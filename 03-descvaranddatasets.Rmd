@@ -1,0 +1,108 @@
+# Describing Data {#describedata}
+
+In this chapter, we learn how to describe variables and datasets (a.k.a dataframes).
+
+These can expedite your understanding the data with very little coding.
+
+## Number of rows and columns (in that sequence)
+
+```{r include=FALSE}
+opts_chunk$set(echo=TRUE, warning=FALSE, message=FALSE)
+```
+
+```{r}
+dim(iris) # dimensions
+```
+
+## Number of rows
+
+```{r}
+nrow(iris)
+```
+
+## Number of columns
+
+```{r}
+ncol(iris)
+```
+
+## Names of variables
+
+
+```{r}
+names(iris) # colnames(iris) also gives that information
+```
+
+## First 6 rows 
+
+```{r}
+head(iris)
+```
+
+## First 2 rows
+
+```{r}
+head(iris,2) # alternately, can use iris[1:2,]
+```
+
+## Last 6 rows
+
+```{r}
+tail(iris) # Number of rows can be controlled, see earlier example involving the head command
+```
+
+## First row
+
+```{r}
+iris[1,]
+```
+
+## First row, first column
+
+```{r}
+iris[1,1]
+```
+
+## Name of third column
+
+```{r}
+names(iris)[3]
+```
+
+## 3 entries from third column
+
+```{r}
+head(iris[3],3) # alternately, can use iris[1:3,3]
+```
+
+## Structure of the dataframe
+
+There are different types of variables. For the most part, we will be concerned with `character`, `factor`, and `numeric` variables. We can broadly categorize nominal and ordinal variables as `factor` variables, few of which may be ordered (for ordinal-scaled variables). Interval and Ratio scaled variables could be classified as being `numeric`. The `str` command can be a helpful command to detect the state of the variables.
+
+
+```{r}
+str(iris)
+```
+
+Different levels of a factor variable can be determined using the `levels` command.
+
+```{r}
+levels(iris$Species)
+```
+
+## Summary of the dataframe
+
+
+When you ask for the `summary`, the results can provide a cue to the nature of variables in the data. For factor variables, the results are the counts of different categories. For numeric variables, one can get information on the mean, median and distributional information.
+
+```{r}
+summary(iris) # for factor/categorical variables, this gives a count of all categories
+```
+
+## Summary of a variable in the dataframe
+
+```{r}
+summary(iris$Sepal.Length)
+```
+
+

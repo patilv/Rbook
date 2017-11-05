@@ -1,0 +1,233 @@
+# Modifying Data {#modifydata}
+
+
+## Subsetting data and dropping factor levels
+
+This creates a subset of `iris` such that `Sepal.Length` is greater than or equal to 5.8.
+
+
+```{r include=FALSE}
+opts_chunk$set(echo=TRUE, warning=FALSE, message=FALSE)
+```
+
+
+```{r}
+irisSubset1=iris[iris$Sepal.Length>=5.8,]
+summary(irisSubset1$Sepal.Length)
+```
+
+Multiple conditions can also be introduced for subsetting.
+
+```{r}
+irisSubset2=iris[iris$Sepal.Length>=5.8 & iris$Sepal.Width<3,]
+summary(irisSubset2)
+```
+
+Subsetting based on a factor variable could be done using a different approach. The following line of code creates a subset of the `iris` dataset that has only two types of Species - setosa and versicolor.
+
+```{r}
+irisSubset3=subset(iris,Species %in% c("setosa","versicolor"))
+# This can also be accomplished by the following statement
+# irisSubset3=iris[iris$Species!="virginica",]
+```
+
+Let's verify that we indeed have only two levels of the `Species` variable.
+
+```{r}
+summary(irisSubset3$Species)
+```
+
+Please note since we excluded `virginica`, the resulting dataset, `irisSubset3` does not have any observations from that `Species`. However, that factor level is still shown with 0 observations. To drop that factor level, we would just re-factor it.   
+
+```{r}
+irisSubset3$Species=factor(irisSubset3$Species)
+```
+
+Let's verify that the earlier statement did its job.
+
+```{r}
+summary(irisSubset3$Species)
+```
+
+
+
+## Reordering factor levels
+
+There may be instances where we may want the order the factor levels of a variable in a difference sequence than the default one. This can be accomplished using the following procedure.
+
+```{r}
+levels(iris$Species)
+```
+
+The default sequence is `setosa`, `versicolor`, and `virginica`. Let's reverse the sequence. 
+
+```{r}
+iris$Species = factor(iris$Species,levels(iris$Species)[c(3,2,1)])
+ 
+```
+
+By specifying the sequence, the earlier third level now becomes the first, the second level remains unchanged, and the new third level is the earlier first level. Let's verify if this indeed occurred.
+
+```{r}
+levels(iris$Species)
+```
+
+## Changing column names
+
+Current names of columns in dataset
+
+```{r}
+
+names(irisSubset3)
+```
+
+Rename the `Species` column
+
+```{r}
+names(irisSubset3)[5]="SpeciesWithoutvirginica"
+names(irisSubset3)
+```
+
+
+```{r eval=FALSE}
+names(dataname)=c("newcol1","newcol2","newcol3") # for a 3 column dataset
+names(dataname)[3]="latestcol3name" # changing name for only the third column
+```
+
+Alternately, the `rename` function from the `dplyr` package can be used.
+
+```{r eval=FALSE}
+library(dplyr)
+dataname=dataname %>% rename(newnamecol1=oldnamecol1,newnamecol2=oldnamecol2)
+```
+
+
+
+## Renaming/Collapsing factor levels
+
+If we wanted to change the labels/values of a factor variable, then we have to alter the variable's factor levels.  (Alternately, one can convert the factor variable into a character variable and then make the change.) The following discussion permits us to collapse factor levels into fewer levels as well. Let us make a copy of the iris dataset to play around with the Species variable.
+
+```{r}
+playiris=iris
+levels(playiris$Species)
+```
+
+Please know the sequence in which the factor levels are presented. In the next step, we change the label `virginica` to `factor3` and `versicolor` to `factor 2` using two different approaches.
+
+```{r}
+levels(playiris$Species)[levels(playiris$Species)=="virginica"]="factor3"
+levels(playiris$Species)
+```
+
+In the next approach, we use the fact that the label `versicolor` that we are changing to `factor2` is the second factor level.
+
+```{r}
+levels(playiris$Species)[2]="factor2"
+levels(playiris$Species)
+```
+
+We can always rename all levels simultaneously using the following approach.
+
+```{r}
+levels(playiris$Species)=c("newlevel1","newlevel2","newlevel3")
+levels(playiris$Species)
+```
+
+## Converting data types
+
+### Factor to numeric 
+
+This comes in handy when we have a factor variable with numbers as values and we want to treat the variable as a numeric variable. This discussion is [based on this Stack Overflow post.](http://stackoverflow.com/questions/3418128/how-to-convert-a-factor-to-an-integer-numeric-without-a-loss-of-information)
+
+Let us go back to the `playiris` dataset. Remember the factor levels of the `Species` variable?
+
+```{r}
+levels(playiris$Species)
+```
+
+If we summarized the variable, it will give the number of observations with each level of `Species`.
+
+```{r}
+summary(playiris$Species)
+```
+
+Let us convert the levels of the variables to numbers using the approach we used previously.
+
+```{r}
+levels(playiris$Species)=c("1","2","3")
+summary(playiris$Species)
+```
+
+This is insightful. Even though we have numbers as values for the `Species` variable, R is counting the number of observations with each value, instead of summarizing the variable with numeric values. To make the change, we have to convert that variable to a numeric variable.
+
+```{r}
+playiris$Species=as.numeric(levels(playiris$Species))[playiris$Species] 
+# This can also be accomplished by the following.
+# playiris$Species=as.numeric(as.character(playiris$Species))
+```
+
+Now, if we summarize the variable, we should get information on the min, max, mean and other summary statistics associated with numeric variables.
+
+```{r}
+summary(playiris$Species)
+```
+
+
+### Numeric to Factor - Binning variables 
+
+Let us re-convert the Species variable to a factor variable - with numbers as values.
+
+```{r}
+playiris$Species=factor(playiris$Species)
+summary(playiris$Species)
+```
+
+Some times, we might have to create factor levels based on numeric values. For example, we might want to create three levels of the Petal length variable - low, medium and high. 
+
+```{r}
+summary(playiris$Petal.Length)
+```
+
+Our goal is to place all observations with `Petal.Length` less than or equal to the 25th percentile value (1st quartile) of 1.6 as "low" and those greater than 5.1 (75th percentile value, 3rd quartile) as "high". The rest of the observations get a value of "medium". Instead of overwriting the 
+
+```{r}
+playiris$Petal.LengthFactor=cut(playiris$Petal.Length,breaks = c(1,1.6,5.1,6.9),labels = c("low","medium","high"),include.lowest = TRUE,ordered_result = TRUE)
+```
+
+Another approach involves using if_else statement(s)
+
+```{r}
+playiris$Petallength.Factor=ifelse(playiris$Petal.Length<=1.6,"low",ifelse(playiris$Petal.Length>5.1,"high","medium"))
+```
+
+Binning may also be needed to create equal interval bins and equal frequency bins. Please see [this response](https://stackoverflow.com/questions/42037740/equal-frequency-and-equal-width-binning-in-r) and [this response](https://stackoverflow.com/questions/5731116/equal-frequency-discretization-in-r/5741495#5741495) on Stack OVerflow for more details on the possible solutions.
+
+### Factor and Numeric to Character and vice versa
+
+There are times when we might want values of a column to be in a character format. For example, this may be necessary if we wanted to replace string patterns in the levels of factor variables or for text-mining purposes. In such cases, we can convert factor or numeric variables to character variables. 
+
+Let us take a look at the structure of the playiris dataset.
+```{r}
+str(playiris)
+```
+
+Let us convert `Species` and `Petal.LengthFactor` to  character variables
+
+```{r}
+playiris$Species=as.character(playiris$Species)
+playiris$Petal.LengthFactor=as.character(playiris$Petal.LengthFactor)
+str(playiris)
+```
+
+The results indicate that our conversion worked. Converting these back to factors or numeric is as simple as doing the following.
+
+```{r}
+playiris$Species=as.numeric(playiris$Species)
+playiris$Petal.LengthFactor=as.factor(playiris$Petal.LengthFactor)
+str(playiris)
+
+```
+
+The following summarizes our discussion about converting data types, especially among factor, numeric, and character variables. 
+
+<img src="04files/conversion.png">

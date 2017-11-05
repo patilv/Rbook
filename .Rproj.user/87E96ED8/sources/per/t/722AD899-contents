@@ -1,0 +1,18 @@
+bookdown::gitbook:
+  css: style.css
+  config:
+    toc:
+      before: |
+        <li><a href="./">Basic Insights from Data for Marketing Researchers</a></li>
+      after: |
+        <li><a href="https://github.com/patilv" target="blank">Published with bookdown</a></li>
+    collapse: section
+    scroll_highlight: yes
+    toolbar:
+        position: fixed
+    search: yes
+    fontsettings:
+      theme: white
+      family: sans
+      size: 2
+  

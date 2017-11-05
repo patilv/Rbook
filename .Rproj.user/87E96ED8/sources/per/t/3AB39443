@@ -1,0 +1,22 @@
+{
+    "collab_server" : "",
+    "contents" : "",
+    "created" : 1509895044843.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "2501715957",
+    "id" : "3AB39443",
+    "lastKnownWriteTime" : 1501427611,
+    "last_content_update" : 1501427611,
+    "path" : "~/GitHub/patilv.github.io/Rbook/06-singlevar.Rmd",
+    "project_path" : "06-singlevar.Rmd",
+    "properties" : {
+        "cursorPosition" : "61,30",
+        "scrollLine" : "50"
+    },
+    "relative_order" : 1,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_markdown"
+}

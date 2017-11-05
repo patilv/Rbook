@@ -1,0 +1,7 @@
+book_filename: "Rbook"
+output_dir: "docs"
+language:
+  fig: "FIGURE "
+  tab: "TABLE "
+  ui:
+    chapter_name: "Chapter "

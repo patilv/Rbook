@@ -1,0 +1,146 @@
+# Summary Statistics {#summarystats}
+
+## Measures of Central Tendency
+
+Mean, Median and Mode are commonly used. Don't forget that not all can be used for all types of variables. For nominal variables (e.g., Gender), only mode is appropriate. For ordered categorical variables (ordinal variables), mode and median can be used. All three can be used for numeric variables. 
+
+```{r}
+mean(iris$Sepal.Length)
+```
+
+The mean of Sepal.Length is `r mean(iris$Sepal.Length)`.
+
+
+```{r}
+median(iris$Petal.Length)
+```
+
+The median of Petal.Length is `r median(iris$Petal.Length)`
+
+There is no built-in function for determining the mode. However, one can write a function to do that job. Please see the function below called `mymode`. This has been taken from the solutions discussed [in response to a question on Stack Overflow.](http://stackoverflow.com/questions/2547402/is-there-a-built-in-function-for-finding-the-mode)
+
+```{r}
+# Function to determine the mode. Can also identify multiple modes
+mymode <- function(x) {
+  ux <- unique(x)
+tab <- tabulate(match(x, ux)); ux[tab == max(tab)]
+}
+
+# Function to give the frequency of occurrence of mode
+modecount <- function(x) {
+  ux <- unique(x)
+max(tabulate(match(x, ux)))
+}
+
+```
+
+
+Let us put those function to use to determine the mode of a numeric variable first.
+
+```{r}
+
+mymode(iris$Petal.Length) # Gives the mode(s) of Petal.Length
+modecount(iris$Petal.Length) # Gives the frequency of occurrence of the mode
+
+```
+
+And now, a factor variable.
+
+```{r}
+mymode(iris$Species)
+modecount(iris$Species)
+
+```
+
+Note that all three types of species are identified as modes because there are 50 observations of each type.
+
+## Other measures of central tendency
+
+* Trimmed Mean: Means can be affected by outliers (extreme values). Trimmed means can provide a more robust measure in such cases. If there is a good explanation for the presence of the outliers, avoid using this. 
+
+Regular mean:
+
+```{r}
+mean(iris$Sepal.Length)
+```
+
+5% trimmed mean
+
+```{r}
+mean(iris$Sepal.Length,trim = .05) # knocks off 5% of the observations on each end.
+```
+
+10% trimmed mean:
+
+```{r}
+mean(iris$Sepal.Length, trim = .1) # knocks off 10% of the observation on each end.
+```
+
+
+## Measures of Dispersion (variation)
+
+
+### Range
+
+```{r}
+min(iris$Sepal.Length) # minimum
+```
+
+
+```{r}
+max(iris$Sepal.Length) # maximum
+```
+
+```{r}
+range(iris$Sepal.Length) # should give the min and max
+```
+
+### Interquartile range: Difference between 25th and 75th percentile (or quantile)
+
+E.g., 5th percentile or 5th quantile of a variable is the smallest number below which 5% of the observations of that variable lie.
+
+```{r}
+quantile(iris$Sepal.Length,probs = .05)
+```
+
+The median is the 50th percentile value.
+
+```{r}
+median(iris$Sepal.Length)
+```
+
+```{r}
+quantile(iris$Sepal.Length,probs=.5)
+```
+
+
+25th quantile
+
+```{r}
+quantile(iris$Sepal.Length,probs=.25)
+```
+
+75th quantile
+
+```{r}
+quantile(iris$Sepal.Length,probs=.75)
+```
+
+Therefore, IQR is the difference between the 75th quantile and 25th quantile.
+
+```{r}
+IQR(iris$Sepal.Length)
+```
+
+
+### Variance and Standard Deviation
+
+```{r}
+var(iris$Sepal.Length)
+```
+
+```{r}
+sd(iris$Sepal.Length)
+```
+
+Note that the standard deviation is the square root of variance.

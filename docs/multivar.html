@@ -1,0 +1,479 @@
+<!DOCTYPE html>
+<html >
+
+<head>
+
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>Basic Insights from Data for Marketing Researchers</title>
+  <meta name="description" content="This book should contain introductory material for analyzing data for marketing researchers.">
+  <meta name="generator" content="bookdown 0.5 and GitBook 2.6.7">
+
+  <meta property="og:title" content="Basic Insights from Data for Marketing Researchers" />
+  <meta property="og:type" content="book" />
+  
+  
+  <meta property="og:description" content="This book should contain introductory material for analyzing data for marketing researchers." />
+  <meta name="github-repo" content="patilv.github.io" />
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="Basic Insights from Data for Marketing Researchers" />
+  
+  <meta name="twitter:description" content="This book should contain introductory material for analyzing data for marketing researchers." />
+  
+
+<meta name="author" content="Vivek H. Patil">
+
+
+<meta name="date" content="2017-11-05">
+
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  
+  
+<link rel="prev" href="singlevar.html">
+
+<script src="libs/jquery-2.2.3/jquery.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+
+<style type="text/css">
+div.sourceCode { overflow-x: auto; }
+table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
+  margin: 0; padding: 0; vertical-align: baseline; border: none; }
+table.sourceCode { width: 100%; line-height: 100%; }
+td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; color: #aaaaaa; border-right: 1px solid #aaaaaa; }
+td.sourceCode { padding-left: 5px; }
+code > span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code > span.dt { color: #902000; } /* DataType */
+code > span.dv { color: #40a070; } /* DecVal */
+code > span.bn { color: #40a070; } /* BaseN */
+code > span.fl { color: #40a070; } /* Float */
+code > span.ch { color: #4070a0; } /* Char */
+code > span.st { color: #4070a0; } /* String */
+code > span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code > span.ot { color: #007020; } /* Other */
+code > span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code > span.fu { color: #06287e; } /* Function */
+code > span.er { color: #ff0000; font-weight: bold; } /* Error */
+code > span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+code > span.cn { color: #880000; } /* Constant */
+code > span.sc { color: #4070a0; } /* SpecialChar */
+code > span.vs { color: #4070a0; } /* VerbatimString */
+code > span.ss { color: #bb6688; } /* SpecialString */
+code > span.im { } /* Import */
+code > span.va { color: #19177c; } /* Variable */
+code > span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code > span.op { color: #666666; } /* Operator */
+code > span.bu { } /* BuiltIn */
+code > span.ex { } /* Extension */
+code > span.pp { color: #bc7a00; } /* Preprocessor */
+code > span.at { color: #7d9029; } /* Attribute */
+code > span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code > span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code > span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+</style>
+
+<link rel="stylesheet" href="style.css" type="text/css" />
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li><a href="./">Basic Insights from Data for Marketing Researchers</a></li>
+
+<li class="divider"></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i>Preface</a><ul>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html#about-me"><i class="fa fa-check"></i>About me</a></li>
+</ul></li>
+<li class="chapter" data-level="1" data-path="introR.html"><a href="introR.html"><i class="fa fa-check"></i><b>1</b> Introduction to R</a><ul>
+<li class="chapter" data-level="1.1" data-path="introR.html"><a href="introR.html#why-use-r"><i class="fa fa-check"></i><b>1.1</b> Why use R?</a></li>
+<li class="chapter" data-level="1.2" data-path="introR.html"><a href="introR.html#r---environment-and-software"><i class="fa fa-check"></i><b>1.2</b> R - Environment and Software</a></li>
+<li class="chapter" data-level="1.3" data-path="introR.html"><a href="introR.html#r-consortium"><i class="fa fa-check"></i><b>1.3</b> R Consortium</a></li>
+<li class="chapter" data-level="1.4" data-path="introR.html"><a href="introR.html#a-recently-released-video-on-r"><i class="fa fa-check"></i><b>1.4</b> A Recently Released Video on R</a></li>
+</ul></li>
+<li class="chapter" data-level="2" data-path="Rgettingstarted.html"><a href="Rgettingstarted.html"><i class="fa fa-check"></i><b>2</b> Getting Started with R</a><ul>
+<li class="chapter" data-level="2.1" data-path="Rgettingstarted.html"><a href="Rgettingstarted.html#r-studio-interface"><i class="fa fa-check"></i><b>2.1</b> R-Studio Interface</a></li>
+<li class="chapter" data-level="2.2" data-path="Rgettingstarted.html"><a href="Rgettingstarted.html#organizing-projects"><i class="fa fa-check"></i><b>2.2</b> Organizing projects</a></li>
+<li class="chapter" data-level="2.3" data-path="Rgettingstarted.html"><a href="Rgettingstarted.html#installing-packages-from-cran"><i class="fa fa-check"></i><b>2.3</b> Installing Packages from CRAN</a></li>
+<li class="chapter" data-level="2.4" data-path="Rgettingstarted.html"><a href="Rgettingstarted.html#installing-a-package-from-github"><i class="fa fa-check"></i><b>2.4</b> Installing a package from GitHub</a></li>
+<li class="chapter" data-level="2.5" data-path="Rgettingstarted.html"><a href="Rgettingstarted.html#installed-packages-should-be-loaded-for-them-to-offer-their-functions-for-use"><i class="fa fa-check"></i><b>2.5</b> Installed packages should be loaded for them to offer their functions for use</a></li>
+<li class="chapter" data-level="2.6" data-path="Rgettingstarted.html"><a href="Rgettingstarted.html#setting-your-working-directory"><i class="fa fa-check"></i><b>2.6</b> Setting your working directory</a></li>
+<li class="chapter" data-level="2.7" data-path="Rgettingstarted.html"><a href="Rgettingstarted.html#reading-data-from-different-sources"><i class="fa fa-check"></i><b>2.7</b> Reading data from different sources</a></li>
+<li class="chapter" data-level="2.8" data-path="Rgettingstarted.html"><a href="Rgettingstarted.html#saving-data"><i class="fa fa-check"></i><b>2.8</b> Saving data</a></li>
+<li class="chapter" data-level="2.9" data-path="Rgettingstarted.html"><a href="Rgettingstarted.html#creating-a-dataframe"><i class="fa fa-check"></i><b>2.9</b> Creating a dataframe</a></li>
+</ul></li>
+<li class="chapter" data-level="3" data-path="describedata.html"><a href="describedata.html"><i class="fa fa-check"></i><b>3</b> Describing Data</a><ul>
+<li class="chapter" data-level="3.1" data-path="describedata.html"><a href="describedata.html#number-of-rows-and-columns-in-that-sequence"><i class="fa fa-check"></i><b>3.1</b> Number of rows and columns (in that sequence)</a></li>
+<li class="chapter" data-level="3.2" data-path="describedata.html"><a href="describedata.html#number-of-rows"><i class="fa fa-check"></i><b>3.2</b> Number of rows</a></li>
+<li class="chapter" data-level="3.3" data-path="describedata.html"><a href="describedata.html#number-of-columns"><i class="fa fa-check"></i><b>3.3</b> Number of columns</a></li>
+<li class="chapter" data-level="3.4" data-path="describedata.html"><a href="describedata.html#names-of-variables"><i class="fa fa-check"></i><b>3.4</b> Names of variables</a></li>
+<li class="chapter" data-level="3.5" data-path="describedata.html"><a href="describedata.html#first-6-rows"><i class="fa fa-check"></i><b>3.5</b> First 6 rows</a></li>
+<li class="chapter" data-level="3.6" data-path="describedata.html"><a href="describedata.html#first-2-rows"><i class="fa fa-check"></i><b>3.6</b> First 2 rows</a></li>
+<li class="chapter" data-level="3.7" data-path="describedata.html"><a href="describedata.html#last-6-rows"><i class="fa fa-check"></i><b>3.7</b> Last 6 rows</a></li>
+<li class="chapter" data-level="3.8" data-path="describedata.html"><a href="describedata.html#first-row"><i class="fa fa-check"></i><b>3.8</b> First row</a></li>
+<li class="chapter" data-level="3.9" data-path="describedata.html"><a href="describedata.html#first-row-first-column"><i class="fa fa-check"></i><b>3.9</b> First row, first column</a></li>
+<li class="chapter" data-level="3.10" data-path="describedata.html"><a href="describedata.html#name-of-third-column"><i class="fa fa-check"></i><b>3.10</b> Name of third column</a></li>
+<li class="chapter" data-level="3.11" data-path="describedata.html"><a href="describedata.html#entries-from-third-column"><i class="fa fa-check"></i><b>3.11</b> 3 entries from third column</a></li>
+<li class="chapter" data-level="3.12" data-path="describedata.html"><a href="describedata.html#structure-of-the-dataframe"><i class="fa fa-check"></i><b>3.12</b> Structure of the dataframe</a></li>
+<li class="chapter" data-level="3.13" data-path="describedata.html"><a href="describedata.html#summary-of-the-dataframe"><i class="fa fa-check"></i><b>3.13</b> Summary of the dataframe</a></li>
+<li class="chapter" data-level="3.14" data-path="describedata.html"><a href="describedata.html#summary-of-a-variable-in-the-dataframe"><i class="fa fa-check"></i><b>3.14</b> Summary of a variable in the dataframe</a></li>
+</ul></li>
+<li class="chapter" data-level="4" data-path="modifydata.html"><a href="modifydata.html"><i class="fa fa-check"></i><b>4</b> Modifying Data</a><ul>
+<li class="chapter" data-level="4.1" data-path="modifydata.html"><a href="modifydata.html#subsetting-data-and-dropping-factor-levels"><i class="fa fa-check"></i><b>4.1</b> Subsetting data and dropping factor levels</a></li>
+<li class="chapter" data-level="4.2" data-path="modifydata.html"><a href="modifydata.html#reordering-factor-levels"><i class="fa fa-check"></i><b>4.2</b> Reordering factor levels</a></li>
+<li class="chapter" data-level="4.3" data-path="modifydata.html"><a href="modifydata.html#changing-column-names"><i class="fa fa-check"></i><b>4.3</b> Changing column names</a></li>
+<li class="chapter" data-level="4.4" data-path="modifydata.html"><a href="modifydata.html#renamingcollapsing-factor-levels"><i class="fa fa-check"></i><b>4.4</b> Renaming/Collapsing factor levels</a></li>
+<li class="chapter" data-level="4.5" data-path="modifydata.html"><a href="modifydata.html#converting-data-types"><i class="fa fa-check"></i><b>4.5</b> Converting data types</a><ul>
+<li class="chapter" data-level="4.5.1" data-path="modifydata.html"><a href="modifydata.html#factor-to-numeric"><i class="fa fa-check"></i><b>4.5.1</b> Factor to numeric</a></li>
+<li class="chapter" data-level="4.5.2" data-path="modifydata.html"><a href="modifydata.html#numeric-to-factor---binning-variables"><i class="fa fa-check"></i><b>4.5.2</b> Numeric to Factor - Binning variables</a></li>
+<li class="chapter" data-level="4.5.3" data-path="modifydata.html"><a href="modifydata.html#factor-and-numeric-to-character-and-vice-versa"><i class="fa fa-check"></i><b>4.5.3</b> Factor and Numeric to Character and vice versa</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="5" data-path="summarystats.html"><a href="summarystats.html"><i class="fa fa-check"></i><b>5</b> Summary Statistics</a><ul>
+<li class="chapter" data-level="5.1" data-path="summarystats.html"><a href="summarystats.html#measures-of-central-tendency"><i class="fa fa-check"></i><b>5.1</b> Measures of Central Tendency</a></li>
+<li class="chapter" data-level="5.2" data-path="summarystats.html"><a href="summarystats.html#other-measures-of-central-tendency"><i class="fa fa-check"></i><b>5.2</b> Other measures of central tendency</a></li>
+<li class="chapter" data-level="5.3" data-path="summarystats.html"><a href="summarystats.html#measures-of-dispersion-variation"><i class="fa fa-check"></i><b>5.3</b> Measures of Dispersion (variation)</a><ul>
+<li class="chapter" data-level="5.3.1" data-path="summarystats.html"><a href="summarystats.html#range"><i class="fa fa-check"></i><b>5.3.1</b> Range</a></li>
+<li class="chapter" data-level="5.3.2" data-path="summarystats.html"><a href="summarystats.html#interquartile-range-difference-between-25th-and-75th-percentile-or-quantile"><i class="fa fa-check"></i><b>5.3.2</b> Interquartile range: Difference between 25th and 75th percentile (or quantile)</a></li>
+<li class="chapter" data-level="5.3.3" data-path="summarystats.html"><a href="summarystats.html#variance-and-standard-deviation"><i class="fa fa-check"></i><b>5.3.3</b> Variance and Standard Deviation</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="6" data-path="singlevar.html"><a href="singlevar.html"><i class="fa fa-check"></i><b>6</b> Single variable Analysis</a><ul>
+<li class="chapter" data-level="6.1" data-path="singlevar.html"><a href="singlevar.html#numeric-variable"><i class="fa fa-check"></i><b>6.1</b> Numeric Variable</a><ul>
+<li class="chapter" data-level="6.1.1" data-path="singlevar.html"><a href="singlevar.html#histogram"><i class="fa fa-check"></i><b>6.1.1</b> Histogram</a></li>
+<li class="chapter" data-level="6.1.2" data-path="singlevar.html"><a href="singlevar.html#density-plot"><i class="fa fa-check"></i><b>6.1.2</b> Density plot</a></li>
+<li class="chapter" data-level="6.1.3" data-path="singlevar.html"><a href="singlevar.html#box-plot"><i class="fa fa-check"></i><b>6.1.3</b> Box plot</a></li>
+<li class="chapter" data-level="6.1.4" data-path="singlevar.html"><a href="singlevar.html#test-of-mean"><i class="fa fa-check"></i><b>6.1.4</b> Test of Mean</a></li>
+</ul></li>
+<li class="chapter" data-level="6.2" data-path="singlevar.html"><a href="singlevar.html#factor-variable"><i class="fa fa-check"></i><b>6.2</b> Factor variable</a><ul>
+<li class="chapter" data-level="6.2.1" data-path="singlevar.html"><a href="singlevar.html#bar-plot"><i class="fa fa-check"></i><b>6.2.1</b> Bar plot</a></li>
+<li class="chapter" data-level="6.2.2" data-path="singlevar.html"><a href="singlevar.html#pie-chart---fyi-do-not-use"><i class="fa fa-check"></i><b>6.2.2</b> Pie Chart - FYI Do not use</a></li>
+<li class="chapter" data-level="6.2.3" data-path="singlevar.html"><a href="singlevar.html#one-factor-variable-chi-square-goodness-of-fit-test"><i class="fa fa-check"></i><b>6.2.3</b> One factor-variable Chi-square goodness-of-fit test</a></li>
+</ul></li>
+<li class="chapter" data-level="6.3" data-path="singlevar.html"><a href="singlevar.html#one-factor-variable---t-test-one-sample-proportion"><i class="fa fa-check"></i><b>6.3</b> One factor variable - t-test one sample proportion</a></li>
+</ul></li>
+<li class="chapter" data-level="7" data-path="multivar.html"><a href="multivar.html"><i class="fa fa-check"></i><b>7</b> Relationships between variables</a><ul>
+<li class="chapter" data-level="7.1" data-path="multivar.html"><a href="multivar.html#between-continuous-variables-correlations"><i class="fa fa-check"></i><b>7.1</b> Between continuous variables: Correlations</a><ul>
+<li class="chapter" data-level="7.1.1" data-path="multivar.html"><a href="multivar.html#plotting"><i class="fa fa-check"></i><b>7.1.1</b> Plotting</a></li>
+<li class="chapter" data-level="7.1.2" data-path="multivar.html"><a href="multivar.html#correlations-between-two-numeric-variables"><i class="fa fa-check"></i><b>7.1.2</b> Correlations between two numeric variables</a></li>
+<li class="chapter" data-level="7.1.3" data-path="multivar.html"><a href="multivar.html#paired-samples---comparing-two-means"><i class="fa fa-check"></i><b>7.1.3</b> Paired Samples - comparing two-means</a></li>
+<li class="chapter" data-level="7.1.4" data-path="multivar.html"><a href="multivar.html#relationships-between-more-than-two-numeric-variables"><i class="fa fa-check"></i><b>7.1.4</b> Relationships between more than two numeric variables</a></li>
+</ul></li>
+<li class="chapter" data-level="7.2" data-path="multivar.html"><a href="multivar.html#relationships-between-factor-variables"><i class="fa fa-check"></i><b>7.2</b> Relationships between factor variables</a></li>
+<li class="chapter" data-level="7.3" data-path="multivar.html"><a href="multivar.html#between-factor-and-continuous-variables"><i class="fa fa-check"></i><b>7.3</b> Between factor and continuous variables</a><ul>
+<li class="chapter" data-level="7.3.1" data-path="multivar.html"><a href="multivar.html#two-levels-of-a-factor-level-and-one-continuous-variable---t-test"><i class="fa fa-check"></i><b>7.3.1</b> Two levels of a factor level and one continuous variable - t-test</a></li>
+<li class="chapter" data-level="7.3.2" data-path="multivar.html"><a href="multivar.html#more-than-two-levels-of-a-factor-variable-and-one-continuous-variable.--one-way-anova"><i class="fa fa-check"></i><b>7.3.2</b> More than two levels of a factor variable and one continuous variable.- One-Way ANOVA</a></li>
+</ul></li>
+</ul></li>
+<li class="divider"></li>
+<li><a href="https://github.com/patilv" target="blank">Published with bookdown</a></li>
+
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Basic Insights from Data for Marketing Researchers</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="multivar" class="section level1">
+<h1><span class="header-section-number">Chapter 7</span> Relationships between variables</h1>
+<div id="between-continuous-variables-correlations" class="section level2">
+<h2><span class="header-section-number">7.1</span> Between continuous variables: Correlations</h2>
+<div id="plotting" class="section level3">
+<h3><span class="header-section-number">7.1.1</span> Plotting</h3>
+<p><img src="Rbook_files/figure-html/unnamed-chunk-99-1.png" width="672" /></p>
+</div>
+<div id="correlations-between-two-numeric-variables" class="section level3">
+<h3><span class="header-section-number">7.1.2</span> Correlations between two numeric variables</h3>
+<p>Assumptions of interval/ratio scaled variables, presence of linear relationships, absence of extreme outliers, and normality of the variables are made when conducting these tests.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">plot</span>(iris<span class="op">$</span>Sepal.Length,iris<span class="op">$</span>Petal.Length,<span class="dt">col=</span><span class="st">&quot;red&quot;</span>,<span class="dt">xlab=</span><span class="st">&quot;Sepal.Length&quot;</span>,<span class="dt">ylab=</span><span class="st">&quot;Petal.Length&quot;</span>)
+<span class="kw">abline</span>(<span class="kw">lm</span>(iris<span class="op">$</span>Petal.Length<span class="op">~</span>iris<span class="op">$</span>Sepal.Length),<span class="dt">col=</span><span class="st">&quot;blue&quot;</span>)</code></pre></div>
+<p><img src="Rbook_files/figure-html/unnamed-chunk-100-1.png" width="672" /></p>
+<p>Pearson Correlation coefficient</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">cor</span>(iris<span class="op">$</span>Sepal.Length,iris<span class="op">$</span>Petal.Length)</code></pre></div>
+<pre><code>## [1] 0.8717538</code></pre>
+<p>Testing whether the observed correlation coefficient is different from 0</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">cor.test</span>(iris<span class="op">$</span>Sepal.Length,iris<span class="op">$</span>Petal.Length)</code></pre></div>
+<pre><code>## 
+##  Pearson&#39;s product-moment correlation
+## 
+## data:  iris$Sepal.Length and iris$Petal.Length
+## t = 21.646, df = 148, p-value &lt; 2.2e-16
+## alternative hypothesis: true correlation is not equal to 0
+## 95 percent confidence interval:
+##  0.8270363 0.9055080
+## sample estimates:
+##       cor 
+## 0.8717538</code></pre>
+<p>Testing whether the observed correlation coefficient is greater than 0</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">cor.test</span>(iris<span class="op">$</span>Sepal.Length,iris<span class="op">$</span>Petal.Length,<span class="dt">alternative =</span> <span class="st">&quot;greater&quot;</span>)</code></pre></div>
+<pre><code>## 
+##  Pearson&#39;s product-moment correlation
+## 
+## data:  iris$Sepal.Length and iris$Petal.Length
+## t = 21.646, df = 148, p-value &lt; 2.2e-16
+## alternative hypothesis: true correlation is greater than 0
+## 95 percent confidence interval:
+##  0.8350748 1.0000000
+## sample estimates:
+##       cor 
+## 0.8717538</code></pre>
+</div>
+<div id="paired-samples---comparing-two-means" class="section level3">
+<h3><span class="header-section-number">7.1.3</span> Paired Samples - comparing two-means</h3>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">summary</span>(survey[,<span class="kw">c</span>(<span class="dv">2</span>,<span class="dv">3</span>)])</code></pre></div>
+<pre><code>##      Wr.Hnd          NW.Hnd     
+##  Min.   :13.00   Min.   :12.50  
+##  1st Qu.:17.50   1st Qu.:17.50  
+##  Median :18.50   Median :18.50  
+##  Mean   :18.67   Mean   :18.58  
+##  3rd Qu.:19.80   3rd Qu.:19.73  
+##  Max.   :23.20   Max.   :23.50  
+##  NA&#39;s   :1       NA&#39;s   :1</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">t.test</span>(survey<span class="op">$</span>Wr.Hnd,survey<span class="op">$</span>NW.Hnd,<span class="dt">paired =</span> <span class="ot">TRUE</span>)</code></pre></div>
+<pre><code>## 
+##  Paired t-test
+## 
+## data:  survey$Wr.Hnd and survey$NW.Hnd
+## t = 2.1268, df = 235, p-value = 0.03448
+## alternative hypothesis: true difference in means is not equal to 0
+## 95 percent confidence interval:
+##  0.006367389 0.166513967
+## sample estimates:
+## mean of the differences 
+##              0.08644068</code></pre>
+</div>
+<div id="relationships-between-more-than-two-numeric-variables" class="section level3">
+<h3><span class="header-section-number">7.1.4</span> Relationships between more than two numeric variables</h3>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">pairs</span>(iris[,<span class="dv">1</span><span class="op">:</span><span class="dv">4</span>])</code></pre></div>
+<p><img src="Rbook_files/figure-html/unnamed-chunk-106-1.png" width="672" /></p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(car)
+<span class="kw">scatterplotMatrix</span>(iris[,<span class="dv">1</span><span class="op">:</span><span class="dv">4</span>])</code></pre></div>
+<p><img src="Rbook_files/figure-html/unnamed-chunk-107-1.png" width="672" /></p>
+<p>The correlations matrix and test of significance</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">cor</span>(iris[,<span class="dv">1</span><span class="op">:</span><span class="dv">4</span>])</code></pre></div>
+<pre><code>##              Sepal.Length Sepal.Width Petal.Length Petal.Width
+## Sepal.Length    1.0000000  -0.1175698    0.8717538   0.8179411
+## Sepal.Width    -0.1175698   1.0000000   -0.4284401  -0.3661259
+## Petal.Length    0.8717538  -0.4284401    1.0000000   0.9628654
+## Petal.Width     0.8179411  -0.3661259    0.9628654   1.0000000</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Correlations with significance levels</span>
+<span class="kw">library</span>(Hmisc)
+<span class="kw">rcorr</span>(<span class="kw">as.matrix</span>(iris[,<span class="dv">1</span><span class="op">:</span><span class="dv">4</span>]), <span class="dt">type=</span><span class="st">&quot;pearson&quot;</span>) <span class="co"># type can be pearson or spearman</span></code></pre></div>
+<pre><code>##              Sepal.Length Sepal.Width Petal.Length Petal.Width
+## Sepal.Length         1.00       -0.12         0.87        0.82
+## Sepal.Width         -0.12        1.00        -0.43       -0.37
+## Petal.Length         0.87       -0.43         1.00        0.96
+## Petal.Width          0.82       -0.37         0.96        1.00
+## 
+## n= 150 
+## 
+## 
+## P
+##              Sepal.Length Sepal.Width Petal.Length Petal.Width
+## Sepal.Length              0.1519      0.0000       0.0000     
+## Sepal.Width  0.1519                   0.0000       0.0000     
+## Petal.Length 0.0000       0.0000                   0.0000     
+## Petal.Width  0.0000       0.0000      0.0000</code></pre>
+</div>
+</div>
+<div id="relationships-between-factor-variables" class="section level2">
+<h2><span class="header-section-number">7.2</span> Relationships between factor variables</h2>
+<p>Let us revert back to our use of the <code>survey</code> dataset and focus on the <code>Sex</code> and <code>Exer</code>variables. Below, we look at the structure of the dataset and summarize each of the three variables.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">str</span>(survey)</code></pre></div>
+<pre><code>## &#39;data.frame&#39;:    237 obs. of  12 variables:
+##  $ Sex   : Factor w/ 2 levels &quot;Female&quot;,&quot;Male&quot;: 1 2 2 2 2 1 2 1 2 2 ...
+##  $ Wr.Hnd: num  18.5 19.5 18 18.8 20 18 17.7 17 20 18.5 ...
+##  $ NW.Hnd: num  18 20.5 13.3 18.9 20 17.7 17.7 17.3 19.5 18.5 ...
+##  $ W.Hnd : Factor w/ 2 levels &quot;Left&quot;,&quot;Right&quot;: 2 1 2 2 2 2 2 2 2 2 ...
+##  $ Fold  : Factor w/ 3 levels &quot;L on R&quot;,&quot;Neither&quot;,..: 3 3 1 3 2 1 1 3 3 3 ...
+##  $ Pulse : int  92 104 87 NA 35 64 83 74 72 90 ...
+##  $ Clap  : Factor w/ 3 levels &quot;Left&quot;,&quot;Neither&quot;,..: 1 1 2 2 3 3 3 3 3 3 ...
+##  $ Exer  : Factor w/ 3 levels &quot;Freq&quot;,&quot;None&quot;,..: 3 2 2 2 3 3 1 1 3 3 ...
+##  $ Smoke : Factor w/ 4 levels &quot;Heavy&quot;,&quot;Never&quot;,..: 2 4 3 2 2 2 2 2 2 2 ...
+##  $ Height: num  173 178 NA 160 165 ...
+##  $ M.I   : Factor w/ 2 levels &quot;Imperial&quot;,&quot;Metric&quot;: 2 1 NA 2 2 1 1 2 2 2 ...
+##  $ Age   : num  18.2 17.6 16.9 20.3 23.7 ...</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">summary</span>(survey<span class="op">$</span>Sex)</code></pre></div>
+<pre><code>## Female   Male   NA&#39;s 
+##    118    118      1</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">summary</span>(survey<span class="op">$</span>Exer)</code></pre></div>
+<pre><code>## Freq None Some 
+##  115   24   98</code></pre>
+<p>A cross-tab (or a cross-tabulation) presents joint-frequencies of two or more variables. For example, if we were interested in finding how many of the 118 Females engaged in different levels of Exercise, we could use a cross-tab to answer that.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">crosstab=<span class="kw">table</span>(survey<span class="op">$</span>Exer,survey<span class="op">$</span>Sex)
+crosstab</code></pre></div>
+<pre><code>##       
+##        Female Male
+##   Freq     49   65
+##   None     11   13
+##   Some     58   40</code></pre>
+<p>We could also plot that data in the form of stacked or dodged bar graphs.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">barplot</span>(crosstab,<span class="dt">beside=</span><span class="ot">TRUE</span>, <span class="dt">legend=</span><span class="kw">levels</span>(<span class="kw">unique</span>(survey<span class="op">$</span>Exer)),<span class="dt">args.legend=</span><span class="kw">list</span>(
+      <span class="dt">x=</span> <span class="dv">8</span>,<span class="dt">y=</span><span class="dv">70</span>))</code></pre></div>
+<p><img src="Rbook_files/figure-html/unnamed-chunk-114-1.png" width="672" /></p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">barplot</span>(crosstab,<span class="dt">legend=</span><span class="kw">levels</span>(<span class="kw">unique</span>(survey<span class="op">$</span>Exer)),<span class="dt">args.legend=</span><span class="kw">list</span>(
+      <span class="dt">x=</span> <span class="fl">1.75</span>,<span class="dt">y=</span><span class="dv">150</span>,<span class="dt">horiz=</span><span class="ot">TRUE</span>))</code></pre></div>
+<p><img src="Rbook_files/figure-html/unnamed-chunk-115-1.png" width="672" /></p>
+<p>If we now wanted to check if the tendency to exercise was independent of the gender, we could use the Chi-square test of independence.</p>
+<p>The null hypothesis is that the two variables are independent and the alternate is that they are related.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">chisq.test</span>(crosstab)</code></pre></div>
+<pre><code>## 
+##  Pearson&#39;s Chi-squared test
+## 
+## data:  crosstab
+## X-squared = 5.7184, df = 2, p-value = 0.05731</code></pre>
+<p>Interpretation: the p-value of .057 suggests that there is no evidence of the presence of a relationship between Sex and Exercise. Thus, it is likely that the variables are independent of each other.</p>
+</div>
+<div id="between-factor-and-continuous-variables" class="section level2">
+<h2><span class="header-section-number">7.3</span> Between factor and continuous variables</h2>
+<p>In such cases, one may be interested in studying how the mean scores of the continuous variable differs across multiple levels of the factor variable</p>
+<div id="two-levels-of-a-factor-level-and-one-continuous-variable---t-test" class="section level3">
+<h3><span class="header-section-number">7.3.1</span> Two levels of a factor level and one continuous variable - t-test</h3>
+<p>Let us check how the mean height of different genders in the <code>survey</code> data.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">aggregate</span>(survey<span class="op">$</span>Height,<span class="kw">list</span>(survey<span class="op">$</span>Sex),mean, <span class="dt">na.rm=</span>T)</code></pre></div>
+<pre><code>##   Group.1        x
+## 1  Female 165.6867
+## 2    Male 178.8260</code></pre>
+<p>The distribution of Height across the two levels can be studied using a box plot.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">plot</span>(survey<span class="op">$</span>Height<span class="op">~</span>survey<span class="op">$</span>Sex)</code></pre></div>
+<p><img src="Rbook_files/figure-html/unnamed-chunk-118-1.png" width="672" /></p>
+<p>Although males seem to be taller than females, it is unclear if the difference being observed is statistically significant. In such a case, we could use an independent samples t-test to answer the question.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">t.test</span>(survey<span class="op">$</span>Height<span class="op">~</span>survey<span class="op">$</span>Sex, <span class="dt">alternative=</span><span class="st">&#39;less&#39;</span>, <span class="dt">conf.level=</span>.<span class="dv">99</span>, <span class="dt">var.equal=</span><span class="ot">FALSE</span>)</code></pre></div>
+<pre><code>## 
+##  Welch Two Sample t-test
+## 
+## data:  survey$Height by survey$Sex
+## t = -12.924, df = 192.7, p-value &lt; 2.2e-16
+## alternative hypothesis: true difference in means is less than 0
+## 99 percent confidence interval:
+##       -Inf -10.75448
+## sample estimates:
+## mean in group Female   mean in group Male 
+##             165.6867             178.8260</code></pre>
+<p>Note that the mean height of females is lower than the mean height of males. Hence the test-statistic is negative. The result suggests that mean height of females is less than the mean height of men. (the p-value is less than .01 and the t-value observed lies in the 99 percent confidence interval.)</p>
+</div>
+<div id="more-than-two-levels-of-a-factor-variable-and-one-continuous-variable.--one-way-anova" class="section level3">
+<h3><span class="header-section-number">7.3.2</span> More than two levels of a factor variable and one continuous variable.- One-Way ANOVA</h3>
+<p>Let us check the mean height of people who engage in different levels of Exercising.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">aggregate</span>(survey<span class="op">$</span>Height,<span class="kw">list</span>(survey<span class="op">$</span>Exer),mean, <span class="dt">na.rm=</span>T)</code></pre></div>
+<pre><code>##   Group.1        x
+## 1    Freq 174.6067
+## 2    None 169.0280
+## 3    Some 170.3969</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">plot</span>(survey<span class="op">$</span>Height<span class="op">~</span>survey<span class="op">$</span>Exer)</code></pre></div>
+<p><img src="Rbook_files/figure-html/unnamed-chunk-121-1.png" width="672" /></p>
+<p>Interestingly, we find that those who engage in frequent exercise have a higher mean height than those who engage in some exercise. In a similar vein, those who engage in some exercise seem to have a higher mean height than those who do not engage in any exercise. But, are these differences statistically significant?</p>
+<p>Since we have more than two levels of the factor variable, one will have to use an ANOVA (Analysis of Variance).</p>
+<p>The Null hypothesis is that the means of all groups is the same and the alternate is that at least one mean is different.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">results=<span class="kw">aov</span>(survey<span class="op">$</span>Height <span class="op">~</span><span class="st"> </span>survey<span class="op">$</span>Exer)
+<span class="kw">summary</span>(results)</code></pre></div>
+<pre><code>##              Df Sum Sq Mean Sq F value  Pr(&gt;F)   
+## survey$Exer   2   1076   537.8   5.802 0.00354 **
+## Residuals   206  19095    92.7                   
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 28 observations deleted due to missingness</code></pre>
+<p>The findings suggest that we have evidence that at least one of the three means is different from the others. (The p-value of .00354 indicates significance at the .01 level.) <strong>Note that the earlier test does not tell us whether the differences between consecutive means is statistically significant.</strong></p>
+<p>We can do a multiple-comparison of means to test that.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">TukeyHSD</span>(results,<span class="dt">conf.level =</span> .<span class="dv">99</span>)</code></pre></div>
+<pre><code>##   Tukey multiple comparisons of means
+##     99% family-wise confidence level
+## 
+## Fit: aov(formula = survey$Height ~ survey$Exer)
+## 
+## $`survey$Exer`
+##                diff        lwr         upr     p adj
+## None-Freq -5.578667 -12.498802  1.34146876 0.0482672
+## Some-Freq -4.209762  -8.361843 -0.05768065 0.0088321
+## Some-None  1.368905  -5.688276  8.42608588 0.8354672</code></pre>
+
+</div>
+</div>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="singlevar.html" class="navigation navigation-prev navigation-unique" aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/lunr.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": {
+"github": false,
+"facebook": true,
+"twitter": true,
+"google": false,
+"weibo": false,
+"instapper": false,
+"vk": false,
+"all": ["facebook", "google", "twitter", "weibo", "instapaper"]
+},
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": null,
+"text": null
+},
+"download": null,
+"toc": {
+"collapse": "subsection"
+},
+"collapse": "section",
+"scroll_highlight": true,
+"toolbar": {
+"position": "fixed"
+},
+"search": true
+});
+});
+</script>
+
+</body>
+
+</html>

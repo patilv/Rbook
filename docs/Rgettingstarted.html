@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html >
+
+<head>
+
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>Basic Insights from Data for Marketing Researchers</title>
+  <meta name="description" content="This book should contain introductory material for analyzing data for marketing researchers.">
+  <meta name="generator" content="bookdown 0.5 and GitBook 2.6.7">
+
+  <meta property="og:title" content="Basic Insights from Data for Marketing Researchers" />
+  <meta property="og:type" content="book" />
+  
+  
+  <meta property="og:description" content="This book should contain introductory material for analyzing data for marketing researchers." />
+  <meta name="github-repo" content="patilv.github.io" />
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="Basic Insights from Data for Marketing Researchers" />
+  
+  <meta name="twitter:description" content="This book should contain introductory material for analyzing data for marketing researchers." />
+  
+
+<meta name="author" content="Vivek H. Patil">
+
+
+<meta name="date" content="2017-11-05">
+
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  
+  
+<link rel="prev" href="introR.html">
+<link rel="next" href="describedata.html">
+<script src="libs/jquery-2.2.3/jquery.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+
+<style type="text/css">
+div.sourceCode { overflow-x: auto; }
+table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
+  margin: 0; padding: 0; vertical-align: baseline; border: none; }
+table.sourceCode { width: 100%; line-height: 100%; }
+td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; color: #aaaaaa; border-right: 1px solid #aaaaaa; }
+td.sourceCode { padding-left: 5px; }
+code > span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code > span.dt { color: #902000; } /* DataType */
+code > span.dv { color: #40a070; } /* DecVal */
+code > span.bn { color: #40a070; } /* BaseN */
+code > span.fl { color: #40a070; } /* Float */
+code > span.ch { color: #4070a0; } /* Char */
+code > span.st { color: #4070a0; } /* String */
+code > span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code > span.ot { color: #007020; } /* Other */
+code > span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code > span.fu { color: #06287e; } /* Function */
+code > span.er { color: #ff0000; font-weight: bold; } /* Error */
+code > span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+code > span.cn { color: #880000; } /* Constant */
+code > span.sc { color: #4070a0; } /* SpecialChar */
+code > span.vs { color: #4070a0; } /* VerbatimString */
+code > span.ss { color: #bb6688; } /* SpecialString */
+code > span.im { } /* Import */
+code > span.va { color: #19177c; } /* Variable */
+code > span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code > span.op { color: #666666; } /* Operator */
+code > span.bu { } /* BuiltIn */
+code > span.ex { } /* Extension */
+code > span.pp { color: #bc7a00; } /* Preprocessor */
+code > span.at { color: #7d9029; } /* Attribute */
+code > span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code > span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code > span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+</style>
+
+<link rel="stylesheet" href="style.css" type="text/css" />
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li><a href="./">Basic Insights from Data for Marketing Researchers</a></li>
+
+<li class="divider"></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i>Preface</a><ul>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html#about-me"><i class="fa fa-check"></i>About me</a></li>
+</ul></li>
+<li class="chapter" data-level="1" data-path="introR.html"><a href="introR.html"><i class="fa fa-check"></i><b>1</b> Introduction to R</a><ul>
+<li class="chapter" data-level="1.1" data-path="introR.html"><a href="introR.html#why-use-r"><i class="fa fa-check"></i><b>1.1</b> Why use R?</a></li>
+<li class="chapter" data-level="1.2" data-path="introR.html"><a href="introR.html#r---environment-and-software"><i class="fa fa-check"></i><b>1.2</b> R - Environment and Software</a></li>
+<li class="chapter" data-level="1.3" data-path="introR.html"><a href="introR.html#r-consortium"><i class="fa fa-check"></i><b>1.3</b> R Consortium</a></li>
+<li class="chapter" data-level="1.4" data-path="introR.html"><a href="introR.html#a-recently-released-video-on-r"><i class="fa fa-check"></i><b>1.4</b> A Recently Released Video on R</a></li>
+</ul></li>
+<li class="chapter" data-level="2" data-path="Rgettingstarted.html"><a href="Rgettingstarted.html"><i class="fa fa-check"></i><b>2</b> Getting Started with R</a><ul>
+<li class="chapter" data-level="2.1" data-path="Rgettingstarted.html"><a href="Rgettingstarted.html#r-studio-interface"><i class="fa fa-check"></i><b>2.1</b> R-Studio Interface</a></li>
+<li class="chapter" data-level="2.2" data-path="Rgettingstarted.html"><a href="Rgettingstarted.html#organizing-projects"><i class="fa fa-check"></i><b>2.2</b> Organizing projects</a></li>
+<li class="chapter" data-level="2.3" data-path="Rgettingstarted.html"><a href="Rgettingstarted.html#installing-packages-from-cran"><i class="fa fa-check"></i><b>2.3</b> Installing Packages from CRAN</a></li>
+<li class="chapter" data-level="2.4" data-path="Rgettingstarted.html"><a href="Rgettingstarted.html#installing-a-package-from-github"><i class="fa fa-check"></i><b>2.4</b> Installing a package from GitHub</a></li>
+<li class="chapter" data-level="2.5" data-path="Rgettingstarted.html"><a href="Rgettingstarted.html#installed-packages-should-be-loaded-for-them-to-offer-their-functions-for-use"><i class="fa fa-check"></i><b>2.5</b> Installed packages should be loaded for them to offer their functions for use</a></li>
+<li class="chapter" data-level="2.6" data-path="Rgettingstarted.html"><a href="Rgettingstarted.html#setting-your-working-directory"><i class="fa fa-check"></i><b>2.6</b> Setting your working directory</a></li>
+<li class="chapter" data-level="2.7" data-path="Rgettingstarted.html"><a href="Rgettingstarted.html#reading-data-from-different-sources"><i class="fa fa-check"></i><b>2.7</b> Reading data from different sources</a></li>
+<li class="chapter" data-level="2.8" data-path="Rgettingstarted.html"><a href="Rgettingstarted.html#saving-data"><i class="fa fa-check"></i><b>2.8</b> Saving data</a></li>
+<li class="chapter" data-level="2.9" data-path="Rgettingstarted.html"><a href="Rgettingstarted.html#creating-a-dataframe"><i class="fa fa-check"></i><b>2.9</b> Creating a dataframe</a></li>
+</ul></li>
+<li class="chapter" data-level="3" data-path="describedata.html"><a href="describedata.html"><i class="fa fa-check"></i><b>3</b> Describing Data</a><ul>
+<li class="chapter" data-level="3.1" data-path="describedata.html"><a href="describedata.html#number-of-rows-and-columns-in-that-sequence"><i class="fa fa-check"></i><b>3.1</b> Number of rows and columns (in that sequence)</a></li>
+<li class="chapter" data-level="3.2" data-path="describedata.html"><a href="describedata.html#number-of-rows"><i class="fa fa-check"></i><b>3.2</b> Number of rows</a></li>
+<li class="chapter" data-level="3.3" data-path="describedata.html"><a href="describedata.html#number-of-columns"><i class="fa fa-check"></i><b>3.3</b> Number of columns</a></li>
+<li class="chapter" data-level="3.4" data-path="describedata.html"><a href="describedata.html#names-of-variables"><i class="fa fa-check"></i><b>3.4</b> Names of variables</a></li>
+<li class="chapter" data-level="3.5" data-path="describedata.html"><a href="describedata.html#first-6-rows"><i class="fa fa-check"></i><b>3.5</b> First 6 rows</a></li>
+<li class="chapter" data-level="3.6" data-path="describedata.html"><a href="describedata.html#first-2-rows"><i class="fa fa-check"></i><b>3.6</b> First 2 rows</a></li>
+<li class="chapter" data-level="3.7" data-path="describedata.html"><a href="describedata.html#last-6-rows"><i class="fa fa-check"></i><b>3.7</b> Last 6 rows</a></li>
+<li class="chapter" data-level="3.8" data-path="describedata.html"><a href="describedata.html#first-row"><i class="fa fa-check"></i><b>3.8</b> First row</a></li>
+<li class="chapter" data-level="3.9" data-path="describedata.html"><a href="describedata.html#first-row-first-column"><i class="fa fa-check"></i><b>3.9</b> First row, first column</a></li>
+<li class="chapter" data-level="3.10" data-path="describedata.html"><a href="describedata.html#name-of-third-column"><i class="fa fa-check"></i><b>3.10</b> Name of third column</a></li>
+<li class="chapter" data-level="3.11" data-path="describedata.html"><a href="describedata.html#entries-from-third-column"><i class="fa fa-check"></i><b>3.11</b> 3 entries from third column</a></li>
+<li class="chapter" data-level="3.12" data-path="describedata.html"><a href="describedata.html#structure-of-the-dataframe"><i class="fa fa-check"></i><b>3.12</b> Structure of the dataframe</a></li>
+<li class="chapter" data-level="3.13" data-path="describedata.html"><a href="describedata.html#summary-of-the-dataframe"><i class="fa fa-check"></i><b>3.13</b> Summary of the dataframe</a></li>
+<li class="chapter" data-level="3.14" data-path="describedata.html"><a href="describedata.html#summary-of-a-variable-in-the-dataframe"><i class="fa fa-check"></i><b>3.14</b> Summary of a variable in the dataframe</a></li>
+</ul></li>
+<li class="chapter" data-level="4" data-path="modifydata.html"><a href="modifydata.html"><i class="fa fa-check"></i><b>4</b> Modifying Data</a><ul>
+<li class="chapter" data-level="4.1" data-path="modifydata.html"><a href="modifydata.html#subsetting-data-and-dropping-factor-levels"><i class="fa fa-check"></i><b>4.1</b> Subsetting data and dropping factor levels</a></li>
+<li class="chapter" data-level="4.2" data-path="modifydata.html"><a href="modifydata.html#reordering-factor-levels"><i class="fa fa-check"></i><b>4.2</b> Reordering factor levels</a></li>
+<li class="chapter" data-level="4.3" data-path="modifydata.html"><a href="modifydata.html#changing-column-names"><i class="fa fa-check"></i><b>4.3</b> Changing column names</a></li>
+<li class="chapter" data-level="4.4" data-path="modifydata.html"><a href="modifydata.html#renamingcollapsing-factor-levels"><i class="fa fa-check"></i><b>4.4</b> Renaming/Collapsing factor levels</a></li>
+<li class="chapter" data-level="4.5" data-path="modifydata.html"><a href="modifydata.html#converting-data-types"><i class="fa fa-check"></i><b>4.5</b> Converting data types</a><ul>
+<li class="chapter" data-level="4.5.1" data-path="modifydata.html"><a href="modifydata.html#factor-to-numeric"><i class="fa fa-check"></i><b>4.5.1</b> Factor to numeric</a></li>
+<li class="chapter" data-level="4.5.2" data-path="modifydata.html"><a href="modifydata.html#numeric-to-factor---binning-variables"><i class="fa fa-check"></i><b>4.5.2</b> Numeric to Factor - Binning variables</a></li>
+<li class="chapter" data-level="4.5.3" data-path="modifydata.html"><a href="modifydata.html#factor-and-numeric-to-character-and-vice-versa"><i class="fa fa-check"></i><b>4.5.3</b> Factor and Numeric to Character and vice versa</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="5" data-path="summarystats.html"><a href="summarystats.html"><i class="fa fa-check"></i><b>5</b> Summary Statistics</a><ul>
+<li class="chapter" data-level="5.1" data-path="summarystats.html"><a href="summarystats.html#measures-of-central-tendency"><i class="fa fa-check"></i><b>5.1</b> Measures of Central Tendency</a></li>
+<li class="chapter" data-level="5.2" data-path="summarystats.html"><a href="summarystats.html#other-measures-of-central-tendency"><i class="fa fa-check"></i><b>5.2</b> Other measures of central tendency</a></li>
+<li class="chapter" data-level="5.3" data-path="summarystats.html"><a href="summarystats.html#measures-of-dispersion-variation"><i class="fa fa-check"></i><b>5.3</b> Measures of Dispersion (variation)</a><ul>
+<li class="chapter" data-level="5.3.1" data-path="summarystats.html"><a href="summarystats.html#range"><i class="fa fa-check"></i><b>5.3.1</b> Range</a></li>
+<li class="chapter" data-level="5.3.2" data-path="summarystats.html"><a href="summarystats.html#interquartile-range-difference-between-25th-and-75th-percentile-or-quantile"><i class="fa fa-check"></i><b>5.3.2</b> Interquartile range: Difference between 25th and 75th percentile (or quantile)</a></li>
+<li class="chapter" data-level="5.3.3" data-path="summarystats.html"><a href="summarystats.html#variance-and-standard-deviation"><i class="fa fa-check"></i><b>5.3.3</b> Variance and Standard Deviation</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="6" data-path="singlevar.html"><a href="singlevar.html"><i class="fa fa-check"></i><b>6</b> Single variable Analysis</a><ul>
+<li class="chapter" data-level="6.1" data-path="singlevar.html"><a href="singlevar.html#numeric-variable"><i class="fa fa-check"></i><b>6.1</b> Numeric Variable</a><ul>
+<li class="chapter" data-level="6.1.1" data-path="singlevar.html"><a href="singlevar.html#histogram"><i class="fa fa-check"></i><b>6.1.1</b> Histogram</a></li>
+<li class="chapter" data-level="6.1.2" data-path="singlevar.html"><a href="singlevar.html#density-plot"><i class="fa fa-check"></i><b>6.1.2</b> Density plot</a></li>
+<li class="chapter" data-level="6.1.3" data-path="singlevar.html"><a href="singlevar.html#box-plot"><i class="fa fa-check"></i><b>6.1.3</b> Box plot</a></li>
+<li class="chapter" data-level="6.1.4" data-path="singlevar.html"><a href="singlevar.html#test-of-mean"><i class="fa fa-check"></i><b>6.1.4</b> Test of Mean</a></li>
+</ul></li>
+<li class="chapter" data-level="6.2" data-path="singlevar.html"><a href="singlevar.html#factor-variable"><i class="fa fa-check"></i><b>6.2</b> Factor variable</a><ul>
+<li class="chapter" data-level="6.2.1" data-path="singlevar.html"><a href="singlevar.html#bar-plot"><i class="fa fa-check"></i><b>6.2.1</b> Bar plot</a></li>
+<li class="chapter" data-level="6.2.2" data-path="singlevar.html"><a href="singlevar.html#pie-chart---fyi-do-not-use"><i class="fa fa-check"></i><b>6.2.2</b> Pie Chart - FYI Do not use</a></li>
+<li class="chapter" data-level="6.2.3" data-path="singlevar.html"><a href="singlevar.html#one-factor-variable-chi-square-goodness-of-fit-test"><i class="fa fa-check"></i><b>6.2.3</b> One factor-variable Chi-square goodness-of-fit test</a></li>
+</ul></li>
+<li class="chapter" data-level="6.3" data-path="singlevar.html"><a href="singlevar.html#one-factor-variable---t-test-one-sample-proportion"><i class="fa fa-check"></i><b>6.3</b> One factor variable - t-test one sample proportion</a></li>
+</ul></li>
+<li class="chapter" data-level="7" data-path="multivar.html"><a href="multivar.html"><i class="fa fa-check"></i><b>7</b> Relationships between variables</a><ul>
+<li class="chapter" data-level="7.1" data-path="multivar.html"><a href="multivar.html#between-continuous-variables-correlations"><i class="fa fa-check"></i><b>7.1</b> Between continuous variables: Correlations</a><ul>
+<li class="chapter" data-level="7.1.1" data-path="multivar.html"><a href="multivar.html#plotting"><i class="fa fa-check"></i><b>7.1.1</b> Plotting</a></li>
+<li class="chapter" data-level="7.1.2" data-path="multivar.html"><a href="multivar.html#correlations-between-two-numeric-variables"><i class="fa fa-check"></i><b>7.1.2</b> Correlations between two numeric variables</a></li>
+<li class="chapter" data-level="7.1.3" data-path="multivar.html"><a href="multivar.html#paired-samples---comparing-two-means"><i class="fa fa-check"></i><b>7.1.3</b> Paired Samples - comparing two-means</a></li>
+<li class="chapter" data-level="7.1.4" data-path="multivar.html"><a href="multivar.html#relationships-between-more-than-two-numeric-variables"><i class="fa fa-check"></i><b>7.1.4</b> Relationships between more than two numeric variables</a></li>
+</ul></li>
+<li class="chapter" data-level="7.2" data-path="multivar.html"><a href="multivar.html#relationships-between-factor-variables"><i class="fa fa-check"></i><b>7.2</b> Relationships between factor variables</a></li>
+<li class="chapter" data-level="7.3" data-path="multivar.html"><a href="multivar.html#between-factor-and-continuous-variables"><i class="fa fa-check"></i><b>7.3</b> Between factor and continuous variables</a><ul>
+<li class="chapter" data-level="7.3.1" data-path="multivar.html"><a href="multivar.html#two-levels-of-a-factor-level-and-one-continuous-variable---t-test"><i class="fa fa-check"></i><b>7.3.1</b> Two levels of a factor level and one continuous variable - t-test</a></li>
+<li class="chapter" data-level="7.3.2" data-path="multivar.html"><a href="multivar.html#more-than-two-levels-of-a-factor-variable-and-one-continuous-variable.--one-way-anova"><i class="fa fa-check"></i><b>7.3.2</b> More than two levels of a factor variable and one continuous variable.- One-Way ANOVA</a></li>
+</ul></li>
+</ul></li>
+<li class="divider"></li>
+<li><a href="https://github.com/patilv" target="blank">Published with bookdown</a></li>
+
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Basic Insights from Data for Marketing Researchers</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="Rgettingstarted" class="section level1">
+<h1><span class="header-section-number">Chapter 2</span> Getting Started with R</h1>
+<p>The first order of business would involve installing R.</p>
+<ol style="list-style-type: decimal">
+<li>Download R for your computer based on its operating system from <a href="https://cloud.r-project.org/" class="uri">https://cloud.r-project.org/</a> - Select base R. Mac users may have to download the version compatible with the version of the Mac OSX of your laptop.</li>
+<li>Now install the software. (If using Windows, use the 64 bit version if that option is provided.) Once R is installed, open it. A console should open. Once you verify this, you can close the console and get out of the program. There will be no need to open this in the future.</li>
+<li>Get an IDE. I prefer to use R-Studio desktop. This can be downloaded from <a href="https://www.rstudio.com/products/rstudio/download/#download">R-Studio’s website</a>. Don’t forget to download the version compatible with your operating system. Install the software and open it. Whenever you open R-Studio desktop, it provides access to the R-interface through one of its panels. This is the reason we don’t have to open the R-console separately. (See point #2 from above.)</li>
+</ol>
+<div id="r-studio-interface" class="section level2">
+<h2><span class="header-section-number">2.1</span> R-Studio Interface</h2>
+</div>
+<div id="organizing-projects" class="section level2">
+<h2><span class="header-section-number">2.2</span> Organizing projects</h2>
+<ol style="list-style-type: decimal">
+<li><p>It is a good idea to organize analysis projects into separate folders of their own. Any output of the analysis and the reports you generate would also end up being saved in that folder.</p></li>
+<li><p>Naming conventions for folders, files, and variables: Avoid having any special characters and or spaces for names of folders, files and variables. Variable names can have underscores between words, for example, <code>University_Standing</code> or <code>UniversityStanding</code> would be perfectly fine. Use names that can help <strong>you</strong> and <strong>any reader</strong> of the report make sense of what it is that you are studying. Graham Williams has a good style guide for how to code in R. It can be downloaded from <a href="http://onepager.togaware.com">onepager.togaware.com</a>.</p></li>
+<li><p>After opening R-Studio, always check on the working directory and set it to the specific location within the folder intended for the project.</p></li>
+</ol>
+</div>
+<div id="installing-packages-from-cran" class="section level2">
+<h2><span class="header-section-number">2.3</span> Installing Packages from CRAN</h2>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">install.packages</span>(<span class="st">&quot;pkgname&quot;</span>)
+<span class="kw">install.packages</span>(<span class="kw">c</span>(<span class="st">&quot;pkgname1&quot;</span>,<span class="st">&quot;pkgname2&quot;</span>)) <span class="co"># For two or more packages </span></code></pre></div>
+</div>
+<div id="installing-a-package-from-github" class="section level2">
+<h2><span class="header-section-number">2.4</span> Installing a package from GitHub</h2>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="cf">if</span> (<span class="op">!</span><span class="kw">require</span>(<span class="st">&quot;devtools&quot;</span>)) <span class="kw">install.packages</span>(<span class="st">&quot;devtools&quot;</span>) <span class="co"># Checks if the devtools package is available and if not, installs it from CRAN</span>
+devtools<span class="op">::</span><span class="kw">install_github</span>(<span class="st">&quot;githubaccountname/packagerepository&quot;</span>)</code></pre></div>
+</div>
+<div id="installed-packages-should-be-loaded-for-them-to-offer-their-functions-for-use" class="section level2">
+<h2><span class="header-section-number">2.5</span> Installed packages should be loaded for them to offer their functions for use</h2>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(pkgname)</code></pre></div>
+</div>
+<div id="setting-your-working-directory" class="section level2">
+<h2><span class="header-section-number">2.6</span> Setting your working directory</h2>
+<p>This helps in organizing the inputs/outputs of a project.</p>
+<ul>
+<li>The current working directory can be determined using <code>getwd()</code></li>
+<li>A new working directory can be set using <code>setwd(path to directory)</code></li>
+<li>R-Studio makes this much easier to do using their GUI using <em>Session -&gt; Set Working Directory</em> option</li>
+<li>Using <em>Projects</em> in R-Studio also makes the process of switching working directories between different projects easier.</li>
+</ul>
+</div>
+<div id="reading-data-from-different-sources" class="section level2">
+<h2><span class="header-section-number">2.7</span> Reading data from different sources</h2>
+<p>Load R file</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">load</span>(<span class="st">&quot;filename.Rda&quot;</span>)</code></pre></div>
+<p>Delimited files text files</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">dataname=<span class="kw">read.csv</span>(<span class="st">&quot;datafilename.csv&quot;</span>)<span class="co"># use ?read.csv to see options</span></code></pre></div>
+<p>Excel Files</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">install.packages</span>(<span class="st">&quot;readxl&quot;</span>) <span class="co"># https://github.com/hadley/readxl</span>
+<span class="kw">library</span>(readxl)
+<span class="kw">read_excel</span>(<span class="st">&quot;excelfilename.xls&quot;</span>) <span class="co"># reads xlsx extensions also</span>
+<span class="kw">read_excel</span>(<span class="st">&quot;excelfilename.xlsx&quot;</span>, <span class="dt">sheet =</span> <span class="st">&quot;nameofsheet&quot;</span>)
+<span class="kw">read_excel</span>(<span class="st">&quot;excelfilename.xlsx&quot;</span>, <span class="dt">sheet =</span> <span class="dv">3</span>)<span class="co"># for third sheet, as an example</span>
+<span class="kw">read_excel</span>(<span class="st">&quot;my-spreadsheet.xls&quot;</span>, <span class="dt">na =</span> <span class="st">&quot;NA&quot;</span>) <span class="co"># if NAs are represented by non-blank cells, specify them with na=</span></code></pre></div>
+<p>SPSS/SAS/Stata files</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">install.packages</span>(<span class="st">&quot;haven&quot;</span>) <span class="co"># https://github.com/hadley/haven</span>
+<span class="kw">library</span>(haven)
+<span class="kw">read_sas</span>(<span class="st">&quot;path/to/file&quot;</span>) <span class="co"># SAS file</span>
+<span class="kw">read_por</span>(<span class="st">&quot;path/to/file&quot;</span>) <span class="co"># SPSS por files</span>
+<span class="kw">read_sav</span>(<span class="st">&quot;path/to/file&quot;</span>) <span class="co"># SPSS sav files</span>
+<span class="kw">read_dta</span>(<span class="st">&quot;path/to/file&quot;</span>)<span class="co"># Stata</span></code></pre></div>
+<p>Many others</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">?read.table
+?readClipboard
+<span class="co"># Checkout the readr package from Hadley: https://github.com/hadley/readr</span></code></pre></div>
+</div>
+<div id="saving-data" class="section level2">
+<h2><span class="header-section-number">2.8</span> Saving data</h2>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">save</span>(dataframename,<span class="dt">file=</span><span class="st">&quot;filename.Rda&quot;</span>) <span class="co"># To R data</span>
+<span class="kw">write.csv</span>(dataframename,<span class="dt">file=</span><span class="st">&quot;myfilename.csv&quot;</span>) <span class="co"># to csv...see also ?write.csv</span>
+<span class="kw">write.table</span>(dataframename,<span class="dt">file=</span><span class="st">&quot;myfilename.tsv&quot;</span>,<span class="dt">sep=</span><span class="st">&quot;</span><span class="ch">\t</span><span class="st">&quot;</span>) <span class="co"># to tab-separated file...see also ?write.table</span></code></pre></div>
+</div>
+<div id="creating-a-dataframe" class="section level2">
+<h2><span class="header-section-number">2.9</span> Creating a dataframe</h2>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">Person=<span class="kw">c</span>(<span class="st">&quot;A&quot;</span>,<span class="st">&quot;B&quot;</span>,<span class="st">&quot;C&quot;</span>,<span class="st">&quot;D&quot;</span>,<span class="st">&quot;E&quot;</span>)
+Age=<span class="kw">c</span>(<span class="dv">15</span>,<span class="dv">20</span>,<span class="dv">25</span>,<span class="dv">30</span>,<span class="dv">35</span>)
+Height=<span class="kw">c</span>(<span class="dv">60</span>,<span class="dv">63</span>,<span class="dv">75</span>,<span class="dv">79</span>,<span class="dv">56</span>)
+page=<span class="kw">data.frame</span>(Person,Age,Height)</code></pre></div>
+
+</div>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="introR.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="describedata.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/lunr.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": {
+"github": false,
+"facebook": true,
+"twitter": true,
+"google": false,
+"weibo": false,
+"instapper": false,
+"vk": false,
+"all": ["facebook", "google", "twitter", "weibo", "instapaper"]
+},
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": null,
+"text": null
+},
+"download": null,
+"toc": {
+"collapse": "subsection"
+},
+"collapse": "section",
+"scroll_highlight": true,
+"toolbar": {
+"position": "fixed"
+},
+"search": true
+});
+});
+</script>
+
+</body>
+
+</html>

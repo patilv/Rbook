@@ -1,0 +1,152 @@
+# Single variable Analysis {#singlevar}  
+
+
+## Numeric Variable
+
+### Histogram
+
+```{r}
+hist(iris$Sepal.Length,col="darkred",breaks=30,border = "white",xlab = "Sepal.Length") 
+# use ?hist to know more about other parameters and how you can change the title
+```
+
+### Density plot
+
+
+```{r}
+plot(density(iris$Sepal.Length))
+```
+
+### Box plot
+
+```{r}
+boxplot(iris$Sepal.Length) ## box plot
+```
+
+
+### Test of Mean
+
+```{r}
+mean(iris$Sepal.Length)
+```
+
+If we had to test whether the mean of Sepal.Length was either = or < or >  a particular value, we could use a t-test.
+
+There are three assumptions of a one-sample t-test.
+
+1. Random sampling from a defined population
+2. Interval or ratio scale of measurement 
+3. Population is normally distributed
+
+```{r}
+t.test(iris$Sepal.Length,mu=5) # Ho: mu=5 
+```
+
+
+```{r}
+t.test(iris$Sepal.Length,mu=5,alternative="greater",conf.level = .99) # Ho: mu=5 
+```
+
+Interpretation: Since the p-value is less than .01, we have evidence to suggest that the mean of Sepal.Length is greater than 5.
+
+
+
+## Factor variable
+
+### Bar plot
+
+```{r}
+plot(iris$Species)
+```
+
+### Pie Chart - FYI Do not use
+
+```{r}
+counts=table(iris$Species) ## get counts
+labs=paste(iris$Species,counts)## create labels
+pie(counts,labels=labs) ## plot
+```
+
+
+### One factor-variable Chi-square goodness-of-fit test
+
+This is useful to determine whether a frequency distribution (of a factor variable) fits well an expected frequency distribution. To illustrate this, let us use the `survey` dataset (from an R packages named `MASS`). The data and their description have been provided in the folder for datasets. 
+
+** Names of variables**: 
+
+```{r}
+load("data/survey.Rda")
+names(survey)
+```
+
+** Structure of the dataframe**
+
+```{r}
+str(survey)
+
+```
+
+
+Plotting a single factor variable, say the smoking habits of students provided in the `Smoke` variable. 
+
+```{r}
+plot(survey$Smoke,col="lightblue")
+```
+
+Let us now suppose that we wanted to test whether in the observed frequency distribution can help us make the inference that in the population of students, 70% of students were non-smokers and the remaining 30% were equally split among the other three groups.
+
+Null: The observed frequency distribution fits well with the expected frequency distribution.
+Alternate: The observed frequency distribution does not fit well with the expected frequency distribution.
+
+Assumptions of the test are discussed in: [http://www.basic.northwestern.edu/statguidefiles/gf-dist_ass_viol.html](http://www.basic.northwestern.edu/statguidefiles/gf-dist_ass_viol.html)
+
+How many observations are present in each of the four levels of the `Smoker` variable? - Observed frequency distribution
+
+```{r}
+obsfreq=table(survey$Smoke)
+obsfreq
+```
+
+Observed frequency distribution (in proportions)
+
+```{r}
+prop.table(obsfreq)
+```
+
+Expected frequency distribution (in proportions)
+
+```{r}
+expprop=c(.1,.7,.1,.1)
+```
+
+Chi-square test of goodness of fit test
+
+```{r}
+chisq.test(obsfreq,p=expprop)
+```
+
+Interpretation: Since the p-value is less than .01 (to yield a 99% confidence level), we find evidence to suggest that the two distributions are different. (The two distributions are the observed frequency distribution and the expected frequency distribution.) 
+
+## One factor variable - t-test one sample proportion
+
+```{r}
+summary(survey$M.I)
+```
+
+Let us suppose we were testing a hypothesis that the proportion of students who would indicate their responses in the Imperial units (feet/inches, in contrast to the metric units - centimeters/meters) would be something other than 30%. We find that there are 68 of them who provide a response in that unit. Do we have evidence in favor of the hypothesis that there would be a value different from 30%?
+
+```{r}
+binom.test(table(survey$M.I),p=.3)
+```
+
+Conclusion: We do not have evidence that the proportion is different from .3 (why? checkout the p-value. and the confidence interval should not contain the observed probability.)
+
+
+What if we were testing the hypothesis that the proportion will be greater than .3?
+
+```{r}
+binom.test(table(survey$M.I),p=.3,alternative = "greater")
+```
+
+Yet again, we don't have any evidence that the mean is greater than .3 (although the observed proportion is .325, it is not "statistically significant"
+)
