@@ -1,0 +1,22 @@
+{
+    "collab_server" : "",
+    "contents" : "",
+    "created" : 1510498098093.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "4113157343",
+    "id" : "5405CBCD",
+    "lastKnownWriteTime" : 1510500179,
+    "last_content_update" : 1510500179181,
+    "path" : "~/GitHub/Rbook/04-modification.Rmd",
+    "project_path" : "04-modification.Rmd",
+    "properties" : {
+        "cursorPosition" : "107,13",
+        "scrollLine" : "92"
+    },
+    "relative_order" : 1,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_markdown"
+}

@@ -1,0 +1,177 @@
+---
+title: "Introduction to Geographic Mapping "
+author:  "Vivek H. Patil <br> Professor of Marketing, Gonzaga University"
+date: "November 14, 2017"
+output:
+  ioslides_presentation:
+    smaller: yes
+    theme: spacelab
+    widescreen: yes
+---
+
+<style>
+.title-slide hgroup h1 {color: red;}
+h2 {color: red;}
+slides > slide:not(.nobackground):after {
+  content: '';
+}
+</style>
+
+
+## Geographic mapping of points - An introduction
+
+```{r}
+thingstodo=read.table(text="
+                      Attraction  lat lon  Population
+                      Jepson  47.667268 -117.405114 45
+                      Starbucks  47.669088 -117.396847  50
+                      WSU 47.660960 -117.405697 250
+                      EWU 47.661061 -117.404044 400",header=TRUE)
+```
+
+## Geocoding, if only address is available
+
+```{r}
+suppressMessages(library(ggmap))
+
+whatislatlon=function(mydata,addressindata){
+locs=geocode(as.character(unique(mydata[,addressindata])))
+locs$address=unique(mydata[,addressindata])
+mydata$latitude=locs$lat[ match(mydata[,addressindata],locs$address)]
+mydata$longitude=locs$lon[ match(mydata[,addressindata],locs$address)]
+return(mydata)
+}
+```
+
+## That function works
+
+```{r message=FALSE}
+
+Address=c("502 E Boone Ave, Spokane, WA, 99258","502 E Boone Ave, Spokane, WA, 99258")
+mydummydata=data.frame(Address=Address)
+mysmartdata=whatislatlon(mydummydata,"Address")
+mysmartdata
+```
+
+## A map of location of interest
+
+```{r warning=FALSE, message=FALSE }
+location=c(-117.402209,47.665330)
+map=get_map(location=location,maptype="roadmap",source="google",zoom=16)
+spokanemap=ggmap(map)
+print(spokanemap)
+```
+
+## Add Attractions
+
+```{r}
+spokanemap=spokanemap+geom_point(data=thingstodo,
+            aes(lon,lat,color=Attraction),size=5)
+print(spokanemap)
+```
+
+## Some Cleaning
+
+```{r}
+spokanemap+theme(panel.grid.major = element_blank(),
+                 panel.grid.minor = element_blank(),
+                axis.text = element_blank(),axis.title = element_blank(),
+                axis.ticks = element_blank())
+```
+
+## A traveling student's route
+
+```{r message=FALSE, warning=FALSE}
+routes=data.frame(x=thingstodo$lon,y=thingstodo$lat)
+newmap=get_googlemap(center=location,zoom=16,
+                     markers=routes,
+                     path = routes,scale=2,maptype = "satellite")
+ggmap(newmap,darken=.3)+geom_text(data=thingstodo,aes(lon,lat,label=Attraction),
+                                                  color="white",size=3)
+```
+
+## R-Studio's `leaflet` package
+
+* Interface to `leaflet` JS  
+
+```{r}
+library(leaflet) #rstudio package
+leaflet() %>% addTiles()
+```
+
+## Add our points of attraction
+
+```{r message=FALSE, warning=FALSE}
+leaflet() %>% addTiles()%>%addCircleMarkers(data=thingstodo)
+```
+
+## Give more information
+
+```{r}
+leaflet() %>% addTiles()%>%addCircleMarkers(data=thingstodo,popup=~Attraction,radius=~Population*.05)
+```
+
+## Markers
+
+```{r message=FALSE, warning=FALSE}
+leaflet() %>% addTiles()%>%addMarkers(data=thingstodo,popup=~Attraction)
+```
+
+## Routes
+
+```{r message=FALSE, warning=FALSE}
+leaflet() %>% addTiles()%>%addMarkers(data=thingstodo,popup=~Attraction)%>% 
+  addPolylines(thingstodo$lon,thingstodo$lat)
+```
+
+## Few Controls
+
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+leaflet() %>% addTiles(group = "OSM (default)") %>%
+  addProviderTiles("Stamen.Toner", group = "Toner") %>%
+  addProviderTiles("Stamen.TonerLite", group = "Toner Lite") %>%
+  addMarkers(data=thingstodo,popup=~Attraction)%>% 
+  addPolylines(thingstodo$lon,thingstodo$lat,group="Route")%>%
+  addLayersControl(
+    baseGroups = c("OSM (default)", "Toner", "Toner Lite"),
+    overlayGroups = c("Route"),
+    options = layersControlOptions(collapsed = FALSE)
+  )%>% hideGroup("Route")
+```
+
+## Blog example 1: Air Pollution Levels
+
+[http://patilv.com/airpollution/](http://patilv.com/airpollution/)
+<iframe src="http://patilv.github.io/Airpollutionpm/topcitiespm10map.html"></iframe>
+
+## Blog example 2: Count of Refugees from Different Countries in 2014 
+
+[http://patilv.com/USRefugees/](http://patilv.com/USRefugees/)
+<iframe src="http://patilv.github.io/Refugees/countryleaflet.html"></iframe>
+
+## Blog example 3: Animated Choropleths
+
+[http://bit.ly/patilanimatedchoropleths](http://bit.ly/patilanimatedchoropleths)
+
+## Blog example 4: Great Circles
+[http://patilv.com/USOpenCountries/](http://patilv.com/USOpenCountries/)
+<img src="playernationalitymap.png" width=900 height=700>
+
+
+## Code used is borrowed from many folks including: 
+
+* R-Studio: [https://rstudio.github.io/leaflet/](https://rstudio.github.io/leaflet/)
+* Ari Lamstein: [http://www.arilamstein.com/](http://www.arilamstein.com/)
+* Erik Erhardt: [http://statacumen.com/](http://statacumen.com/)
+<h4> Thanks are due to the many package developers and the wonderful R community.
+
+
+## Few Resources on shiny and leaflet
+
+* [http://shiny.rstudio.com/](http://shiny.rstudio.com/)
+* Sample apps I have worked on: [http://patilv.com/tags/#Shiny](http://patilv.com/tags/#Shiny)
+* [https://rstudio.github.io/leaflet/](https://rstudio.github.io/leaflet/)
+* Search on R-Bloggers: [http://www.r-bloggers.com/?s=shiny](http://www.r-bloggers.com/?s=shiny) 
+
+
+
