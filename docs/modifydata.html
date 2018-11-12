@@ -7,7 +7,7 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <title>Basic Insights from Data for Marketing Researchers</title>
   <meta name="description" content="This book should contain introductory material for analyzing data for marketing researchers.">
-  <meta name="generator" content="bookdown 0.5 and GitBook 2.6.7">
+  <meta name="generator" content="bookdown 0.7 and GitBook 2.6.7">
 
   <meta property="og:title" content="Basic Insights from Data for Marketing Researchers" />
   <meta property="og:type" content="book" />
@@ -25,7 +25,7 @@
 <meta name="author" content="Vivek H. Patil">
 
 
-<meta name="date" content="2017-11-12">
+<meta name="date" content="2018-11-12">
 
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -140,15 +140,16 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <li class="chapter" data-level="3.14" data-path="describedata.html"><a href="describedata.html#summary-of-a-variable-in-the-dataframe"><i class="fa fa-check"></i><b>3.14</b> Summary of a variable in the dataframe</a></li>
 </ul></li>
 <li class="chapter" data-level="4" data-path="modifydata.html"><a href="modifydata.html"><i class="fa fa-check"></i><b>4</b> Modifying Data</a><ul>
-<li class="chapter" data-level="4.1" data-path="modifydata.html"><a href="modifydata.html#subsetting-data-and-dropping-factor-levels"><i class="fa fa-check"></i><b>4.1</b> Subsetting data and dropping factor levels</a></li>
-<li class="chapter" data-level="4.2" data-path="modifydata.html"><a href="modifydata.html#reordering-factor-levels"><i class="fa fa-check"></i><b>4.2</b> Reordering factor levels</a></li>
-<li class="chapter" data-level="4.3" data-path="modifydata.html"><a href="modifydata.html#reordering-dataset-entries"><i class="fa fa-check"></i><b>4.3</b> Reordering dataset entries</a></li>
-<li class="chapter" data-level="4.4" data-path="modifydata.html"><a href="modifydata.html#changing-column-names"><i class="fa fa-check"></i><b>4.4</b> Changing column names</a></li>
-<li class="chapter" data-level="4.5" data-path="modifydata.html"><a href="modifydata.html#renamingcollapsing-factor-levels"><i class="fa fa-check"></i><b>4.5</b> Renaming/Collapsing factor levels</a></li>
-<li class="chapter" data-level="4.6" data-path="modifydata.html"><a href="modifydata.html#converting-data-types"><i class="fa fa-check"></i><b>4.6</b> Converting data types</a><ul>
-<li class="chapter" data-level="4.6.1" data-path="modifydata.html"><a href="modifydata.html#factor-to-numeric"><i class="fa fa-check"></i><b>4.6.1</b> Factor to numeric</a></li>
-<li class="chapter" data-level="4.6.2" data-path="modifydata.html"><a href="modifydata.html#numeric-to-factor---binning-variables"><i class="fa fa-check"></i><b>4.6.2</b> Numeric to Factor - Binning variables</a></li>
-<li class="chapter" data-level="4.6.3" data-path="modifydata.html"><a href="modifydata.html#factor-and-numeric-to-character-and-vice-versa"><i class="fa fa-check"></i><b>4.6.3</b> Factor and Numeric to Character and vice versa</a></li>
+<li class="chapter" data-level="4.1" data-path="modifydata.html"><a href="modifydata.html#creating-new-variables"><i class="fa fa-check"></i><b>4.1</b> Creating new variables</a></li>
+<li class="chapter" data-level="4.2" data-path="modifydata.html"><a href="modifydata.html#subsetting-data-and-dropping-factor-levels"><i class="fa fa-check"></i><b>4.2</b> Subsetting data and dropping factor levels</a></li>
+<li class="chapter" data-level="4.3" data-path="modifydata.html"><a href="modifydata.html#reordering-factor-levels"><i class="fa fa-check"></i><b>4.3</b> Reordering factor levels</a></li>
+<li class="chapter" data-level="4.4" data-path="modifydata.html"><a href="modifydata.html#reordering-dataset-entries"><i class="fa fa-check"></i><b>4.4</b> Reordering dataset entries</a></li>
+<li class="chapter" data-level="4.5" data-path="modifydata.html"><a href="modifydata.html#changing-column-names"><i class="fa fa-check"></i><b>4.5</b> Changing column names</a></li>
+<li class="chapter" data-level="4.6" data-path="modifydata.html"><a href="modifydata.html#renamingcollapsing-factor-levels"><i class="fa fa-check"></i><b>4.6</b> Renaming/Collapsing factor levels</a></li>
+<li class="chapter" data-level="4.7" data-path="modifydata.html"><a href="modifydata.html#converting-data-types"><i class="fa fa-check"></i><b>4.7</b> Converting data types</a><ul>
+<li class="chapter" data-level="4.7.1" data-path="modifydata.html"><a href="modifydata.html#factor-to-numeric"><i class="fa fa-check"></i><b>4.7.1</b> Factor to numeric</a></li>
+<li class="chapter" data-level="4.7.2" data-path="modifydata.html"><a href="modifydata.html#numeric-to-factor---binning-variables"><i class="fa fa-check"></i><b>4.7.2</b> Numeric to Factor - Binning variables</a></li>
+<li class="chapter" data-level="4.7.3" data-path="modifydata.html"><a href="modifydata.html#factor-and-numeric-to-character-and-vice-versa"><i class="fa fa-check"></i><b>4.7.3</b> Factor and Numeric to Character and vice versa</a></li>
 </ul></li>
 </ul></li>
 <li class="chapter" data-level="5" data-path="summarystats.html"><a href="summarystats.html"><i class="fa fa-check"></i><b>5</b> Summary Statistics</a><ul>
@@ -209,8 +210,15 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
             <section class="normal" id="section-">
 <div id="modifydata" class="section level1">
 <h1><span class="header-section-number">Chapter 4</span> Modifying Data</h1>
+<div id="creating-new-variables" class="section level2">
+<h2><span class="header-section-number">4.1</span> Creating new variables</h2>
+<p>We can create new variables that result from manipulations of existing variables. For example, if we wanted to create a variable in the <code>iris</code> dataset that was a sum of the variables <code>Sepal.Length</code> and <code>Sepal.Width</code> and we wanted to call it <code>Sepal.dimensions</code>, we could code it as follows.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">iris<span class="op">$</span>Sepal.dimensions=iris<span class="op">$</span>Sepal.Length <span class="op">+</span><span class="st"> </span>iris<span class="op">$</span>Sepal.Width</code></pre></div>
+<p>There might be instances where we might decide to not create new variables and modify existing variable values. In such a case, we would use the same variable name on the left hand side of the equation shown above. Thus, the line of code would now become</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">iris<span class="op">$</span>Sepal.Length=<span class="st"> </span>iris<span class="op">$</span>Sepal.Length <span class="op">+</span><span class="st"> </span>iris<span class="op">$</span>Sepal.Width</code></pre></div>
+</div>
 <div id="subsetting-data-and-dropping-factor-levels" class="section level2">
-<h2><span class="header-section-number">4.1</span> Subsetting data and dropping factor levels</h2>
+<h2><span class="header-section-number">4.2</span> Subsetting data and dropping factor levels</h2>
 <p>This creates a subset of <code>iris</code> such that <code>Sepal.Length</code> is greater than or equal to 5.8.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">irisSubset1=iris[iris<span class="op">$</span>Sepal.Length<span class="op">&gt;=</span><span class="fl">5.8</span>,]
 <span class="kw">summary</span>(irisSubset1<span class="op">$</span>Sepal.Length)</code></pre></div>
@@ -249,7 +257,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 ##         50         50</code></pre>
 </div>
 <div id="reordering-factor-levels" class="section level2">
-<h2><span class="header-section-number">4.2</span> Reordering factor levels</h2>
+<h2><span class="header-section-number">4.3</span> Reordering factor levels</h2>
 <p>There may be instances where we may want the order the factor levels of a variable in a difference sequence than the default one. This can be accomplished using the following procedure.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">levels</span>(iris<span class="op">$</span>Species)</code></pre></div>
 <pre><code>## [1] &quot;setosa&quot;     &quot;versicolor&quot; &quot;virginica&quot;</code></pre>
@@ -260,7 +268,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <pre><code>## [1] &quot;virginica&quot;  &quot;versicolor&quot; &quot;setosa&quot;</code></pre>
 </div>
 <div id="reordering-dataset-entries" class="section level2">
-<h2><span class="header-section-number">4.3</span> Reordering dataset entries</h2>
+<h2><span class="header-section-number">4.4</span> Reordering dataset entries</h2>
 <p>If there was a need to rearrange entries of a dataframe based on either an ascending or a descending order of values of one or more columns, the <code>order</code> function comes in handy.</p>
 <p>For example, the <code>Sepal.Length</code> of the first row of the <code>iris</code> dataset can be obtained using the following command.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">iris<span class="op">$</span>Sepal.Length[<span class="dv">1</span>]</code></pre></div>
@@ -278,7 +286,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <pre><code>## [1] 7.9 7.7 7.7 7.7 7.7 7.6</code></pre>
 </div>
 <div id="changing-column-names" class="section level2">
-<h2><span class="header-section-number">4.4</span> Changing column names</h2>
+<h2><span class="header-section-number">4.5</span> Changing column names</h2>
 <p>Current names of columns in dataset</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">names</span>(irisSubset3)</code></pre></div>
 <pre><code>## [1] &quot;Sepal.Length&quot; &quot;Sepal.Width&quot;  &quot;Petal.Length&quot; &quot;Petal.Width&quot; 
@@ -296,7 +304,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 dataname=dataname <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">rename</span>(<span class="dt">newnamecol1=</span>oldnamecol1,<span class="dt">newnamecol2=</span>oldnamecol2)</code></pre></div>
 </div>
 <div id="renamingcollapsing-factor-levels" class="section level2">
-<h2><span class="header-section-number">4.5</span> Renaming/Collapsing factor levels</h2>
+<h2><span class="header-section-number">4.6</span> Renaming/Collapsing factor levels</h2>
 <p>If we wanted to change the labels/values of a factor variable, then we have to alter the variable’s factor levels. (Alternately, one can convert the factor variable into a character variable and then make the change.) The following discussion permits us to collapse factor levels into fewer levels as well. Let us make a copy of the iris dataset to play around with the Species variable.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">playiris=iris
 <span class="kw">levels</span>(playiris<span class="op">$</span>Species)</code></pre></div>
@@ -315,9 +323,9 @@ dataname=dataname <span class="op">%&gt;%</span><span class="st"> </span><span c
 <pre><code>## [1] &quot;newlevel1&quot; &quot;newlevel2&quot; &quot;newlevel3&quot;</code></pre>
 </div>
 <div id="converting-data-types" class="section level2">
-<h2><span class="header-section-number">4.6</span> Converting data types</h2>
+<h2><span class="header-section-number">4.7</span> Converting data types</h2>
 <div id="factor-to-numeric" class="section level3">
-<h3><span class="header-section-number">4.6.1</span> Factor to numeric</h3>
+<h3><span class="header-section-number">4.7.1</span> Factor to numeric</h3>
 <p>This comes in handy when we have a factor variable with numbers as values and we want to treat the variable as a numeric variable. This discussion is <a href="http://stackoverflow.com/questions/3418128/how-to-convert-a-factor-to-an-integer-numeric-without-a-loss-of-information">based on this Stack Overflow post.</a></p>
 <p>Let us go back to the <code>playiris</code> dataset. Remember the factor levels of the <code>Species</code> variable?</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">levels</span>(playiris<span class="op">$</span>Species)</code></pre></div>
@@ -341,7 +349,7 @@ dataname=dataname <span class="op">%&gt;%</span><span class="st"> </span><span c
 ##       1       1       2       2       3       3</code></pre>
 </div>
 <div id="numeric-to-factor---binning-variables" class="section level3">
-<h3><span class="header-section-number">4.6.2</span> Numeric to Factor - Binning variables</h3>
+<h3><span class="header-section-number">4.7.2</span> Numeric to Factor - Binning variables</h3>
 <p>Let us re-convert the Species variable to a factor variable - with numbers as values.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">playiris<span class="op">$</span>Species=<span class="kw">factor</span>(playiris<span class="op">$</span>Species)
 <span class="kw">summary</span>(playiris<span class="op">$</span>Species)</code></pre></div>
@@ -358,7 +366,7 @@ dataname=dataname <span class="op">%&gt;%</span><span class="st"> </span><span c
 <p>Binning may also be needed to create equal interval bins and equal frequency bins. Please see <a href="https://stackoverflow.com/questions/42037740/equal-frequency-and-equal-width-binning-in-r">this response</a> and <a href="https://stackoverflow.com/questions/5731116/equal-frequency-discretization-in-r/5741495#5741495">this response</a> on Stack OVerflow for more details on the possible solutions.</p>
 </div>
 <div id="factor-and-numeric-to-character-and-vice-versa" class="section level3">
-<h3><span class="header-section-number">4.6.3</span> Factor and Numeric to Character and vice versa</h3>
+<h3><span class="header-section-number">4.7.3</span> Factor and Numeric to Character and vice versa</h3>
 <p>There are times when we might want values of a column to be in a character format. For example, this may be necessary if we wanted to replace string patterns in the levels of factor variables or for text-mining purposes. In such cases, we can convert factor or numeric variables to character variables.</p>
 <p>Let us take a look at the structure of the playiris dataset.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">str</span>(playiris)</code></pre></div>
@@ -424,10 +432,11 @@ gitbook.start({
 "facebook": true,
 "twitter": true,
 "google": false,
+"linkedin": false,
 "weibo": false,
 "instapper": false,
 "vk": false,
-"all": ["facebook", "google", "twitter", "weibo", "instapaper"]
+"all": ["facebook", "google", "twitter", "linkedin", "weibo", "instapaper"]
 },
 "fontsettings": {
 "theme": "white",

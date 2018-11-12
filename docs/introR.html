@@ -7,7 +7,7 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <title>Basic Insights from Data for Marketing Researchers</title>
   <meta name="description" content="This book should contain introductory material for analyzing data for marketing researchers.">
-  <meta name="generator" content="bookdown 0.5 and GitBook 2.6.7">
+  <meta name="generator" content="bookdown 0.7 and GitBook 2.6.7">
 
   <meta property="og:title" content="Basic Insights from Data for Marketing Researchers" />
   <meta property="og:type" content="book" />
@@ -25,7 +25,7 @@
 <meta name="author" content="Vivek H. Patil">
 
 
-<meta name="date" content="2017-11-12">
+<meta name="date" content="2018-11-12">
 
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -140,15 +140,16 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <li class="chapter" data-level="3.14" data-path="describedata.html"><a href="describedata.html#summary-of-a-variable-in-the-dataframe"><i class="fa fa-check"></i><b>3.14</b> Summary of a variable in the dataframe</a></li>
 </ul></li>
 <li class="chapter" data-level="4" data-path="modifydata.html"><a href="modifydata.html"><i class="fa fa-check"></i><b>4</b> Modifying Data</a><ul>
-<li class="chapter" data-level="4.1" data-path="modifydata.html"><a href="modifydata.html#subsetting-data-and-dropping-factor-levels"><i class="fa fa-check"></i><b>4.1</b> Subsetting data and dropping factor levels</a></li>
-<li class="chapter" data-level="4.2" data-path="modifydata.html"><a href="modifydata.html#reordering-factor-levels"><i class="fa fa-check"></i><b>4.2</b> Reordering factor levels</a></li>
-<li class="chapter" data-level="4.3" data-path="modifydata.html"><a href="modifydata.html#reordering-dataset-entries"><i class="fa fa-check"></i><b>4.3</b> Reordering dataset entries</a></li>
-<li class="chapter" data-level="4.4" data-path="modifydata.html"><a href="modifydata.html#changing-column-names"><i class="fa fa-check"></i><b>4.4</b> Changing column names</a></li>
-<li class="chapter" data-level="4.5" data-path="modifydata.html"><a href="modifydata.html#renamingcollapsing-factor-levels"><i class="fa fa-check"></i><b>4.5</b> Renaming/Collapsing factor levels</a></li>
-<li class="chapter" data-level="4.6" data-path="modifydata.html"><a href="modifydata.html#converting-data-types"><i class="fa fa-check"></i><b>4.6</b> Converting data types</a><ul>
-<li class="chapter" data-level="4.6.1" data-path="modifydata.html"><a href="modifydata.html#factor-to-numeric"><i class="fa fa-check"></i><b>4.6.1</b> Factor to numeric</a></li>
-<li class="chapter" data-level="4.6.2" data-path="modifydata.html"><a href="modifydata.html#numeric-to-factor---binning-variables"><i class="fa fa-check"></i><b>4.6.2</b> Numeric to Factor - Binning variables</a></li>
-<li class="chapter" data-level="4.6.3" data-path="modifydata.html"><a href="modifydata.html#factor-and-numeric-to-character-and-vice-versa"><i class="fa fa-check"></i><b>4.6.3</b> Factor and Numeric to Character and vice versa</a></li>
+<li class="chapter" data-level="4.1" data-path="modifydata.html"><a href="modifydata.html#creating-new-variables"><i class="fa fa-check"></i><b>4.1</b> Creating new variables</a></li>
+<li class="chapter" data-level="4.2" data-path="modifydata.html"><a href="modifydata.html#subsetting-data-and-dropping-factor-levels"><i class="fa fa-check"></i><b>4.2</b> Subsetting data and dropping factor levels</a></li>
+<li class="chapter" data-level="4.3" data-path="modifydata.html"><a href="modifydata.html#reordering-factor-levels"><i class="fa fa-check"></i><b>4.3</b> Reordering factor levels</a></li>
+<li class="chapter" data-level="4.4" data-path="modifydata.html"><a href="modifydata.html#reordering-dataset-entries"><i class="fa fa-check"></i><b>4.4</b> Reordering dataset entries</a></li>
+<li class="chapter" data-level="4.5" data-path="modifydata.html"><a href="modifydata.html#changing-column-names"><i class="fa fa-check"></i><b>4.5</b> Changing column names</a></li>
+<li class="chapter" data-level="4.6" data-path="modifydata.html"><a href="modifydata.html#renamingcollapsing-factor-levels"><i class="fa fa-check"></i><b>4.6</b> Renaming/Collapsing factor levels</a></li>
+<li class="chapter" data-level="4.7" data-path="modifydata.html"><a href="modifydata.html#converting-data-types"><i class="fa fa-check"></i><b>4.7</b> Converting data types</a><ul>
+<li class="chapter" data-level="4.7.1" data-path="modifydata.html"><a href="modifydata.html#factor-to-numeric"><i class="fa fa-check"></i><b>4.7.1</b> Factor to numeric</a></li>
+<li class="chapter" data-level="4.7.2" data-path="modifydata.html"><a href="modifydata.html#numeric-to-factor---binning-variables"><i class="fa fa-check"></i><b>4.7.2</b> Numeric to Factor - Binning variables</a></li>
+<li class="chapter" data-level="4.7.3" data-path="modifydata.html"><a href="modifydata.html#factor-and-numeric-to-character-and-vice-versa"><i class="fa fa-check"></i><b>4.7.3</b> Factor and Numeric to Character and vice versa</a></li>
 </ul></li>
 </ul></li>
 <li class="chapter" data-level="5" data-path="summarystats.html"><a href="summarystats.html"><i class="fa fa-check"></i><b>5</b> Summary Statistics</a><ul>
@@ -209,10 +210,10 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
             <section class="normal" id="section-">
 <div id="introR" class="section level1">
 <h1><span class="header-section-number">Chapter 1</span> Introduction to R</h1>
-<p><img src="01files/jchambers.jpg" width="193" /><img src="01files/small-ihaka.gif" /><!-- --><img src="01files/small-robert.gif" /><!-- --></p>
+<p><img src="01files/jchambers.jpg" /><!-- --><img src="01files/small-ihaka.gif" /><!-- --><img src="01files/small-robert.gif" /><!-- --></p>
 <p>R is a progamming language and an environment for statistical computing and graphics. It was created by Ross Ihaka and Robert Gentleman at the University of Auckland in New Zealand. The project was conceived in 1992. It is based on the <strong>S</strong> language, that was created by John Chambers while he was at Bell Labs. S is now owned by TIBCO. R and S are often called “elegant” for they were created by statisticians for statisticians.</p>
 <p>The website of the R-Project is: <a href="http://www.r-project.org" class="uri">http://www.r-project.org</a></p>
-<p><img src="01files/Rlogo.png" width="100" /></p>
+<p><img src="01files/Rlogo.png" /><!-- --></p>
 <div id="why-use-r" class="section level2">
 <h2><span class="header-section-number">1.1</span> Why use R?</h2>
 <p>There are many benefits to R. Since these have been covered by many other books on R, I will not dwell on it here in detail. Here are 9 reasons why I use R.</p>
@@ -222,7 +223,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 </li>
 <li>New routines generally appear in <strong>R</strong> before any other statistical system introduces them.</li>
 </ol>
-<p><img src="01files/fig_10_cran1.png" width="325" /></p>
+<p><img src="01files/fig_10_cran1.png" /><!-- --></p>
 <p>Source: [Muenchen, Robert A, The Popularity of Data Analysis Software.] (<a href="http://r4stats.com/articles/popularity/" class="uri">http://r4stats.com/articles/popularity/</a>), Retrieved 8/15/2013</p>
 <ol start="4" style="list-style-type: decimal">
 <li>Graphics that are produced by <strong>R</strong> can be mindblowing. It is not a surprise that many reputable news outlets that rely on data graphics to communicate stories use R.<br />
@@ -283,10 +284,11 @@ gitbook.start({
 "facebook": true,
 "twitter": true,
 "google": false,
+"linkedin": false,
 "weibo": false,
 "instapper": false,
 "vk": false,
-"all": ["facebook", "google", "twitter", "weibo", "instapaper"]
+"all": ["facebook", "google", "twitter", "linkedin", "weibo", "instapaper"]
 },
 "fontsettings": {
 "theme": "white",

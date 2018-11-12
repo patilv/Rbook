@@ -1,5 +1,21 @@
 # Modifying Data {#modifydata}
 
+## Creating new variables
+
+We can create new variables that result from manipulations of existing variables. For example, if we wanted to create a variable in the `iris` dataset that was a sum of the variables `Sepal.Length` and `Sepal.Width` and we wanted to call it `Sepal.dimensions`, we could code it as follows.
+
+```{r eval=FALSE}
+iris$Sepal.dimensions=iris$Sepal.Length + iris$Sepal.Width
+```
+
+There might be instances where we might decide to not create new variables and modify existing variable values. In such a case, we would use the same variable name on the left hand side of the equation shown above. Thus, the line of code would now become 
+
+```{r eval=FALSE}
+iris$Sepal.Length= iris$Sepal.Length + iris$Sepal.Width
+
+```
+
+
 
 ## Subsetting data and dropping factor levels
 
