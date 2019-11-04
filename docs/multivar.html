@@ -5,11 +5,11 @@
 
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <title>Basic Insights from Data for Marketing Researchers</title>
+  <title>Chapter 7 Relationships between variables | Basic Insights from Data for Marketing Researchers</title>
   <meta name="description" content="This book should contain introductory material for analyzing data for marketing researchers.">
-  <meta name="generator" content="bookdown 0.7 and GitBook 2.6.7">
+  <meta name="generator" content="bookdown  and GitBook 2.6.7">
 
-  <meta property="og:title" content="Basic Insights from Data for Marketing Researchers" />
+  <meta property="og:title" content="Chapter 7 Relationships between variables | Basic Insights from Data for Marketing Researchers" />
   <meta property="og:type" content="book" />
   
   
@@ -17,7 +17,7 @@
   <meta name="github-repo" content="patilv.github.io" />
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="Basic Insights from Data for Marketing Researchers" />
+  <meta name="twitter:title" content="Chapter 7 Relationships between variables | Basic Insights from Data for Marketing Researchers" />
   
   <meta name="twitter:description" content="This book should contain introductory material for analyzing data for marketing researchers." />
   
@@ -25,7 +25,7 @@
 <meta name="author" content="Vivek H. Patil">
 
 
-<meta name="date" content="2018-11-12">
+<meta name="date" content="2019-11-04">
 
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -36,6 +36,7 @@
 
 <script src="libs/jquery-2.2.3/jquery.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
@@ -50,41 +51,67 @@
 
 
 <style type="text/css">
-div.sourceCode { overflow-x: auto; }
-table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
-  margin: 0; padding: 0; vertical-align: baseline; border: none; }
-table.sourceCode { width: 100%; line-height: 100%; }
-td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; color: #aaaaaa; border-right: 1px solid #aaaaaa; }
-td.sourceCode { padding-left: 5px; }
-code > span.kw { color: #007020; font-weight: bold; } /* Keyword */
-code > span.dt { color: #902000; } /* DataType */
-code > span.dv { color: #40a070; } /* DecVal */
-code > span.bn { color: #40a070; } /* BaseN */
-code > span.fl { color: #40a070; } /* Float */
-code > span.ch { color: #4070a0; } /* Char */
-code > span.st { color: #4070a0; } /* String */
-code > span.co { color: #60a0b0; font-style: italic; } /* Comment */
-code > span.ot { color: #007020; } /* Other */
-code > span.al { color: #ff0000; font-weight: bold; } /* Alert */
-code > span.fu { color: #06287e; } /* Function */
-code > span.er { color: #ff0000; font-weight: bold; } /* Error */
-code > span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
-code > span.cn { color: #880000; } /* Constant */
-code > span.sc { color: #4070a0; } /* SpecialChar */
-code > span.vs { color: #4070a0; } /* VerbatimString */
-code > span.ss { color: #bb6688; } /* SpecialString */
-code > span.im { } /* Import */
-code > span.va { color: #19177c; } /* Variable */
-code > span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
-code > span.op { color: #666666; } /* Operator */
-code > span.bu { } /* BuiltIn */
-code > span.ex { } /* Extension */
-code > span.pp { color: #bc7a00; } /* Preprocessor */
-code > span.at { color: #7d9029; } /* Attribute */
-code > span.do { color: #ba2121; font-style: italic; } /* Documentation */
-code > span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
-code > span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
-code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+a.sourceLine { display: inline-block; line-height: 1.25; }
+a.sourceLine { pointer-events: none; color: inherit; text-decoration: inherit; }
+a.sourceLine:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode { white-space: pre; position: relative; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+code.sourceCode { white-space: pre-wrap; }
+a.sourceLine { text-indent: -1em; padding-left: 1em; }
+}
+pre.numberSource a.sourceLine
+  { position: relative; left: -4em; }
+pre.numberSource a.sourceLine::before
+  { content: attr(title);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; pointer-events: all; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {  }
+@media screen {
+a.sourceLine::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
 </style>
 
 <link rel="stylesheet" href="style.css" type="text/css" />
@@ -219,14 +246,14 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <div id="correlations-between-two-numeric-variables" class="section level3">
 <h3><span class="header-section-number">7.1.2</span> Correlations between two numeric variables</h3>
 <p>Assumptions of interval/ratio scaled variables, presence of linear relationships, absence of extreme outliers, and normality of the variables are made when conducting these tests.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">plot</span>(iris<span class="op">$</span>Sepal.Length,iris<span class="op">$</span>Petal.Length,<span class="dt">col=</span><span class="st">&quot;red&quot;</span>,<span class="dt">xlab=</span><span class="st">&quot;Sepal.Length&quot;</span>,<span class="dt">ylab=</span><span class="st">&quot;Petal.Length&quot;</span>)
-<span class="kw">abline</span>(<span class="kw">lm</span>(iris<span class="op">$</span>Petal.Length<span class="op">~</span>iris<span class="op">$</span>Sepal.Length),<span class="dt">col=</span><span class="st">&quot;blue&quot;</span>)</code></pre></div>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">plot</span>(iris<span class="op">$</span>Sepal.Length,iris<span class="op">$</span>Petal.Length,<span class="dt">col=</span><span class="st">&quot;red&quot;</span>,<span class="dt">xlab=</span><span class="st">&quot;Sepal.Length&quot;</span>,<span class="dt">ylab=</span><span class="st">&quot;Petal.Length&quot;</span>)
+<span class="kw">abline</span>(<span class="kw">lm</span>(iris<span class="op">$</span>Petal.Length<span class="op">~</span>iris<span class="op">$</span>Sepal.Length),<span class="dt">col=</span><span class="st">&quot;blue&quot;</span>)</code></pre>
 <p><img src="Rbook_files/figure-html/unnamed-chunk-106-1.png" width="672" /></p>
 <p>Pearson Correlation coefficient</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">cor</span>(iris<span class="op">$</span>Sepal.Length,iris<span class="op">$</span>Petal.Length)</code></pre></div>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">cor</span>(iris<span class="op">$</span>Sepal.Length,iris<span class="op">$</span>Petal.Length)</code></pre>
 <pre><code>## [1] 0.8717538</code></pre>
 <p>Testing whether the observed correlation coefficient is different from 0</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">cor.test</span>(iris<span class="op">$</span>Sepal.Length,iris<span class="op">$</span>Petal.Length)</code></pre></div>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">cor.test</span>(iris<span class="op">$</span>Sepal.Length,iris<span class="op">$</span>Petal.Length)</code></pre>
 <pre><code>## 
 ##  Pearson&#39;s product-moment correlation
 ## 
@@ -239,7 +266,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 ##       cor 
 ## 0.8717538</code></pre>
 <p>Testing whether the observed correlation coefficient is greater than 0</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">cor.test</span>(iris<span class="op">$</span>Sepal.Length,iris<span class="op">$</span>Petal.Length,<span class="dt">alternative =</span> <span class="st">&quot;greater&quot;</span>)</code></pre></div>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">cor.test</span>(iris<span class="op">$</span>Sepal.Length,iris<span class="op">$</span>Petal.Length,<span class="dt">alternative =</span> <span class="st">&quot;greater&quot;</span>)</code></pre>
 <pre><code>## 
 ##  Pearson&#39;s product-moment correlation
 ## 
@@ -254,7 +281,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 </div>
 <div id="paired-samples---comparing-two-means" class="section level3">
 <h3><span class="header-section-number">7.1.3</span> Paired Samples - comparing two-means</h3>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">summary</span>(survey[,<span class="kw">c</span>(<span class="dv">2</span>,<span class="dv">3</span>)])</code></pre></div>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">summary</span>(survey[,<span class="kw">c</span>(<span class="dv">2</span>,<span class="dv">3</span>)])</code></pre>
 <pre><code>##      Wr.Hnd          NW.Hnd     
 ##  Min.   :13.00   Min.   :12.50  
 ##  1st Qu.:17.50   1st Qu.:17.50  
@@ -263,7 +290,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 ##  3rd Qu.:19.80   3rd Qu.:19.73  
 ##  Max.   :23.20   Max.   :23.50  
 ##  NA&#39;s   :1       NA&#39;s   :1</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">t.test</span>(survey<span class="op">$</span>Wr.Hnd,survey<span class="op">$</span>NW.Hnd,<span class="dt">paired =</span> <span class="ot">TRUE</span>)</code></pre></div>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">t.test</span>(survey<span class="op">$</span>Wr.Hnd,survey<span class="op">$</span>NW.Hnd,<span class="dt">paired =</span> <span class="ot">TRUE</span>)</code></pre>
 <pre><code>## 
 ##  Paired t-test
 ## 
@@ -278,21 +305,21 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 </div>
 <div id="relationships-between-more-than-two-numeric-variables" class="section level3">
 <h3><span class="header-section-number">7.1.4</span> Relationships between more than two numeric variables</h3>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">pairs</span>(iris[,<span class="dv">1</span><span class="op">:</span><span class="dv">4</span>])</code></pre></div>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">pairs</span>(iris[,<span class="dv">1</span><span class="op">:</span><span class="dv">4</span>])</code></pre>
 <p><img src="Rbook_files/figure-html/unnamed-chunk-112-1.png" width="672" /></p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(car)
-<span class="kw">scatterplotMatrix</span>(iris[,<span class="dv">1</span><span class="op">:</span><span class="dv">4</span>])</code></pre></div>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(car)
+<span class="kw">scatterplotMatrix</span>(iris[,<span class="dv">1</span><span class="op">:</span><span class="dv">4</span>])</code></pre>
 <p><img src="Rbook_files/figure-html/unnamed-chunk-113-1.png" width="672" /></p>
 <p>The correlations matrix and test of significance</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">cor</span>(iris[,<span class="dv">1</span><span class="op">:</span><span class="dv">4</span>])</code></pre></div>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">cor</span>(iris[,<span class="dv">1</span><span class="op">:</span><span class="dv">4</span>])</code></pre>
 <pre><code>##              Sepal.Length Sepal.Width Petal.Length Petal.Width
 ## Sepal.Length    1.0000000  -0.1175698    0.8717538   0.8179411
 ## Sepal.Width    -0.1175698   1.0000000   -0.4284401  -0.3661259
 ## Petal.Length    0.8717538  -0.4284401    1.0000000   0.9628654
 ## Petal.Width     0.8179411  -0.3661259    0.9628654   1.0000000</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Correlations with significance levels</span>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Correlations with significance levels</span>
 <span class="kw">library</span>(Hmisc)
-<span class="kw">rcorr</span>(<span class="kw">as.matrix</span>(iris[,<span class="dv">1</span><span class="op">:</span><span class="dv">4</span>]), <span class="dt">type=</span><span class="st">&quot;pearson&quot;</span>) <span class="co"># type can be pearson or spearman</span></code></pre></div>
+<span class="kw">rcorr</span>(<span class="kw">as.matrix</span>(iris[,<span class="dv">1</span><span class="op">:</span><span class="dv">4</span>]), <span class="dt">type=</span><span class="st">&quot;pearson&quot;</span>) <span class="co"># type can be pearson or spearman</span></code></pre>
 <pre><code>##              Sepal.Length Sepal.Width Petal.Length Petal.Width
 ## Sepal.Length         1.00       -0.12         0.87        0.82
 ## Sepal.Width         -0.12        1.00        -0.43       -0.37
@@ -313,7 +340,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <div id="relationships-between-factor-variables" class="section level2">
 <h2><span class="header-section-number">7.2</span> Relationships between factor variables</h2>
 <p>Let us revert back to our use of the <code>survey</code> dataset and focus on the <code>Sex</code> and <code>Exer</code>variables. Below, we look at the structure of the dataset and summarize each of the three variables.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">str</span>(survey)</code></pre></div>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">str</span>(survey)</code></pre>
 <pre><code>## &#39;data.frame&#39;:    237 obs. of  12 variables:
 ##  $ Sex   : Factor w/ 2 levels &quot;Female&quot;,&quot;Male&quot;: 1 2 2 2 2 1 2 1 2 2 ...
 ##  $ Wr.Hnd: num  18.5 19.5 18 18.8 20 18 17.7 17 20 18.5 ...
@@ -327,30 +354,30 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 ##  $ Height: num  173 178 NA 160 165 ...
 ##  $ M.I   : Factor w/ 2 levels &quot;Imperial&quot;,&quot;Metric&quot;: 2 1 NA 2 2 1 1 2 2 2 ...
 ##  $ Age   : num  18.2 17.6 16.9 20.3 23.7 ...</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">summary</span>(survey<span class="op">$</span>Sex)</code></pre></div>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">summary</span>(survey<span class="op">$</span>Sex)</code></pre>
 <pre><code>## Female   Male   NA&#39;s 
 ##    118    118      1</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">summary</span>(survey<span class="op">$</span>Exer)</code></pre></div>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">summary</span>(survey<span class="op">$</span>Exer)</code></pre>
 <pre><code>## Freq None Some 
 ##  115   24   98</code></pre>
 <p>A cross-tab (or a cross-tabulation) presents joint-frequencies of two or more variables. For example, if we were interested in finding how many of the 118 Females engaged in different levels of Exercise, we could use a cross-tab to answer that.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">crosstab=<span class="kw">table</span>(survey<span class="op">$</span>Exer,survey<span class="op">$</span>Sex)
-crosstab</code></pre></div>
+<pre class="sourceCode r"><code class="sourceCode r">crosstab=<span class="kw">table</span>(survey<span class="op">$</span>Exer,survey<span class="op">$</span>Sex)
+crosstab</code></pre>
 <pre><code>##       
 ##        Female Male
 ##   Freq     49   65
 ##   None     11   13
 ##   Some     58   40</code></pre>
 <p>We could also plot that data in the form of stacked or dodged bar graphs.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">barplot</span>(crosstab,<span class="dt">beside=</span><span class="ot">TRUE</span>, <span class="dt">legend=</span><span class="kw">levels</span>(<span class="kw">unique</span>(survey<span class="op">$</span>Exer)),<span class="dt">args.legend=</span><span class="kw">list</span>(
-      <span class="dt">x=</span> <span class="dv">8</span>,<span class="dt">y=</span><span class="dv">70</span>))</code></pre></div>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">barplot</span>(crosstab,<span class="dt">beside=</span><span class="ot">TRUE</span>, <span class="dt">legend=</span><span class="kw">levels</span>(<span class="kw">unique</span>(survey<span class="op">$</span>Exer)),<span class="dt">args.legend=</span><span class="kw">list</span>(
+      <span class="dt">x=</span> <span class="dv">8</span>,<span class="dt">y=</span><span class="dv">70</span>))</code></pre>
 <p><img src="Rbook_files/figure-html/unnamed-chunk-120-1.png" width="672" /></p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">barplot</span>(crosstab,<span class="dt">legend=</span><span class="kw">levels</span>(<span class="kw">unique</span>(survey<span class="op">$</span>Exer)),<span class="dt">args.legend=</span><span class="kw">list</span>(
-      <span class="dt">x=</span> <span class="fl">1.75</span>,<span class="dt">y=</span><span class="dv">150</span>,<span class="dt">horiz=</span><span class="ot">TRUE</span>))</code></pre></div>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">barplot</span>(crosstab,<span class="dt">legend=</span><span class="kw">levels</span>(<span class="kw">unique</span>(survey<span class="op">$</span>Exer)),<span class="dt">args.legend=</span><span class="kw">list</span>(
+      <span class="dt">x=</span> <span class="fl">1.75</span>,<span class="dt">y=</span><span class="dv">150</span>,<span class="dt">horiz=</span><span class="ot">TRUE</span>))</code></pre>
 <p><img src="Rbook_files/figure-html/unnamed-chunk-121-1.png" width="672" /></p>
 <p>If we now wanted to check if the tendency to exercise was independent of the gender, we could use the Chi-square test of independence.</p>
 <p>The null hypothesis is that the two variables are independent and the alternate is that they are related.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">chisq.test</span>(crosstab)</code></pre></div>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">chisq.test</span>(crosstab)</code></pre>
 <pre><code>## 
 ##  Pearson&#39;s Chi-squared test
 ## 
@@ -364,15 +391,15 @@ crosstab</code></pre></div>
 <div id="two-levels-of-a-factor-level-and-one-continuous-variable---t-test" class="section level3">
 <h3><span class="header-section-number">7.3.1</span> Two levels of a factor level and one continuous variable - t-test</h3>
 <p>Let us check how the mean height of different genders in the <code>survey</code> data.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">aggregate</span>(survey<span class="op">$</span>Height,<span class="kw">list</span>(survey<span class="op">$</span>Sex),mean, <span class="dt">na.rm=</span>T)</code></pre></div>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">aggregate</span>(survey<span class="op">$</span>Height,<span class="kw">list</span>(survey<span class="op">$</span>Sex),mean, <span class="dt">na.rm=</span>T)</code></pre>
 <pre><code>##   Group.1        x
 ## 1  Female 165.6867
 ## 2    Male 178.8260</code></pre>
 <p>The distribution of Height across the two levels can be studied using a box plot.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">plot</span>(survey<span class="op">$</span>Height<span class="op">~</span>survey<span class="op">$</span>Sex)</code></pre></div>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">plot</span>(survey<span class="op">$</span>Height<span class="op">~</span>survey<span class="op">$</span>Sex)</code></pre>
 <p><img src="Rbook_files/figure-html/unnamed-chunk-124-1.png" width="672" /></p>
 <p>Although males seem to be taller than females, it is unclear if the difference being observed is statistically significant. In such a case, we could use an independent samples t-test to answer the question.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">t.test</span>(survey<span class="op">$</span>Height<span class="op">~</span>survey<span class="op">$</span>Sex, <span class="dt">alternative=</span><span class="st">&#39;less&#39;</span>, <span class="dt">conf.level=</span>.<span class="dv">99</span>, <span class="dt">var.equal=</span><span class="ot">FALSE</span>)</code></pre></div>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">t.test</span>(survey<span class="op">$</span>Height<span class="op">~</span>survey<span class="op">$</span>Sex, <span class="dt">alternative=</span><span class="st">&#39;less&#39;</span>, <span class="dt">conf.level=</span>.<span class="dv">99</span>, <span class="dt">var.equal=</span><span class="ot">FALSE</span>)</code></pre>
 <pre><code>## 
 ##  Welch Two Sample t-test
 ## 
@@ -389,18 +416,18 @@ crosstab</code></pre></div>
 <div id="more-than-two-levels-of-a-factor-variable-and-one-continuous-variable.--one-way-anova" class="section level3">
 <h3><span class="header-section-number">7.3.2</span> More than two levels of a factor variable and one continuous variable.- One-Way ANOVA</h3>
 <p>Let us check the mean height of people who engage in different levels of Exercising.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">aggregate</span>(survey<span class="op">$</span>Height,<span class="kw">list</span>(survey<span class="op">$</span>Exer),mean, <span class="dt">na.rm=</span>T)</code></pre></div>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">aggregate</span>(survey<span class="op">$</span>Height,<span class="kw">list</span>(survey<span class="op">$</span>Exer),mean, <span class="dt">na.rm=</span>T)</code></pre>
 <pre><code>##   Group.1        x
 ## 1    Freq 174.6067
 ## 2    None 169.0280
 ## 3    Some 170.3969</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">plot</span>(survey<span class="op">$</span>Height<span class="op">~</span>survey<span class="op">$</span>Exer)</code></pre></div>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">plot</span>(survey<span class="op">$</span>Height<span class="op">~</span>survey<span class="op">$</span>Exer)</code></pre>
 <p><img src="Rbook_files/figure-html/unnamed-chunk-127-1.png" width="672" /></p>
 <p>Interestingly, we find that those who engage in frequent exercise have a higher mean height than those who engage in some exercise. In a similar vein, those who engage in some exercise seem to have a higher mean height than those who do not engage in any exercise. But, are these differences statistically significant?</p>
 <p>Since we have more than two levels of the factor variable, one will have to use an ANOVA (Analysis of Variance).</p>
 <p>The Null hypothesis is that the means of all groups is the same and the alternate is that at least one mean is different.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">results=<span class="kw">aov</span>(survey<span class="op">$</span>Height <span class="op">~</span><span class="st"> </span>survey<span class="op">$</span>Exer)
-<span class="kw">summary</span>(results)</code></pre></div>
+<pre class="sourceCode r"><code class="sourceCode r">results=<span class="kw">aov</span>(survey<span class="op">$</span>Height <span class="op">~</span><span class="st"> </span>survey<span class="op">$</span>Exer)
+<span class="kw">summary</span>(results)</code></pre>
 <pre><code>##              Df Sum Sq Mean Sq F value  Pr(&gt;F)   
 ## survey$Exer   2   1076   537.8   5.802 0.00354 **
 ## Residuals   206  19095    92.7                   
@@ -409,7 +436,7 @@ crosstab</code></pre></div>
 ## 28 observations deleted due to missingness</code></pre>
 <p>The findings suggest that we have evidence that at least one of the three means is different from the others. (The p-value of .00354 indicates significance at the .01 level.) <strong>Note that the earlier test does not tell us whether the differences between consecutive means is statistically significant.</strong></p>
 <p>We can do a multiple-comparison of means to test that.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">TukeyHSD</span>(results,<span class="dt">conf.level =</span> .<span class="dv">99</span>)</code></pre></div>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">TukeyHSD</span>(results,<span class="dt">conf.level =</span> <span class="fl">.99</span>)</code></pre>
 <pre><code>##   Tukey multiple comparisons of means
 ##     99% family-wise confidence level
 ## 
@@ -450,7 +477,7 @@ gitbook.start({
 "google": false,
 "linkedin": false,
 "weibo": false,
-"instapper": false,
+"instapaper": false,
 "vk": false,
 "all": ["facebook", "google", "twitter", "linkedin", "weibo", "instapaper"]
 },
@@ -460,6 +487,10 @@ gitbook.start({
 "size": 2
 },
 "edit": {
+"link": null,
+"text": null
+},
+"history": {
 "link": null,
 "text": null
 },

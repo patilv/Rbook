@@ -65,13 +65,9 @@ I like to understand this using the metaphor of a physical library. Imagine walk
 Base **R** is akin to the library and the librarian. A task in the earlier example, can be similar to an analysis that needs to be conducted on some data. The **R** software comes with a certain set of books, which are called *packages*. These packages are capable of conducting a certain set of analyses. However, when the need to perform additional analyses that cannot be conducted by base **R** arises, one can download additional **R** packages that may be available for that purpose. These downloaded packages are like the books that are checked out from the library. Please note that many a times, the packages may have dependencies, that are either installed along with the package installation commands, or may have to be installed separately. In the event no one in the world has thought of your problem and written a package to perform the analysis, you can always write your own package that does that and contribute it for the greater good.
 
 
-## R Consortium
-
-<iframe src="https://www.r-consortium.org/" style="min-height: 500px; min-width: 950px;"></iframe>
-
 ## A Recently Released Video on R
 
-From the R Consortium <br>  
+From the [R Consortium](https://www.r-consortium.org/) <br>  
 <center>
 <iframe width="560" height="315" src="https://www.youtube.com/embed/XcBLEVknqvY" frameborder="0" allowfullscreen></iframe>
 

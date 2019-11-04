@@ -5,11 +5,11 @@
 
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <title>Basic Insights from Data for Marketing Researchers</title>
+  <title>Chapter 4 Modifying Data | Basic Insights from Data for Marketing Researchers</title>
   <meta name="description" content="This book should contain introductory material for analyzing data for marketing researchers.">
-  <meta name="generator" content="bookdown 0.7 and GitBook 2.6.7">
+  <meta name="generator" content="bookdown  and GitBook 2.6.7">
 
-  <meta property="og:title" content="Basic Insights from Data for Marketing Researchers" />
+  <meta property="og:title" content="Chapter 4 Modifying Data | Basic Insights from Data for Marketing Researchers" />
   <meta property="og:type" content="book" />
   
   
@@ -17,7 +17,7 @@
   <meta name="github-repo" content="patilv.github.io" />
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="Basic Insights from Data for Marketing Researchers" />
+  <meta name="twitter:title" content="Chapter 4 Modifying Data | Basic Insights from Data for Marketing Researchers" />
   
   <meta name="twitter:description" content="This book should contain introductory material for analyzing data for marketing researchers." />
   
@@ -25,7 +25,7 @@
 <meta name="author" content="Vivek H. Patil">
 
 
-<meta name="date" content="2018-11-12">
+<meta name="date" content="2019-11-04">
 
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -36,6 +36,7 @@
 <link rel="next" href="summarystats.html">
 <script src="libs/jquery-2.2.3/jquery.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
@@ -50,41 +51,67 @@
 
 
 <style type="text/css">
-div.sourceCode { overflow-x: auto; }
-table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
-  margin: 0; padding: 0; vertical-align: baseline; border: none; }
-table.sourceCode { width: 100%; line-height: 100%; }
-td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; color: #aaaaaa; border-right: 1px solid #aaaaaa; }
-td.sourceCode { padding-left: 5px; }
-code > span.kw { color: #007020; font-weight: bold; } /* Keyword */
-code > span.dt { color: #902000; } /* DataType */
-code > span.dv { color: #40a070; } /* DecVal */
-code > span.bn { color: #40a070; } /* BaseN */
-code > span.fl { color: #40a070; } /* Float */
-code > span.ch { color: #4070a0; } /* Char */
-code > span.st { color: #4070a0; } /* String */
-code > span.co { color: #60a0b0; font-style: italic; } /* Comment */
-code > span.ot { color: #007020; } /* Other */
-code > span.al { color: #ff0000; font-weight: bold; } /* Alert */
-code > span.fu { color: #06287e; } /* Function */
-code > span.er { color: #ff0000; font-weight: bold; } /* Error */
-code > span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
-code > span.cn { color: #880000; } /* Constant */
-code > span.sc { color: #4070a0; } /* SpecialChar */
-code > span.vs { color: #4070a0; } /* VerbatimString */
-code > span.ss { color: #bb6688; } /* SpecialString */
-code > span.im { } /* Import */
-code > span.va { color: #19177c; } /* Variable */
-code > span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
-code > span.op { color: #666666; } /* Operator */
-code > span.bu { } /* BuiltIn */
-code > span.ex { } /* Extension */
-code > span.pp { color: #bc7a00; } /* Preprocessor */
-code > span.at { color: #7d9029; } /* Attribute */
-code > span.do { color: #ba2121; font-style: italic; } /* Documentation */
-code > span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
-code > span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
-code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+a.sourceLine { display: inline-block; line-height: 1.25; }
+a.sourceLine { pointer-events: none; color: inherit; text-decoration: inherit; }
+a.sourceLine:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode { white-space: pre; position: relative; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+code.sourceCode { white-space: pre-wrap; }
+a.sourceLine { text-indent: -1em; padding-left: 1em; }
+}
+pre.numberSource a.sourceLine
+  { position: relative; left: -4em; }
+pre.numberSource a.sourceLine::before
+  { content: attr(title);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; pointer-events: all; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {  }
+@media screen {
+a.sourceLine::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
 </style>
 
 <link rel="stylesheet" href="style.css" type="text/css" />
@@ -213,20 +240,20 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <div id="creating-new-variables" class="section level2">
 <h2><span class="header-section-number">4.1</span> Creating new variables</h2>
 <p>We can create new variables that result from manipulations of existing variables. For example, if we wanted to create a variable in the <code>iris</code> dataset that was a sum of the variables <code>Sepal.Length</code> and <code>Sepal.Width</code> and we wanted to call it <code>Sepal.dimensions</code>, we could code it as follows.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">iris<span class="op">$</span>Sepal.dimensions=iris<span class="op">$</span>Sepal.Length <span class="op">+</span><span class="st"> </span>iris<span class="op">$</span>Sepal.Width</code></pre></div>
+<pre class="sourceCode r"><code class="sourceCode r">iris<span class="op">$</span>Sepal.dimensions=iris<span class="op">$</span>Sepal.Length <span class="op">+</span><span class="st"> </span>iris<span class="op">$</span>Sepal.Width</code></pre>
 <p>There might be instances where we might decide to not create new variables and modify existing variable values. In such a case, we would use the same variable name on the left hand side of the equation shown above. Thus, the line of code would now become</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">iris<span class="op">$</span>Sepal.Length=<span class="st"> </span>iris<span class="op">$</span>Sepal.Length <span class="op">+</span><span class="st"> </span>iris<span class="op">$</span>Sepal.Width</code></pre></div>
+<pre class="sourceCode r"><code class="sourceCode r">iris<span class="op">$</span>Sepal.Length=<span class="st"> </span>iris<span class="op">$</span>Sepal.Length <span class="op">+</span><span class="st"> </span>iris<span class="op">$</span>Sepal.Width</code></pre>
 </div>
 <div id="subsetting-data-and-dropping-factor-levels" class="section level2">
 <h2><span class="header-section-number">4.2</span> Subsetting data and dropping factor levels</h2>
 <p>This creates a subset of <code>iris</code> such that <code>Sepal.Length</code> is greater than or equal to 5.8.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">irisSubset1=iris[iris<span class="op">$</span>Sepal.Length<span class="op">&gt;=</span><span class="fl">5.8</span>,]
-<span class="kw">summary</span>(irisSubset1<span class="op">$</span>Sepal.Length)</code></pre></div>
+<pre class="sourceCode r"><code class="sourceCode r">irisSubset1=iris[iris<span class="op">$</span>Sepal.Length<span class="op">&gt;=</span><span class="fl">5.8</span>,]
+<span class="kw">summary</span>(irisSubset1<span class="op">$</span>Sepal.Length)</code></pre>
 <pre><code>##    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
 ##   5.800   6.100   6.400   6.509   6.800   7.900</code></pre>
 <p>Multiple conditions can also be introduced for subsetting.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">irisSubset2=iris[iris<span class="op">$</span>Sepal.Length<span class="op">&gt;=</span><span class="fl">5.8</span> <span class="op">&amp;</span><span class="st"> </span>iris<span class="op">$</span>Sepal.Width<span class="op">&lt;</span><span class="dv">3</span>,]
-<span class="kw">summary</span>(irisSubset2)</code></pre></div>
+<pre class="sourceCode r"><code class="sourceCode r">irisSubset2=iris[iris<span class="op">$</span>Sepal.Length<span class="op">&gt;=</span><span class="fl">5.8</span> <span class="op">&amp;</span><span class="st"> </span>iris<span class="op">$</span>Sepal.Width<span class="op">&lt;</span><span class="dv">3</span>,]
+<span class="kw">summary</span>(irisSubset2)</code></pre>
 <pre><code>##   Sepal.Length   Sepal.Width     Petal.Length   Petal.Width   
 ##  Min.   :5.80   Min.   :2.200   Min.   :3.90   Min.   :1.000  
 ##  1st Qu.:6.00   1st Qu.:2.600   1st Qu.:4.50   1st Qu.:1.300  
@@ -242,84 +269,84 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 ##                 
 ## </code></pre>
 <p>Subsetting based on a factor variable could be done using a different approach. The following line of code creates a subset of the <code>iris</code> dataset that has only two types of Species - setosa and versicolor.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">irisSubset3=<span class="kw">subset</span>(iris,Species <span class="op">%in%</span><span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;setosa&quot;</span>,<span class="st">&quot;versicolor&quot;</span>))
+<pre class="sourceCode r"><code class="sourceCode r">irisSubset3=<span class="kw">subset</span>(iris,Species <span class="op">%in%</span><span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;setosa&quot;</span>,<span class="st">&quot;versicolor&quot;</span>))
 <span class="co"># This can also be accomplished by the following statement</span>
-<span class="co"># irisSubset3=iris[iris$Species!=&quot;virginica&quot;,]</span></code></pre></div>
+<span class="co"># irisSubset3=iris[iris$Species!=&quot;virginica&quot;,]</span></code></pre>
 <p>Let’s verify that we indeed have only two levels of the <code>Species</code> variable.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">summary</span>(irisSubset3<span class="op">$</span>Species)</code></pre></div>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">summary</span>(irisSubset3<span class="op">$</span>Species)</code></pre>
 <pre><code>##     setosa versicolor  virginica 
 ##         50         50          0</code></pre>
 <p>Please note since we excluded <code>virginica</code>, the resulting dataset, <code>irisSubset3</code> does not have any observations from that <code>Species</code>. However, that factor level is still shown with 0 observations. To drop that factor level, we would just re-factor it.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">irisSubset3<span class="op">$</span>Species=<span class="kw">factor</span>(irisSubset3<span class="op">$</span>Species)</code></pre></div>
+<pre class="sourceCode r"><code class="sourceCode r">irisSubset3<span class="op">$</span>Species=<span class="kw">factor</span>(irisSubset3<span class="op">$</span>Species)</code></pre>
 <p>Let’s verify that the earlier statement did its job.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">summary</span>(irisSubset3<span class="op">$</span>Species)</code></pre></div>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">summary</span>(irisSubset3<span class="op">$</span>Species)</code></pre>
 <pre><code>##     setosa versicolor 
 ##         50         50</code></pre>
 </div>
 <div id="reordering-factor-levels" class="section level2">
 <h2><span class="header-section-number">4.3</span> Reordering factor levels</h2>
 <p>There may be instances where we may want the order the factor levels of a variable in a difference sequence than the default one. This can be accomplished using the following procedure.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">levels</span>(iris<span class="op">$</span>Species)</code></pre></div>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">levels</span>(iris<span class="op">$</span>Species)</code></pre>
 <pre><code>## [1] &quot;setosa&quot;     &quot;versicolor&quot; &quot;virginica&quot;</code></pre>
 <p>The default sequence is <code>setosa</code>, <code>versicolor</code>, and <code>virginica</code>. Let’s reverse the sequence.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">iris<span class="op">$</span>Species =<span class="st"> </span><span class="kw">factor</span>(iris<span class="op">$</span>Species,<span class="kw">levels</span>(iris<span class="op">$</span>Species)[<span class="kw">c</span>(<span class="dv">3</span>,<span class="dv">2</span>,<span class="dv">1</span>)])</code></pre></div>
+<pre class="sourceCode r"><code class="sourceCode r">iris<span class="op">$</span>Species =<span class="st"> </span><span class="kw">factor</span>(iris<span class="op">$</span>Species,<span class="kw">levels</span>(iris<span class="op">$</span>Species)[<span class="kw">c</span>(<span class="dv">3</span>,<span class="dv">2</span>,<span class="dv">1</span>)])</code></pre>
 <p>By specifying the sequence, the earlier third level now becomes the first, the second level remains unchanged, and the new third level is the earlier first level. Let’s verify if this indeed occurred.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">levels</span>(iris<span class="op">$</span>Species)</code></pre></div>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">levels</span>(iris<span class="op">$</span>Species)</code></pre>
 <pre><code>## [1] &quot;virginica&quot;  &quot;versicolor&quot; &quot;setosa&quot;</code></pre>
 </div>
 <div id="reordering-dataset-entries" class="section level2">
 <h2><span class="header-section-number">4.4</span> Reordering dataset entries</h2>
 <p>If there was a need to rearrange entries of a dataframe based on either an ascending or a descending order of values of one or more columns, the <code>order</code> function comes in handy.</p>
 <p>For example, the <code>Sepal.Length</code> of the first row of the <code>iris</code> dataset can be obtained using the following command.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">iris<span class="op">$</span>Sepal.Length[<span class="dv">1</span>]</code></pre></div>
+<pre class="sourceCode r"><code class="sourceCode r">iris<span class="op">$</span>Sepal.Length[<span class="dv">1</span>]</code></pre>
 <pre><code>## [1] 5.1</code></pre>
 <p>We also know that the range of the <code>Sepal.Length</code> variable can be obtained using the following.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">range</span>(iris<span class="op">$</span>Sepal.Length)</code></pre></div>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">range</span>(iris<span class="op">$</span>Sepal.Length)</code></pre>
 <pre><code>## [1] 4.3 7.9</code></pre>
 <p>If we now wanted to rearrange the rows of the iris dataset in an ascending order of <code>Sepal.Length</code>, we can do it in the following manner.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">ascendingiris=iris[<span class="kw">order</span>(iris<span class="op">$</span>Sepal.Length),]
-<span class="kw">head</span>(ascendingiris<span class="op">$</span>Sepal.Length)</code></pre></div>
+<pre class="sourceCode r"><code class="sourceCode r">ascendingiris=iris[<span class="kw">order</span>(iris<span class="op">$</span>Sepal.Length),]
+<span class="kw">head</span>(ascendingiris<span class="op">$</span>Sepal.Length)</code></pre>
 <pre><code>## [1] 4.3 4.4 4.4 4.4 4.5 4.6</code></pre>
 <p>For a descending order, we do the following.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">descendingiris=iris[<span class="kw">order</span>(<span class="op">-</span>iris<span class="op">$</span>Sepal.Length),]
-<span class="kw">head</span>(descendingiris<span class="op">$</span>Sepal.Length)</code></pre></div>
+<pre class="sourceCode r"><code class="sourceCode r">descendingiris=iris[<span class="kw">order</span>(<span class="op">-</span>iris<span class="op">$</span>Sepal.Length),]
+<span class="kw">head</span>(descendingiris<span class="op">$</span>Sepal.Length)</code></pre>
 <pre><code>## [1] 7.9 7.7 7.7 7.7 7.7 7.6</code></pre>
 </div>
 <div id="changing-column-names" class="section level2">
 <h2><span class="header-section-number">4.5</span> Changing column names</h2>
 <p>Current names of columns in dataset</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">names</span>(irisSubset3)</code></pre></div>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">names</span>(irisSubset3)</code></pre>
 <pre><code>## [1] &quot;Sepal.Length&quot; &quot;Sepal.Width&quot;  &quot;Petal.Length&quot; &quot;Petal.Width&quot; 
 ## [5] &quot;Species&quot;</code></pre>
 <p>Rename the <code>Species</code> column</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">names</span>(irisSubset3)[<span class="dv">5</span>]=<span class="st">&quot;SpeciesWithoutvirginica&quot;</span>
-<span class="kw">names</span>(irisSubset3)</code></pre></div>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">names</span>(irisSubset3)[<span class="dv">5</span>]=<span class="st">&quot;SpeciesWithoutvirginica&quot;</span>
+<span class="kw">names</span>(irisSubset3)</code></pre>
 <pre><code>## [1] &quot;Sepal.Length&quot;            &quot;Sepal.Width&quot;            
 ## [3] &quot;Petal.Length&quot;            &quot;Petal.Width&quot;            
 ## [5] &quot;SpeciesWithoutvirginica&quot;</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">names</span>(dataname)=<span class="kw">c</span>(<span class="st">&quot;newcol1&quot;</span>,<span class="st">&quot;newcol2&quot;</span>,<span class="st">&quot;newcol3&quot;</span>) <span class="co"># for a 3 column dataset</span>
-<span class="kw">names</span>(dataname)[<span class="dv">3</span>]=<span class="st">&quot;latestcol3name&quot;</span> <span class="co"># changing name for only the third column</span></code></pre></div>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">names</span>(dataname)=<span class="kw">c</span>(<span class="st">&quot;newcol1&quot;</span>,<span class="st">&quot;newcol2&quot;</span>,<span class="st">&quot;newcol3&quot;</span>) <span class="co"># for a 3 column dataset</span>
+<span class="kw">names</span>(dataname)[<span class="dv">3</span>]=<span class="st">&quot;latestcol3name&quot;</span> <span class="co"># changing name for only the third column</span></code></pre>
 <p>Alternately, the <code>rename</code> function from the <code>dplyr</code> package can be used.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(dplyr)
-dataname=dataname <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">rename</span>(<span class="dt">newnamecol1=</span>oldnamecol1,<span class="dt">newnamecol2=</span>oldnamecol2)</code></pre></div>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(dplyr)
+dataname=dataname <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">rename</span>(<span class="dt">newnamecol1=</span>oldnamecol1,<span class="dt">newnamecol2=</span>oldnamecol2)</code></pre>
 </div>
 <div id="renamingcollapsing-factor-levels" class="section level2">
 <h2><span class="header-section-number">4.6</span> Renaming/Collapsing factor levels</h2>
 <p>If we wanted to change the labels/values of a factor variable, then we have to alter the variable’s factor levels. (Alternately, one can convert the factor variable into a character variable and then make the change.) The following discussion permits us to collapse factor levels into fewer levels as well. Let us make a copy of the iris dataset to play around with the Species variable.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">playiris=iris
-<span class="kw">levels</span>(playiris<span class="op">$</span>Species)</code></pre></div>
+<pre class="sourceCode r"><code class="sourceCode r">playiris=iris
+<span class="kw">levels</span>(playiris<span class="op">$</span>Species)</code></pre>
 <pre><code>## [1] &quot;virginica&quot;  &quot;versicolor&quot; &quot;setosa&quot;</code></pre>
 <p>Please know the sequence in which the factor levels are presented. In the next step, we change the label <code>virginica</code> to <code>factor3</code> and <code>versicolor</code> to <code>factor 2</code> using two different approaches.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">levels</span>(playiris<span class="op">$</span>Species)[<span class="kw">levels</span>(playiris<span class="op">$</span>Species)<span class="op">==</span><span class="st">&quot;virginica&quot;</span>]=<span class="st">&quot;factor3&quot;</span>
-<span class="kw">levels</span>(playiris<span class="op">$</span>Species)</code></pre></div>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">levels</span>(playiris<span class="op">$</span>Species)[<span class="kw">levels</span>(playiris<span class="op">$</span>Species)<span class="op">==</span><span class="st">&quot;virginica&quot;</span>]=<span class="st">&quot;factor3&quot;</span>
+<span class="kw">levels</span>(playiris<span class="op">$</span>Species)</code></pre>
 <pre><code>## [1] &quot;factor3&quot;    &quot;versicolor&quot; &quot;setosa&quot;</code></pre>
 <p>In the next approach, we use the fact that the label <code>versicolor</code> that we are changing to <code>factor2</code> is the second factor level.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">levels</span>(playiris<span class="op">$</span>Species)[<span class="dv">2</span>]=<span class="st">&quot;factor2&quot;</span>
-<span class="kw">levels</span>(playiris<span class="op">$</span>Species)</code></pre></div>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">levels</span>(playiris<span class="op">$</span>Species)[<span class="dv">2</span>]=<span class="st">&quot;factor2&quot;</span>
+<span class="kw">levels</span>(playiris<span class="op">$</span>Species)</code></pre>
 <pre><code>## [1] &quot;factor3&quot; &quot;factor2&quot; &quot;setosa&quot;</code></pre>
 <p>We can always rename all levels simultaneously using the following approach.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">levels</span>(playiris<span class="op">$</span>Species)=<span class="kw">c</span>(<span class="st">&quot;newlevel1&quot;</span>,<span class="st">&quot;newlevel2&quot;</span>,<span class="st">&quot;newlevel3&quot;</span>)
-<span class="kw">levels</span>(playiris<span class="op">$</span>Species)</code></pre></div>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">levels</span>(playiris<span class="op">$</span>Species)=<span class="kw">c</span>(<span class="st">&quot;newlevel1&quot;</span>,<span class="st">&quot;newlevel2&quot;</span>,<span class="st">&quot;newlevel3&quot;</span>)
+<span class="kw">levels</span>(playiris<span class="op">$</span>Species)</code></pre>
 <pre><code>## [1] &quot;newlevel1&quot; &quot;newlevel2&quot; &quot;newlevel3&quot;</code></pre>
 </div>
 <div id="converting-data-types" class="section level2">
@@ -328,48 +355,48 @@ dataname=dataname <span class="op">%&gt;%</span><span class="st"> </span><span c
 <h3><span class="header-section-number">4.7.1</span> Factor to numeric</h3>
 <p>This comes in handy when we have a factor variable with numbers as values and we want to treat the variable as a numeric variable. This discussion is <a href="http://stackoverflow.com/questions/3418128/how-to-convert-a-factor-to-an-integer-numeric-without-a-loss-of-information">based on this Stack Overflow post.</a></p>
 <p>Let us go back to the <code>playiris</code> dataset. Remember the factor levels of the <code>Species</code> variable?</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">levels</span>(playiris<span class="op">$</span>Species)</code></pre></div>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">levels</span>(playiris<span class="op">$</span>Species)</code></pre>
 <pre><code>## [1] &quot;newlevel1&quot; &quot;newlevel2&quot; &quot;newlevel3&quot;</code></pre>
 <p>If we summarized the variable, it will give the number of observations with each level of <code>Species</code>.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">summary</span>(playiris<span class="op">$</span>Species)</code></pre></div>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">summary</span>(playiris<span class="op">$</span>Species)</code></pre>
 <pre><code>## newlevel1 newlevel2 newlevel3 
 ##        50        50        50</code></pre>
 <p>Let us convert the levels of the variables to numbers using the approach we used previously.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">levels</span>(playiris<span class="op">$</span>Species)=<span class="kw">c</span>(<span class="st">&quot;1&quot;</span>,<span class="st">&quot;2&quot;</span>,<span class="st">&quot;3&quot;</span>)
-<span class="kw">summary</span>(playiris<span class="op">$</span>Species)</code></pre></div>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">levels</span>(playiris<span class="op">$</span>Species)=<span class="kw">c</span>(<span class="st">&quot;1&quot;</span>,<span class="st">&quot;2&quot;</span>,<span class="st">&quot;3&quot;</span>)
+<span class="kw">summary</span>(playiris<span class="op">$</span>Species)</code></pre>
 <pre><code>##  1  2  3 
 ## 50 50 50</code></pre>
 <p>This is insightful. Even though we have numbers as values for the <code>Species</code> variable, R is counting the number of observations with each value, instead of summarizing the variable with numeric values. To make the change, we have to convert that variable to a numeric variable.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">playiris<span class="op">$</span>Species=<span class="kw">as.numeric</span>(<span class="kw">levels</span>(playiris<span class="op">$</span>Species))[playiris<span class="op">$</span>Species] 
+<pre class="sourceCode r"><code class="sourceCode r">playiris<span class="op">$</span>Species=<span class="kw">as.numeric</span>(<span class="kw">levels</span>(playiris<span class="op">$</span>Species))[playiris<span class="op">$</span>Species] 
 <span class="co"># This can also be accomplished by the following.</span>
-<span class="co"># playiris$Species=as.numeric(as.character(playiris$Species))</span></code></pre></div>
+<span class="co"># playiris$Species=as.numeric(as.character(playiris$Species))</span></code></pre>
 <p>Now, if we summarize the variable, we should get information on the min, max, mean and other summary statistics associated with numeric variables.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">summary</span>(playiris<span class="op">$</span>Species)</code></pre></div>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">summary</span>(playiris<span class="op">$</span>Species)</code></pre>
 <pre><code>##    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
 ##       1       1       2       2       3       3</code></pre>
 </div>
 <div id="numeric-to-factor---binning-variables" class="section level3">
 <h3><span class="header-section-number">4.7.2</span> Numeric to Factor - Binning variables</h3>
 <p>Let us re-convert the Species variable to a factor variable - with numbers as values.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">playiris<span class="op">$</span>Species=<span class="kw">factor</span>(playiris<span class="op">$</span>Species)
-<span class="kw">summary</span>(playiris<span class="op">$</span>Species)</code></pre></div>
+<pre class="sourceCode r"><code class="sourceCode r">playiris<span class="op">$</span>Species=<span class="kw">factor</span>(playiris<span class="op">$</span>Species)
+<span class="kw">summary</span>(playiris<span class="op">$</span>Species)</code></pre>
 <pre><code>##  1  2  3 
 ## 50 50 50</code></pre>
 <p>Some times, we might have to create factor levels based on numeric values. For example, we might want to create three levels of the Petal length variable - low, medium and high.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">summary</span>(playiris<span class="op">$</span>Petal.Length)</code></pre></div>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">summary</span>(playiris<span class="op">$</span>Petal.Length)</code></pre>
 <pre><code>##    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
 ##   1.000   1.600   4.350   3.758   5.100   6.900</code></pre>
 <p>Our goal is to place all observations with <code>Petal.Length</code> less than or equal to the 25th percentile value (1st quartile) of 1.6 as “low” and those greater than 5.1 (75th percentile value, 3rd quartile) as “high”. The rest of the observations get a value of “medium”. Instead of overwriting the</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">playiris<span class="op">$</span>Petal.LengthFactor=<span class="kw">cut</span>(playiris<span class="op">$</span>Petal.Length,<span class="dt">breaks =</span> <span class="kw">c</span>(<span class="dv">1</span>,<span class="fl">1.6</span>,<span class="fl">5.1</span>,<span class="fl">6.9</span>),<span class="dt">labels =</span> <span class="kw">c</span>(<span class="st">&quot;low&quot;</span>,<span class="st">&quot;medium&quot;</span>,<span class="st">&quot;high&quot;</span>),<span class="dt">include.lowest =</span> <span class="ot">TRUE</span>,<span class="dt">ordered_result =</span> <span class="ot">TRUE</span>)</code></pre></div>
+<pre class="sourceCode r"><code class="sourceCode r">playiris<span class="op">$</span>Petal.LengthFactor=<span class="kw">cut</span>(playiris<span class="op">$</span>Petal.Length,<span class="dt">breaks =</span> <span class="kw">c</span>(<span class="dv">1</span>,<span class="fl">1.6</span>,<span class="fl">5.1</span>,<span class="fl">6.9</span>),<span class="dt">labels =</span> <span class="kw">c</span>(<span class="st">&quot;low&quot;</span>,<span class="st">&quot;medium&quot;</span>,<span class="st">&quot;high&quot;</span>),<span class="dt">include.lowest =</span> <span class="ot">TRUE</span>,<span class="dt">ordered_result =</span> <span class="ot">TRUE</span>)</code></pre>
 <p>Another approach involves using if_else statement(s)</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">playiris<span class="op">$</span>Petallength.Factor=<span class="kw">ifelse</span>(playiris<span class="op">$</span>Petal.Length<span class="op">&lt;=</span><span class="fl">1.6</span>,<span class="st">&quot;low&quot;</span>,<span class="kw">ifelse</span>(playiris<span class="op">$</span>Petal.Length<span class="op">&gt;</span><span class="fl">5.1</span>,<span class="st">&quot;high&quot;</span>,<span class="st">&quot;medium&quot;</span>))</code></pre></div>
+<pre class="sourceCode r"><code class="sourceCode r">playiris<span class="op">$</span>Petallength.Factor=<span class="kw">ifelse</span>(playiris<span class="op">$</span>Petal.Length<span class="op">&lt;=</span><span class="fl">1.6</span>,<span class="st">&quot;low&quot;</span>,<span class="kw">ifelse</span>(playiris<span class="op">$</span>Petal.Length<span class="op">&gt;</span><span class="fl">5.1</span>,<span class="st">&quot;high&quot;</span>,<span class="st">&quot;medium&quot;</span>))</code></pre>
 <p>Binning may also be needed to create equal interval bins and equal frequency bins. Please see <a href="https://stackoverflow.com/questions/42037740/equal-frequency-and-equal-width-binning-in-r">this response</a> and <a href="https://stackoverflow.com/questions/5731116/equal-frequency-discretization-in-r/5741495#5741495">this response</a> on Stack OVerflow for more details on the possible solutions.</p>
 </div>
 <div id="factor-and-numeric-to-character-and-vice-versa" class="section level3">
 <h3><span class="header-section-number">4.7.3</span> Factor and Numeric to Character and vice versa</h3>
 <p>There are times when we might want values of a column to be in a character format. For example, this may be necessary if we wanted to replace string patterns in the levels of factor variables or for text-mining purposes. In such cases, we can convert factor or numeric variables to character variables.</p>
 <p>Let us take a look at the structure of the playiris dataset.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">str</span>(playiris)</code></pre></div>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">str</span>(playiris)</code></pre>
 <pre><code>## &#39;data.frame&#39;:    150 obs. of  7 variables:
 ##  $ Sepal.Length      : num  5.1 4.9 4.7 4.6 5 5.4 4.6 5 4.4 4.9 ...
 ##  $ Sepal.Width       : num  3.5 3 3.2 3.1 3.6 3.9 3.4 3.4 2.9 3.1 ...
@@ -379,9 +406,9 @@ dataname=dataname <span class="op">%&gt;%</span><span class="st"> </span><span c
 ##  $ Petal.LengthFactor: Ord.factor w/ 3 levels &quot;low&quot;&lt;&quot;medium&quot;&lt;..: 1 1 1 1 1 2 1 1 1 1 ...
 ##  $ Petallength.Factor: chr  &quot;low&quot; &quot;low&quot; &quot;low&quot; &quot;low&quot; ...</code></pre>
 <p>Let us convert <code>Species</code> and <code>Petal.LengthFactor</code> to character variables</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">playiris<span class="op">$</span>Species=<span class="kw">as.character</span>(playiris<span class="op">$</span>Species)
+<pre class="sourceCode r"><code class="sourceCode r">playiris<span class="op">$</span>Species=<span class="kw">as.character</span>(playiris<span class="op">$</span>Species)
 playiris<span class="op">$</span>Petal.LengthFactor=<span class="kw">as.character</span>(playiris<span class="op">$</span>Petal.LengthFactor)
-<span class="kw">str</span>(playiris)</code></pre></div>
+<span class="kw">str</span>(playiris)</code></pre>
 <pre><code>## &#39;data.frame&#39;:    150 obs. of  7 variables:
 ##  $ Sepal.Length      : num  5.1 4.9 4.7 4.6 5 5.4 4.6 5 4.4 4.9 ...
 ##  $ Sepal.Width       : num  3.5 3 3.2 3.1 3.6 3.9 3.4 3.4 2.9 3.1 ...
@@ -391,9 +418,9 @@ playiris<span class="op">$</span>Petal.LengthFactor=<span class="kw">as.characte
 ##  $ Petal.LengthFactor: chr  &quot;low&quot; &quot;low&quot; &quot;low&quot; &quot;low&quot; ...
 ##  $ Petallength.Factor: chr  &quot;low&quot; &quot;low&quot; &quot;low&quot; &quot;low&quot; ...</code></pre>
 <p>The results indicate that our conversion worked. Converting these back to factors or numeric is as simple as doing the following.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">playiris<span class="op">$</span>Species=<span class="kw">as.numeric</span>(playiris<span class="op">$</span>Species)
+<pre class="sourceCode r"><code class="sourceCode r">playiris<span class="op">$</span>Species=<span class="kw">as.numeric</span>(playiris<span class="op">$</span>Species)
 playiris<span class="op">$</span>Petal.LengthFactor=<span class="kw">as.factor</span>(playiris<span class="op">$</span>Petal.LengthFactor)
-<span class="kw">str</span>(playiris)</code></pre></div>
+<span class="kw">str</span>(playiris)</code></pre>
 <pre><code>## &#39;data.frame&#39;:    150 obs. of  7 variables:
 ##  $ Sepal.Length      : num  5.1 4.9 4.7 4.6 5 5.4 4.6 5 4.4 4.9 ...
 ##  $ Sepal.Width       : num  3.5 3 3.2 3.1 3.6 3.9 3.4 3.4 2.9 3.1 ...
@@ -434,7 +461,7 @@ gitbook.start({
 "google": false,
 "linkedin": false,
 "weibo": false,
-"instapper": false,
+"instapaper": false,
 "vk": false,
 "all": ["facebook", "google", "twitter", "linkedin", "weibo", "instapaper"]
 },
@@ -444,6 +471,10 @@ gitbook.start({
 "size": 2
 },
 "edit": {
+"link": null,
+"text": null
+},
+"history": {
 "link": null,
 "text": null
 },

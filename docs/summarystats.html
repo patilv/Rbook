@@ -5,11 +5,11 @@
 
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <title>Basic Insights from Data for Marketing Researchers</title>
+  <title>Chapter 5 Summary Statistics | Basic Insights from Data for Marketing Researchers</title>
   <meta name="description" content="This book should contain introductory material for analyzing data for marketing researchers.">
-  <meta name="generator" content="bookdown 0.7 and GitBook 2.6.7">
+  <meta name="generator" content="bookdown  and GitBook 2.6.7">
 
-  <meta property="og:title" content="Basic Insights from Data for Marketing Researchers" />
+  <meta property="og:title" content="Chapter 5 Summary Statistics | Basic Insights from Data for Marketing Researchers" />
   <meta property="og:type" content="book" />
   
   
@@ -17,7 +17,7 @@
   <meta name="github-repo" content="patilv.github.io" />
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="Basic Insights from Data for Marketing Researchers" />
+  <meta name="twitter:title" content="Chapter 5 Summary Statistics | Basic Insights from Data for Marketing Researchers" />
   
   <meta name="twitter:description" content="This book should contain introductory material for analyzing data for marketing researchers." />
   
@@ -25,7 +25,7 @@
 <meta name="author" content="Vivek H. Patil">
 
 
-<meta name="date" content="2018-11-12">
+<meta name="date" content="2019-11-04">
 
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -36,6 +36,7 @@
 <link rel="next" href="singlevar.html">
 <script src="libs/jquery-2.2.3/jquery.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
@@ -50,41 +51,67 @@
 
 
 <style type="text/css">
-div.sourceCode { overflow-x: auto; }
-table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
-  margin: 0; padding: 0; vertical-align: baseline; border: none; }
-table.sourceCode { width: 100%; line-height: 100%; }
-td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; color: #aaaaaa; border-right: 1px solid #aaaaaa; }
-td.sourceCode { padding-left: 5px; }
-code > span.kw { color: #007020; font-weight: bold; } /* Keyword */
-code > span.dt { color: #902000; } /* DataType */
-code > span.dv { color: #40a070; } /* DecVal */
-code > span.bn { color: #40a070; } /* BaseN */
-code > span.fl { color: #40a070; } /* Float */
-code > span.ch { color: #4070a0; } /* Char */
-code > span.st { color: #4070a0; } /* String */
-code > span.co { color: #60a0b0; font-style: italic; } /* Comment */
-code > span.ot { color: #007020; } /* Other */
-code > span.al { color: #ff0000; font-weight: bold; } /* Alert */
-code > span.fu { color: #06287e; } /* Function */
-code > span.er { color: #ff0000; font-weight: bold; } /* Error */
-code > span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
-code > span.cn { color: #880000; } /* Constant */
-code > span.sc { color: #4070a0; } /* SpecialChar */
-code > span.vs { color: #4070a0; } /* VerbatimString */
-code > span.ss { color: #bb6688; } /* SpecialString */
-code > span.im { } /* Import */
-code > span.va { color: #19177c; } /* Variable */
-code > span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
-code > span.op { color: #666666; } /* Operator */
-code > span.bu { } /* BuiltIn */
-code > span.ex { } /* Extension */
-code > span.pp { color: #bc7a00; } /* Preprocessor */
-code > span.at { color: #7d9029; } /* Attribute */
-code > span.do { color: #ba2121; font-style: italic; } /* Documentation */
-code > span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
-code > span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
-code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+a.sourceLine { display: inline-block; line-height: 1.25; }
+a.sourceLine { pointer-events: none; color: inherit; text-decoration: inherit; }
+a.sourceLine:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode { white-space: pre; position: relative; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+code.sourceCode { white-space: pre-wrap; }
+a.sourceLine { text-indent: -1em; padding-left: 1em; }
+}
+pre.numberSource a.sourceLine
+  { position: relative; left: -4em; }
+pre.numberSource a.sourceLine::before
+  { content: attr(title);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; pointer-events: all; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {  }
+@media screen {
+a.sourceLine::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
 </style>
 
 <link rel="stylesheet" href="style.css" type="text/css" />
@@ -213,14 +240,14 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <div id="measures-of-central-tendency" class="section level2">
 <h2><span class="header-section-number">5.1</span> Measures of Central Tendency</h2>
 <p>Mean, Median and Mode are commonly used. Don’t forget that not all can be used for all types of variables. For nominal variables (e.g., Gender), only mode is appropriate. For ordered categorical variables (ordinal variables), mode and median can be used. All three can be used for numeric variables.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">mean</span>(iris<span class="op">$</span>Sepal.Length)</code></pre></div>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">mean</span>(iris<span class="op">$</span>Sepal.Length)</code></pre>
 <pre><code>## [1] 5.843333</code></pre>
 <p>The mean of Sepal.Length is 5.8433333.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">median</span>(iris<span class="op">$</span>Petal.Length)</code></pre></div>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">median</span>(iris<span class="op">$</span>Petal.Length)</code></pre>
 <pre><code>## [1] 4.35</code></pre>
 <p>The median of Petal.Length is 4.35</p>
 <p>There is no built-in function for determining the mode. However, one can write a function to do that job. Please see the function below called <code>mymode</code>. This has been taken from the solutions discussed <a href="http://stackoverflow.com/questions/2547402/is-there-a-built-in-function-for-finding-the-mode">in response to a question on Stack Overflow.</a></p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Function to determine the mode. Can also identify multiple modes</span>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Function to determine the mode. Can also identify multiple modes</span>
 mymode &lt;-<span class="st"> </span><span class="cf">function</span>(x) {
   ux &lt;-<span class="st"> </span><span class="kw">unique</span>(x)
 tab &lt;-<span class="st"> </span><span class="kw">tabulate</span>(<span class="kw">match</span>(x, ux)); ux[tab <span class="op">==</span><span class="st"> </span><span class="kw">max</span>(tab)]
@@ -230,17 +257,17 @@ tab &lt;-<span class="st"> </span><span class="kw">tabulate</span>(<span class="
 modecount &lt;-<span class="st"> </span><span class="cf">function</span>(x) {
   ux &lt;-<span class="st"> </span><span class="kw">unique</span>(x)
 <span class="kw">max</span>(<span class="kw">tabulate</span>(<span class="kw">match</span>(x, ux)))
-}</code></pre></div>
+}</code></pre>
 <p>Let us put those function to use to determine the mode of a numeric variable first.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">mymode</span>(iris<span class="op">$</span>Petal.Length) <span class="co"># Gives the mode(s) of Petal.Length</span></code></pre></div>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">mymode</span>(iris<span class="op">$</span>Petal.Length) <span class="co"># Gives the mode(s) of Petal.Length</span></code></pre>
 <pre><code>## [1] 1.4 1.5</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">modecount</span>(iris<span class="op">$</span>Petal.Length) <span class="co"># Gives the frequency of occurrence of the mode</span></code></pre></div>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">modecount</span>(iris<span class="op">$</span>Petal.Length) <span class="co"># Gives the frequency of occurrence of the mode</span></code></pre>
 <pre><code>## [1] 13</code></pre>
 <p>And now, a factor variable.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">mymode</span>(iris<span class="op">$</span>Species)</code></pre></div>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">mymode</span>(iris<span class="op">$</span>Species)</code></pre>
 <pre><code>## [1] setosa     versicolor virginica 
 ## Levels: virginica versicolor setosa</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">modecount</span>(iris<span class="op">$</span>Species)</code></pre></div>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">modecount</span>(iris<span class="op">$</span>Species)</code></pre>
 <pre><code>## [1] 50</code></pre>
 <p>Note that all three types of species are identified as modes because there are 50 observations of each type.</p>
 </div>
@@ -250,55 +277,55 @@ modecount &lt;-<span class="st"> </span><span class="cf">function</span>(x) {
 <li>Trimmed Mean: Means can be affected by outliers (extreme values). Trimmed means can provide a more robust measure in such cases. If there is a good explanation for the presence of the outliers, avoid using this.</li>
 </ul>
 <p>Regular mean:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">mean</span>(iris<span class="op">$</span>Sepal.Length)</code></pre></div>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">mean</span>(iris<span class="op">$</span>Sepal.Length)</code></pre>
 <pre><code>## [1] 5.843333</code></pre>
 <p>5% trimmed mean</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">mean</span>(iris<span class="op">$</span>Sepal.Length,<span class="dt">trim =</span> .<span class="dv">05</span>) <span class="co"># knocks off 5% of the observations on each end.</span></code></pre></div>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">mean</span>(iris<span class="op">$</span>Sepal.Length,<span class="dt">trim =</span> <span class="fl">.05</span>) <span class="co"># knocks off 5% of the observations on each end.</span></code></pre>
 <pre><code>## [1] 5.820588</code></pre>
 <p>10% trimmed mean:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">mean</span>(iris<span class="op">$</span>Sepal.Length, <span class="dt">trim =</span> .<span class="dv">1</span>) <span class="co"># knocks off 10% of the observation on each end.</span></code></pre></div>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">mean</span>(iris<span class="op">$</span>Sepal.Length, <span class="dt">trim =</span> <span class="fl">.1</span>) <span class="co"># knocks off 10% of the observation on each end.</span></code></pre>
 <pre><code>## [1] 5.808333</code></pre>
 </div>
 <div id="measures-of-dispersion-variation" class="section level2">
 <h2><span class="header-section-number">5.3</span> Measures of Dispersion (variation)</h2>
 <div id="range" class="section level3">
 <h3><span class="header-section-number">5.3.1</span> Range</h3>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">min</span>(iris<span class="op">$</span>Sepal.Length) <span class="co"># minimum</span></code></pre></div>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">min</span>(iris<span class="op">$</span>Sepal.Length) <span class="co"># minimum</span></code></pre>
 <pre><code>## [1] 4.3</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">max</span>(iris<span class="op">$</span>Sepal.Length) <span class="co"># maximum</span></code></pre></div>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">max</span>(iris<span class="op">$</span>Sepal.Length) <span class="co"># maximum</span></code></pre>
 <pre><code>## [1] 7.9</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">range</span>(iris<span class="op">$</span>Sepal.Length) <span class="co"># should give the min and max</span></code></pre></div>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">range</span>(iris<span class="op">$</span>Sepal.Length) <span class="co"># should give the min and max</span></code></pre>
 <pre><code>## [1] 4.3 7.9</code></pre>
 </div>
 <div id="interquartile-range-difference-between-25th-and-75th-percentile-or-quantile" class="section level3">
 <h3><span class="header-section-number">5.3.2</span> Interquartile range: Difference between 25th and 75th percentile (or quantile)</h3>
 <p>E.g., 5th percentile or 5th quantile of a variable is the smallest number below which 5% of the observations of that variable lie.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">quantile</span>(iris<span class="op">$</span>Sepal.Length,<span class="dt">probs =</span> .<span class="dv">05</span>)</code></pre></div>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">quantile</span>(iris<span class="op">$</span>Sepal.Length,<span class="dt">probs =</span> <span class="fl">.05</span>)</code></pre>
 <pre><code>##  5% 
 ## 4.6</code></pre>
 <p>The median is the 50th percentile value.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">median</span>(iris<span class="op">$</span>Sepal.Length)</code></pre></div>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">median</span>(iris<span class="op">$</span>Sepal.Length)</code></pre>
 <pre><code>## [1] 5.8</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">quantile</span>(iris<span class="op">$</span>Sepal.Length,<span class="dt">probs=</span>.<span class="dv">5</span>)</code></pre></div>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">quantile</span>(iris<span class="op">$</span>Sepal.Length,<span class="dt">probs=</span>.<span class="dv">5</span>)</code></pre>
 <pre><code>## 50% 
 ## 5.8</code></pre>
 <p>25th quantile</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">quantile</span>(iris<span class="op">$</span>Sepal.Length,<span class="dt">probs=</span>.<span class="dv">25</span>)</code></pre></div>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">quantile</span>(iris<span class="op">$</span>Sepal.Length,<span class="dt">probs=</span>.<span class="dv">25</span>)</code></pre>
 <pre><code>## 25% 
 ## 5.1</code></pre>
 <p>75th quantile</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">quantile</span>(iris<span class="op">$</span>Sepal.Length,<span class="dt">probs=</span>.<span class="dv">75</span>)</code></pre></div>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">quantile</span>(iris<span class="op">$</span>Sepal.Length,<span class="dt">probs=</span>.<span class="dv">75</span>)</code></pre>
 <pre><code>## 75% 
 ## 6.4</code></pre>
 <p>Therefore, IQR is the difference between the 75th quantile and 25th quantile.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">IQR</span>(iris<span class="op">$</span>Sepal.Length)</code></pre></div>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">IQR</span>(iris<span class="op">$</span>Sepal.Length)</code></pre>
 <pre><code>## [1] 1.3</code></pre>
 </div>
 <div id="variance-and-standard-deviation" class="section level3">
 <h3><span class="header-section-number">5.3.3</span> Variance and Standard Deviation</h3>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">var</span>(iris<span class="op">$</span>Sepal.Length)</code></pre></div>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">var</span>(iris<span class="op">$</span>Sepal.Length)</code></pre>
 <pre><code>## [1] 0.6856935</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">sd</span>(iris<span class="op">$</span>Sepal.Length)</code></pre></div>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">sd</span>(iris<span class="op">$</span>Sepal.Length)</code></pre>
 <pre><code>## [1] 0.8280661</code></pre>
 <p>Note that the standard deviation is the square root of variance.</p>
 
@@ -331,7 +358,7 @@ gitbook.start({
 "google": false,
 "linkedin": false,
 "weibo": false,
-"instapper": false,
+"instapaper": false,
 "vk": false,
 "all": ["facebook", "google", "twitter", "linkedin", "weibo", "instapaper"]
 },
@@ -341,6 +368,10 @@ gitbook.start({
 "size": 2
 },
 "edit": {
+"link": null,
+"text": null
+},
+"history": {
 "link": null,
 "text": null
 },

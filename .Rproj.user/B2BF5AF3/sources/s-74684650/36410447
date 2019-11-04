@@ -1,0 +1,22 @@
+{
+    "collab_server" : "",
+    "contents" : "",
+    "created" : 1546971818723.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "0",
+    "id" : "36410447",
+    "lastKnownWriteTime" : 1542060493,
+    "last_content_update" : 1542060493,
+    "path" : "C:/Users/patil/Documents/GitHub/Rbook/07-multivar.Rmd",
+    "project_path" : "07-multivar.Rmd",
+    "properties" : {
+        "cursorPosition" : "32,41",
+        "scrollLine" : "0"
+    },
+    "relative_order" : 1,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_markdown"
+}
