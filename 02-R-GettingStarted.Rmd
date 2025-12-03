@@ -13,7 +13,12 @@ The first order of business would involve installing R.
 
 ## R-Studio Interface
 
+The R-Studio interface is generally divided into 4 quadrants.
 
+1.  **Source:** This is where you write your scripts. This is usually the top-left quadrant.
+2.  **Console:** This is where you see the execution of the commands and the output. This is usually the bottom-left quadrant.
+3.  **Environment/History:** This is where you can see the variables that are currently in the R environment and the history of the commands that you have executed. This is usually the top-right quadrant.
+4.  **Files/Plots/Packages/Help/Viewer:** This is where you can see the files in your working directory, the plots that you have generated, the packages that are installed, and the help documentation. This is usually the bottom-right quadrant.
 
 
 ## Organizing projects
