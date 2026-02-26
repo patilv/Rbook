@@ -1,26 +1,20 @@
-# Functional Programming with purrr {#purrr}
+# Doing the Same Thing to Many Things at Once {#purrr}
 
 ```{r include=FALSE}
 library(tidyverse)
 knitr::opts_chunk$set(echo = TRUE, warning = FALSE, message = FALSE)
 ```
 
-One of R's greatest strengths is that functions are first-class objects --- you can pass them as arguments, return them from other functions, and store them in lists. **Functional programming** is a paradigm that takes full advantage of this property. Rather than writing explicit loops that describe *how* to iterate over data step by step, functional programming encourages you to describe *what* you want to happen to each element and let a higher-order function handle the iteration.
+## The Problem: Repetition
 
-The **purrr** package, part of the tidyverse, provides a complete and consistent set of tools for functional programming in R. It replaces the inconsistent family of `apply()` functions in base R with a predictable, type-stable toolkit that integrates seamlessly with the rest of the tidyverse. In this chapter, we will learn how to use purrr to iterate over vectors and lists, work with multiple inputs, handle errors gracefully, and build powerful data analysis pipelines.
+Here's a scenario. You have 12 CSV files --- one for each month of sales data --- and you need to read them all into R and stack them into one data frame. Or you need to calculate the mean of every numeric column in a dataset. Or you need to run the same regression on three different customer segments.
 
-## Why Avoid Explicit For Loops?
+In all of these cases, you're doing the **same thing to many things**. You could write a for loop, and that would work fine. But the **purrr** package gives you a cleaner, more expressive way to do it --- usually in a single line.
 
-R programmers are often told to avoid `for` loops, and this advice deserves some nuance. There is nothing inherently wrong with a `for` loop --- it is a fundamental control-flow structure that works perfectly well. However, in practice, explicit loops tend to produce code that is:
-
-- **Verbose**: A `for` loop requires you to initialize an output container, set up the loop, fill in each element, and then return the result. This boilerplate obscures the intent of the code.
-- **Error-prone**: Off-by-one errors, forgetting to pre-allocate output, and accidentally overwriting variables are common loop mistakes.
-- **Harder to compose**: A `for` loop is a statement, not an expression --- it does not return a value, which makes it difficult to chain with other operations.
-
-Consider a simple task: compute the mean of each numeric column in `mtcars`.
+Let's see the difference. Here's computing the mean of each column in `mtcars` with a for loop:
 
 ```{r}
-# Using a for loop
+# The for-loop way
 means <- numeric(ncol(mtcars))
 for (i in seq_along(mtcars)) {
   means[i] <- mean(mtcars[[i]])
@@ -29,98 +23,49 @@ names(means) <- names(mtcars)
 means
 ```
 
-Now compare this with the functional approach using purrr.
+Now with purrr:
 
 ```{r}
 map_dbl(mtcars, mean)
 ```
 
-The purrr version is a single, expressive line. It communicates the intent directly: "apply `mean` to each column of `mtcars` and return a double vector." There is no boilerplate, no indexing, and no room for off-by-one errors.
+One line. Same result. No indexing, no pre-allocation, no room for mistakes. Let's learn how this works.
 
-## The map Family
 
-The `map()` family of functions is the backbone of purrr. Each function applies a function to every element of a vector or list and returns a result in a specific format.
+## The `map` Family: Apply a Function to Every Element
 
-### map() --- Returns a List
+The idea is simple: take a list (or vector, or data frame), apply a function to each element, and collect the results. The `map` family differs only in what type of output you want back.
 
-The most general function is `map()`. It always returns a list, regardless of what the applied function returns.
+**`map()` --- returns a list** (the safest, most general option):
 
 ```{r}
 simple_list <- list(a = 1:5, b = 6:10, c = 11:15)
 map(simple_list, mean)
 ```
 
-The result is a list of length three, with each element containing a single numeric value. Because `map()` always returns a list, it is the safest option when you are unsure what the output type will be.
-
-```{r}
-map(simple_list, summary)
-```
-
-Here, each element of the result is a named numeric vector (the output of `summary()`), which cannot be simplified to a single atomic vector. The `map()` function handles this without complaint.
-
-### map_dbl() --- Returns a Double Vector
-
-When you know the function will return a single numeric value for each element, use `map_dbl()` to get a numeric vector directly.
+**`map_dbl()` --- returns a numeric vector** (use when each result is a single number):
 
 ```{r}
 map_dbl(simple_list, mean)
-```
-
-```{r}
 map_dbl(simple_list, sd)
 ```
 
-If the function returns something other than a single double, `map_dbl()` will throw an error. This type strictness is a feature --- it catches unexpected outputs early.
-
-### map_int() --- Returns an Integer Vector
-
-Use `map_int()` when you expect integer results.
-
-```{r}
-map_int(simple_list, length)
-```
-
-```{r}
-map_int(iris, n_distinct)
-```
-
-### map_chr() --- Returns a Character Vector
-
-Use `map_chr()` when you expect character results.
+**`map_chr()` --- returns a character vector** (use when each result is a single string):
 
 ```{r}
 map_chr(iris, class)
 ```
 
-```{r}
-map_chr(simple_list, ~ paste(.x, collapse = ", "))
-```
-
-### map_lgl() --- Returns a Logical Vector
-
-Use `map_lgl()` when you expect logical results.
-
-```{r}
-map_lgl(iris, is.numeric)
-```
-
-```{r}
-map_lgl(simple_list, ~ max(.x) > 10)
-```
-
-### map_dfr() --- Returns a Data Frame (Binding Rows)
-
-When each element produces a data frame (or a named vector that can become a row), `map_dfr()` binds them together row-wise.
-Note that `map_dfr()` has been superseded in favor of using `map()` combined with `list_rbind()`, but it remains widely used and is still perfectly functional.
+**`map_dfr()` --- returns a data frame** by stacking results as rows (great for building summary tables):
 
 ```{r}
 map_dfr(simple_list, ~ tibble(mean = mean(.x), sd = sd(.x), n = length(.x)),
         .id = "group")
 ```
 
-The `.id` argument creates a column from the names of the input list, which is extremely useful for tracking which group each row came from.
+The `.id = "group"` argument adds a column that tells you which list element each row came from. Very handy.
 
-The modern equivalent using `list_rbind()` looks like this.
+The modern alternative to `map_dfr()` uses `map()` with `list_rbind()`:
 
 ```{r}
 simple_list %>%
@@ -128,499 +73,77 @@ simple_list %>%
   list_rbind(names_to = "group")
 ```
 
-### Comparing map() with Base R
+Same result, slightly more explicit.
 
-Base R provides `lapply()` and `sapply()` for similar tasks. How does purrr compare?
 
-- `lapply()` is equivalent to `map()` --- both return lists. The purrr version adds formula shortcuts and better error messages.
-- `sapply()` tries to simplify the result automatically. This is dangerous because the return type depends on the data. If the function returns a single value for every element, `sapply()` returns a vector. If different elements produce different lengths, it returns a list. This unpredictability makes `sapply()` unsuitable for programming.
+## The Formula Shortcut: `~ .x`
 
-```{r}
-# Base R
-lapply(mtcars, mean)
-sapply(mtcars, mean)
-
-# purrr
-map(mtcars, mean)
-map_dbl(mtcars, mean)
-```
-
-The purrr functions are explicit about what they return. When you write `map_dbl()`, you are making a contract with the reader (and with R): this will return a double vector, or it will fail. There are no surprises.
-
-## Anonymous Functions and Shortcuts
-
-Often, you want to apply a small, one-off function that does not deserve a name. purrr provides several ways to express these anonymous functions concisely.
-
-### Full Function Syntax
-
-You can always pass a standard anonymous function.
+When you need a quick, one-off function, purrr lets you write it as a formula. The `~` creates the function, and `.x` refers to each element.
 
 ```{r}
+# Full function syntax
 map_dbl(simple_list, function(x) sum(x^2))
-```
 
-### Formula Shortcut (~.x)
-
-purrr supports a compact formula syntax where `~` creates a function and `.x` refers to the element.
-
-```{r}
+# Formula shortcut --- same thing, less typing
 map_dbl(simple_list, ~ sum(.x^2))
 ```
 
-This is equivalent to the full function syntax above but much more concise. For functions of two arguments (used with `map2()`), you use `.x` and `.y`.
-
-```{r}
-map_dbl(simple_list, ~ .x[1] + .x[length(.x)])
-```
-
-### Lambda Syntax (R 4.1+)
-
-R 4.1 introduced a native shorthand for anonymous functions using `\(x)`.
+You can also use R 4.1's `\(x)` syntax if you prefer:
 
 ```{r}
 map_dbl(simple_list, \(x) sum(x^2))
 ```
 
-This is base R syntax, not specific to purrr, and it works everywhere a function is expected. Choose whichever style you find most readable. The formula shortcut (`~.x`) is traditional in purrr code, while the lambda syntax (`\(x)`) is becoming increasingly popular.
+All three do the same thing. The formula shortcut (`~ .x`) is the most common in purrr code, so it's worth getting comfortable with.
 
-### Extracting Elements by Name or Position
 
-A very common use of `map()` is extracting elements from a list of lists. purrr provides shortcuts for this.
+## Extracting Elements from Lists
+
+A super common use case: you have a list of lists (like API responses or JSON data) and need to pull out one field from each.
 
 ```{r}
-people <- list(
+customers <- list(
   list(name = "Alice", age = 30, city = "Portland"),
   list(name = "Bob", age = 25, city = "Austin"),
   list(name = "Carol", age = 35, city = "Denver")
 )
 
-# Extract by name
-map_chr(people, "name")
+map_chr(customers, "name")
+map_int(customers, "age")
+map_chr(customers, "city")
 ```
 
-```{r}
-map_int(people, "age")
-```
+Just pass the name of the element as a string. Purrr handles the extraction.
 
-```{r}
-# Extract by position
-map_chr(people, 3)
-```
 
-When you pass a string or integer to `map()`, it uses that as an extractor. This is equivalent to `map(people, ~ .x[["name"]])` but much cleaner. You can also extract nested elements by passing a vector of accessors.
+## Two Inputs at Once: `map2()`
 
-```{r}
-nested_people <- list(
-  list(info = list(name = "Alice", age = 30)),
-  list(info = list(name = "Bob", age = 25)),
-  list(info = list(name = "Carol", age = 35))
-)
-
-map_chr(nested_people, c("info", "name"))
-```
-
-## Mapping with Multiple Inputs
-
-Sometimes you need to iterate over two or more inputs simultaneously. purrr provides `map2()` and `pmap()` for this purpose.
-
-### map2() --- Two Inputs
-
-The `map2()` function iterates over two vectors in parallel, applying a function that takes two arguments.
+Sometimes you need to iterate over two things in parallel. `map2()` takes two inputs and a function with `.x` and `.y`.
 
 ```{r}
 x <- list(1:5, 6:10, 11:15)
 y <- list(10, 20, 30)
 
-map2(x, y, ~ .x + .y)
-```
-
-```{r}
 map2_dbl(x, y, ~ mean(.x) + .y)
 ```
 
-A practical example: generating random samples of different sizes from different distributions.
+Practical example --- generating samples from different distributions:
 
 ```{r}
 set.seed(42)
 means <- c(0, 5, 10)
 sds <- c(1, 2, 3)
 
-samples <- map2(means, sds, ~ rnorm(n = 5, mean = .x, sd = .y))
-samples
+map2(means, sds, ~ rnorm(n = 5, mean = .x, sd = .y))
 ```
 
-Like `map()`, `map2()` has typed variants: `map2_dbl()`, `map2_chr()`, `map2_lgl()`, `map2_int()`, and `map2_dfr()`.
 
-### pmap() --- Multiple Inputs
+## The Killer Use Case: Reading Multiple CSV Files
 
-When you have more than two inputs, use `pmap()`. It takes a list of vectors (or a data frame, since a data frame is a list of columns) and applies a function to the corresponding elements.
-
-```{r}
-params <- list(
-  n = c(5, 10, 20),
-  mean = c(0, 5, 10),
-  sd = c(1, 2, 3)
-)
-
-set.seed(42)
-pmap(params, rnorm)
-```
-
-Notice that the names of the list elements match the argument names of `rnorm()`. purrr matches by name, which makes `pmap()` calls very readable.
-
-You can also use `pmap()` with a data frame, which is useful when your parameters are stored as rows.
+This is probably the most common real-world use of purrr for business analysts. You have a folder full of data files and need to combine them.
 
 ```{r}
-param_df <- tibble(
-  n = c(100, 100, 100),
-  mean = c(0, 5, 10),
-  sd = c(1, 2, 3)
-)
-
-set.seed(42)
-results <- pmap(param_df, rnorm)
-map_dbl(results, mean)
-```
-
-A practical example: creating customized greeting messages.
-
-```{r}
-greetings <- tibble(
-  name = c("Alice", "Bob", "Carol"),
-  time_of_day = c("morning", "afternoon", "evening"),
-  title = c("Dr.", "Mr.", "Ms.")
-)
-
-pmap_chr(greetings, ~ paste0("Good ", ..2, ", ", ..3, " ", ..1, "!"))
-```
-
-In `pmap()`, the arguments are referred to as `..1`, `..2`, `..3`, etc. (corresponding to the first, second, third elements of the list). Alternatively, you can write a named function.
-
-```{r}
-pmap_chr(greetings, function(name, time_of_day, title) {
-  paste0("Good ", time_of_day, ", ", title, " ", name, "!")
-})
-```
-
-## Walking for Side Effects
-
-Sometimes you call a function not for its return value but for its **side effects** --- writing a file, printing to the console, creating a plot, or sending a message. The `walk()` family is designed for this purpose. It works exactly like `map()` but returns the input invisibly instead of the function's output.
-
-### walk()
-
-```{r}
-messages <- c("Processing file 1...", "Processing file 2...", "Processing file 3...")
-walk(messages, message)
-```
-
-A practical example: saving multiple plots to files. Here we demonstrate the concept without actually writing files.
-
-```{r}
-plots <- mtcars %>%
-  split(.$cyl) %>%
-  map(~ ggplot(.x, aes(x = wt, y = mpg)) +
-        geom_point() +
-        labs(title = paste("Cylinders:", unique(.x$cyl))))
-
-# To save these plots, you would use:
-# walk2(paste0("plot_cyl_", names(plots), ".png"), plots, ggsave)
-```
-
-### walk2() and pwalk()
-
-Just as `map2()` and `pmap()` iterate over multiple inputs, `walk2()` and `pwalk()` do the same for side-effect functions.
-
-```{r}
-file_names <- c("report_q1.txt", "report_q2.txt", "report_q3.txt")
-contents <- c("Q1 results: 100", "Q2 results: 120", "Q3 results: 130")
-
-# To write files, you would use:
-# walk2(file_names, contents, writeLines)
-
-# Demonstration with message instead of file writing
-walk2(file_names, contents, ~ message("Writing '", .y, "' to ", .x))
-```
-
-The `pwalk()` function works with a list or data frame of multiple arguments, similar to `pmap()`.
-
-```{r}
-tasks <- tibble(
-  filename = c("data_2022.csv", "data_2023.csv"),
-  nrows = c(100, 200),
-  desc = c("year 2022 data", "year 2023 data")
-)
-
-pwalk(tasks, function(filename, nrows, desc) {
-  message("Would write ", nrows, " rows of ", desc, " to ", filename)
-})
-```
-
-## Modifying and Filtering Lists
-
-purrr provides a rich set of functions for transforming, filtering, and extracting from lists. These functions are often more expressive than their base R equivalents.
-
-### modify() and Variants
-
-The `modify()` function works like `map()` but always returns the same type as its input. If you give it a data frame, you get a data frame back.
-
-```{r}
-modify(simple_list, ~ .x * 2)
-```
-
-```{r}
-# modify() on a data frame returns a data frame
-iris %>%
-  select(where(is.numeric)) %>%
-  modify(scale) %>%
-  head()
-```
-
-The `modify_if()` function applies a transformation only to elements that satisfy a predicate.
-
-```{r}
-# Double only the numeric columns in iris
-iris %>%
-  modify_if(is.numeric, ~ .x * 2) %>%
-  head()
-```
-
-The `modify_at()` function applies a transformation to elements at specific positions or with specific names.
-
-```{r}
-modify_at(simple_list, c("a", "c"), ~ .x + 100)
-```
-
-### keep() and discard()
-
-The `keep()` function retains elements that satisfy a predicate, while `discard()` removes them.
-
-```{r}
-mixed_list <- list(a = 1:5, b = "hello", c = 6:10, d = TRUE, e = 11:15)
-
-keep(mixed_list, is.numeric)
-```
-
-```{r}
-discard(mixed_list, is.numeric)
-```
-
-```{r}
-# Keep only elements with mean greater than 7
-keep(simple_list, ~ mean(.x) > 7)
-```
-
-### compact()
-
-The `compact()` function removes all `NULL` and length-zero elements from a list.
-
-```{r}
-sparse_list <- list(a = 1, b = NULL, c = 3, d = NULL, e = 5)
-compact(sparse_list)
-```
-
-This is particularly useful when a function returns `NULL` for some inputs.
-
-### pluck() and chuck()
-
-The `pluck()` function provides a flexible way to extract deeply nested elements. It returns `NULL` if the element does not exist.
-
-```{r}
-deep_list <- list(
-  level1 = list(
-    level2 = list(
-      level3 = "found it!"
-    )
-  )
-)
-
-pluck(deep_list, "level1", "level2", "level3")
-```
-
-```{r}
-# Returns NULL for non-existent paths
-pluck(deep_list, "level1", "nonexistent", "level3")
-```
-
-```{r}
-# Provide a default value
-pluck(deep_list, "level1", "nonexistent", .default = "not found")
-```
-
-The `chuck()` function works like `pluck()` but throws an error instead of returning `NULL` when the path does not exist. Use `chuck()` when missing data indicates a programming error.
-
-### flatten()
-
-The `flatten()` function removes one level of nesting from a list.
-
-```{r}
-nested <- list(list(1, 2), list(3, 4), list(5, 6))
-flatten(nested)
-```
-
-There are also typed variants: `flatten_dbl()`, `flatten_chr()`, `flatten_int()`, and `flatten_lgl()`.
-
-```{r}
-flatten_dbl(nested)
-```
-
-## Reducing and Accumulating
-
-Sometimes you need to combine all elements of a list into a single result by repeatedly applying a two-argument function. purrr provides `reduce()` and `accumulate()` for this.
-
-### reduce()
-
-The `reduce()` function takes a list and a two-argument function, then applies the function cumulatively: first to elements 1 and 2, then to that result and element 3, and so on.
-
-```{r}
-reduce(1:5, `+`)
-```
-
-This is equivalent to `((((1 + 2) + 3) + 4) + 5)`, which equals 15.
-
-A more practical example: combining multiple data frames with a join operation.
-
-```{r}
-df1 <- tibble(id = 1:3, value_a = c(10, 20, 30))
-df2 <- tibble(id = 2:4, value_b = c(40, 50, 60))
-df3 <- tibble(id = 3:5, value_c = c(70, 80, 90))
-
-list_of_dfs <- list(df1, df2, df3)
-reduce(list_of_dfs, left_join, by = "id")
-```
-
-This is one of the most powerful uses of `reduce()`. Instead of writing nested `left_join()` calls or chaining them manually, you provide a list of data frames and let `reduce()` join them sequentially. This pattern scales to any number of data frames.
-
-Another example: finding the intersection of multiple vectors.
-
-```{r}
-sets <- list(c(1, 2, 3, 4, 5), c(2, 3, 4, 6), c(3, 4, 7, 8))
-reduce(sets, intersect)
-```
-
-### accumulate()
-
-The `accumulate()` function works like `reduce()` but keeps all intermediate results.
-
-```{r}
-accumulate(1:5, `+`)
-```
-
-This shows the running sum: 1, 3, 6, 10, 15.
-
-```{r}
-accumulate(1:5, `*`)
-```
-
-This shows the running product: 1, 2, 6, 24, 120 (factorials).
-
-A practical example: computing cumulative balances with deposits and withdrawals.
-
-```{r}
-transactions <- c(1000, -200, 500, -150, -300, 800)
-
-accumulate(transactions, `+`)
-```
-
-This shows the account balance after each transaction.
-
-## Handling Errors
-
-When you apply a function across many elements, some of those applications may fail. Rather than letting a single failure crash the entire computation, purrr provides wrapper functions that capture errors and let processing continue.
-
-### safely()
-
-The `safely()` function wraps another function and returns a list with two components: `result` (the successful return value or `NULL`) and `error` (the error object or `NULL`).
-
-```{r}
-safe_log <- safely(log)
-safe_log(10)
-```
-
-```{r}
-safe_log("oops")
-```
-
-This is extremely useful when mapping over data that might contain problematic values.
-
-```{r}
-inputs <- list(10, "bad", 100, -1, "worse", 1000)
-results <- map(inputs, safely(log))
-results
-```
-
-### Processing Results with transpose()
-
-The output of `safely()` applied via `map()` gives you a list of lists, which can be awkward to work with. The `transpose()` function reorganizes this structure.
-
-```{r}
-transposed <- transpose(results)
-str(transposed, max.level = 2)
-```
-
-Now you have a `result` list and an `error` list, making it easy to separate successes from failures.
-
-```{r}
-# Which inputs succeeded?
-succeeded <- map_lgl(transposed$error, is.null)
-succeeded
-```
-
-```{r}
-# Extract successful results
-transposed$result[succeeded]
-```
-
-```{r}
-# Extract error messages
-transposed$error[!succeeded] %>%
-  map_chr(~ .x$message)
-```
-
-### possibly()
-
-The `possibly()` function is a simpler alternative to `safely()`. Instead of returning a list with result and error components, it returns a default value when an error occurs.
-
-```{r}
-safe_log2 <- possibly(log, otherwise = NA_real_)
-safe_log2(10)
-safe_log2("oops")
-```
-
-This integrates perfectly with `map()`.
-
-```{r}
-map_dbl(inputs, possibly(log, otherwise = NA_real_))
-```
-
-The `NA` values clearly mark which inputs failed, and the result is a clean numeric vector that can be used for further analysis.
-
-### quietly()
-
-The `quietly()` function captures not just errors but also warnings, messages, and printed output.
-
-```{r}
-quiet_log <- quietly(log)
-quiet_log(-1)
-```
-
-This is useful for functions that produce warnings you want to inspect later without cluttering the console.
-
-```{r}
-noisy_inputs <- list(10, -1, 100, -5)
-quiet_results <- map(noisy_inputs, quietly(log))
-map_chr(quiet_results, ~ paste(.x$warnings, collapse = "; "))
-```
-
-## Practical Examples
-
-Let us now put everything together with complete, realistic examples that demonstrate how purrr enables powerful workflows.
-
-### Reading Multiple Files
-
-One of the most common uses of purrr is reading multiple files into R and combining them into a single data frame.
-
-```{r}
-# Simulate creating multiple CSV files
+# First, let's create some example CSV files
 temp_dir <- tempdir()
 walk(1:3, function(i) {
   df <- tibble(
@@ -637,7 +160,7 @@ csv_files
 ```
 
 ```{r}
-# Read all files and combine into one data frame
+# Read all files and combine into one data frame --- THE money pattern
 all_data <- csv_files %>%
   set_names(basename(.)) %>%
   map(read_csv) %>%
@@ -646,181 +169,51 @@ all_data <- csv_files %>%
 all_data
 ```
 
-This pattern --- list files, read them with `map()`, combine with `list_rbind()` --- is a workhorse in data analysis. It scales to hundreds of files without any change in structure.
+That three-line pattern --- list files, read them with `map()`, combine with `list_rbind()` --- scales to hundreds of files without changing a single thing. If your company sends you 52 weekly reports as separate CSV files, this is how you handle it.
 
-### Running Models on Grouped Data
 
-A particularly powerful pattern combines `nest()` from tidyr with `map()` from purrr to run models on grouped data. Let us walk through a complete modeling workflow using the `mtcars` dataset.
+## Handling Errors: `possibly()` and `safely()`
 
-**Step 1: Nest by Group**
-
-We group the data by the number of cylinders and nest the remaining columns into a list-column.
+When you're applying a function to many inputs, some might fail. Maybe one CSV file is corrupted, or one data point makes your function throw an error. Instead of crashing the entire operation, you can use `possibly()` to return a default value when something goes wrong.
 
 ```{r}
-nested_cars <- mtcars %>%
-  as_tibble(rownames = "car") %>%
-  nest(data = -cyl)
+inputs <- list(10, "oops", 100, -1, "nope", 1000)
 
-nested_cars
+# This would crash: map_dbl(inputs, log)
+# This doesn't:
+map_dbl(inputs, possibly(log, otherwise = NA_real_))
 ```
 
-Each row represents one group (4-, 6-, or 8-cylinder cars), and the `data` column contains a tibble with all the variables for that group.
-
-**Step 2: Fit Models with map()**
-
-We use `map()` to fit a linear model to each group, predicting miles per gallon from weight.
+The `NA` values tell you exactly which inputs failed, and your analysis continues with the rest. For more detailed error information, `safely()` captures both the result and the error message:
 
 ```{r}
-models <- nested_cars %>%
-  mutate(model = map(data, ~ lm(mpg ~ wt, data = .x)))
-
-models
+safe_log <- safely(log)
+safe_log(10)
+safe_log("oops")
 ```
 
-The `model` column now contains three fitted `lm` objects --- one for each cylinder group.
+`possibly()` is what you'll use 90% of the time. `safely()` is there when you need to debug what went wrong.
 
-**Step 3: Extract Model Statistics**
 
-We use `map()` again to extract summary statistics from each model.
+## Quick Reference
 
-```{r}
-model_stats <- models %>%
-  mutate(
-    r_squared = map_dbl(model, ~ summary(.x)$r.squared),
-    coefficients = map(model, ~ tidy(.x)),
-    predictions = map(model, ~ augment(.x))
-  )
+| What you want | Function | Returns |
+|:--------------|:---------|:--------|
+| Apply function, get list | `map()` | list |
+| Apply function, get numbers | `map_dbl()` | numeric vector |
+| Apply function, get strings | `map_chr()` | character vector |
+| Apply function, get data frame | `map_dfr()` or `map() %>% list_rbind()` | data frame |
+| Two inputs at once | `map2()`, `map2_dbl()` | depends on variant |
+| Handle errors gracefully | `possibly()`, `safely()` | default value or result+error |
 
-model_stats %>%
-  select(cyl, r_squared)
+The core pattern for business analysts:
+
+```r
+# Reading multiple files (the one you'll use most)
+list.files("data/", pattern = "*.csv", full.names = TRUE) %>%
+  set_names(basename(.)) %>%
+  map(read_csv) %>%
+  list_rbind(names_to = "source_file")
 ```
 
-We need the `broom` package for `tidy()` and `augment()`. Let us load it and redo the extraction.
-
-```{r}
-library(broom)
-
-model_results <- models %>%
-  mutate(
-    glance = map(model, glance),
-    tidy = map(model, tidy),
-    augment = map(model, augment)
-  )
-```
-
-**Step 4: Unnest Results**
-
-Now we can unnest the results to get clean, analysis-ready data frames.
-
-```{r}
-# Model-level statistics
-model_results %>%
-  unnest(glance) %>%
-  select(cyl, r.squared, adj.r.squared, p.value, sigma)
-```
-
-```{r}
-# Coefficient-level statistics
-model_results %>%
-  unnest(tidy) %>%
-  select(cyl, term, estimate, std.error, p.value)
-```
-
-```{r}
-# Observation-level predictions
-model_results %>%
-  unnest(augment) %>%
-  select(cyl, mpg, wt, .fitted, .resid) %>%
-  head(10)
-```
-
-**Complete Pipeline**
-
-Here is the entire workflow condensed into a single, readable pipeline.
-
-```{r}
-mtcars %>%
-  as_tibble(rownames = "car") %>%
-  nest(data = -cyl) %>%
-  mutate(
-    model = map(data, ~ lm(mpg ~ wt, data = .x)),
-    tidy = map(model, tidy)
-  ) %>%
-  unnest(tidy) %>%
-  select(cyl, term, estimate, std.error, p.value) %>%
-  arrange(cyl, term)
-```
-
-This pipeline takes the raw `mtcars` data, groups it by cylinder count, fits a linear model to each group, extracts the coefficients, and presents them in a tidy table --- all in a single, composable chain of operations.
-
-### Extracting Model Statistics at Scale
-
-Let us extend this pattern to fit multiple different models to the `iris` dataset and compare them.
-
-```{r}
-formulas <- list(
-  "Sepal.Length ~ Sepal.Width" = Sepal.Length ~ Sepal.Width,
-  "Sepal.Length ~ Petal.Length" = Sepal.Length ~ Petal.Length,
-  "Sepal.Length ~ Petal.Width" = Sepal.Length ~ Petal.Width,
-  "Sepal.Length ~ ." = Sepal.Length ~ Sepal.Width + Petal.Length + Petal.Width
-)
-
-model_comparison <- formulas %>%
-  map(~ lm(.x, data = iris)) %>%
-  map_dfr(glance, .id = "formula") %>%
-  arrange(desc(r.squared))
-
-model_comparison %>%
-  select(formula, r.squared, adj.r.squared, AIC, BIC)
-```
-
-This lets you rapidly compare model fit statistics across many specifications.
-
-### Combining safely() with a Modeling Workflow
-
-In real-world analyses, some model fits may fail --- perhaps due to insufficient data or singular design matrices. The `safely()` function lets you handle this gracefully.
-
-```{r}
-safe_lm <- safely(lm)
-
-# Create groups with varying amounts of data
-grouped_data <- iris %>%
-  as_tibble() %>%
-  nest(data = -Species) %>%
-  mutate(
-    model = map(data, ~ safe_lm(Sepal.Length ~ Sepal.Width + Petal.Length, data = .x)),
-    result = map(model, "result"),
-    error = map(model, "error"),
-    has_error = map_lgl(error, ~ !is.null(.x))
-  )
-
-grouped_data %>%
-  select(Species, has_error)
-```
-
-```{r}
-# Extract summaries only for successful models
-grouped_data %>%
-  filter(!has_error) %>%
-  mutate(glance = map(result, glance)) %>%
-  unnest(glance) %>%
-  select(Species, r.squared, adj.r.squared, p.value)
-```
-
-## Summary
-
-In this chapter, we covered the purrr package for functional programming in R:
-
-| Function Family | Purpose |
-|:----------------|:--------|
-| `map()`, `map_dbl()`, `map_chr()`, `map_lgl()`, `map_int()` | Apply a function to each element and return a specific type |
-| `map_dfr()` / `list_rbind()` | Apply a function and bind results into a data frame |
-| `map2()`, `pmap()` | Iterate over two or more inputs in parallel |
-| `walk()`, `walk2()`, `pwalk()` | Apply a function for its side effects |
-| `modify()`, `modify_if()`, `modify_at()` | Transform elements while preserving structure |
-| `keep()`, `discard()`, `compact()` | Filter list elements based on predicates |
-| `pluck()` | Extract deeply nested elements |
-| `reduce()`, `accumulate()` | Combine elements by repeatedly applying a function |
-| `safely()`, `possibly()`, `quietly()` | Handle errors gracefully during iteration |
-
-The key takeaway is that purrr lets you replace explicit loops with clear, composable, type-stable function calls. When combined with tidyr's `nest()` and `unnest()`, purrr enables a powerful pattern for applying complex operations --- modeling, summarization, visualization --- to grouped data. This nest-map-unnest workflow is one of the most distinctive and productive patterns in the tidyverse.
+That's purrr. It replaces repetitive loops with clean, one-line function calls. Start with `map_dbl()` for simple calculations and the file-reading pattern for combining data, and you'll cover most of what you need.
