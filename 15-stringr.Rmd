@@ -7,28 +7,28 @@ knitr::opts_chunk$set(echo = TRUE, warning = FALSE, message = FALSE)
 
 ## Why You Need This
 
-Here is an uncomfortable truth: a terrifying amount of real business data is just text. Survey responses. Product names. Customer addresses. Free-form comments from your NPS survey that say things like "  GREAT product!!  " and "great   Product" --- which are obviously the same sentiment, but R treats them as completely different values.
+Here is an uncomfortable truth about business data: a horrifying amount of it is just text that humans typed with reckless abandon. Survey responses. Product names. Customer addresses. Free-form NPS comments like "  GREAT product!!  " and "great   Product" --- which any reasonable person would call identical, but R sees them as completely different values.
 
-The **stringr** package is your cleanup crew. Every function starts with `str_`, takes the string first (so it works beautifully with the pipe), and does exactly what its name suggests. Let's get into it.
+The **stringr** package is your data janitor. Every function starts with `str_`, takes the string first (pipe-friendly), and does exactly what its name says. Think of it as spell-check for your datasets.
 
 
 ## String Basics
 
-Strings in R live inside quotes. Double quotes are the convention.
+Strings in R live inside quotes. Double quotes are standard.
 
 ```{r}
 product <- "Wireless Bluetooth Speaker"
 product
 ```
 
-If your string contains a quote, escape it with a backslash or wrap in single quotes:
+If your string itself contains a quote, wrap it in single quotes:
 
 ```{r}
 tagline <- 'She said, "Take my money!"'
 tagline
 ```
 
-`str_length()` counts characters --- handy for flagging those one-word survey responses from people who clearly wanted to leave early:
+`str_length()` counts characters --- useful for flagging those one-word survey responses from people who clearly had somewhere else to be:
 
 ```{r}
 responses <- c("Great product!", "OK", "This changed my life and I want to tell everyone", "N/A")
@@ -38,14 +38,14 @@ str_length(responses)
 
 ## Combining Strings with `str_c()`
 
-`str_c()` glues strings together. Think `paste()`, but tidyverse-flavored.
+`str_c()` glues strings together. It is `paste()` but tidyverse-flavored.
 
 ```{r}
 str_c("Q", 1:4)
 str_c("Hello", "World", sep = " ")
 ```
 
-The `collapse` argument squashes a vector into one string --- great for building labels:
+The `collapse` argument squashes a whole vector into one string --- great for building labels or email subject lines:
 
 ```{r}
 departments <- c("Marketing", "Finance", "Operations")
@@ -56,7 +56,7 @@ str_c(departments, collapse = " & ")
 
 ## Changing Case --- Your Most-Used Trick
 
-When survey respondents type "NEW YORK", "new york", and "New york" --- those are three different values to R. One line fixes it:
+When survey respondents type "NEW YORK", "new york", and "New york" --- R sees three different values. One line fixes all of them:
 
 ```{r}
 cities <- c("new york", "LOS ANGELES", "chicago", "SAN FRANCISCO")
@@ -72,12 +72,12 @@ str_to_upper(sample_text)
 str_to_title(sample_text)
 ```
 
-You will use these every single time you clean survey data, product categories, or anything where humans had a keyboard and zero standards.
+You will use these every single time you clean data where humans had a keyboard and zero standards. So... every time.
 
 
 ## Trimming Whitespace
 
-Extra spaces are the silent killer of data joins. If one spreadsheet has "Marketing" and another has "  Marketing  ", your `left_join()` will silently drop rows and you will silently lose your mind.
+Extra spaces are the silent killer of data joins. If one spreadsheet has "Marketing" and another has "  Marketing  ", your `left_join()` will silently drop rows and you will silently lose your mind trying to figure out why.
 
 ```{r}
 messy <- "   too  much   space   "
@@ -85,19 +85,19 @@ str_trim(messy)       # removes leading/trailing spaces
 str_squish(messy)     # also collapses internal spaces to one
 ```
 
-`str_squish()` handles everything. Use it by default.
+`str_squish()` handles everything. Just use it by default and move on with your life.
 
 
 ## Detecting Patterns with `str_detect()`
 
-"Does this string contain this word?" That is `str_detect()`. It returns TRUE/FALSE, which makes it perfect inside `filter()`.
+"Does this string contain this word?" That is `str_detect()`. It returns TRUE/FALSE, which makes it a perfect partner for `filter()`.
 
 ```{r}
 products <- c("iPhone 15 Pro", "Samsung Galaxy S24", "iPhone 15", "Google Pixel 8", "iPhone SE")
 str_detect(products, "iPhone")
 ```
 
-Inside a data frame --- this is where it gets useful:
+Inside a data frame --- this is where it earns its paycheck:
 
 ```{r}
 product_df <- tibble(
@@ -108,12 +108,12 @@ product_df <- tibble(
 product_df %>% filter(str_detect(product, "iPhone"))
 ```
 
-You just filtered to Apple products without needing a separate category column. Your manager will never know how easy that was.
+You just filtered to Apple products without needing a separate category column. Bill 3 hours for it anyway.
 
 
 ## Replacing Text with `str_replace()`
 
-`str_replace()` fixes the first match. `str_replace_all()` fixes every match.
+`str_replace()` fixes the first match. `str_replace_all()` fixes every match. Think "Find and Replace" in Excel, but it actually works on 50,000 rows.
 
 ```{r}
 reviews <- c("This product is gr8", "Loved it!! Will buy again!!", "Good product, good price")
@@ -127,7 +127,7 @@ responses <- c("50 percent", "30%", "about 20 percent", "75%")
 str_replace_all(responses, " percent", "%")
 ```
 
-`str_remove()` and `str_remove_all()` are shortcuts for replacing with nothing:
+`str_remove()` and `str_remove_all()` are shortcuts for replacing with nothing --- perfect for stripping symbols:
 
 ```{r}
 prices <- c("$29.99", "$149.50", "$5.00")
@@ -144,12 +144,12 @@ order_notes <- c("Order 1234 placed", "Invoice 5678 pending", "Shipped item 9101
 str_extract(order_notes, "\\d+")
 ```
 
-That `\\d+` is a regular expression. Do not panic --- the next section covers the only ones you will ever need.
+That `\\d+` is a regular expression (regex). Do not panic --- the next section covers the only ones you will ever need.
 
 
 ## Regular Expressions: Just the 3 Patterns You Actually Need
 
-Regex has a reputation for looking like a cat walked across your keyboard. The good news: for business data cleaning, you only need three patterns.
+Regex looks like a cat walked across your keyboard. The good news: for 90% of business data cleaning, you only need three patterns. Seriously.
 
 **Pattern 1: `\\d+` --- Find numbers**
 
@@ -174,12 +174,12 @@ messages <- c("Contact alice@example.com for details",
 str_extract(messages, "[\\w.]+@[\\w.]+")
 ```
 
-That is it. Three patterns. If you need something fancier, Google "regex cheat sheet." No shame in that --- everyone does it, including the people who wrote the cheat sheet.
+That is the whole regex syllabus. If you need something fancier, Google "regex cheat sheet." Everyone does it --- including the people who wrote the cheat sheet.
 
 
 ## Putting It All Together: A Survey Data Cleaning Pipeline
 
-Here is a realistic scenario. You received survey data and it looks like it was filled out during an earthquake:
+Here is a realistic scenario. You received survey data and it looks like it was filled out during an earthquake on a moving bus:
 
 ```{r}
 survey_raw <- tibble(
@@ -212,18 +212,18 @@ survey_clean <- survey_raw %>%
 survey_clean
 ```
 
-Five lines of `mutate()` and the chaos is gone. Let's verify the colors standardized:
+Five lines of `mutate()` and the chaos is gone. Let's verify the colors actually standardized:
 
 ```{r}
 survey_clean %>% count(favorite_color)
 ```
 
-Blue and green each appear twice. Order restored.
+Blue and green each appear twice. Order restored. Sanity preserved.
 
 
 ## Cleaning Product Names
 
-Pulling structured data out of messy product descriptions --- you will do this more often than you think:
+Pulling structured data out of messy product descriptions --- you will do this way more often than you think:
 
 ```{r}
 products <- tibble(
@@ -244,7 +244,7 @@ products %>%
   select(product_name, sku, price)
 ```
 
-One messy text column became three clean, analysis-ready columns.
+One messy text column became three clean, analysis-ready columns. That is the kind of transformation that gets you a "nice work" in the group chat.
 
 
 ## Extracting Numbers from Sales Notes
@@ -269,12 +269,12 @@ sales_notes %>%
   summarize(total_units = sum(units), .groups = "drop")
 ```
 
-Text data became a proper summary table. Put that in the quarterly deck.
+Text data became a proper summary table. Drop that into the quarterly deck and watch heads nod approvingly.
 
 
 ## Quick Reference
 
-The functions you will actually use:
+The functions you will actually use, ranked by how often you will reach for them:
 
 | What you want to do | Function |
 |:---------------------|:---------|
@@ -287,7 +287,7 @@ The functions you will actually use:
 | Delete a pattern | `str_remove()`, `str_remove_all()` |
 | How many characters? | `str_length()` |
 
-And the three regex patterns that handle most problems:
+And the three regex patterns that handle 90% of business problems:
 
 | Pattern | What it finds | Example |
 |:--------|:-------------|:--------|
@@ -295,4 +295,4 @@ And the three regex patterns that handle most problems:
 | `[A-Za-z]+` | Words (letters) | "**SKU**-12345" |
 | `[\\w.]+@[\\w.]+` | Email addresses | "**alice@example.com**" |
 
-That is stringr. Clean your text, extract what you need, get back to the analysis that actually matters.
+That is stringr. Clean your text, extract what you need, get back to the analysis that actually matters. Your data does not care how it was entered --- but your boss cares how it looks when you present it.

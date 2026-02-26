@@ -6,16 +6,16 @@ library(knitr)
 opts_chunk$set(echo = TRUE, warning = FALSE, message = FALSE)
 ```
 
-If there's one chapter in this book that will directly make you better at your job, it's this one. Data wrangling -- filtering, sorting, summarizing, reshaping -- is what analysts spend most of their time doing. And dplyr makes it almost enjoyable.
+If Excel is a bicycle, dplyr is a Tesla --- it gets you to the same place, but faster, smoother, and with a lot less sweating. Data wrangling (filtering, sorting, summarizing, reshaping) is what analysts spend roughly 80% of their time doing, and dplyr turns that grind into something almost... fun?
 
-Think of dplyr as a set of power tools for your data. Instead of clicking around in Excel or writing complicated formulas, you write clear, readable code that says exactly what you want. "Show me only the rows where revenue is above $10,000." "Add a column that calculates profit margin." "Give me average sales by region." That's dplyr in a nutshell.
+Think of dplyr as Excel pivot tables on steroids. Instead of clicking through menus and dragging columns around, you write short, readable commands: "Show me only the rows where revenue tops \$10K." "Add a profit-margin column." "Give me average sales by region." Done, done, and done.
 
-The best part? Every dplyr function takes a data frame in and gives a data frame back. So you can chain them together like an assembly line. But we'll get to that.
+Every dplyr function takes a data frame in and hands a data frame back, so you can chain them together like an assembly line at a factory. But we'll get to that.
 
 
 ## The Six Verbs You Need to Know {#core-verbs}
 
-Almost everything you'll do with dplyr comes down to six functions. Here they are, in plain English:
+Almost everything in dplyr boils down to six functions. Memorize these and you're basically a data analyst.
 
 | Verb | What It Does | Excel Equivalent |
 |:-------------|:-----------------------------------------|:--------------------------|
@@ -26,18 +26,18 @@ Almost everything you'll do with dplyr comes down to six functions. Here they ar
 | `arrange()` | Sort my data | Sort A-Z / Z-A |
 | `group_by()` | Do it separately for each group | Pivot tables! |
 
-Every one of these functions works the same way:
+They all work the same way:
 
 1. First argument: your data.
 2. Next arguments: what you want to do, using column names directly (no quotes needed).
-3. Result: a new data frame.
+3. Result: a shiny new data frame.
 
 Let's dig in.
 
 
 ## filter() -- Show Me Only the Rows I Care About {#filter}
 
-You know how in Excel you can filter a column to show only certain values? `filter()` does the same thing, but with way more power.
+Imagine you're a recruiter with a stack of 500 resumes on your desk. You don't read all 500 --- you filter. "Only candidates with 3+ years of experience." "Only people who speak Spanish." That's `filter()`. Same logic, applied to data.
 
 ### Basic Comparisons
 
@@ -58,7 +58,7 @@ filter(mtcars, cyl == 6)
 
 The comparison operators are what you'd expect: `==` (equals), `!=` (not equal), `>`, `<`, `>=`, `<=`.
 
-One gotcha: it's `==` for comparison, not `=`. A single `=` is for assigning values. This trips up everyone at least once.
+**Pro tip that will save you 20 minutes of debugging:** Use `==` for comparison, not `=`. A single `=` is for assigning values. Everyone makes this mistake exactly once. Some of us make it twice.
 
 ### Combining Conditions
 
@@ -69,7 +69,7 @@ Need multiple conditions? Use `&` (and) or `|` (or).
 filter(iris, Species == "setosa" & Sepal.Length > 5)
 ```
 
-Here's a nice shortcut: when you separate conditions with commas inside `filter()`, R treats them as "and" automatically.
+Shortcut: commas inside `filter()` are treated as "and" automatically.
 
 ```{r}
 # Same thing, cleaner syntax
@@ -83,7 +83,7 @@ filter(mtcars, cyl == 4 | mpg > 30)
 
 ### The %in% Operator
 
-When you want to match against a list of values, `%in%` is your friend. Think of it as "is this value in this set?"
+When you want to match against a list of values, `%in%` is your friend. Think of it as checking whether a job applicant's major is on your "approved majors" list.
 
 ```{r}
 # Setosa or virginica (but not versicolor)
@@ -97,7 +97,7 @@ filter(mtcars, cyl %in% c(4, 8))
 
 ### Filtering Ranges
 
-The `between()` helper is perfect for "give me everything from X to Y" situations.
+`between()` is perfect for "give me everything from X to Y" --- like pulling all transactions between Q1 and Q3.
 
 ```{r}
 # Sepal length between 5.0 and 6.0
@@ -106,7 +106,7 @@ filter(iris, between(Sepal.Length, 5.0, 6.0))
 
 ### Dealing with Missing Values
 
-Missing data (`NA`) is a fact of life in business. Someone didn't fill out the survey field, a sensor malfunctioned, a record got corrupted. You can't test for `NA` with `==`; you need `is.na()`.
+Missing data (`NA`) is the business world's version of "the dog ate my homework." Someone didn't fill out the survey, a sensor died, a record got corrupted. You can't test for `NA` with `==`; you need `is.na()`.
 
 ```{r}
 df_with_na <- tibble(
@@ -125,7 +125,7 @@ filter(df_with_na, !is.na(x), !is.na(y))
 
 ### Putting It Together
 
-Real filtering usually combines several conditions. Here's the kind of thing you'll actually write at work:
+Real-world filtering usually stacks several conditions. Here's the kind of thing you'll actually write at work:
 
 ```{r}
 # Efficient cars: 4 cylinders with above-average mpg
@@ -135,7 +135,7 @@ filter(mtcars, cyl == 4, mpg > mean(mpg))
 
 ## select() -- Show Me Only the Columns I Care About {#select}
 
-Your dataset has 47 columns but you only need 5 of them? `select()` strips it down.
+Your dataset has 47 columns but you only need 5? `select()` is the Marie Kondo of data wrangling --- it keeps only what sparks joy (or, you know, what's relevant to your analysis).
 
 ### Picking Columns
 
@@ -156,7 +156,7 @@ select(iris, -Species)
 
 ### Smart Selection Helpers
 
-When your data has lots of similarly named columns (like `Q1_Revenue`, `Q2_Revenue`, `Q3_Revenue`...), these helpers save tons of typing.
+When your data has lots of similarly named columns (like `Q1_Revenue`, `Q2_Revenue`, `Q3_Revenue`...), these helpers save a ton of typing.
 
 ```{r}
 # All columns that start with "Sepal"
@@ -187,7 +187,7 @@ Want to move a column to the front? Use `everything()` to keep the rest.
 select(iris, Species, everything())
 ```
 
-You can rename as you select:
+Rename as you select:
 
 ```{r}
 select(iris, sepal_length = Sepal.Length, species = Species)
@@ -202,7 +202,7 @@ rename(iris, sepal_length = Sepal.Length, sepal_width = Sepal.Width) |> head(3)
 
 ## mutate() -- Add a New Column {#mutate}
 
-This is like adding a formula column in Excel. You define a new column based on existing ones.
+Think of `mutate()` as adding a new column to your sales report. You've got Revenue and Costs? Great, now add a Profit column. That's `mutate()` in a nutshell.
 
 ### Creating New Columns
 
@@ -224,7 +224,7 @@ select(mtcars_modified, wt, weight_kg, hp, hp_per_kg) |> head()
 
 ### Overwriting Existing Columns
 
-If you assign to a name that already exists, it overwrites.
+If you assign to a name that already exists, it overwrites. No drama, no pop-up asking "are you sure?"
 
 ```{r}
 # Convert wt from thousands of pounds to actual pounds
@@ -233,7 +233,7 @@ mutate(mtcars, wt = wt * 1000) |> select(wt) |> head()
 
 ### Useful Functions Inside mutate()
 
-**Arithmetic** -- the usual suspects: `+`, `-`, `*`, `/`.
+**Arithmetic** --- the usual suspects: `+`, `-`, `*`, `/`.
 
 ```{r}
 mutate(iris,
@@ -242,7 +242,7 @@ mutate(iris,
 ) |> head()
 ```
 
-**Lag and lead** -- great for "compared to last month" calculations.
+**Lag and lead** --- great for "compared to last month" calculations. Your CFO will love these.
 
 ```{r}
 example_df <- tibble(
@@ -255,7 +255,7 @@ mutate(example_df,
 )
 ```
 
-**Cumulative functions** -- running totals, running averages.
+**Cumulative functions** --- running totals, running averages. Perfect for tracking year-to-date performance.
 
 ```{r}
 mutate(example_df,
@@ -266,7 +266,7 @@ mutate(example_df,
 
 ### if_else() and case_when() -- Conditional Logic
 
-`if_else()` is your basic "if this, then that" tool.
+`if_else()` is your basic "if this, then that."
 
 ```{r}
 mutate(mtcars,
@@ -274,7 +274,7 @@ mutate(mtcars,
 ) |> select(mpg, efficiency) |> head(10)
 ```
 
-`case_when()` handles multiple conditions. Think of it as a series of "if... else if... else if..." checks. Way more readable than nesting a dozen IF statements in Excel.
+`case_when()` handles multiple conditions --- like a series of "if... else if... else if..." checks. Way more readable than nesting a dozen IF statements in Excel. (We've all seen those. We've all cried.)
 
 ```{r}
 mutate(mtcars,
@@ -287,7 +287,7 @@ mutate(mtcars,
 ) |> select(mpg, mpg_category) |> head(10)
 ```
 
-This is incredibly useful for bucketing data. Customer segments, performance tiers, risk categories -- `case_when()` handles them all.
+This is incredibly useful for bucketing data --- customer segments, performance tiers, risk categories, you name it.
 
 ```{r}
 mutate(iris,
@@ -302,7 +302,7 @@ mutate(iris,
 
 ## summarize() -- Give Me the Summary Stats {#summarize}
 
-`summarize()` (or `summarise()` if you prefer British spelling) collapses your data down to summary numbers. On its own, it gives you one row of results. Pair it with `group_by()` and it becomes a pivot table machine.
+`summarize()` (or `summarise()` if you're feeling British) collapses your entire dataset into summary numbers. Alone, it gives you one row. Pair it with `group_by()` and it becomes a full-blown pivot table machine.
 
 ### The Basics
 
@@ -317,7 +317,7 @@ summarize(mtcars,
 
 ### Common Summary Functions
 
-Here's your toolkit:
+Your cheat sheet:
 
 | Function | What It Does |
 |:---------------|:---------------------------------------|
@@ -339,7 +339,7 @@ summarize(iris,
 
 ### Summarizing Multiple Columns with across()
 
-Instead of writing out a summary for every single column, `across()` lets you apply the same function to multiple columns at once.
+Instead of writing out a summary for every single column (boring), `across()` lets you apply the same function to multiple columns at once.
 
 ```{r}
 # Mean of all numeric columns
@@ -360,7 +360,7 @@ iris |>
 
 ## arrange() -- Sort My Data {#arrange}
 
-Sorting. Simple but essential.
+Sorting. Simple, essential, and surprisingly satisfying.
 
 ```{r}
 # Sort by mpg (lowest first)
@@ -369,7 +369,7 @@ arrange(mtcars, mpg) |> head()
 
 ### Descending Order
 
-Wrap the column in `desc()` to flip the sort.
+Wrap the column in `desc()` to flip the sort --- like clicking that Z-to-A button.
 
 ```{r}
 # Best gas mileage first
@@ -378,23 +378,23 @@ arrange(mtcars, desc(mpg)) |> head()
 
 ### Sorting by Multiple Columns
 
-Ties in the first column get broken by the second.
+Ties in the first column get broken by the second. Just like sorting a spreadsheet by Region, then by Revenue within each region.
 
 ```{r}
 # Sort by cylinders, then by mpg within each group
 arrange(mtcars, cyl, desc(mpg)) |> head(12)
 ```
 
-Note: `NA` values always get sorted to the end, no matter what.
+Note: `NA` values always sort to the end. Always.
 
 
 ## group_by() -- The Pivot Table of R {#groupby}
 
-This is where dplyr starts to feel magical. `group_by()` tells R: "Hey, for the next operation, do it separately for each group." It's exactly like creating a pivot table in Excel, but more flexible.
+This is where dplyr goes from "neat tool" to "how did I ever live without this?" `group_by()` tells R: "For the next operation, do it separately for each group." It's the R equivalent of dragging a field into the Rows area of an Excel pivot table.
 
 ### Grouped Summaries
 
-This is the most common combo: `group_by()` + `summarize()`.
+The bread and butter combo: `group_by()` + `summarize()`.
 
 ```{r}
 iris |>
@@ -416,11 +416,11 @@ mtcars |>
   )
 ```
 
-Just like that, you've got a pivot table. Average MPG and horsepower, broken out by cylinder count, with a count of how many cars are in each group.
+Boom --- pivot table. Average MPG and horsepower, broken out by cylinder count. Your boss would frame this.
 
 ### Multiple Grouping Variables
 
-You can group by more than one thing. R computes summaries for every combination.
+Group by more than one variable and R computes summaries for every combination --- like a two-dimensional pivot table.
 
 ```{r}
 mtcars |>
@@ -432,11 +432,11 @@ mtcars |>
   )
 ```
 
-The `.groups = "drop"` at the end removes the grouping when you're done. Good habit to get into -- leftover grouping can cause surprises later.
+The `.groups = "drop"` removes the grouping when you're done. Good habit --- leftover grouping causes sneaky bugs.
 
 ### Grouped Mutate
 
-When you use `mutate()` on grouped data, calculations happen within each group. This is great for "compared to the group average" analysis.
+When you use `mutate()` on grouped data, calculations happen within each group. Perfect for "compared to the department average" analysis.
 
 ```{r}
 # How does each flower compare to its species average?
@@ -451,7 +451,7 @@ iris |>
 
 ### Grouped Filter
 
-You can also filter within groups. "Show me only the above-average performers in each department."
+Filter within groups: "Show me the top performers in each department."
 
 ```{r}
 # Cars with above-average mpg for their cylinder class
@@ -464,7 +464,7 @@ mtcars |>
 
 ### Don't Forget to ungroup()
 
-Grouping is sticky -- it persists until you explicitly remove it. If your results look weird, check whether there's leftover grouping.
+Grouping is sticky --- it hangs around until you explicitly remove it. If your results look weird, check for leftover grouping. It's like leaving a filter on in Excel and then wondering why your row count seems off.
 
 ```{r}
 iris_grouped <- iris |> group_by(Species)
@@ -477,11 +477,11 @@ group_vars(iris_ungrouped)
 
 ## Combining Operations -- Where the Magic Happens {#combining}
 
-Here's the payoff. Everything we've learned chains together with the pipe operator (`|>`). Each step feeds into the next, creating a readable analysis pipeline. Read these out loud and they almost sound like English.
+Here's the payoff. Everything we've learned chains together with the pipe operator (`|>`). Each step feeds into the next, creating a readable analysis pipeline.
 
 ### Example: Top Fuel-Efficient Cars by Class
 
-"Take the car data. Add car names. Keep only 4- and 6-cylinder cars. Select the columns I care about. Within each cylinder group, rank them by mpg. Show me the top 3 in each group."
+Read this pipeline like a sentence: "Take the car data. Add car names. Keep only 4- and 6-cylinder cars. Select the columns I need. Within each cylinder group, rank by mpg. Show me the top 3 in each group."
 
 ```{r}
 mtcars |>
@@ -495,11 +495,11 @@ mtcars |>
   ungroup()
 ```
 
-That pipeline answers a real question in eight clean lines. Try doing that in Excel without a mess of helper columns.
+Eight clean lines that answer a real business question. Try doing that in Excel without a labyrinth of helper columns and VLOOKUP nightmares.
 
 ### Example: Performance Report
 
-"Take the car data. Label the transmissions and engine types with readable names. Group by transmission and engine. Compute averages. Sort by fuel efficiency."
+"Label the transmissions and engine types. Group by both. Compute averages. Sort by fuel efficiency."
 
 ```{r}
 mtcars |>
@@ -518,7 +518,7 @@ mtcars |>
   arrange(desc(avg_mpg))
 ```
 
-This is exactly the kind of summary table your manager wants to see. Clean, grouped, sorted, with readable labels.
+This is exactly the kind of summary table your manager wants on their desk by Friday. Clean, grouped, sorted, readable.
 
 ### Example: Species Comparison with Full Stats
 
@@ -535,11 +535,11 @@ iris |>
 
 ## Joining Data -- Connecting Your Tables {#joins}
 
-In any real business, data lives in multiple tables. You've got a customer table and an orders table. An employee table and a payroll table. A product table and an inventory table. Joins let you connect them.
+In the real world, data doesn't live in one neat spreadsheet. Your company has a customer database, an orders database, a product catalog, and a returns log --- all in different tables. Joins are how you connect them. Think of it like matching up customer names across two different spreadsheets so you can see the full picture.
 
 ### Setting Up the Example
 
-Let's use a scenario you'd actually encounter: customers and their orders.
+Let's use a scenario every business student can relate to: a CRM with customer info and a separate order tracking system.
 
 ```{r}
 customers <- tibble(
@@ -557,45 +557,43 @@ orders <- tibble(
 orders
 ```
 
-Notice: customers 4 and 5 haven't placed orders. Customers 6 and 7 placed orders but aren't in our customer table (maybe they're new and haven't been entered yet).
+Notice: David and Eve are in the CRM but haven't placed orders. Customers 6 and 7 placed orders but aren't in the CRM yet (maybe they signed up through a new channel).
 
 ### left_join() -- The One You'll Use 90% of the Time
 
-`left_join()` keeps everything from the left table and pulls in matching data from the right table. No match? You get `NA`. This is almost always what you want.
+`left_join()` keeps every row from your main table (left) and pulls in matching data from the second table (right). No match? You get `NA`. It's like doing a VLOOKUP from your customer list into the orders sheet.
 
 ```{r}
 left_join(customers, orders, by = "customer_id")
 ```
 
-All five customers are here. David and Eve show `NA` for revenue and quarter because they had no orders. Customers 6 and 7 from the orders table are excluded because they weren't in the customer table.
-
-This is your go-to join. "Start with my main table, and bring in extra info where available."
+All five customers are here. David and Eve show `NA` for revenue and quarter because they had no orders. Customers 6 and 7 from the orders table? Excluded --- they weren't in the customer list. This is your go-to join.
 
 ### inner_join() -- Only the Matches
 
-`inner_join()` keeps only rows that appear in both tables.
+`inner_join()` keeps only rows that appear in BOTH tables. It's like saying "show me only customers who have actually bought something."
 
 ```{r}
 inner_join(customers, orders, by = "customer_id")
 ```
 
-Only Alice, Bob, and Carol survive -- they're the only ones in both tables.
+Only Alice, Bob, and Carol survive. They're the only ones in both tables.
 
 ### Other Joins (Quick Reference)
 
-**right_join()** -- like `left_join()` but keeps everything from the right table instead.
+**right_join()** --- like `left_join()` but keeps everything from the right table instead. (Rarely used --- most people just swap the table order and use `left_join()`.)
 
 ```{r}
 right_join(customers, orders, by = "customer_id")
 ```
 
-**full_join()** -- keeps everything from both tables. Missing data gets `NA`.
+**full_join()** --- keeps everything from both tables. The "I don't want to lose ANY data" option.
 
 ```{r}
 full_join(customers, orders, by = "customer_id")
 ```
 
-**anti_join()** -- "show me customers who DON'T have orders." Great for finding gaps in your data.
+**anti_join()** --- "Show me customers who DON'T have orders." Perfect for finding gaps in your data, like identifying leads who haven't converted.
 
 ```{r}
 anti_join(customers, orders, by = "customer_id")
@@ -603,7 +601,7 @@ anti_join(customers, orders, by = "customer_id")
 
 ### When Column Names Don't Match
 
-Sometimes the key column has different names in each table. Use `join_by()`.
+Sometimes the key column has different names in each table (because of course it does --- the sales team and the marketing team never agree on naming conventions). Use `join_by()`.
 
 ```{r}
 orders_renamed <- orders |> rename(id = customer_id)
@@ -613,7 +611,7 @@ left_join(customers, orders_renamed, by = join_by(customer_id == id))
 
 ### Joining on Multiple Columns
 
-You can join on more than one column.
+You can join on more than one column --- useful when a single column isn't enough to uniquely identify a match (like needing both customer AND product to find the right price).
 
 ```{r}
 order_details <- tibble(
@@ -634,11 +632,11 @@ inner_join(order_details, prices, by = c("customer", "product"))
 
 ## Other Handy Functions {#other-functions}
 
-Here are some extras that come up all the time in practice.
+A few more tools that come up constantly in practice.
 
 ### count() -- Quick Frequency Tables
 
-`count()` is a shortcut for "group by this, then count the rows." You'll use it constantly.
+`count()` is shorthand for "group by this, then count the rows." You'll use it more than you think.
 
 ```{r}
 count(iris, Species)
@@ -702,7 +700,7 @@ relocate(iris, Species) |> head(3)
 
 ### bind_rows() -- Stack Data Frames
 
-When you have data in separate tables with the same columns, stack them vertically.
+When you have data split across separate tables with the same columns, stack them vertically --- like combining regional sales spreadsheets into one master file.
 
 ```{r}
 df1 <- tibble(x = 1:3, y = c("a", "b", "c"))
@@ -718,15 +716,15 @@ bind_rows(first = df1, second = df2, .id = "source")
 
 ## Summary
 
-Here's the bottom line: dplyr gives you six verbs that handle 95% of data wrangling tasks.
+Here's the cheat sheet you'll tape to your monitor:
 
-- **`filter()`** -- pick the rows you want
-- **`select()`** -- pick the columns you want
-- **`mutate()`** -- add or change columns
-- **`summarize()`** -- compute summary statistics
-- **`arrange()`** -- sort your data
-- **`group_by()`** -- do any of the above by group (pivot tables!)
+- **`filter()`** --- pick the rows you want (sorting through job applicants)
+- **`select()`** --- pick the columns you want (decluttering your spreadsheet)
+- **`mutate()`** --- add or change columns (adding a formula to your sales report)
+- **`summarize()`** --- compute summary statistics (the bottom of every pivot table)
+- **`arrange()`** --- sort your data (A-to-Z, big-to-small)
+- **`group_by()`** --- do any of the above by group (the actual pivot table)
 
-Chain them together with the pipe (`|>`), and you can build analysis pipelines that are powerful and readable. Add in `left_join()` to connect your tables, `count()` for quick frequency tables, and `case_when()` for conditional logic, and you've got a toolkit that handles just about anything a business analyst needs.
+Chain them together with the pipe (`|>`), add `left_join()` to connect your tables, `count()` for quick frequency tables, and `case_when()` for conditional logic, and you've got a toolkit that handles just about anything a business analyst needs.
 
-The next chapter on tidyr will show you how to reshape data between wide and long formats -- the final piece of the data wrangling puzzle.
+The next chapter on tidyr (Chapter \@ref(tidyr)) will show you how to reshape data between wide and long formats --- the final piece of the data wrangling puzzle.
