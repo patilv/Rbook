@@ -1,26 +1,82 @@
-# Single variable Analysis {#singlevar}  
+# Single Variable Analysis {#singlevar}
 
+```{r include=FALSE}
+library(tidyverse)
+opts_chunk$set(echo=TRUE, warning=FALSE, message=FALSE)
+```
+
+This chapter covers univariate analysis using both base R and ggplot2 visualizations. For a comprehensive treatment of ggplot2, see Chapters \@ref(ggplot2basics) and \@ref(ggplot2customize).
 
 ## Numeric Variable
 
 ### Histogram
 
+**Base R:**
+
 ```{r}
-hist(iris$Sepal.Length,col="darkred",breaks=30,border = "white",xlab = "Sepal.Length") 
-# use ?hist to know more about other parameters and how you can change the title
+hist(iris$Sepal.Length, col = "darkred", breaks = 30, border = "white", xlab = "Sepal.Length")
+```
+
+**ggplot2:**
+
+```{r}
+ggplot(iris, aes(x = Sepal.Length)) +
+  geom_histogram(bins = 30, fill = "darkred", color = "white") +
+  labs(x = "Sepal Length", y = "Count", title = "Distribution of Sepal Length") +
+  theme_minimal()
 ```
 
 ### Density plot
 
+**Base R:**
 
 ```{r}
 plot(density(iris$Sepal.Length))
 ```
 
-### Box plot
+**ggplot2:**
 
 ```{r}
-boxplot(iris$Sepal.Length) ## box plot
+ggplot(iris, aes(x = Sepal.Length)) +
+  geom_density(fill = "steelblue", alpha = 0.5) +
+  labs(x = "Sepal Length", y = "Density", title = "Density of Sepal Length") +
+  theme_minimal()
+```
+
+We can also overlay density plots by group:
+
+```{r}
+ggplot(iris, aes(x = Sepal.Length, fill = Species)) +
+  geom_density(alpha = 0.4) +
+  labs(x = "Sepal Length", y = "Density", title = "Density by Species") +
+  theme_minimal()
+```
+
+### Box plot
+
+**Base R:**
+
+```{r}
+boxplot(iris$Sepal.Length)
+```
+
+**ggplot2:**
+
+```{r}
+ggplot(iris, aes(y = Sepal.Length)) +
+  geom_boxplot(fill = "steelblue") +
+  labs(y = "Sepal Length", title = "Boxplot of Sepal Length") +
+  theme_minimal()
+```
+
+Box plots by group:
+
+```{r}
+ggplot(iris, aes(x = Species, y = Sepal.Length, fill = Species)) +
+  geom_boxplot() +
+  labs(x = "Species", y = "Sepal Length", title = "Sepal Length by Species") +
+  theme_minimal() +
+  theme(legend.position = "none")
 ```
 
 
@@ -55,16 +111,32 @@ Interpretation: Since the p-value is less than .01, we have evidence to suggest 
 
 ### Bar plot
 
+**Base R:**
+
 ```{r}
 plot(iris$Species)
 ```
 
-### Pie Chart - FYI Do not use
+**ggplot2:**
 
 ```{r}
-counts=table(iris$Species) ## get counts
-labs=paste(iris$Species,counts)## create labels
-pie(counts,labels=labs) ## plot
+ggplot(iris, aes(x = Species, fill = Species)) +
+  geom_bar() +
+  labs(x = "Species", y = "Count", title = "Count of Each Species") +
+  theme_minimal() +
+  theme(legend.position = "none")
+```
+
+### Pie Chart - FYI Do not use
+
+Pie charts are generally discouraged because humans are poor at judging angles and areas compared to lengths. Bar charts are almost always a better alternative. That said, here is how one is created:
+
+**Base R:**
+
+```{r}
+counts <- table(iris$Species)
+labs <- paste(iris$Species, counts)
+pie(counts, labels = labs)
 ```
 
 

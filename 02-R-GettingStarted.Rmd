@@ -5,113 +5,240 @@
 opts_chunk$set(echo=TRUE, warning=FALSE, message=FALSE)
 ```
 
-The first order of business would involve installing R. 
+The first order of business would involve installing R.
 
 1. Download R for your computer based on its operating system from [https://cloud.r-project.org/](https://cloud.r-project.org/) - Select base R. Mac users may have to download the version compatible with the version of the Mac OSX of your laptop.
 2. Now install the software. (If using Windows, use the 64 bit version if that option is provided.) Once R is installed, open it. A console should open. Once you verify this, you can close the console and get out of the program. There will be no need to open this in the future.
-3. Get an IDE. I prefer to use R-Studio desktop. This can be downloaded from [R-Studio's website](https://www.rstudio.com/products/rstudio/download/#download). Don't forget to download the version compatible with your operating system. Install the software and open it. Whenever you open R-Studio desktop, it provides access to the R-interface through one of its panels. This is the reason we don't have to open the R-console separately. (See point #2 from above.)  
+3. Get an IDE. I prefer to use RStudio desktop (now by [Posit](https://posit.co/)). This can be downloaded from [Posit's website](https://posit.co/download/rstudio-desktop/). Don't forget to download the version compatible with your operating system. Install the software and open it. Whenever you open RStudio desktop, it provides access to the R-interface through one of its panels. This is the reason we don't have to open the R-console separately. (See point #2 from above.)
 
-## R-Studio Interface
+## The RStudio Interface
 
+RStudio is divided into four panes:
 
-
+- **Source** (top-left): Where you write and edit R scripts and R Markdown documents.
+- **Console** (bottom-left): Where R commands are executed and output is displayed.
+- **Environment/History** (top-right): Shows objects in your workspace and command history.
+- **Files/Plots/Packages/Help/Viewer** (bottom-right): A multi-purpose pane for file browsing, viewing plots, managing packages, and reading help documentation.
 
 ## Organizing projects
 
 1. It is a good idea to organize analysis projects into separate folders of their own. Any output of the analysis and the reports you generate would also end up being saved in that folder.
 
-2. Naming conventions for folders, files, and variables: Avoid having any special characters and or spaces for names of folders, files and variables. Variable names can have underscores between words, for example, `University_Standing` or `UniversityStanding` would be perfectly fine. Use names that can help **you** and **any reader** of the report make sense of what it is that you are studying. Graham Williams has a good style guide for how to code in R. It can be downloaded from [onepager.togaware.com](http://onepager.togaware.com).
+2. Naming conventions for folders, files, and variables: Avoid having any special characters and or spaces for names of folders, files and variables. Variable names can have underscores between words, for example, `University_Standing` or `UniversityStanding` would be perfectly fine. Use names that can help **you** and **any reader** of the report make sense of what it is that you are studying.
 
-3. After opening R-Studio, always check on the working directory and set it to the specific location within the folder intended for the project. 
+3. After opening RStudio, always check on the working directory and set it to the specific location within the folder intended for the project.
+
+4. **Use RStudio Projects**: The recommended way to organize your work is with RStudio Projects (`.Rproj` files). Go to *File -> New Project* to create one. Projects automatically set the working directory, keep your files organized, and integrate well with version control systems like Git.
 
 ## Installing Packages from CRAN
 
 ```{r eval=FALSE}
 install.packages("pkgname")
-install.packages(c("pkgname1","pkgname2")) # For two or more packages 
+install.packages(c("pkgname1","pkgname2")) # For two or more packages
+```
+
+### Installing the tidyverse
+
+The tidyverse is a collection of packages that we will use extensively throughout this book. Install it with:
+
+```{r eval=FALSE}
+install.packages("tidyverse")
+```
+
+This single command installs ggplot2, dplyr, tidyr, readr, purrr, tibble, stringr, forcats, and lubridate, among others. You can also install additional useful packages:
+
+```{r eval=FALSE}
+install.packages(c("readxl", "haven", "knitr", "rmarkdown", "kableExtra"))
 ```
 
 ## Installing a package from GitHub
 
 ```{r eval=FALSE}
-if (!require("devtools")) install.packages("devtools") # Checks if the devtools package is available and if not, installs it from CRAN
+if (!require("devtools")) install.packages("devtools")
 devtools::install_github("githubaccountname/packagerepository")
 ```
 
-## Installed packages should be loaded for them to offer their functions for use
+## Loading packages
+
+Installed packages should be loaded for them to offer their functions for use.
 
 ```{r eval=FALSE}
 library(pkgname)
 ```
 
+Loading the tidyverse loads the core packages together:
+
+```{r eval=FALSE}
+library(tidyverse)
+```
+
+You will see a startup message listing the attached packages and any function name conflicts with base R. This is normal.
+
 ## Setting your working directory
 
-This helps in organizing the inputs/outputs of a project. 
+This helps in organizing the inputs/outputs of a project.
 
 * The current working directory can be determined using `getwd()`
 * A new working directory can be set using `setwd(path to directory)`
-* R-Studio makes this much easier to do using their GUI using *Session -> Set Working Directory* option
-* Using *Projects* in R-Studio also makes the process of switching working directories between different projects easier. 
+* RStudio makes this much easier to do using their GUI using *Session -> Set Working Directory* option
+* Using *Projects* in RStudio also makes the process of switching working directories between different projects easier.
 
 ## Reading data from different sources
 
-Load R file
+### Base R approach
+
+Load R file:
 
 ```{r eval=FALSE}
 load("filename.Rda")
 ```
 
-Delimited files text files
+Delimited text files:
 
 ```{r eval=FALSE}
-dataname=read.csv("datafilename.csv")# use ?read.csv to see options
+dataname <- read.csv("datafilename.csv") # use ?read.csv to see options
 ```
 
-Excel Files
+### Tidyverse approach (readr)
+
+The **readr** package (part of the tidyverse) provides faster and more consistent functions for reading data. See Chapter \@ref(dataimport) for a comprehensive treatment.
 
 ```{r eval=FALSE}
+library(readr)
+dataname <- read_csv("datafilename.csv") # returns a tibble
+```
 
-install.packages("readxl") # https://github.com/hadley/readxl
+### Excel Files
+
+```{r eval=FALSE}
 library(readxl)
 read_excel("excelfilename.xls") # reads xlsx extensions also
 read_excel("excelfilename.xlsx", sheet = "nameofsheet")
-read_excel("excelfilename.xlsx", sheet = 3)# for third sheet, as an example
-read_excel("my-spreadsheet.xls", na = "NA") # if NAs are represented by non-blank cells, specify them with na=
+read_excel("excelfilename.xlsx", sheet = 3) # for third sheet
+read_excel("my-spreadsheet.xls", na = "NA") # specify NA representation
 ```
 
-SPSS/SAS/Stata files
+### SPSS/SAS/Stata files
 
 ```{r eval=FALSE}
-install.packages("haven") # https://github.com/hadley/haven
 library(haven)
 read_sas("path/to/file") # SAS file
 read_por("path/to/file") # SPSS por files
 read_sav("path/to/file") # SPSS sav files
-read_dta("path/to/file")# Stata
+read_dta("path/to/file") # Stata
 ```
 
-Many others
+### Many others
 
 ```{r eval=FALSE}
 ?read.table
-?readClipboard
-# Checkout the readr package from Hadley: https://github.com/hadley/readr
+# The readr package provides many other options: https://readr.tidyverse.org/
 ```
 
 ## Saving data
 
+### Base R
+
 ```{r eval=FALSE}
-save(dataframename,file="filename.Rda") # To R data
-write.csv(dataframename,file="myfilename.csv") # to csv...see also ?write.csv
-write.table(dataframename,file="myfilename.tsv",sep="\t") # to tab-separated file...see also ?write.table
+save(dataframename, file = "filename.Rda") # To R data
+write.csv(dataframename, file = "myfilename.csv") # to csv
+write.table(dataframename, file = "myfilename.tsv", sep = "\t") # to tab-separated file
 ```
 
-## Creating a dataframe
+### Tidyverse (readr)
+
+```{r eval=FALSE}
+library(readr)
+write_csv(dataframename, file = "myfilename.csv") # faster, no row names by default
+write_rds(dataframename, file = "myfilename.rds") # single R object, preserves types
+```
+
+## Creating a data frame
+
+### Base R
 
 ```{r}
-Person=c("A","B","C","D","E")
-Age=c(15,20,25,30,35)
-Height=c(60,63,75,79,56)
-page=data.frame(Person,Age,Height)
+Person <- c("A", "B", "C", "D", "E")
+Age <- c(15, 20, 25, 30, 35)
+Height <- c(60, 63, 75, 79, 56)
+page <- data.frame(Person, Age, Height)
+page
 ```
+
+### Tidyverse (tibble)
+
+```{r}
+library(tibble)
+page_tibble <- tibble(
+  Person = c("A", "B", "C", "D", "E"),
+  Age = c(15, 20, 25, 30, 35),
+  Height = c(60, 63, 75, 79, 56)
+)
+page_tibble
+```
+
+You can also create small tibbles row-by-row using `tribble()`:
+
+```{r}
+page_tribble <- tribble(
+  ~Person, ~Age, ~Height,
+  "A",      15,    60,
+  "B",      20,    63,
+  "C",      25,    75,
+  "D",      30,    79,
+  "E",      35,    56
+)
+page_tribble
+```
+
+## R basics: Objects and assignment
+
+R stores data in objects. You assign values to objects using `<-` (preferred) or `=`:
+
+```{r}
+x <- 10
+y <- "hello"
+z <- c(1, 2, 3, 4, 5)
+```
+
+### Common data types
+
+```{r}
+# Numeric
+num <- 42.5
+class(num)
+
+# Character (string)
+name <- "Gonzaga"
+class(name)
+
+# Logical (boolean)
+flag <- TRUE
+class(flag)
+
+# Vector (collection of same type)
+nums <- c(10, 20, 30, 40, 50)
+names <- c("Alice", "Bob", "Charlie")
+```
+
+### Useful functions for exploring objects
+
+```{r eval=FALSE}
+class(x)     # What type of object?
+length(x)    # How many elements?
+str(x)       # Structure of the object
+typeof(x)    # Internal storage type
+is.numeric(x) # Is it numeric?
+```
+
+## Getting help
+
+```{r eval=FALSE}
+?mean              # Help page for a specific function
+help(mean)         # Same as above
+??regression       # Search help pages for a keyword
+help.search("regression") # Same as above
+```
+
+In RStudio, you can also press **F1** with your cursor on a function name to open its help page.
 

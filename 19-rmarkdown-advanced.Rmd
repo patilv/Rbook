@@ -1,0 +1,1004 @@
+# Advanced R Markdown {#rmarkdown-advanced}
+
+```{r include=FALSE}
+library(tidyverse)
+knitr::opts_chunk$set(echo = TRUE, warning = FALSE, message = FALSE)
+```
+
+In Chapter \@ref(rmarkdown), we covered the fundamentals of R Markdown --- YAML headers, Markdown syntax, code chunks, and the three core output formats (HTML, PDF, and Word). Those fundamentals will carry you a long way, but R Markdown can do much more. It can generate parameterized reports that adapt to different inputs, create slide presentations, build interactive dashboards, power entire websites and blogs, and even produce the book you are reading right now. This chapter surveys these advanced capabilities so that you know what is possible and where to look when you need to go beyond a standard report.
+
+## Parameterized Reports {#parameterized-reports}
+
+One of the most powerful features of R Markdown is the ability to create **parameterized reports** --- documents that accept input values and produce customized output based on those inputs. Imagine you need to generate a separate report for each species in the `iris` dataset, or a monthly sales report for each region in your company. Instead of maintaining separate `.Rmd` files or manually editing values before each render, you define parameters once and let R Markdown do the rest.
+
+### Defining Parameters in YAML
+
+Parameters are declared in a `params` block within the YAML header. Each parameter has a name and a default value:
+
+````
+---
+title: "Species Report"
+author: "Vivek H. Patil"
+date: "`r knitr::inline_expr('Sys.Date()')`"
+params:
+  species_name: "setosa"
+  include_plot: true
+output: html_document
+---
+````
+
+You can define as many parameters as you need, and they can be of any R data type --- character strings, numbers, logicals, dates, or even vectors.
+
+### Accessing Parameters in Code
+
+Inside your R Markdown document, all parameters are available through the `params` list object. You use `params$parameter_name` to retrieve each value:
+
+```{r eval=FALSE}
+# Filter the iris dataset to the chosen species
+species_data <- iris %>%
+  filter(Species == params$species_name)
+
+# Use the parameter in narrative text via inline R code
+# For example: "This report covers the `r knitr::inline_expr('params$species_name')` species."
+```
+
+### A Complete Parameterized Report Example
+
+Below is a complete example of a parameterized report. You would save this as its own `.Rmd` file (for example, `species-report.Rmd`):
+
+````
+---
+title: "Iris Species Report"
+author: "Vivek H. Patil"
+date: "`r knitr::inline_expr('Sys.Date()')`"
+params:
+  species_name: "setosa"
+output:
+  html_document:
+    toc: true
+    theme: flatly
+---
+
+```{r setup, include=FALSE}`r ''`
+library(tidyverse)
+knitr::opts_chunk$set(echo = FALSE, message = FALSE, warning = FALSE)
+```
+
+## Overview
+
+This report summarizes the measurements for the
+**`r knitr::inline_expr('params$species_name')`** species from the `iris` dataset.
+
+```{r}`r ''`
+species_data <- iris %>%
+  filter(Species == params$species_name)
+```
+
+The dataset contains `r knitr::inline_expr('nrow(species_data)')` observations.
+
+## Summary Statistics
+
+```{r}`r ''`
+summary(species_data %>% select(-Species))
+```
+
+## Visualization
+
+```{r fig.width=6, fig.height=4}`r ''`
+ggplot(species_data, aes(x = Sepal.Length, y = Sepal.Width)) +
+  geom_point(color = "steelblue", size = 2) +
+  labs(
+    title = paste("Sepal Dimensions:", params$species_name),
+    x = "Sepal Length (cm)",
+    y = "Sepal Width (cm)"
+  ) +
+  theme_minimal()
+```
+````
+
+### Rendering with Custom Parameters
+
+To render the report with a specific set of parameters, use `rmarkdown::render()` and supply a named list to the `params` argument:
+
+```{r eval=FALSE}
+rmarkdown::render(
+  input = "species-report.Rmd",
+  params = list(species_name = "versicolor"),
+  output_file = "report-versicolor.html"
+)
+```
+
+### Generating Many Reports at Once
+
+The real power of parameterized reports emerges when you combine `rmarkdown::render()` with iteration. For example, to generate one report per species:
+
+```{r eval=FALSE}
+species_list <- c("setosa", "versicolor", "virginica")
+
+for (sp in species_list) {
+  rmarkdown::render(
+    input = "species-report.Rmd",
+    params = list(species_name = sp),
+    output_file = paste0("report-", sp, ".html")
+  )
+}
+```
+
+You could also use `purrr::walk()` for a more idiomatic tidyverse approach:
+
+```{r eval=FALSE}
+species_list <- c("setosa", "versicolor", "virginica")
+
+walk(species_list, ~ rmarkdown::render(
+  input = "species-report.Rmd",
+  params = list(species_name = .x),
+  output_file = paste0("report-", .x, ".html")
+))
+```
+
+This pattern is invaluable in business settings where you might generate weekly reports for dozens of regions, product lines, or client accounts --- all from a single template.
+
+## R Markdown Presentations {#rmarkdown-presentations}
+
+R Markdown is not limited to documents. It can also produce slide presentations that combine narrative, code, and output. This is particularly useful for data-driven talks where you want your slides to update automatically when the underlying analysis changes.
+
+### ioslides Presentations
+
+The `ioslides_presentation` format produces HTML5 slides that run in any web browser:
+
+````
+---
+title: "Data Analysis Results"
+author: "Vivek H. Patil"
+date: "`r knitr::inline_expr('Sys.Date()')`"
+output:
+  ioslides_presentation:
+    widescreen: true
+    smaller: false
+    transition: default
+    logo: logo.png
+---
+````
+
+Key features of ioslides:
+
+- New slides are created with `##` (level 2 headers) or a horizontal rule (`---`).
+- Set `widescreen: true` for a 16:9 aspect ratio.
+- The `transition` option controls slide animations (`default`, `slower`, `faster`, or `none`).
+- Use `{.smaller}` after a slide title to make text smaller on that slide.
+
+### Slidy Presentations
+
+Slidy is another HTML-based presentation format with a slightly different look and feel:
+
+````
+---
+title: "Quarterly Review"
+author: "Vivek H. Patil"
+output:
+  slidy_presentation:
+    font_adjustment: 0
+    duration: 45
+    footer: "Confidential"
+---
+````
+
+Slidy slides also use `##` for new slides. The `duration` option adds a timer, and `footer` places text at the bottom of every slide.
+
+### Beamer Presentations (LaTeX/PDF)
+
+For PDF slides (common in academic settings), use the `beamer_presentation` format. This requires a LaTeX installation (see `tinytex`):
+
+````
+---
+title: "Research Findings"
+author: "Vivek H. Patil"
+institute: "Gonzaga University"
+date: "`r knitr::inline_expr('Sys.Date()')`"
+output:
+  beamer_presentation:
+    theme: "Madrid"
+    colortheme: "dolphin"
+    fonttheme: "structurebold"
+    slide_level: 2
+---
+````
+
+Beamer offers dozens of built-in themes (e.g., `Madrid`, `Berlin`, `CambridgeUS`, `AnnArbor`) and color themes (e.g., `dolphin`, `whale`, `crane`, `beaver`). The `slide_level` option determines which heading level creates a new slide.
+
+### Xaringan Presentations
+
+The `xaringan` package produces beautiful, highly customizable HTML slides based on remark.js. It is a popular choice for conference talks and teaching:
+
+```{r eval=FALSE}
+install.packages("xaringan")
+```
+
+````
+---
+title: "An Introduction to Data Visualization"
+subtitle: "Using ggplot2 and the Tidyverse"
+author: "Vivek H. Patil"
+institute: "Gonzaga University"
+date: "`r knitr::inline_expr('Sys.Date()')`"
+output:
+  xaringan::moon_reader:
+    lib_dir: libs
+    css: [default, default-fonts]
+    nature:
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+      ratio: "16:9"
+---
+````
+
+In xaringan, new slides are created with `---` (three dashes on their own line). Key features include:
+
+- **Incremental reveals**: Use `--` on its own line to reveal content incrementally within a slide.
+- **Presenter notes**: Place notes below `???` on a slide. They appear in presenter mode (press `p`).
+- **Two-column layouts**: Use `.pull-left[]` and `.pull-right[]` for side-by-side content.
+- **Custom CSS themes**: Xaringan ships with many themes (`metropolis`, `rladies`, `robot`, etc.) and you can create your own.
+
+### Slide Delimiters and Common Features
+
+Across all presentation formats, a few patterns are common:
+
+| Feature           | ioslides / Slidy     | Beamer                | Xaringan              |
+|:------------------|:---------------------|:----------------------|:----------------------|
+| New slide         | `##` or `---`        | `##` (at slide_level) | `---`                 |
+| Incremental lists | `>` before `-`       | `- item` with `incremental: true` | `--` between items |
+| Presenter notes   | `<div class="notes">` | Not built-in         | `???` below content   |
+| Two-column layout | CSS/HTML divs        | `\begin{columns}`    | `.pull-left[]` / `.pull-right[]` |
+
+For most data analysis presentations, ioslides or xaringan are excellent starting points because they produce self-contained HTML files that you can share easily.
+
+## Dashboards with flexdashboard {#dashboards-flexdashboard}
+
+Dashboards are a common way to present key metrics and visualizations in a compact, at-a-glance format. The `flexdashboard` package makes it remarkably easy to create dashboards from R Markdown.
+
+### Installation and Basic Setup
+
+```{r eval=FALSE}
+install.packages("flexdashboard")
+```
+
+A flexdashboard document uses a special YAML configuration:
+
+````
+---
+title: "Sales Dashboard"
+output:
+  flexdashboard::flex_dashboard:
+    orientation: columns
+    vertical_layout: fill
+    theme: cosmo
+    source_code: embed
+---
+````
+
+### Layout with Columns and Rows
+
+Flexdashboard uses Markdown headers to define the layout structure:
+
+- **Level 2 headers (`##`)** define columns (when `orientation: columns`) or rows (when `orientation: rows`).
+- **Level 3 headers (`###`)** define individual boxes (charts, tables, value boxes) within those columns or rows.
+
+Here is a complete dashboard structure:
+
+````
+---
+title: "Iris Dashboard"
+output:
+  flexdashboard::flex_dashboard:
+    orientation: columns
+    vertical_layout: fill
+---
+
+```{r setup, include=FALSE}`r ''`
+library(flexdashboard)
+library(tidyverse)
+```
+
+Column {data-width=650}
+-----------------------------------------------------------------------
+
+### Scatter Plot
+
+```{r}`r ''`
+ggplot(iris, aes(x = Sepal.Length, y = Sepal.Width, color = Species)) +
+  geom_point(size = 2) +
+  theme_minimal()
+```
+
+Column {data-width=350}
+-----------------------------------------------------------------------
+
+### Summary Table
+
+```{r}`r ''`
+iris %>%
+  group_by(Species) %>%
+  summarize(
+    Mean_SL = mean(Sepal.Length),
+    Mean_SW = mean(Sepal.Width)
+  ) %>%
+  knitr::kable(digits = 2)
+```
+
+### Observation Count
+
+```{r}`r ''`
+nrow(iris)
+```
+````
+
+The `{data-width=650}` attribute controls relative column widths. Similarly, `{data-height=...}` controls relative row heights when using row orientation.
+
+### Multiple Pages and Tabsets
+
+For dashboards with multiple pages, use level 1 headers (`#`). For tabbed sections within a page, add `{.tabset}` to a column or row header:
+
+````
+Page 1
+=====================================
+
+Column {.tabset}
+-------------------------------------
+
+### Tab A
+
+Content for Tab A.
+
+### Tab B
+
+Content for Tab B.
+
+Page 2
+=====================================
+
+Content for the second page.
+````
+
+### Value Boxes and Gauges
+
+Flexdashboard provides special components for highlighting key metrics:
+
+```{r eval=FALSE}
+# Value box --- displays a single value with an icon and color
+valueBox(value = 150, caption = "Total Observations", icon = "fa-table", color = "primary")
+
+# Gauge --- displays a value on a meter/dial
+gauge(value = 72, min = 0, max = 100, symbol = "%",
+      gaugeSectors(success = c(80, 100), warning = c(50, 79), danger = c(0, 49)))
+```
+
+### Adding Shiny Runtime for Interactivity
+
+By adding `runtime: shiny` to the YAML, you can turn a static flexdashboard into a fully interactive application with input widgets and reactive outputs:
+
+````
+---
+title: "Interactive Dashboard"
+output:
+  flexdashboard::flex_dashboard:
+    orientation: columns
+runtime: shiny
+---
+
+```{r setup, include=FALSE}`r ''`
+library(flexdashboard)
+library(tidyverse)
+```
+
+Column {.sidebar}
+-----------------------------------------------------------------------
+
+```{r}`r ''`
+selectInput("species", "Choose Species:",
+            choices = levels(iris$Species))
+```
+
+Column
+-----------------------------------------------------------------------
+
+### Filtered Scatter Plot
+
+```{r}`r ''`
+renderPlot({
+  data <- iris %>% filter(Species == input$species)
+  ggplot(data, aes(x = Sepal.Length, y = Sepal.Width)) +
+    geom_point(color = "steelblue", size = 3) +
+    theme_minimal() +
+    labs(title = paste("Species:", input$species))
+})
+```
+````
+
+Note that dashboards with `runtime: shiny` require a running R session and cannot be shared as static HTML files. They must be hosted on a Shiny server or run locally.
+
+## Interactive Documents {#interactive-documents}
+
+Even without Shiny, you can add substantial interactivity to HTML R Markdown documents using **htmlwidgets**. These are R packages that wrap JavaScript visualization libraries, producing self-contained interactive content that works in any web browser without a server.
+
+### Interactive Tables with DT
+
+The `DT` package wraps the DataTables JavaScript library and produces tables with sorting, searching, filtering, and pagination:
+
+```{r eval=FALSE}
+install.packages("DT")
+```
+
+```{r}
+library(DT)
+datatable(
+  iris,
+  options = list(pageLength = 10, autoWidth = TRUE),
+  caption = "Interactive table of the iris dataset.",
+  filter = "top"
+)
+```
+
+The `filter = "top"` argument adds individual column filters. Users can search across all columns using the global search box, sort by clicking column headers, and navigate between pages.
+
+### Interactive Plots with plotly
+
+The `plotly` package creates interactive charts with hover tooltips, zooming, and panning. The easiest way to use it is through the `ggplotly()` function, which converts any ggplot2 plot into an interactive plotly visualization:
+
+```{r eval=FALSE}
+install.packages("plotly")
+```
+
+```{r}
+library(plotly)
+
+p <- ggplot(iris, aes(x = Sepal.Length, y = Sepal.Width, color = Species)) +
+  geom_point(size = 2) +
+  labs(title = "Iris Sepal Dimensions",
+       x = "Sepal Length (cm)",
+       y = "Sepal Width (cm)") +
+  theme_minimal()
+
+ggplotly(p)
+```
+
+Hover over any point to see its exact values. You can also zoom in by clicking and dragging, and use the toolbar in the upper right corner to pan, reset the view, or download the plot as a PNG image.
+
+### Interactive Maps with leaflet
+
+The `leaflet` package produces interactive maps based on the Leaflet.js library. It is the go-to tool for creating maps in R Markdown:
+
+```{r eval=FALSE}
+install.packages("leaflet")
+```
+
+```{r}
+library(leaflet)
+
+leaflet() %>%
+  addTiles() %>%
+  addMarkers(
+    lng = -117.4260,
+    lat = 47.6673,
+    popup = "Gonzaga University"
+  ) %>%
+  setView(lng = -117.4260, lat = 47.6673, zoom = 14)
+```
+
+Leaflet maps support multiple tile layers, markers, popups, polygons, heatmaps, and much more. They are fully interactive --- users can zoom, pan, and click on markers.
+
+### Shiny in R Markdown Documents
+
+For interactivity that goes beyond what htmlwidgets can provide, you can embed Shiny components directly into an R Markdown document by adding `runtime: shiny` to the YAML header:
+
+````
+---
+title: "Interactive Analysis"
+output: html_document
+runtime: shiny
+---
+````
+
+With Shiny runtime, you can use input widgets (dropdown menus, sliders, checkboxes) and reactive outputs that update whenever the user changes an input:
+
+```{r eval=FALSE}
+# Input widget
+selectInput("var", "Choose a variable:", names(mtcars))
+
+# Reactive output
+renderPlot({
+  ggplot(mtcars, aes_string(x = input$var)) +
+    geom_histogram(fill = "steelblue", bins = 15) +
+    theme_minimal()
+})
+```
+
+Remember that documents with `runtime: shiny` require a live R session to function. They cannot be shared as standalone HTML files.
+
+## Bookdown {#bookdown-section}
+
+The book you are currently reading was built with `bookdown`, an R package that extends R Markdown to support long-form, multi-chapter documents. If you ever need to write a thesis, a technical manual, a textbook, or any document that spans multiple chapters, bookdown is the tool for the job.
+
+### What Bookdown Adds Over R Markdown
+
+Bookdown provides several capabilities that base R Markdown lacks:
+
+- **Multi-file documents**: Each chapter can live in its own `.Rmd` file, and bookdown stitches them together into a single output.
+- **Cross-referencing**: Automatic numbered references to figures, tables, equations, theorems, and sections across the entire document (as discussed in Chapter \@ref(rmarkdown), Section \@ref(cross-referencing)).
+- **Theorem and proof environments**: Special environments for theorems, lemmas, definitions, proofs, and other academic structures.
+- **Multiple output formats**: Generate HTML (gitbook style), PDF, and EPUB from the same source files.
+- **Numbering continuity**: Figure, table, and equation numbers are continuous across chapters.
+
+### Project Structure
+
+A typical bookdown project has the following structure:
+
+```
+my-book/
+  index.Rmd          # First file: YAML header + preface
+  01-introduction.Rmd
+  02-methods.Rmd
+  03-results.Rmd
+  _bookdown.yml       # Bookdown configuration
+  _output.yml         # Output format configuration
+  book.bib            # Bibliography
+  style.css           # Custom CSS for HTML output
+  preamble.tex        # Custom LaTeX for PDF output
+```
+
+### _bookdown.yml Configuration
+
+The `_bookdown.yml` file controls how bookdown assembles the chapters:
+
+````
+book_filename: "my-book"
+output_dir: "docs"
+rmd_files: [
+  "index.Rmd",
+  "01-introduction.Rmd",
+  "02-methods.Rmd",
+  "03-results.Rmd"
+]
+language:
+  fig: "FIGURE "
+  tab: "TABLE "
+  ui:
+    chapter_name: "Chapter "
+````
+
+The `rmd_files` field specifies the order of chapters. The `output_dir` determines where the built book is placed.
+
+### _output.yml Configuration
+
+The `_output.yml` file specifies the output formats and their settings:
+
+````
+bookdown::gitbook:
+  css: style.css
+  config:
+    toc:
+      before: |
+        <li><a href="./">My Book Title</a></li>
+    search: yes
+
+bookdown::pdf_book:
+  includes:
+    in_header: preamble.tex
+
+bookdown::epub_book: default
+````
+
+The `gitbook` format produces the familiar web-based book interface with a sidebar table of contents, search functionality, and font controls --- the same format used by this book.
+
+### Building the Book
+
+To build a bookdown project, use:
+
+```{r eval=FALSE}
+bookdown::render_book("index.Rmd", "bookdown::gitbook")
+```
+
+Or simply click **Build Book** in the RStudio Build pane if your project has a `DESCRIPTION` file or `_bookdown.yml`.
+
+## Blogdown and Websites {#blogdown-websites}
+
+Beyond books, the R Markdown ecosystem includes tools for building complete websites and blogs.
+
+### Blogdown
+
+The `blogdown` package, created by Yihui Xie, allows you to build static websites and blogs using R Markdown and the Hugo static site generator:
+
+```{r eval=FALSE}
+install.packages("blogdown")
+blogdown::install_hugo()
+```
+
+A blogdown site lets you write blog posts as `.Rmd` files that include R code, visualizations, and analysis. The site is compiled into static HTML that can be hosted on any web server, including free platforms like Netlify or GitHub Pages.
+
+Key features of blogdown:
+
+- Write posts in R Markdown with full code execution.
+- Choose from hundreds of Hugo themes for the site design.
+- Build the site locally with `blogdown::serve_site()` for live preview.
+- Deploy easily to Netlify, GitHub Pages, or any static hosting service.
+
+A minimal site configuration in `config.toml` (or `config.yaml`) defines the site title, theme, and navigation. Individual posts are placed in the `content/post/` directory as `.Rmd` files.
+
+### Distill
+
+The `distill` package provides a publication-quality format designed specifically for scientific and technical communication on the web:
+
+```{r eval=FALSE}
+install.packages("distill")
+```
+
+Distill articles feature:
+
+- Clean, modern typography optimized for readability.
+- Built-in support for citations, footnotes, and hover-over references.
+- Automatic metadata (DOI, author affiliations) for scientific publishing.
+- Responsive layout that works well on all devices.
+
+You can create a distill blog or website with:
+
+```{r eval=FALSE}
+distill::create_blog(dir = "my-blog", title = "My Data Science Blog")
+distill::create_website(dir = "my-site", title = "My Research Site")
+```
+
+Both blogdown and distill are excellent choices for sharing data analyses, tutorials, and research with the broader community.
+
+## Advanced Chunk Options {#advanced-chunk-options}
+
+Chapter \@ref(rmarkdown) covered the most common chunk options. Here we explore several advanced options that become important as your documents grow in complexity.
+
+### Child Documents
+
+For very long documents, you can break your content into multiple `.Rmd` files and include them as children. This keeps individual files manageable:
+
+````
+```{r child="sections/data-cleaning.Rmd"}`r ''`
+```
+
+```{r child="sections/modeling.Rmd"}`r ''`
+```
+
+```{r child="sections/results.Rmd"}`r ''`
+```
+````
+
+Each child document is a regular `.Rmd` file (without its own YAML header). When the parent is rendered, knitr injects the child content at the location of the chunk. This approach is especially useful for reports that have standard sections (e.g., an appendix or a methods section) shared across multiple documents.
+
+### Caching Strategies
+
+When a document takes a long time to render because of expensive computations, caching can dramatically speed up subsequent renders. Setting `cache=TRUE` on a chunk tells knitr to save the results and skip re-execution if the code has not changed:
+
+````
+```{r model-fitting, cache=TRUE}`r ''`
+model <- lm(mpg ~ wt + hp + cyl + disp, data = mtcars)
+summary(model)
+```
+````
+
+However, caching has subtleties that you must understand to avoid stale results:
+
+- **Dependency tracking with `dependson`**: If a cached chunk depends on an upstream chunk, declare the dependency explicitly so that changes upstream invalidate the cache:
+
+````
+```{r data-prep}`r ''`
+cleaned_data <- mtcars %>% filter(hp > 100)
+```
+
+```{r analysis, cache=TRUE, dependson="data-prep"}`r ''`
+model <- lm(mpg ~ wt, data = cleaned_data)
+```
+````
+
+- **External file dependencies with `cache.extra`**: If your chunk reads an external file, changes to that file will not automatically invalidate the cache. Use `cache.extra` to track the file's modification time:
+
+````
+```{r read-data, cache=TRUE, cache.extra=file.mtime("data/sales.csv")}`r ''`
+sales <- read_csv("data/sales.csv")
+```
+````
+
+- **Clearing the cache**: To force a complete re-run, delete the cache directory (typically named `*_cache/`) or set `cache=FALSE` temporarily.
+
+### Other Language Engines
+
+R Markdown is not limited to R code. Knitr supports many language engines, allowing you to embed code in Python, SQL, Bash, and other languages within the same document.
+
+**Python chunks** (requires the `reticulate` package):
+
+````
+```{python}`r ''`
+import pandas as pd
+data = pd.DataFrame({"x": [1, 2, 3], "y": [4, 5, 6]})
+print(data)
+```
+````
+
+**SQL chunks** (connect to a database):
+
+````
+```{sql connection=con}`r ''`
+SELECT * FROM customers WHERE region = 'West' LIMIT 10;
+```
+````
+
+**Bash chunks**:
+
+````
+```{bash}`r ''`
+echo "Current directory:"
+pwd
+ls -la
+```
+````
+
+The ability to mix languages in a single document is powerful for workflows that span multiple tools --- for example, pulling data with SQL, processing it with Python, and visualizing it with R.
+
+### Hook Functions
+
+Knitr hook functions let you customize the processing of chunks and their output. There are two types:
+
+- **Chunk hooks**: Run before or after a chunk is executed.
+- **Output hooks**: Modify the raw output (source code, text output, plots, etc.) before it is written to the document.
+
+For example, to add a custom message before every chunk:
+
+```{r eval=FALSE}
+knitr::knit_hooks$set(timestamp = function(before, options, envir) {
+  if (before) {
+    paste("<!-- Chunk executed at", Sys.time(), "-->")
+  }
+})
+```
+
+Hook functions are an advanced topic, but they provide a powerful mechanism for customizing the rendering pipeline when the built-in chunk options are not sufficient.
+
+## Custom Output Formats {#custom-output-formats}
+
+R Markdown's flexibility extends to creating custom output formats with tailored styling.
+
+### Custom CSS for HTML Output
+
+The simplest way to customize HTML output is by providing a custom CSS file:
+
+````
+---
+title: "Styled Report"
+output:
+  html_document:
+    css: custom-styles.css
+---
+````
+
+Your CSS file can override any of the default styles. For example:
+
+```{css eval=FALSE}
+/* custom-styles.css */
+body {
+  font-family: "Georgia", serif;
+  max-width: 800px;
+  margin: 0 auto;
+  line-height: 1.8;
+}
+
+h1, h2, h3 {
+  color: #2c3e50;
+  font-family: "Helvetica Neue", sans-serif;
+}
+
+pre {
+  background-color: #f8f9fa;
+  border: 1px solid #dee2e6;
+  border-radius: 4px;
+  padding: 12px;
+}
+
+table {
+  border-collapse: collapse;
+  width: 100%;
+}
+
+th {
+  background-color: #3366cc;
+  color: white;
+  padding: 8px;
+}
+```
+
+### Custom LaTeX for PDF Output
+
+For PDF output, you can customize the appearance using a LaTeX preamble file:
+
+````
+---
+title: "Custom PDF Report"
+output:
+  pdf_document:
+    includes:
+      in_header: preamble.tex
+      before_body: before-body.tex
+      after_body: after-body.tex
+    latex_engine: xelatex
+---
+````
+
+A typical `preamble.tex` might include:
+
+```{r eval=FALSE}
+# Contents of preamble.tex (this is LaTeX, not R)
+# \usepackage{geometry}
+# \geometry{margin=1in}
+# \usepackage{fancyhdr}
+# \pagestyle{fancy}
+# \fancyhead[L]{My Report}
+# \fancyhead[R]{\today}
+# \usepackage{setspace}
+# \onehalfspacing
+```
+
+### Pandoc Templates
+
+For full control over the output structure, you can provide a custom Pandoc template. Pandoc templates define the complete skeleton of the output document, with placeholders for content, metadata, and other elements:
+
+````
+---
+output:
+  html_document:
+    template: my-template.html
+---
+````
+
+Creating custom Pandoc templates requires familiarity with both Pandoc's template syntax and the target output format (HTML or LaTeX). The default templates are a good starting point --- you can extract them with:
+
+```{r eval=FALSE}
+# View the default HTML template
+rmarkdown::html_document()$pandoc$template
+
+# Or from the command line:
+# pandoc -D html > my-template.html
+```
+
+### Creating Reusable Templates as R Packages
+
+For organizations that need consistent report formatting, you can bundle a custom R Markdown template into an R package. The template includes a skeleton `.Rmd` file, a custom output format function, and any supporting files (CSS, LaTeX preambles, logos). Once installed, the template appears in the RStudio **New R Markdown** dialog under **From Template**.
+
+The package structure for a custom template looks like:
+
+```
+myreport/
+  DESCRIPTION
+  NAMESPACE
+  R/
+    report_format.R      # Custom output format function
+  inst/
+    rmarkdown/
+      templates/
+        my-report/
+          template.yaml
+          skeleton/
+            skeleton.Rmd   # Template .Rmd file
+            styles.css
+```
+
+## Tips for Reproducible Research {#tips-reproducible-research}
+
+R Markdown is a cornerstone of reproducible research --- the practice of providing enough detail about your data, code, and environment that someone else (or your future self) can exactly replicate your results. Here are several practices that strengthen the reproducibility of your work.
+
+### Recording Session Information
+
+Always include session information at the end of important documents. This records the exact versions of R and every loaded package, which is critical for debugging issues that arise when software versions change:
+
+```{r}
+sessionInfo()
+```
+
+The `sessioninfo` package provides a more readable alternative:
+
+```{r eval=FALSE}
+install.packages("sessioninfo")
+```
+
+```{r eval=FALSE}
+sessioninfo::session_info()
+```
+
+Including session information in your rendered documents creates a permanent record of the software environment that produced the results.
+
+### Setting Seeds for Reproducibility
+
+Any analysis that involves randomness --- simulations, random sampling, bootstrapping, cross-validation, stochastic optimization --- should set a random seed so that results are exactly reproducible:
+
+```{r}
+set.seed(42)
+sample(1:100, 5)
+```
+
+```{r}
+# Same seed produces the same results
+set.seed(42)
+sample(1:100, 5)
+```
+
+Place `set.seed()` at the beginning of your document (typically in the setup chunk) or at the start of any chunk that uses randomness. Document the seed value so that others can reproduce your exact results.
+
+### Package Version Management with renv
+
+The `renv` package provides project-level dependency management for R. It creates a snapshot of the exact package versions used in your project, allowing anyone to recreate the same environment:
+
+```{r eval=FALSE}
+install.packages("renv")
+
+# Initialize renv in your project
+renv::init()
+
+# Take a snapshot of current package versions
+renv::snapshot()
+
+# Restore packages from a snapshot (e.g., on a new machine)
+renv::restore()
+```
+
+When you run `renv::init()`, it creates a `renv.lock` file that records every package and its version. Committing this file to version control ensures that collaborators can install the exact same package versions with `renv::restore()`.
+
+This is especially important for long-lived projects where package updates might change function behavior or output formatting.
+
+### Organizing Project Structure
+
+A well-organized project structure makes your work easier to understand, maintain, and reproduce. A recommended layout:
+
+```
+my-project/
+  my-project.Rproj       # RStudio project file
+  data/
+    raw/                  # Original, unmodified data files
+    processed/            # Cleaned and transformed data
+  R/                      # R scripts for functions and utilities
+  analysis/
+    01-cleaning.Rmd       # Data cleaning steps
+    02-exploration.Rmd    # Exploratory analysis
+    03-modeling.Rmd       # Statistical modeling
+    04-report.Rmd         # Final report
+  output/
+    figures/              # Saved plots
+    tables/               # Saved tables
+  renv.lock               # Package version snapshot
+  README.md               # Project description
+```
+
+Key principles for project organization:
+
+- **Never modify raw data.** Keep original data files in a `data/raw/` directory and write cleaning scripts that produce processed versions.
+- **Use relative paths.** With an RStudio project (`.Rproj` file), the working directory is always the project root, so `read_csv("data/raw/sales.csv")` works regardless of where the project lives on disk.
+- **Separate code from prose.** Put reusable functions in `.R` files under `R/` and source them from your `.Rmd` documents with `source("R/helpers.R")`.
+- **Document everything.** A `README.md` at the project root should describe what the project is, how to run the analysis, and any prerequisites.
+
+### The Reproducibility Checklist
+
+Before sharing or publishing any analysis, verify the following:
+
+1. **Clean environment**: Can you knit the document from scratch in a fresh R session? Use `rmarkdown::render()` from the command line or restart R before knitting to be sure.
+2. **Random seeds**: Are seeds set for all stochastic operations?
+3. **Package versions**: Are package versions recorded (via `sessionInfo()` or `renv::snapshot()`)?
+4. **Data availability**: Is the data included or clearly documented with instructions for access?
+5. **File paths**: Are all file paths relative to the project root (no absolute paths like `C:/Users/...`)?
+6. **No manual steps**: Can the entire analysis run without any manual intervention (no copy-pasting of numbers, no point-and-click steps)?
+
+## Summary {#rmarkdown-advanced-summary}
+
+R Markdown is far more than a tool for writing simple reports. In this chapter, we explored its advanced capabilities:
+
+- **Parameterized reports** let you generate customized documents by passing parameters through the YAML header and rendering with `rmarkdown::render()`. This is ideal for producing many similar reports from a single template.
+- **Presentations** in multiple formats --- ioslides, Slidy, Beamer, and xaringan --- let you deliver data-driven talks directly from R Markdown.
+- **Flexdashboard** makes it straightforward to build dashboards with columns, rows, tabsets, value boxes, and gauges, optionally powered by Shiny for full interactivity.
+- **Interactive documents** using htmlwidgets --- `DT` for tables, `plotly` for charts, `leaflet` for maps --- add interactivity to static HTML output without requiring a server.
+- **Bookdown** extends R Markdown to support multi-chapter documents with cross-referencing, theorem environments, and multiple output formats.
+- **Blogdown and distill** enable you to build websites and blogs powered by R Markdown.
+- **Advanced chunk options** including child documents, caching strategies, multi-language engines, and hook functions give you fine-grained control over the rendering process.
+- **Custom output formats** through CSS, LaTeX preambles, Pandoc templates, and R package templates let you tailor the appearance of your documents to match any style guide.
+- **Reproducible research practices** --- recording session information, setting seeds, managing package versions with `renv`, and organizing projects thoughtfully --- ensure that your work can be replicated by anyone, at any time.
+
+As you continue through this book and the [Visual Analytics and Data Storytelling](http://patilv.com/VizAnalytics4Biz/) course, you will find that these tools open up a wide range of possibilities for communicating data-driven insights effectively.

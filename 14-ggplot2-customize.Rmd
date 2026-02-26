@@ -1,0 +1,832 @@
+# Customizing ggplot2 Visualizations {#ggplot2customize}
+
+```{r include=FALSE}
+library(tidyverse)
+knitr::opts_chunk$set(echo = TRUE, warning = FALSE, message = FALSE)
+```
+
+## Introduction
+
+The default appearance of ggplot2 plots is clean and functional, but rarely publication-ready. Whether you are preparing a figure for a journal article, a business dashboard, or a class presentation, you will almost certainly need to adjust colors, fonts, labels, legends, and layout. Customization is what transforms a quick exploratory chart into a polished, professional visualization that communicates your message clearly.
+
+In this chapter we cover the major customization tools that ggplot2 and its ecosystem provide:
+
+- **Themes** control the non-data elements of a plot --- backgrounds, gridlines, fonts, and spacing.
+- **Color and fill scales** let you map data values to meaningful and accessible color palettes.
+- **Axis scales and formatting** give you precise control over tick marks, labels, and ranges.
+- **Legend customization** allows you to reposition, restyle, or remove legends.
+- **Annotations** add contextual information directly onto the plot surface.
+- **Combining plots** with the patchwork package lets you assemble multi-panel figures.
+- **Custom theme functions** let you codify your preferred style and reuse it across projects.
+
+We will use the built-in `mpg`, `iris`, and `diamonds` datasets throughout this chapter.
+
+## Themes
+
+### Built-in Themes
+
+Every ggplot2 plot uses a theme to style its non-data elements. The default theme is `theme_gray()`, which uses a gray background with white gridlines. ggplot2 ships with several alternatives.
+
+```{r fig.height=8, fig.width=10}
+base_plot <- ggplot(mpg, aes(x = displ, y = hwy)) +
+  geom_point(aes(color = class)) +
+  labs(title = "Engine Displacement vs. Highway MPG")
+
+# Show eight built-in themes side by side
+library(patchwork)
+
+p1 <- base_plot + theme_gray() + ggtitle("theme_gray()")
+p2 <- base_plot + theme_bw() + ggtitle("theme_bw()")
+p3 <- base_plot + theme_minimal() + ggtitle("theme_minimal()")
+p4 <- base_plot + theme_classic() + ggtitle("theme_classic()")
+p5 <- base_plot + theme_void() + ggtitle("theme_void()")
+p6 <- base_plot + theme_light() + ggtitle("theme_light()")
+p7 <- base_plot + theme_dark() + ggtitle("theme_dark()")
+p8 <- base_plot + theme_linedraw() + ggtitle("theme_linedraw()")
+
+(p1 | p2 | p3 | p4) / (p5 | p6 | p7 | p8)
+```
+
+A few highlights:
+
+- `theme_bw()` removes the gray background, which many people prefer for printed output.
+- `theme_minimal()` strips away even more chrome, leaving a very clean look.
+- `theme_classic()` mimics the style of base R graphics with axis lines and no gridlines.
+- `theme_void()` removes almost everything, which is useful for maps or diagrams.
+
+### Themes from ggthemes
+
+The **ggthemes** package provides themes inspired by well-known publications and visualization styles.
+
+```{r fig.height=8, fig.width=10}
+library(ggthemes)
+
+t1 <- base_plot + theme_economist() + ggtitle("theme_economist()")
+t2 <- base_plot + theme_fivethirtyeight() + ggtitle("theme_fivethirtyeight()")
+t3 <- base_plot + theme_tufte() + ggtitle("theme_tufte()")
+t4 <- base_plot + theme_wsj() + ggtitle("theme_wsj()")
+
+(t1 | t2) / (t3 | t4)
+```
+
+- `theme_economist()` mimics *The Economist* magazine style.
+- `theme_fivethirtyeight()` is based on the FiveThirtyEight data journalism site.
+- `theme_tufte()` follows Edward Tufte's minimalist design philosophy.
+- `theme_wsj()` mimics the *Wall Street Journal* style.
+
+### Setting a Global Theme
+
+If you want every plot in your document to use a particular theme, call `theme_set()` at the top of your script. Every subsequent ggplot call will use that theme automatically.
+
+```{r}
+theme_set(theme_minimal())
+
+# This plot now uses theme_minimal() without explicitly adding it
+ggplot(mpg, aes(x = class)) +
+  geom_bar(fill = "steelblue") +
+  labs(title = "Vehicle Class Counts", x = "Class", y = "Count")
+```
+
+```{r include=FALSE}
+# Reset to default for the rest of the chapter
+theme_set(theme_gray())
+```
+
+## Customizing Theme Elements
+
+### The theme() Function
+
+The `theme()` function lets you modify individual elements of a plot's theme. You target specific elements by name and describe their appearance using one of four **element functions**:
+
+| Element Function | Controls | Key Arguments |
+|:---|:---|:---|
+| `element_text()` | Text elements | `family`, `face`, `size`, `color`, `angle`, `hjust`, `vjust` |
+| `element_line()` | Lines | `color`, `linewidth`, `linetype` |
+| `element_rect()` | Rectangles/borders | `fill`, `color`, `linewidth` |
+| `element_blank()` | Removes the element | (none) |
+
+### Key Theme Elements
+
+Here is a reference for the most commonly customized theme elements:
+
+| Element Name | What It Controls |
+|:---|:---|
+| `plot.title` | The main title |
+| `plot.subtitle` | The subtitle |
+| `plot.caption` | The caption |
+| `axis.title` | Both axis titles (use `axis.title.x` or `axis.title.y` for one) |
+| `axis.text` | Tick labels on both axes |
+| `axis.ticks` | Tick marks on both axes |
+| `panel.grid.major` | Major gridlines |
+| `panel.grid.minor` | Minor gridlines |
+| `panel.background` | The panel background |
+| `plot.background` | The entire plot background |
+| `legend.position` | Where the legend is placed |
+| `legend.title` | The legend title text |
+| `legend.text` | The legend labels |
+| `strip.text` | Text in facet strip labels |
+| `strip.background` | Background of facet strip labels |
+
+### Example: Styling Titles and Axis Text
+
+```{r}
+ggplot(mpg, aes(x = displ, y = hwy, color = class)) +
+  geom_point(size = 2) +
+  labs(
+    title = "Fuel Efficiency by Engine Size",
+    subtitle = "Larger engines tend to have lower highway mileage",
+    caption = "Source: EPA fuel economy data (mpg dataset)",
+    x = "Engine Displacement (liters)",
+    y = "Highway MPG",
+    color = "Vehicle Class"
+  ) +
+  theme(
+    plot.title = element_text(face = "bold", size = 16, color = "navy"),
+    plot.subtitle = element_text(face = "italic", size = 12, color = "gray40"),
+    plot.caption = element_text(size = 9, hjust = 0, color = "gray50"),
+    axis.title = element_text(face = "bold", size = 12),
+    axis.text = element_text(size = 10)
+  )
+```
+
+### Example: Modifying Gridlines and Background
+
+```{r}
+ggplot(mpg, aes(x = cty, y = hwy)) +
+  geom_point(alpha = 0.5, color = "darkorange") +
+  labs(title = "City vs. Highway Fuel Economy") +
+  theme(
+    panel.background = element_rect(fill = "white"),
+    plot.background = element_rect(fill = "gray95"),
+    panel.grid.major = element_line(color = "gray80", linewidth = 0.5),
+    panel.grid.minor = element_blank(),
+    axis.ticks = element_line(color = "gray40")
+  )
+```
+
+### Example: Customizing Facet Strips
+
+```{r}
+ggplot(mpg, aes(x = displ, y = hwy)) +
+  geom_point(color = "steelblue") +
+  facet_wrap(~ drv) +
+  labs(title = "Highway MPG by Drive Type") +
+  theme(
+    strip.text = element_text(face = "bold", size = 12, color = "white"),
+    strip.background = element_rect(fill = "darkblue", color = "darkblue"),
+    panel.spacing = unit(1, "lines")
+  )
+```
+
+### Example: Rotating Axis Labels
+
+When category labels are long, rotating them prevents overlap.
+
+```{r}
+ggplot(mpg, aes(x = manufacturer)) +
+  geom_bar(fill = "coral") +
+  labs(title = "Vehicles by Manufacturer", x = NULL, y = "Count") +
+  theme(
+    axis.text.x = element_text(angle = 45, hjust = 1, size = 9),
+    plot.title = element_text(face = "bold", size = 14)
+  )
+```
+
+## Color and Fill Scales
+
+Color is one of the most powerful visual channels. ggplot2 provides many ways to control how colors are mapped to data values.
+
+### Discrete Color Scales
+
+#### Manual Colors
+
+Use `scale_color_manual()` or `scale_fill_manual()` to specify exact colors for each level of a categorical variable. You can use named R colors or hex codes.
+
+```{r}
+ggplot(mpg, aes(x = displ, y = hwy, color = drv)) +
+  geom_point(size = 2) +
+  scale_color_manual(
+    values = c("f" = "#E41A1C", "r" = "#377EB8", "4" = "#4DAF4A"),
+    labels = c("f" = "Front", "r" = "Rear", "4" = "Four-Wheel")
+  ) +
+  labs(
+    title = "MPG by Engine Size and Drive Type",
+    color = "Drive Type"
+  )
+```
+
+#### ColorBrewer Palettes
+
+The RColorBrewer package provides carefully designed color palettes. Use `scale_color_brewer()` or `scale_fill_brewer()` to access them.
+
+```{r fig.height=6, fig.width=8}
+# Display all available ColorBrewer palettes
+RColorBrewer::display.brewer.all()
+```
+
+The palettes fall into three categories:
+
+- **Sequential** (e.g., Blues, Greens, OrRd) --- for ordered data from low to high.
+- **Diverging** (e.g., RdBu, RdYlGn, Spectral) --- for data with a meaningful midpoint.
+- **Qualitative** (e.g., Set1, Set2, Dark2, Paired) --- for unordered categorical data.
+
+```{r}
+ggplot(mpg, aes(x = class, fill = class)) +
+  geom_bar() +
+  scale_fill_brewer(palette = "Set2") +
+  labs(title = "Vehicle Counts by Class (Set2 palette)") +
+  theme(legend.position = "none")
+```
+
+```{r}
+ggplot(iris, aes(x = Sepal.Length, y = Sepal.Width, color = Species)) +
+  geom_point(size = 2.5) +
+  scale_color_brewer(palette = "Dark2") +
+  labs(title = "Iris Measurements (Dark2 palette)")
+```
+
+### Continuous Color Scales
+
+#### Gradient Scales
+
+For continuous variables, `scale_color_gradient()` creates a two-color gradient, and `scale_color_gradient2()` creates a diverging three-color gradient.
+
+```{r}
+ggplot(mpg, aes(x = displ, y = hwy, color = cty)) +
+  geom_point(size = 2.5) +
+  scale_color_gradient(low = "yellow", high = "red") +
+  labs(
+    title = "Highway MPG Colored by City MPG",
+    color = "City MPG"
+  )
+```
+
+```{r}
+# Diverging gradient centered at the median
+median_cty <- median(mpg$cty)
+
+ggplot(mpg, aes(x = displ, y = hwy, color = cty)) +
+  geom_point(size = 2.5) +
+  scale_color_gradient2(
+    low = "blue", mid = "white", high = "red",
+    midpoint = median_cty
+  ) +
+  labs(
+    title = "Highway MPG with Diverging Color Scale",
+    subtitle = paste("Midpoint at median city MPG =", median_cty),
+    color = "City MPG"
+  )
+```
+
+#### Viridis Palettes
+
+The viridis color scales are perceptually uniform and colorblind-friendly. They are an excellent default choice for continuous data.
+
+```{r fig.height=8, fig.width=10}
+diamonds_sample <- diamonds[sample(nrow(diamonds), 2000), ]
+
+v1 <- ggplot(diamonds_sample, aes(x = carat, y = price, color = depth)) +
+  geom_point(alpha = 0.6) +
+  scale_color_viridis_c(option = "viridis") +
+  labs(title = "viridis")
+
+v2 <- ggplot(diamonds_sample, aes(x = carat, y = price, color = depth)) +
+  geom_point(alpha = 0.6) +
+  scale_color_viridis_c(option = "magma") +
+  labs(title = "magma")
+
+v3 <- ggplot(diamonds_sample, aes(x = carat, y = price, color = depth)) +
+  geom_point(alpha = 0.6) +
+  scale_color_viridis_c(option = "plasma") +
+  labs(title = "plasma")
+
+v4 <- ggplot(diamonds_sample, aes(x = carat, y = price, color = depth)) +
+  geom_point(alpha = 0.6) +
+  scale_color_viridis_c(option = "inferno") +
+  labs(title = "inferno")
+
+(v1 | v2) / (v3 | v4)
+```
+
+For discrete data, use `scale_color_viridis_d()` or `scale_fill_viridis_d()`:
+
+```{r}
+ggplot(mpg, aes(x = class, fill = class)) +
+  geom_bar() +
+  scale_fill_viridis_d(option = "plasma") +
+  labs(title = "Vehicle Class with Viridis Discrete (Plasma)") +
+  theme(legend.position = "none")
+```
+
+## Axis Scales and Formatting
+
+### Continuous Axis Scales
+
+`scale_x_continuous()` and `scale_y_continuous()` let you set breaks, labels, and limits for numeric axes.
+
+```{r}
+ggplot(mpg, aes(x = displ, y = hwy)) +
+  geom_point(color = "steelblue") +
+  scale_x_continuous(
+    breaks = seq(1, 7, by = 1),
+    limits = c(1, 7)
+  ) +
+  scale_y_continuous(
+    breaks = seq(10, 45, by = 5),
+    limits = c(10, 45)
+  ) +
+  labs(title = "Custom Axis Breaks and Limits")
+```
+
+### Formatting Labels with the scales Package
+
+The **scales** package provides convenient label formatting functions.
+
+```{r}
+diamonds_summary <- diamonds %>%
+  group_by(cut) %>%
+  summarize(avg_price = mean(price), count = n())
+
+ggplot(diamonds_summary, aes(x = cut, y = avg_price)) +
+  geom_col(fill = "darkgreen") +
+  scale_y_continuous(labels = scales::dollar) +
+  labs(
+    title = "Average Diamond Price by Cut",
+    x = "Cut Quality", y = "Average Price"
+  )
+```
+
+```{r}
+ggplot(diamonds_summary, aes(x = cut, y = count)) +
+  geom_col(fill = "steelblue") +
+  scale_y_continuous(labels = scales::comma) +
+  labs(
+    title = "Diamond Count by Cut",
+    x = "Cut Quality", y = "Number of Diamonds"
+  )
+```
+
+Here is an example using `scales::percent`:
+
+```{r}
+mpg_pct <- mpg %>%
+  count(class) %>%
+  mutate(pct = n / sum(n))
+
+ggplot(mpg_pct, aes(x = reorder(class, pct), y = pct)) +
+  geom_col(fill = "tomato") +
+  scale_y_continuous(labels = scales::percent) +
+  coord_flip() +
+  labs(
+    title = "Percentage of Vehicles by Class",
+    x = NULL, y = "Percentage"
+  )
+```
+
+### Log Scales
+
+For data that span several orders of magnitude, log-transformed axes can reveal patterns.
+
+```{r}
+ggplot(diamonds, aes(x = carat, y = price)) +
+  geom_point(alpha = 0.05, color = "purple") +
+  scale_x_log10() +
+  scale_y_log10(labels = scales::dollar) +
+  labs(
+    title = "Diamond Price vs. Carat (Log-Log Scale)",
+    x = "Carat (log scale)", y = "Price (log scale)"
+  )
+```
+
+### coord_cartesian() vs. Scale Limits
+
+There is an important distinction between setting limits via `scale_*_continuous(limits = ...)` and using `coord_cartesian(xlim = ..., ylim = ...)`.
+
+- **Scale limits** remove data points outside the range *before* any statistical computations (e.g., smoothers, boxplots). This can change the shape of fitted lines or summary statistics.
+- **coord_cartesian()** zooms into the specified range *after* all computations, preserving the full dataset.
+
+```{r fig.width=10, fig.height=5}
+p_base <- ggplot(mpg, aes(x = displ, y = hwy)) +
+  geom_point() +
+  geom_smooth(method = "lm")
+
+p_scale <- p_base +
+  scale_x_continuous(limits = c(3, 6)) +
+  ggtitle("scale limits (data removed)")
+
+p_coord <- p_base +
+  coord_cartesian(xlim = c(3, 6)) +
+  ggtitle("coord_cartesian (zoom only)")
+
+p_scale | p_coord
+```
+
+Notice how the regression line differs between the two approaches. In general, prefer `coord_cartesian()` when you want to zoom into a region without altering the underlying statistics.
+
+### Discrete Axis Scales
+
+Use `scale_x_discrete()` or `scale_y_discrete()` to reorder or relabel categories.
+
+```{r}
+ggplot(mpg, aes(x = class, y = hwy)) +
+  geom_boxplot(fill = "lightblue") +
+  scale_x_discrete(
+    limits = c("2seater", "compact", "midsize", "subcompact",
+               "suv", "minivan", "pickup"),
+    labels = c("2-Seater", "Compact", "Midsize", "Subcompact",
+               "SUV", "Minivan", "Pickup")
+  ) +
+  labs(title = "Highway MPG by Vehicle Class (Custom Order)")
+```
+
+## Legend Customization
+
+### Legend Position
+
+The `legend.position` argument inside `theme()` accepts the strings `"top"`, `"bottom"`, `"left"`, `"right"`, and `"none"`. You can also pass a numeric vector `c(x, y)` with values between 0 and 1 to place the legend inside the plot area.
+
+```{r fig.height=8, fig.width=10}
+base <- ggplot(mpg, aes(x = displ, y = hwy, color = class)) +
+  geom_point()
+
+l1 <- base + theme(legend.position = "top") + ggtitle("Top")
+l2 <- base + theme(legend.position = "bottom") + ggtitle("Bottom")
+l3 <- base + theme(legend.position = "left") + ggtitle("Left")
+l4 <- base + theme(legend.position = "right") + ggtitle("Right")
+
+(l1 | l2) / (l3 | l4)
+```
+
+Placing the legend inside the plot:
+
+```{r}
+ggplot(mpg, aes(x = displ, y = hwy, color = drv)) +
+  geom_point(size = 2) +
+  theme(
+    legend.position = c(0.85, 0.80),
+    legend.background = element_rect(fill = "white", color = "gray70")
+  ) +
+  labs(title = "Legend Placed Inside the Plot", color = "Drive Type")
+```
+
+### Removing the Legend
+
+```{r}
+ggplot(mpg, aes(x = class, fill = class)) +
+  geom_bar() +
+  theme(legend.position = "none") +
+  labs(title = "Bar Chart Without Legend")
+```
+
+### Modifying Legend Title and Labels
+
+You can change the legend title and labels directly inside the scale function or by using `labs()`.
+
+```{r}
+ggplot(iris, aes(x = Sepal.Length, y = Petal.Length, color = Species)) +
+  geom_point(size = 2) +
+  scale_color_manual(
+    values = c("setosa" = "#1b9e77", "versicolor" = "#d95f02", "virginica" = "#7570b3"),
+    labels = c("Setosa", "Versicolor", "Virginica")
+  ) +
+  labs(color = "Iris Species", title = "Custom Legend Title and Labels")
+```
+
+### guide_legend() and guide_colorbar()
+
+For finer control over legends, use `guides()` with `guide_legend()` or `guide_colorbar()`.
+
+```{r}
+ggplot(mpg, aes(x = displ, y = hwy, color = class)) +
+  geom_point(size = 2) +
+  guides(
+    color = guide_legend(
+      title = "Vehicle Class",
+      nrow = 2,
+      override.aes = list(size = 4)
+    )
+  ) +
+  labs(title = "Legend with Two Rows and Larger Points")
+```
+
+```{r}
+ggplot(diamonds_sample, aes(x = carat, y = price, color = depth)) +
+  geom_point(alpha = 0.6) +
+  scale_color_viridis_c() +
+  guides(
+    color = guide_colorbar(
+      title = "Depth (%)",
+      barwidth = 15,
+      barheight = 0.8,
+      title.position = "top"
+    )
+  ) +
+  theme(legend.position = "bottom") +
+  labs(title = "Customized Colorbar Legend")
+```
+
+## Annotations
+
+Annotations add context directly to the plot canvas. They draw the reader's attention to specific features of the data.
+
+### annotate()
+
+The `annotate()` function adds geom-like elements that are not mapped to data.
+
+```{r}
+ggplot(mpg, aes(x = displ, y = hwy)) +
+  geom_point(color = "gray50") +
+  annotate("text", x = 6, y = 40, label = "Efficient outliers",
+           color = "red", fontface = "bold", size = 5) +
+  annotate("rect", xmin = 5.5, xmax = 7, ymin = 25, ymax = 45,
+           alpha = 0.1, fill = "red", color = "red", linetype = "dashed") +
+  annotate("segment", x = 5, y = 42, xend = 5.6, yend = 38,
+           arrow = arrow(length = unit(0.3, "cm")), color = "red") +
+  labs(title = "Using annotate() for Text, Rectangles, and Segments")
+```
+
+### geom_text() and geom_label()
+
+Unlike `annotate()`, `geom_text()` and `geom_label()` map aesthetics from your data.
+
+```{r}
+top_classes <- mpg %>%
+  count(class) %>%
+  arrange(desc(n)) %>%
+  head(5)
+
+ggplot(top_classes, aes(x = reorder(class, n), y = n)) +
+  geom_col(fill = "steelblue") +
+  geom_text(aes(label = n), hjust = -0.3, size = 5, fontface = "bold") +
+  coord_flip() +
+  scale_y_continuous(expand = expansion(mult = c(0, 0.15))) +
+  labs(title = "Top 5 Vehicle Classes with Labels", x = NULL, y = "Count")
+```
+
+```{r}
+avg_iris <- iris %>%
+  group_by(Species) %>%
+  summarize(
+    Sepal.Length = mean(Sepal.Length),
+    Petal.Length = mean(Petal.Length)
+  )
+
+ggplot(iris, aes(x = Sepal.Length, y = Petal.Length, color = Species)) +
+  geom_point(alpha = 0.4) +
+  geom_label(
+    data = avg_iris,
+    aes(label = Species),
+    size = 4, fontface = "bold",
+    show.legend = FALSE
+  ) +
+  labs(title = "Species Labels at Group Means")
+```
+
+### Non-overlapping Labels with ggrepel
+
+When labels overlap, the **ggrepel** package provides `geom_text_repel()` and `geom_label_repel()`, which automatically adjust label positions to avoid collisions.
+
+```{r}
+library(ggrepel)
+
+best_mpg <- mpg %>%
+  group_by(manufacturer) %>%
+  slice_max(hwy, n = 1) %>%
+  ungroup() %>%
+  slice_max(hwy, n = 8)
+
+ggplot(mpg, aes(x = displ, y = hwy)) +
+  geom_point(color = "gray70") +
+  geom_point(data = best_mpg, color = "red", size = 3) +
+  geom_label_repel(
+    data = best_mpg,
+    aes(label = paste(manufacturer, model)),
+    size = 3,
+    max.overlaps = 20,
+    fill = "lightyellow"
+  ) +
+  labs(
+    title = "Most Fuel-Efficient Vehicles by Manufacturer",
+    subtitle = "Top 8 models highlighted",
+    x = "Engine Displacement (L)",
+    y = "Highway MPG"
+  )
+```
+
+## Combining Multiple Plots
+
+### The patchwork Package
+
+The **patchwork** package provides an intuitive syntax for combining ggplot objects. We already used it earlier in this chapter. Here we cover its features more formally.
+
+- `+` or `|` places plots side by side (horizontally).
+- `/` stacks plots vertically.
+- `()` groups plots to control layout order.
+- `plot_layout()` sets the number of columns, rows, or relative widths/heights.
+- `plot_annotation()` adds titles, subtitles, captions, and tag labels to the combined figure.
+
+```{r fig.height=4, fig.width=10}
+p_scatter <- ggplot(mpg, aes(x = displ, y = hwy)) +
+  geom_point(color = "steelblue") +
+  labs(title = "Scatter Plot")
+
+p_box <- ggplot(mpg, aes(x = drv, y = hwy, fill = drv)) +
+  geom_boxplot(show.legend = FALSE) +
+  labs(title = "Box Plot")
+
+p_bar <- ggplot(mpg, aes(x = class)) +
+  geom_bar(fill = "coral") +
+  labs(title = "Bar Chart") +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+
+p_scatter | p_box | p_bar
+```
+
+### Controlling Layout
+
+```{r fig.height=7, fig.width=10}
+(p_scatter | p_box) / p_bar +
+  plot_layout(heights = c(2, 1))
+```
+
+### Adding Tags and a Shared Title
+
+```{r fig.height=7, fig.width=10}
+(p_scatter | p_box) / p_bar +
+  plot_annotation(
+    title = "Overview of the mpg Dataset",
+    subtitle = "Three complementary views of the data",
+    caption = "Source: EPA fuel economy data",
+    tag_levels = "A"
+  ) +
+  plot_layout(heights = c(2, 1))
+```
+
+Tags are automatically labeled A, B, C (or you can use `"1"`, `"i"`, etc.).
+
+### Controlling Relative Widths
+
+```{r fig.height=4, fig.width=10}
+p_scatter + p_box + p_bar +
+  plot_layout(widths = c(2, 1, 1))
+```
+
+### Collecting Legends
+
+When multiple plots share the same legend, use `plot_layout(guides = "collect")` to combine them into a single shared legend.
+
+```{r fig.height=4, fig.width=10}
+p_a <- ggplot(mpg, aes(x = displ, y = hwy, color = drv)) +
+  geom_point()
+
+p_b <- ggplot(mpg, aes(x = cty, y = hwy, color = drv)) +
+  geom_point()
+
+p_a + p_b +
+  plot_layout(guides = "collect") +
+  plot_annotation(title = "Shared Legend Between Plots")
+```
+
+### Alternatives: cowplot and gridExtra
+
+While patchwork is the most modern and flexible option, two other packages are commonly encountered:
+
+- **cowplot** provides `plot_grid()` for arranging plots and a clean default theme.
+- **gridExtra** provides `grid.arrange()` for combining plots.
+
+Both are mature and well-documented, but for most use cases patchwork is the recommended approach because of its simpler syntax and tighter integration with ggplot2.
+
+## Creating a Custom Theme
+
+Once you have a preferred combination of theme settings, you can wrap them into a reusable function. This ensures a consistent look across all your plots without repeating code.
+
+### Extending an Existing Theme
+
+The simplest approach is to start with a built-in theme and add modifications.
+
+```{r}
+theme_custom <- function(base_size = 12) {
+  theme_minimal(base_size = base_size) %+replace%
+    theme(
+      # Title styling
+      plot.title = element_text(
+        face = "bold", size = rel(1.3), hjust = 0,
+        margin = margin(b = 10)
+      ),
+      plot.subtitle = element_text(
+        face = "italic", size = rel(1.0), color = "gray40",
+        margin = margin(b = 10)
+      ),
+      plot.caption = element_text(
+        size = rel(0.8), hjust = 1, color = "gray50",
+        margin = margin(t = 10)
+      ),
+
+      # Axis styling
+      axis.title = element_text(face = "bold", size = rel(1.0)),
+      axis.text = element_text(size = rel(0.9), color = "gray30"),
+
+      # Grid styling --- keep major, remove minor
+      panel.grid.major = element_line(color = "gray90", linewidth = 0.4),
+      panel.grid.minor = element_blank(),
+
+      # Legend styling
+      legend.position = "bottom",
+      legend.title = element_text(face = "bold", size = rel(0.9)),
+      legend.text = element_text(size = rel(0.85)),
+
+      # Strip styling for facets
+      strip.text = element_text(face = "bold", size = rel(1.0)),
+      strip.background = element_rect(fill = "gray95", color = NA),
+
+      # Plot margin
+      plot.margin = margin(15, 15, 15, 15)
+    )
+}
+```
+
+### Using the Custom Theme
+
+```{r}
+ggplot(mpg, aes(x = displ, y = hwy, color = class)) +
+  geom_point(size = 2) +
+  labs(
+    title = "Fuel Efficiency by Engine Size",
+    subtitle = "Using our custom theme function",
+    caption = "Source: mpg dataset",
+    x = "Engine Displacement (L)",
+    y = "Highway MPG",
+    color = "Vehicle Class"
+  ) +
+  theme_custom()
+```
+
+```{r}
+ggplot(iris, aes(x = Sepal.Length, y = Petal.Length, color = Species)) +
+  geom_point(size = 2) +
+  facet_wrap(~ Species) +
+  labs(
+    title = "Iris Measurements by Species",
+    subtitle = "Faceted scatter plot with custom theme",
+    x = "Sepal Length (cm)",
+    y = "Petal Length (cm)"
+  ) +
+  theme_custom() +
+  theme(legend.position = "none")
+```
+
+You can make the custom theme the global default with `theme_set(theme_custom())`, so that every plot in your document uses it automatically.
+
+### Adding Parameters for Flexibility
+
+A more advanced custom theme might accept parameters for common variations:
+
+```{r}
+theme_report <- function(base_size = 12, grid = TRUE, legend_pos = "bottom") {
+  t <- theme_minimal(base_size = base_size) %+replace%
+    theme(
+      plot.title = element_text(face = "bold", size = rel(1.3), hjust = 0),
+      plot.subtitle = element_text(color = "gray40", margin = margin(b = 8)),
+      axis.title = element_text(face = "bold"),
+      legend.position = legend_pos,
+      strip.text = element_text(face = "bold"),
+      strip.background = element_rect(fill = "gray90", color = NA)
+    )
+
+  if (!grid) {
+    t <- t + theme(
+      panel.grid.major = element_blank(),
+      panel.grid.minor = element_blank()
+    )
+  }
+
+  t
+}
+```
+
+```{r fig.width=10, fig.height=4}
+p_grid <- ggplot(mpg, aes(x = class, fill = class)) +
+  geom_bar(show.legend = FALSE) +
+  labs(title = "With Grid") +
+  theme_report(grid = TRUE)
+
+p_nogrid <- ggplot(mpg, aes(x = class, fill = class)) +
+  geom_bar(show.legend = FALSE) +
+  labs(title = "Without Grid") +
+  theme_report(grid = FALSE)
+
+p_grid | p_nogrid
+```
+
+## Summary
+
+This chapter covered the major tools for customizing ggplot2 visualizations:
+
+1. **Themes** --- Built-in and third-party themes provide complete visual overhauls. Use `theme_set()` to apply one globally.
+2. **theme() elements** --- Fine-tune individual components (titles, axes, gridlines, backgrounds, legends, facet strips) using `element_text()`, `element_line()`, `element_rect()`, and `element_blank()`.
+3. **Color scales** --- Use `scale_color_manual()` for hand-picked colors, `scale_color_brewer()` for ColorBrewer palettes, and `scale_color_viridis_c()` for perceptually uniform, colorblind-friendly gradients.
+4. **Axis scales** --- Control breaks, limits, and label formatting with `scale_x_continuous()`, `scale_y_continuous()`, and the `scales` package (`dollar`, `comma`, `percent`). Use `coord_cartesian()` to zoom without dropping data.
+5. **Legends** --- Move, restyle, or remove legends with `theme(legend.position = ...)` and `guides()`.
+6. **Annotations** --- Add text, shapes, and arrows with `annotate()`, label data points with `geom_text()` and `geom_label()`, and prevent overlaps with `ggrepel`.
+7. **Multi-panel figures** --- Combine plots with patchwork using `|`, `/`, `+`, `plot_layout()`, and `plot_annotation()`.
+8. **Custom themes** --- Wrap your preferred settings into a reusable theme function for consistent, professional output across an entire project.

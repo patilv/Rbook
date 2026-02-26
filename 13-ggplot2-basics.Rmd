@@ -1,0 +1,775 @@
+# Data Visualization with ggplot2 {#ggplot2basics}
+
+```{r include=FALSE}
+library(tidyverse)
+knitr::opts_chunk$set(echo = TRUE, warning = FALSE, message = FALSE)
+```
+
+> **Note:** This chapter provides the R foundations for ggplot2. For deeper coverage of visualization design principles, chart type selection, and visual perception, refer to the [Visual Analytics and Data Storytelling](http://patilv.com/VizAnalytics4Biz/) course.
+
+ggplot2 is the tidyverse's data visualization package. It is one of the most popular R packages ever created and has fundamentally changed how people think about building statistical graphics. In this chapter, we will learn the grammar that powers ggplot2 and build a wide range of visualizations from the ground up.
+
+## The Grammar of Graphics
+
+ggplot2 is based on *The Grammar of Graphics*, a landmark book by Leland Wilkinson published in 1999. Wilkinson's key insight was that statistical graphics, much like natural language, can be decomposed into a set of fundamental components governed by rules of composition. Rather than thinking of charts as fixed types --- "this is a bar chart," "that is a scatterplot" --- the grammar encourages you to think of every visualization as a combination of building blocks.
+
+Hadley Wickham, the creator of ggplot2, adapted Wilkinson's grammar into a **layered grammar of graphics** with seven key components:
+
+1. **Data**: The dataset being visualized.
+2. **Aesthetics** (`aes`): Mappings from variables in the data to visual properties (position, color, size, shape, etc.).
+3. **Geometric objects** (`geom`): The visual marks that represent data points (points, lines, bars, etc.).
+4. **Facets**: Subplots that split the data by one or more categorical variables.
+5. **Statistical transformations** (`stat`): Summaries or computations performed on the data before plotting (counts, means, smoothing lines, etc.).
+6. **Coordinate systems** (`coord`): The system that maps the position aesthetics to the 2D plane of the plot (Cartesian, polar, flipped, etc.).
+7. **Themes**: Non-data visual elements that control the overall appearance (fonts, background, gridlines, etc.).
+
+Every ggplot2 plot is built by specifying some or all of these layers. The beauty of this approach is its composability --- you can mix and match layers to create virtually any chart you can imagine.
+
+The template for building a ggplot can be expressed as:
+
+```
+ggplot(data = <DATA>, mapping = aes(<MAPPINGS>)) +
+  <GEOM_FUNCTION>(
+    stat = <STAT>,
+    position = <POSITION>
+  ) +
+  <COORDINATE_FUNCTION> +
+  <FACET_FUNCTION> +
+  <THEME>
+```
+
+You rarely need to specify every component explicitly. ggplot2 provides sensible defaults for most layers, so in practice you build plots incrementally, adding only the layers you need.
+
+
+## Your First ggplot
+
+Let us build our first visualization step by step using the `mpg` dataset, which comes bundled with ggplot2. This dataset contains fuel economy data for 38 popular car models from 1999 to 2008.
+
+```{r}
+glimpse(mpg)
+```
+
+### Step 1: Initialize the plot
+
+The `ggplot()` function creates a coordinate system that you can add layers to. By itself, it produces a blank canvas:
+
+```{r}
+ggplot(data = mpg)
+```
+
+### Step 2: Map variables to aesthetics
+
+Next, we tell ggplot2 which variables should be mapped to the x-axis and y-axis using the `aes()` function. This still does not draw anything visible because we have not specified *how* to represent the data:
+
+```{r}
+ggplot(data = mpg, mapping = aes(x = displ, y = hwy))
+```
+
+Notice that ggplot2 has now set up the axis scales based on the data, but there are no points or lines yet.
+
+### Step 3: Add a geometric layer
+
+Finally, we add a `geom` layer to specify *how* the data should be displayed. For a scatterplot, we use `geom_point()`:
+
+```{r}
+ggplot(data = mpg, mapping = aes(x = displ, y = hwy)) +
+  geom_point()
+```
+
+This plot reveals a clear negative relationship: as engine displacement (`displ`) increases, highway fuel economy (`hwy`) tends to decrease. Notice also the cluster of outliers in the upper right --- these turn out to be two-seater sports cars with efficient highway gearing.
+
+The `+` operator is essential in ggplot2. It adds layers to the plot. You always start with `ggplot()` and add components using `+`.
+
+> **Tip:** A common mistake is to put the `+` at the beginning of a new line instead of at the end of the previous line. The `+` must come at the end of the line that precedes the next layer.
+
+
+## Aesthetic Mappings
+
+Aesthetics are the visual properties of the objects in your plot. The `aes()` function maps variables in your data to these visual properties. Common aesthetics include:
+
+| Aesthetic  | Description                       |
+|------------|-----------------------------------|
+| `x`        | Position on the x-axis            |
+| `y`        | Position on the y-axis            |
+| `color`    | Color of points, lines, outlines  |
+| `fill`     | Fill color of areas               |
+| `size`     | Size of points or thickness of lines |
+| `shape`    | Shape of points                   |
+| `alpha`    | Transparency (0 = invisible, 1 = opaque) |
+| `linetype` | Type of line (solid, dashed, etc.) |
+| `group`    | Grouping variable for connecting observations |
+
+### Mapping vs. Setting
+
+There is a critical distinction between **mapping** an aesthetic (placing it inside `aes()`) and **setting** it (placing it outside `aes()`).
+
+**Mapping** connects a variable in the data to a visual property. ggplot2 automatically creates a scale and a legend:
+
+```{r}
+ggplot(data = mpg, aes(x = displ, y = hwy, color = class)) +
+  geom_point()
+```
+
+Here, each car class is assigned a distinct color, and a legend is generated automatically.
+
+**Setting** assigns a fixed visual property to all points. The value is not connected to any variable:
+
+```{r}
+ggplot(data = mpg, aes(x = displ, y = hwy)) +
+  geom_point(color = "steelblue", size = 3, alpha = 0.6)
+```
+
+All points are now steel blue, size 3, and 60% opaque, regardless of any variable in the data.
+
+### Examples of different aesthetics
+
+**Shape aesthetic:**
+
+```{r}
+ggplot(data = mpg, aes(x = displ, y = hwy, shape = drv)) +
+  geom_point(size = 2)
+```
+
+**Size aesthetic:**
+
+```{r}
+ggplot(data = mpg, aes(x = displ, y = hwy, size = cyl)) +
+  geom_point(alpha = 0.5)
+```
+
+**Alpha (transparency) aesthetic:**
+
+```{r}
+ggplot(data = mpg, aes(x = displ, y = hwy, alpha = cyl)) +
+  geom_point(size = 3, color = "darkblue")
+```
+
+**Multiple aesthetics combined:**
+
+```{r}
+ggplot(data = mpg, aes(x = displ, y = hwy, color = class, shape = drv)) +
+  geom_point(size = 2.5)
+```
+
+When you map a continuous variable to `color`, ggplot2 uses a gradient scale instead of discrete colors:
+
+```{r}
+ggplot(data = mpg, aes(x = displ, y = hwy, color = cty)) +
+  geom_point(size = 2)
+```
+
+
+## Geometric Objects (Geoms)
+
+Geoms are the visual building blocks of your plot. Each geom function creates a different type of visual representation. You can layer multiple geoms on the same plot.
+
+### One Variable: Continuous
+
+**Histogram** --- shows the distribution of a single continuous variable by dividing it into bins:
+
+```{r}
+ggplot(data = mpg, aes(x = hwy)) +
+  geom_histogram(binwidth = 2, fill = "steelblue", color = "white")
+```
+
+**Density plot** --- a smoothed version of the histogram:
+
+```{r}
+ggplot(data = mpg, aes(x = hwy)) +
+  geom_density(fill = "steelblue", alpha = 0.5)
+```
+
+**Frequency polygon** --- similar to a histogram but uses lines instead of bars, making it easier to compare distributions:
+
+```{r}
+ggplot(data = mpg, aes(x = hwy, color = drv)) +
+  geom_freqpoly(binwidth = 2, linewidth = 1)
+```
+
+**Dotplot** --- each observation is a dot, stacked along the axis:
+
+```{r}
+ggplot(data = mpg, aes(x = hwy)) +
+  geom_dotplot(binwidth = 1, fill = "steelblue")
+```
+
+### One Variable: Discrete
+
+**Bar chart** --- counts the number of observations in each category:
+
+```{r}
+ggplot(data = mpg, aes(x = class)) +
+  geom_bar(fill = "steelblue")
+```
+
+Note that `geom_bar()` computes the count automatically via `stat_count()`. You provide only the x variable.
+
+### Distribution by Group
+
+**Boxplot** --- displays the five-number summary (minimum, Q1, median, Q3, maximum) and outliers:
+
+```{r}
+ggplot(data = mpg, aes(x = class, y = hwy)) +
+  geom_boxplot(fill = "lightblue", color = "navy")
+```
+
+**Violin plot** --- similar to a boxplot but shows the full distribution shape:
+
+```{r}
+ggplot(data = mpg, aes(x = class, y = hwy)) +
+  geom_violin(fill = "lightblue", color = "navy", alpha = 0.7)
+```
+
+You can layer a boxplot on top of a violin plot for added detail:
+
+```{r}
+ggplot(data = mpg, aes(x = class, y = hwy)) +
+  geom_violin(fill = "lightblue", alpha = 0.5) +
+  geom_boxplot(width = 0.2, fill = "white")
+```
+
+### Two Variables: Continuous x and Continuous y
+
+**Scatterplot** with `geom_point()`:
+
+```{r}
+ggplot(data = mpg, aes(x = displ, y = hwy)) +
+  geom_point()
+```
+
+**Jittered scatterplot** --- adds small random noise to reveal overlapping points:
+
+```{r}
+ggplot(data = mpg, aes(x = displ, y = hwy)) +
+  geom_jitter(width = 0.2, height = 0.5, alpha = 0.6)
+```
+
+**Line plot** --- connects observations in order of the x variable. Especially useful for time series:
+
+```{r}
+ggplot(data = economics, aes(x = date, y = unemploy)) +
+  geom_line(color = "steelblue")
+```
+
+**Smooth line** --- fits a smoothed conditional mean:
+
+```{r}
+ggplot(data = mpg, aes(x = displ, y = hwy)) +
+  geom_point(alpha = 0.4) +
+  geom_smooth()
+```
+
+By default, `geom_smooth()` uses LOESS for small datasets and GAM for large ones. You can specify the method explicitly:
+
+```{r}
+ggplot(data = mpg, aes(x = displ, y = hwy)) +
+  geom_point(alpha = 0.4) +
+  geom_smooth(method = "lm", se = TRUE, color = "red")
+```
+
+### Two Variables: Discrete x and Continuous y
+
+**Column chart** with `geom_col()` --- unlike `geom_bar()`, this requires both x and y aesthetics. Use it when you have pre-computed summary values:
+
+```{r}
+mpg_avg <- mpg %>%
+  group_by(class) %>%
+  summarize(avg_hwy = mean(hwy))
+
+ggplot(data = mpg_avg, aes(x = class, y = avg_hwy)) +
+  geom_col(fill = "steelblue")
+```
+
+### Annotations
+
+**Text labels** --- add text at each data point:
+
+```{r}
+ggplot(data = mpg_avg, aes(x = class, y = avg_hwy)) +
+  geom_col(fill = "steelblue") +
+  geom_text(aes(label = round(avg_hwy, 1)), vjust = -0.5, size = 3.5)
+```
+
+**Labels** --- similar to text but with a background rectangle for readability:
+
+```{r}
+best_cars <- mpg %>%
+  filter(hwy > 40)
+
+ggplot(data = mpg, aes(x = displ, y = hwy)) +
+  geom_point(alpha = 0.4) +
+  geom_label(data = best_cars, aes(label = model), size = 3, nudge_y = 1)
+```
+
+**Reference lines** --- horizontal, vertical, and diagonal lines:
+
+```{r}
+ggplot(data = mpg, aes(x = displ, y = hwy)) +
+  geom_point(alpha = 0.5) +
+  geom_hline(yintercept = mean(mpg$hwy), linetype = "dashed", color = "red") +
+  geom_vline(xintercept = mean(mpg$displ), linetype = "dashed", color = "blue")
+```
+
+The `geom_abline()` function draws lines defined by a slope and intercept:
+
+```{r}
+ggplot(data = mpg, aes(x = displ, y = hwy)) +
+  geom_point(alpha = 0.5) +
+  geom_abline(intercept = 35, slope = -3.5, color = "red", linetype = "dashed")
+```
+
+### Layering Multiple Geoms
+
+One of the most powerful aspects of ggplot2 is the ability to layer multiple geoms. When you specify aesthetics in the `ggplot()` call, they are inherited by all subsequent geoms. You can also set aesthetics locally within individual geoms:
+
+```{r}
+ggplot(data = mpg, aes(x = displ, y = hwy)) +
+  geom_point(aes(color = class)) +
+  geom_smooth(color = "black", se = FALSE) +
+  geom_hline(yintercept = mean(mpg$hwy), linetype = "dotted", color = "gray50")
+```
+
+
+## Faceting
+
+Faceting splits your data into subsets and creates a panel (subplot) for each subset. This is one of the most effective ways to display how patterns change across categories.
+
+### facet_wrap()
+
+`facet_wrap()` wraps a one-dimensional sequence of panels into a 2D layout. It takes a formula with a single variable:
+
+```{r}
+ggplot(data = mpg, aes(x = displ, y = hwy)) +
+  geom_point() +
+  facet_wrap(~ class)
+```
+
+You can control the layout with `ncol` or `nrow`:
+
+```{r}
+ggplot(data = mpg, aes(x = displ, y = hwy)) +
+  geom_point() +
+  facet_wrap(~ class, ncol = 4)
+```
+
+### facet_grid()
+
+`facet_grid()` creates a matrix of panels defined by row and column variables:
+
+```{r}
+ggplot(data = mpg, aes(x = displ, y = hwy)) +
+  geom_point() +
+  facet_grid(drv ~ cyl)
+```
+
+If you want to facet by only rows or only columns, use a `.` on the other side of the formula:
+
+```{r}
+ggplot(data = mpg, aes(x = displ, y = hwy)) +
+  geom_point() +
+  facet_grid(drv ~ .)
+```
+
+### Free scales
+
+By default, all panels share the same x and y axis scales. You can allow scales to vary across panels using the `scales` argument:
+
+```{r}
+ggplot(data = mpg, aes(x = hwy)) +
+  geom_histogram(binwidth = 2, fill = "steelblue", color = "white") +
+  facet_wrap(~ class, scales = "free_y")
+```
+
+Options include `"free"` (both axes free), `"free_x"` (only x-axis free), and `"free_y"` (only y-axis free).
+
+### Faceting with iris
+
+```{r}
+ggplot(data = iris, aes(x = Sepal.Length, y = Sepal.Width)) +
+  geom_point(aes(color = Species)) +
+  geom_smooth(method = "lm", se = FALSE) +
+  facet_wrap(~ Species, scales = "free")
+```
+
+The relationship between sepal length and sepal width differs across species. Without faceting, these patterns would be tangled together.
+
+
+## Statistical Transformations
+
+Every geom has a default statistical transformation, and every stat has a default geom. Most of the time you do not need to think about stats because the defaults do what you want. However, understanding stats gives you more control.
+
+For example, `geom_bar()` uses `stat_count()` by default, which counts the number of observations in each group:
+
+```{r}
+ggplot(data = diamonds, aes(x = cut)) +
+  geom_bar()
+```
+
+This is equivalent to:
+
+```{r}
+ggplot(data = diamonds, aes(x = cut)) +
+  stat_count()
+```
+
+If you already have a table of counts, you can override the default stat and use `stat = "identity"`:
+
+```{r}
+diamond_counts <- diamonds %>% count(cut)
+
+ggplot(data = diamond_counts, aes(x = cut, y = n)) +
+  geom_bar(stat = "identity", fill = "steelblue")
+```
+
+### stat_summary()
+
+`stat_summary()` allows you to compute and display summary statistics directly in the plot:
+
+```{r}
+ggplot(data = diamonds, aes(x = cut, y = price)) +
+  stat_summary(
+    fun = median,
+    fun.min = function(x) quantile(x, 0.25),
+    fun.max = function(x) quantile(x, 0.75),
+    geom = "pointrange",
+    color = "steelblue"
+  )
+```
+
+### stat_smooth()
+
+`stat_smooth()` computes a smoothed conditional mean. It is the stat behind `geom_smooth()`:
+
+```{r}
+ggplot(data = mpg, aes(x = displ, y = hwy)) +
+  geom_point(alpha = 0.3) +
+  stat_smooth(method = "loess", color = "red")
+```
+
+
+## Position Adjustments
+
+Position adjustments determine how overlapping objects are arranged. They are most commonly used with bar charts, but apply to other geoms as well.
+
+### Stacked bars (default)
+
+The default position for `geom_bar()` is `"stack"`, which places bars on top of each other:
+
+```{r}
+ggplot(data = diamonds, aes(x = cut, fill = clarity)) +
+  geom_bar(position = "stack")
+```
+
+### Dodged bars
+
+`position = "dodge"` places bars side by side:
+
+```{r}
+ggplot(data = diamonds, aes(x = cut, fill = clarity)) +
+  geom_bar(position = "dodge")
+```
+
+### Filled bars
+
+`position = "fill"` stacks bars and standardizes each bar to the same height, showing proportions:
+
+```{r}
+ggplot(data = diamonds, aes(x = cut, fill = clarity)) +
+  geom_bar(position = "fill") +
+  ylab("Proportion")
+```
+
+### Identity
+
+`position = "identity"` places objects exactly where they fall. This is most useful for point geoms but can lead to overlapping bars:
+
+```{r}
+ggplot(data = diamonds, aes(x = cut, fill = clarity)) +
+  geom_bar(position = "identity", alpha = 0.3)
+```
+
+### Jitter
+
+`position = "jitter"` adds small random displacement. This is especially useful for scatterplots with overplotting:
+
+```{r}
+ggplot(data = mpg, aes(x = drv, y = hwy)) +
+  geom_point(position = "jitter")
+```
+
+Here is a comparison to illustrate the difference. Without jitter, many points overlap and the true density is hidden:
+
+```{r}
+p1 <- ggplot(data = mpg, aes(x = drv, y = hwy)) +
+  geom_point() +
+  ggtitle("Without jitter")
+
+p2 <- ggplot(data = mpg, aes(x = drv, y = hwy)) +
+  geom_point(position = position_jitter(width = 0.2)) +
+  ggtitle("With jitter")
+
+library(patchwork)
+p1 + p2
+```
+
+
+## Coordinate Systems
+
+Coordinate systems map the position aesthetics (x and y) onto the plane of the plot. The default is `coord_cartesian()`, which is the standard Cartesian coordinate system.
+
+### coord_flip()
+
+`coord_flip()` swaps the x and y axes. This is useful for making horizontal bar charts or when category labels are long:
+
+```{r}
+ggplot(data = mpg, aes(x = class)) +
+  geom_bar(fill = "steelblue") +
+  coord_flip()
+```
+
+### coord_polar()
+
+`coord_polar()` maps x and y positions to angle and radius in a polar coordinate system. A common use is creating pie or donut charts (though they are often discouraged from a perception standpoint):
+
+```{r}
+ggplot(data = diamonds, aes(x = "", fill = cut)) +
+  geom_bar(width = 1) +
+  coord_polar(theta = "y") +
+  theme_void()
+```
+
+### coord_fixed()
+
+`coord_fixed()` ensures that one unit on the x-axis equals one unit on the y-axis:
+
+```{r}
+ggplot(data = mpg, aes(x = cty, y = hwy)) +
+  geom_point() +
+  geom_abline(color = "red") +
+  coord_fixed()
+```
+
+This is useful when the relationship between x and y should be interpreted on equal scales (such as comparing city vs. highway MPG).
+
+### coord_cartesian() for zooming
+
+You can zoom into a plot without dropping data using `coord_cartesian()`. This is different from setting axis limits with `xlim()`/`ylim()`, which removes data outside the range:
+
+```{r}
+ggplot(data = mpg, aes(x = displ, y = hwy)) +
+  geom_point() +
+  geom_smooth() +
+  coord_cartesian(xlim = c(3, 6), ylim = c(15, 35))
+```
+
+
+## Labels and Annotations
+
+Clear, informative labels are crucial for making your plots understandable. ggplot2 provides several functions for adding and customizing labels.
+
+### labs()
+
+The `labs()` function is the most flexible way to add labels. It can set the title, subtitle, caption, and axis labels all at once:
+
+```{r}
+ggplot(data = mpg, aes(x = displ, y = hwy, color = class)) +
+  geom_point() +
+  labs(
+    title = "Fuel Efficiency vs. Engine Displacement",
+    subtitle = "Data from EPA for 38 popular car models (1999-2008)",
+    caption = "Source: mpg dataset in ggplot2",
+    x = "Engine Displacement (liters)",
+    y = "Highway Fuel Economy (mpg)",
+    color = "Vehicle Class"
+  )
+```
+
+### Individual label functions
+
+You can also use individual functions for specific labels:
+
+```{r}
+ggplot(data = mpg, aes(x = displ, y = hwy)) +
+  geom_point(color = "steelblue") +
+  ggtitle("Fuel Efficiency vs. Engine Displacement") +
+  xlab("Engine Displacement (liters)") +
+  ylab("Highway Fuel Economy (mpg)")
+```
+
+### annotate()
+
+The `annotate()` function adds text, rectangles, segments, or other annotations at specific positions on the plot. Unlike `geom_text()`, it does not map to data --- it places elements at fixed coordinates:
+
+```{r}
+ggplot(data = mpg, aes(x = displ, y = hwy)) +
+  geom_point(alpha = 0.5) +
+  annotate(
+    "text",
+    x = 6, y = 40,
+    label = "High efficiency\nlarge engines",
+    color = "red", fontface = "italic", size = 4
+  ) +
+  annotate(
+    "rect",
+    xmin = 5, xmax = 7, ymin = 35, ymax = 45,
+    alpha = 0.1, fill = "red", color = "red", linetype = "dashed"
+  )
+```
+
+You can annotate with segments and arrows as well:
+
+```{r}
+ggplot(data = mpg, aes(x = displ, y = hwy)) +
+  geom_point(alpha = 0.5) +
+  annotate(
+    "segment",
+    x = 5.5, xend = 5, y = 42, yend = 44,
+    arrow = arrow(length = unit(0.2, "cm")),
+    color = "red"
+  ) +
+  annotate(
+    "text",
+    x = 5.5, y = 41,
+    label = "Corvette",
+    color = "red", size = 3.5
+  )
+```
+
+
+## Saving Plots
+
+The `ggsave()` function saves the most recently created plot to a file. It automatically detects the format from the file extension.
+
+```{r eval=FALSE}
+# Save the last plot as a PNG
+ggsave("my_plot.png")
+
+# Specify dimensions and resolution
+ggsave("my_plot.png", width = 8, height = 6, dpi = 300)
+
+# Save as PDF (vector format, ideal for publications)
+ggsave("my_plot.pdf", width = 8, height = 6)
+
+# Save as SVG (vector format, ideal for web)
+ggsave("my_plot.svg", width = 8, height = 6)
+
+# Save a specific plot object
+my_plot <- ggplot(mpg, aes(displ, hwy)) + geom_point()
+ggsave("specific_plot.png", plot = my_plot, width = 10, height = 7, dpi = 150)
+```
+
+Key arguments for `ggsave()`:
+
+| Argument  | Description                                          |
+|-----------|------------------------------------------------------|
+| `filename`| Name of the file to create (path and extension)      |
+| `plot`    | The plot object to save (defaults to the last plot)   |
+| `width`   | Width in inches (or `units` if specified)             |
+| `height`  | Height in inches (or `units` if specified)            |
+| `dpi`     | Resolution in dots per inch (default is 300)          |
+| `device`  | Device to use (auto-detected from extension)          |
+| `units`   | Units for width/height: `"in"`, `"cm"`, or `"mm"`    |
+
+
+## Putting It All Together
+
+Let us build a polished, publication-ready visualization from scratch, applying the concepts from this chapter. We will use the `diamonds` dataset to explore the relationship between carat weight and price across different diamond cuts.
+
+### Step 1: Start with the basic scatterplot
+
+```{r}
+ggplot(data = diamonds, aes(x = carat, y = price)) +
+  geom_point()
+```
+
+There are over 50,000 observations, so overplotting is severe. Let us improve this.
+
+### Step 2: Address overplotting with transparency and size
+
+```{r}
+ggplot(data = diamonds, aes(x = carat, y = price)) +
+  geom_point(alpha = 0.05, size = 0.5)
+```
+
+### Step 3: Map color to cut quality
+
+```{r}
+ggplot(data = diamonds, aes(x = carat, y = price, color = cut)) +
+  geom_point(alpha = 0.1, size = 0.5)
+```
+
+### Step 4: Add smoothing lines for each cut
+
+```{r}
+ggplot(data = diamonds, aes(x = carat, y = price, color = cut)) +
+  geom_point(alpha = 0.05, size = 0.3) +
+  geom_smooth(se = FALSE, linewidth = 1)
+```
+
+### Step 5: Facet by cut for clarity
+
+```{r}
+ggplot(data = diamonds, aes(x = carat, y = price)) +
+  geom_point(alpha = 0.05, size = 0.3, color = "steelblue") +
+  geom_smooth(color = "red", se = FALSE) +
+  facet_wrap(~ cut)
+```
+
+### Step 6: Add labels and refine the theme
+
+```{r}
+ggplot(data = diamonds, aes(x = carat, y = price)) +
+  geom_point(alpha = 0.05, size = 0.3, color = "steelblue") +
+  geom_smooth(color = "red", se = FALSE) +
+  facet_wrap(~ cut) +
+  scale_y_continuous(labels = scales::dollar_format()) +
+  labs(
+    title = "Diamond Price by Carat Weight and Cut Quality",
+    subtitle = "Each panel shows one of five cut grades; red line is a LOESS smooth",
+    caption = "Source: diamonds dataset in ggplot2",
+    x = "Carat Weight",
+    y = "Price (USD)"
+  ) +
+  theme_minimal(base_size = 12) +
+  theme(
+    plot.title = element_text(face = "bold"),
+    strip.text = element_text(face = "bold"),
+    panel.grid.minor = element_blank()
+  )
+```
+
+This final plot demonstrates the full grammar of graphics at work:
+
+- **Data**: the `diamonds` dataset
+- **Aesthetics**: carat mapped to x, price mapped to y
+- **Geoms**: points and smooth lines layered together
+- **Facets**: one panel per cut quality
+- **Stats**: LOESS smoothing computed by `geom_smooth()`
+- **Coordinates**: default Cartesian (appropriate here)
+- **Theme**: `theme_minimal()` with customizations for a clean, publication-ready look
+
+This layered approach is the hallmark of ggplot2. By building incrementally, you can experiment at each step and diagnose issues easily.
+
+### Another complete example: time series with economics
+
+```{r}
+ggplot(data = economics, aes(x = date, y = unemploy / 1000)) +
+  geom_line(color = "steelblue", linewidth = 0.8) +
+  geom_smooth(method = "loess", span = 0.1, se = FALSE, color = "red", linewidth = 0.5) +
+  scale_x_date(date_labels = "%Y", date_breaks = "5 years") +
+  labs(
+    title = "U.S. Unemployment Over Time",
+    subtitle = "Monthly number of unemployed persons (in thousands), 1967-2015",
+    caption = "Source: economics dataset in ggplot2",
+    x = NULL,
+    y = "Unemployed (thousands)"
+  ) +
+  theme_minimal(base_size = 12) +
+  theme(
+    plot.title = element_text(face = "bold"),
+    axis.text.x = element_text(angle = 45, hjust = 1),
+    panel.grid.minor = element_blank()
+  )
+```
+
+In the next chapter, we will go deeper into customizing ggplot2 visualizations with scales, themes, color palettes, and more advanced techniques.

@@ -1,50 +1,86 @@
 # Modifying Data {#modifydata}
 
+This chapter covers how to modify data using base R approaches. For the tidyverse (dplyr) approach to these same operations, see Chapter \@ref(dplyr).
+
 ## Creating new variables
+
+### Base R approach
 
 We can create new variables that result from manipulations of existing variables. For example, if we wanted to create a variable in the `iris` dataset that was a sum of the variables `Sepal.Length` and `Sepal.Width` and we wanted to call it `Sepal.dimensions`, we could code it as follows.
 
 ```{r eval=FALSE}
-iris$Sepal.dimensions=iris$Sepal.Length + iris$Sepal.Width
+iris$Sepal.dimensions <- iris$Sepal.Length + iris$Sepal.Width
 ```
 
-There might be instances where we might decide to not create new variables and modify existing variable values. In such a case, we would use the same variable name on the left hand side of the equation shown above. Thus, the line of code would now become 
+There might be instances where we might decide to not create new variables and modify existing variable values. In such a case, we would use the same variable name on the left hand side of the equation shown above. Thus, the line of code would now become
 
 ```{r eval=FALSE}
-iris$Sepal.Length= iris$Sepal.Length + iris$Sepal.Width
-
+iris$Sepal.Length <- iris$Sepal.Length + iris$Sepal.Width
 ```
+
+### Tidyverse approach (dplyr)
+
+The `mutate()` function from **dplyr** provides a cleaner way to create new variables:
+
+```{r eval=FALSE}
+library(dplyr)
+iris <- iris %>%
+  mutate(Sepal.dimensions = Sepal.Length + Sepal.Width)
+```
+
+Note how `mutate()` does not require you to repeat the data frame name for each variable --- just use column names directly.
 
 
 
 ## Subsetting data and dropping factor levels
 
+### Base R approach
+
 This creates a subset of `iris` such that `Sepal.Length` is greater than or equal to 5.8.
 
 
 ```{r include=FALSE}
+library(dplyr)
 opts_chunk$set(echo=TRUE, warning=FALSE, message=FALSE)
 ```
 
 
 ```{r}
-irisSubset1=iris[iris$Sepal.Length>=5.8,]
+irisSubset1 <- iris[iris$Sepal.Length >= 5.8,]
 summary(irisSubset1$Sepal.Length)
 ```
 
 Multiple conditions can also be introduced for subsetting.
 
 ```{r}
-irisSubset2=iris[iris$Sepal.Length>=5.8 & iris$Sepal.Width<3,]
+irisSubset2 <- iris[iris$Sepal.Length >= 5.8 & iris$Sepal.Width < 3,]
 summary(irisSubset2)
 ```
 
-Subsetting based on a factor variable could be done using a different approach. The following line of code creates a subset of the `iris` dataset that has only two types of Species - setosa and versicolor.
+Subsetting based on a factor variable could be done using a different approach. The following line of code creates a subset of the `iris` dataset that has only two types of Species --- setosa and versicolor.
 
 ```{r}
-irisSubset3=subset(iris,Species %in% c("setosa","versicolor"))
+irisSubset3 <- subset(iris, Species %in% c("setosa", "versicolor"))
 # This can also be accomplished by the following statement
-# irisSubset3=iris[iris$Species!="virginica",]
+# irisSubset3 <- iris[iris$Species != "virginica",]
+```
+
+### Tidyverse approach (dplyr)
+
+The `filter()` function from **dplyr** provides a more readable way to subset data:
+
+```{r}
+irisSubset1_tidy <- iris %>% filter(Sepal.Length >= 5.8)
+summary(irisSubset1_tidy$Sepal.Length)
+```
+
+```{r}
+irisSubset2_tidy <- iris %>% filter(Sepal.Length >= 5.8, Sepal.Width < 3)
+summary(irisSubset2_tidy)
+```
+
+```{r}
+irisSubset3_tidy <- iris %>% filter(Species %in% c("setosa", "versicolor"))
 ```
 
 Let's verify that we indeed have only two levels of the `Species` variable.
@@ -69,17 +105,18 @@ summary(irisSubset3$Species)
 
 ## Reordering factor levels
 
-There may be instances where we may want the order the factor levels of a variable in a difference sequence than the default one. This can be accomplished using the following procedure.
+### Base R approach
+
+There may be instances where we may want the order of the factor levels of a variable in a different sequence than the default one. This can be accomplished using the following procedure.
 
 ```{r}
 levels(iris$Species)
 ```
 
-The default sequence is `setosa`, `versicolor`, and `virginica`. Let's reverse the sequence. 
+The default sequence is `setosa`, `versicolor`, and `virginica`. Let's reverse the sequence.
 
 ```{r}
-iris$Species = factor(iris$Species,levels(iris$Species)[c(3,2,1)])
- 
+iris$Species <- factor(iris$Species, levels(iris$Species)[c(3, 2, 1)])
 ```
 
 By specifying the sequence, the earlier third level now becomes the first, the second level remains unchanged, and the new third level is the earlier first level. Let's verify if this indeed occurred.
@@ -88,9 +125,28 @@ By specifying the sequence, the earlier third level now becomes the first, the s
 levels(iris$Species)
 ```
 
+### Tidyverse approach (forcats)
+
+The **forcats** package (Chapter \@ref(forcats)) provides intuitive functions for reordering factor levels:
+
+```{r}
+library(forcats)
+# Reverse the levels
+iris$Species <- fct_rev(iris$Species)
+levels(iris$Species)
+```
+
+```{r}
+# Set specific order
+iris$Species <- fct_relevel(iris$Species, "setosa", "versicolor", "virginica")
+levels(iris$Species)
+```
+
 ## Reordering dataset entries
 
-If there was a need to rearrange entries of a dataframe based on either an ascending or a descending order of values of one or more columns, the `order` function comes in handy.
+### Base R approach
+
+If there was a need to rearrange entries of a data frame based on either an ascending or a descending order of values of one or more columns, the `order` function comes in handy.
 
 For example, the `Sepal.Length` of the first row of the `iris` dataset can be obtained using the following command.
 
@@ -107,45 +163,68 @@ range(iris$Sepal.Length)
 If we now wanted to rearrange the rows of the iris dataset in an ascending order of `Sepal.Length`, we can do it in the following manner.
 
 ```{r}
-ascendingiris=iris[order(iris$Sepal.Length),]
+ascendingiris <- iris[order(iris$Sepal.Length),]
 head(ascendingiris$Sepal.Length)
 ```
 
 For a descending order, we do the following.
 
 ```{r}
-descendingiris=iris[order(-iris$Sepal.Length),]
+descendingiris <- iris[order(-iris$Sepal.Length),]
 head(descendingiris$Sepal.Length)
+```
+
+### Tidyverse approach (dplyr)
+
+The `arrange()` function provides a more readable alternative:
+
+```{r}
+ascendingiris_tidy <- iris %>% arrange(Sepal.Length)
+head(ascendingiris_tidy$Sepal.Length)
+```
+
+```{r}
+descendingiris_tidy <- iris %>% arrange(desc(Sepal.Length))
+head(descendingiris_tidy$Sepal.Length)
 ```
 
 
 ## Changing column names
 
-Current names of columns in dataset
+### Base R approach
+
+Current names of columns in dataset:
 
 ```{r}
-
 names(irisSubset3)
 ```
 
-Rename the `Species` column
+Rename the `Species` column:
 
 ```{r}
-names(irisSubset3)[5]="SpeciesWithoutvirginica"
+names(irisSubset3)[5] <- "SpeciesWithoutvirginica"
 names(irisSubset3)
 ```
 
 
 ```{r eval=FALSE}
-names(dataname)=c("newcol1","newcol2","newcol3") # for a 3 column dataset
-names(dataname)[3]="latestcol3name" # changing name for only the third column
+names(dataname) <- c("newcol1", "newcol2", "newcol3") # for a 3 column dataset
+names(dataname)[3] <- "latestcol3name" # changing name for only the third column
 ```
 
-Alternately, the `rename` function from the `dplyr` package can be used.
+### Tidyverse approach (dplyr)
+
+The `rename()` function from **dplyr** uses a `new_name = old_name` syntax:
 
 ```{r eval=FALSE}
-library(dplyr)
-dataname=dataname %>% rename(newnamecol1=oldnamecol1,newnamecol2=oldnamecol2)
+dataname <- dataname %>% rename(newnamecol1 = oldnamecol1, newnamecol2 = oldnamecol2)
+```
+
+Use `rename_with()` to apply a function to column names:
+
+```{r eval=FALSE}
+# Make all column names lowercase
+dataname <- dataname %>% rename_with(tolower)
 ```
 
 

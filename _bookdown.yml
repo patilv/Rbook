@@ -1,5 +1,27 @@
 book_filename: "Rbook"
 output_dir: "docs"
+rmd_files: [
+  "index.Rmd",
+  "01-introR.Rmd",
+  "02-R-GettingStarted.Rmd",
+  "08-rmarkdown.Rmd",
+  "09-tidyverse.Rmd",
+  "10-data-import.Rmd",
+  "11-dplyr.Rmd",
+  "12-tidyr.Rmd",
+  "13-ggplot2-basics.Rmd",
+  "14-ggplot2-customize.Rmd",
+  "15-stringr.Rmd",
+  "16-forcats.Rmd",
+  "17-lubridate.Rmd",
+  "18-purrr.Rmd",
+  "03-descvaranddatasets.Rmd",
+  "04-modification.Rmd",
+  "05-summary.Rmd",
+  "06-singlevar.Rmd",
+  "07-multivar.Rmd",
+  "19-rmarkdown-advanced.Rmd"
+]
 language:
   fig: "FIGURE "
   tab: "TABLE "

@@ -1,8 +1,15 @@
 # Summary Statistics {#summarystats}
 
+```{r include=FALSE}
+library(tidyverse)
+opts_chunk$set(echo=TRUE, warning=FALSE, message=FALSE)
+```
+
+This chapter covers computing summary statistics using base R functions. For computing grouped summaries using **dplyr**, see Chapter \@ref(dplyr).
+
 ## Measures of Central Tendency
 
-Mean, Median and Mode are commonly used. Don't forget that not all can be used for all types of variables. For nominal variables (e.g., Gender), only mode is appropriate. For ordered categorical variables (ordinal variables), mode and median can be used. All three can be used for numeric variables. 
+Mean, Median and Mode are commonly used. Don't forget that not all can be used for all types of variables. For nominal variables (e.g., Gender), only mode is appropriate. For ordered categorical variables (ordinal variables), mode and median can be used. All three can be used for numeric variables.
 
 ```{r}
 mean(iris$Sepal.Length)
@@ -144,3 +151,40 @@ sd(iris$Sepal.Length)
 ```
 
 Note that the standard deviation is the square root of variance.
+
+## Tidyverse approach: Grouped summaries with dplyr
+
+One of the most powerful features of **dplyr** is the ability to compute summary statistics by group. The `group_by()` and `summarize()` pattern makes it easy to compare statistics across categories.
+
+### Summary by group
+
+```{r}
+iris %>%
+  group_by(Species) %>%
+  summarize(
+    n = n(),
+    mean_sl = mean(Sepal.Length),
+    sd_sl = sd(Sepal.Length),
+    median_sl = median(Sepal.Length),
+    min_sl = min(Sepal.Length),
+    max_sl = max(Sepal.Length)
+  )
+```
+
+### Multiple variables at once with `across()`
+
+```{r}
+iris %>%
+  group_by(Species) %>%
+  summarize(across(where(is.numeric), list(mean = mean, sd = sd), .names = "{.col}_{.fn}"))
+```
+
+### Quick counts
+
+The `count()` function provides a quick way to tally observations:
+
+```{r}
+iris %>% count(Species)
+```
+
+For a detailed treatment of `summarize()`, `group_by()`, and `across()`, see Chapter \@ref(dplyr).

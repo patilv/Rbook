@@ -1,0 +1,1096 @@
+# Data Wrangling with dplyr {#dplyr}
+
+```{r include=FALSE}
+library(tidyverse)
+library(knitr)
+opts_chunk$set(echo = TRUE, warning = FALSE, message = FALSE)
+```
+
+Data wrangling --- the process of cleaning, transforming, and reshaping data --- is where analysts spend the majority of their time. Getting data into the right shape for analysis or visualization is often the most labor-intensive step of any project. The **dplyr** package, a core member of the tidyverse, provides an elegant and efficient grammar for tackling these tasks. This chapter covers dplyr in depth, walking through every major function with extensive examples.
+
+## Introduction to dplyr
+
+The dplyr package was created by Hadley Wickham and is now maintained by the tidyverse team. It provides a consistent set of "verbs" --- functions that correspond to the most common data manipulation tasks. Rather than learning dozens of unrelated base R functions with inconsistent argument orders and return types, dplyr gives you a small vocabulary of well-designed functions that combine to accomplish virtually any transformation.
+
+The key advantages of dplyr over base R include:
+
+- **Readability**: Code written with dplyr reads almost like English. A chain of operations like "take the data, filter the rows, select some columns, then summarize" translates directly into dplyr code.
+- **Consistency**: Every dplyr function takes a data frame as its first argument and returns a data frame. This consistency makes functions easy to learn and easy to chain together with the pipe operator.
+- **Speed**: dplyr is implemented with performance in mind. For large datasets, operations are substantially faster than their base R equivalents.
+- **Database support**: The same dplyr code can operate on data frames in memory, database tables, or even Apache Spark clusters with minimal modification.
+
+The dplyr package is loaded as part of the tidyverse, so running `library(tidyverse)` gives you access to all dplyr functions.
+
+
+## The Core Verbs
+
+The dplyr package is organized around six core verbs. Nearly every data manipulation task can be expressed as some combination of these operations:
+
+| Verb | Purpose |
+|:-------------|:----------------------------------------------|
+| `filter()` | Select rows based on conditions |
+| `select()` | Select columns by name or position |
+| `mutate()` | Create new columns or modify existing ones |
+| `summarize()` | Collapse many rows into summary statistics |
+| `arrange()` | Reorder rows |
+| `group_by()` | Define groups for grouped operations |
+
+Each of these verbs follows a common pattern:
+
+1. The first argument is a data frame.
+2. Subsequent arguments describe what to do, using unquoted column names.
+3. The result is a new data frame.
+
+Because the first argument is always a data frame and the result is always a data frame, these verbs chain together naturally using the pipe operator (`|>` or `%>%`). We will explore each verb in detail.
+
+
+## filter() - Selecting Rows {#filter}
+
+The `filter()` function selects rows that satisfy one or more conditions. It is the dplyr equivalent of subsetting rows in base R with `[`, but with cleaner syntax.
+
+### Comparison Operators
+
+The most basic filters use comparison operators to test column values.
+
+```{r}
+# Rows where Sepal.Length is greater than 7
+filter(iris, Sepal.Length > 7)
+```
+
+```{r}
+# Rows where Species is exactly "setosa"
+filter(iris, Species == "setosa")
+```
+
+```{r}
+# Cars with exactly 6 cylinders
+filter(mtcars, cyl == 6)
+```
+
+```{r}
+# Cars with mpg not equal to 21
+filter(mtcars, mpg != 21)
+```
+
+The full set of comparison operators available in R is: `==` (equal), `!=` (not equal), `>` (greater than), `<` (less than), `>=` (greater than or equal), and `<=` (less than or equal).
+
+### Logical Operators
+
+Multiple conditions can be combined using logical operators. The `&` operator means "and" (both conditions must be true), `|` means "or" (at least one condition must be true), and `!` negates a condition.
+
+```{r}
+# Setosa flowers with Sepal.Length greater than 5
+filter(iris, Species == "setosa" & Sepal.Length > 5)
+```
+
+When you supply multiple arguments to `filter()`, they are combined with `&` automatically. The following is equivalent to the code above:
+
+```{r}
+filter(iris, Species == "setosa", Sepal.Length > 5)
+```
+
+```{r}
+# Cars with 4 cylinders OR more than 30 mpg
+filter(mtcars, cyl == 4 | mpg > 30)
+```
+
+```{r}
+# Flowers that are NOT setosa
+filter(iris, !(Species == "setosa"))
+```
+
+### The %in% Operator
+
+When you want to filter for rows where a column matches any value in a set, use `%in%`.
+
+```{r}
+# Setosa or virginica flowers
+filter(iris, Species %in% c("setosa", "virginica"))
+```
+
+```{r}
+# Cars with 4 or 8 cylinders
+filter(mtcars, cyl %in% c(4, 8))
+```
+
+### between() and near()
+
+The `between()` helper tests whether values fall within a range (inclusive on both ends). The `near()` function is useful for comparing floating-point numbers, which can have rounding issues with `==`.
+
+```{r}
+# Sepal.Length between 5.0 and 6.0 (inclusive)
+filter(iris, between(Sepal.Length, 5.0, 6.0))
+```
+
+```{r}
+# near() handles floating point comparison safely
+# This may miss values due to floating point precision:
+# filter(iris, Sepal.Length == 5.1)
+# near() is safer:
+filter(iris, near(Sepal.Length, 5.1))
+```
+
+### Filtering Missing Values
+
+Missing values (`NA`) require special handling. You cannot test for `NA` with `==`; instead, use `is.na()`.
+
+```{r}
+# Create a small data frame with missing values
+df_with_na <- tibble(
+  x = c(1, 2, NA, 4, 5),
+  y = c("a", NA, "c", "d", NA)
+)
+
+# Filter to rows where x is not missing
+filter(df_with_na, !is.na(x))
+```
+
+```{r}
+# Filter to rows where neither x nor y is missing
+filter(df_with_na, !is.na(x), !is.na(y))
+```
+
+### Complex Filter Examples
+
+Real-world filtering often involves combining several conditions.
+
+```{r}
+# High-performance cars: more than 200 horsepower and under 15 seconds quarter mile
+filter(mtcars, hp > 200, qsec < 15)
+```
+
+```{r}
+# Efficient cars: 4 cylinders with above-average mpg
+filter(mtcars, cyl == 4, mpg > mean(mpg))
+```
+
+```{r}
+# Large setosa or small virginica flowers
+filter(iris,
+       (Species == "setosa" & Sepal.Length > 5.5) |
+       (Species == "virginica" & Sepal.Length < 6.0))
+```
+
+
+## select() - Selecting Columns {#select}
+
+The `select()` function picks columns from a data frame. It is especially useful when working with wide datasets that have many columns, only a few of which are relevant for the current task.
+
+### Selecting by Name
+
+```{r}
+# Select specific columns by name
+select(iris, Sepal.Length, Species)
+```
+
+```{r}
+# Select a range of columns
+select(iris, Sepal.Length:Petal.Length)
+```
+
+```{r}
+# Exclude columns using the minus sign
+select(iris, -Species)
+```
+
+```{r}
+# Exclude a range of columns
+select(iris, -(Sepal.Length:Petal.Length))
+```
+
+### Selecting by Position
+
+```{r}
+# Select the first and last columns
+select(iris, 1, 5)
+```
+
+### Helper Functions
+
+The `select()` function provides several helper functions that match columns based on patterns in their names. These are particularly useful when working with data that has many similarly named columns.
+
+```{r}
+# Columns that start with "Sepal"
+select(iris, starts_with("Sepal"))
+```
+
+```{r}
+# Columns that end with "Width"
+select(iris, ends_with("Width"))
+```
+
+```{r}
+# Columns that contain "pal"
+select(iris, contains("pal"))
+```
+
+```{r}
+# Columns that match a regular expression
+select(iris, matches("^S.*th$"))
+```
+
+The `everything()` helper selects all remaining columns and is most useful for reordering.
+
+```{r}
+# Move Species to the front
+select(iris, Species, everything())
+```
+
+The `last_col()` helper selects the last column, with an optional offset.
+
+```{r}
+# Select the last column
+select(iris, last_col())
+```
+
+```{r}
+# Select the second-to-last column
+select(iris, last_col(offset = 1))
+```
+
+The `where()` helper selects columns based on a function that returns `TRUE` or `FALSE`.
+
+```{r}
+# Select only numeric columns
+select(iris, where(is.numeric))
+```
+
+```{r}
+# Select only factor columns
+select(iris, where(is.factor))
+```
+
+### Renaming with select()
+
+You can rename columns as you select them by using the syntax `new_name = old_name`.
+
+```{r}
+select(iris, sepal_length = Sepal.Length, species = Species)
+```
+
+Note that `select()` drops all columns you do not mention. If you want to rename columns without dropping any, use `rename()` instead (covered in a later section).
+
+### Reordering Columns with select()
+
+Using `select()` together with `everything()` is a convenient way to bring specific columns to the front while keeping all others.
+
+```{r}
+# Bring Petal columns to the front, keep everything else after
+select(iris, starts_with("Petal"), everything())
+```
+
+
+## mutate() - Creating New Columns {#mutate}
+
+The `mutate()` function adds new columns to a data frame or modifies existing columns. The original data frame is preserved; `mutate()` returns a new data frame with the additions.
+
+### Creating New Variables
+
+```{r}
+# Add a column for the sepal area (approximation)
+iris_modified <- mutate(iris, Sepal.Area = Sepal.Length * Sepal.Width)
+select(iris_modified, Sepal.Length, Sepal.Width, Sepal.Area) |> head()
+```
+
+```{r}
+# You can create multiple columns in a single mutate() call
+# Columns created earlier can be referenced by later columns
+mtcars_modified <- mutate(mtcars,
+  weight_kg = wt * 453.592,
+  hp_per_kg = hp / weight_kg
+)
+select(mtcars_modified, wt, weight_kg, hp, hp_per_kg) |> head()
+```
+
+### Modifying Existing Variables
+
+If you assign to a column name that already exists, `mutate()` will overwrite it.
+
+```{r}
+# Convert wt from 1000 lbs to actual lbs
+mutate(mtcars, wt = wt * 1000) |> select(wt) |> head()
+```
+
+### Useful Functions Inside mutate()
+
+Many different functions can be used within `mutate()`. Here are some of the most common categories.
+
+**Arithmetic operations**: `+`, `-`, `*`, `/`, `^`, `%%` (modulo), `%/%` (integer division).
+
+```{r}
+mutate(iris,
+  Sepal.Sum = Sepal.Length + Sepal.Width,
+  Petal.Ratio = Petal.Length / Petal.Width
+) |> head()
+```
+
+**Logarithmic and mathematical functions**: `log()`, `log2()`, `log10()`, `sqrt()`, `abs()`.
+
+```{r}
+mutate(mtcars, log_hp = log(hp), sqrt_mpg = sqrt(mpg)) |>
+  select(hp, log_hp, mpg, sqrt_mpg) |> head()
+```
+
+**Lead and lag**: `lead()` and `lag()` shift a column forward or backward by a specified number of positions. These are invaluable for computing differences between consecutive rows.
+
+```{r}
+example_df <- tibble(
+  day = 1:7,
+  sales = c(100, 120, 90, 150, 130, 170, 160)
+)
+mutate(example_df,
+  previous_day_sales = lag(sales),
+  next_day_sales = lead(sales),
+  daily_change = sales - lag(sales)
+)
+```
+
+**Cumulative functions**: `cumsum()`, `cumprod()`, `cummax()`, `cummin()`, `cummean()`.
+
+```{r}
+mutate(example_df,
+  cumulative_sales = cumsum(sales),
+  running_average = cummean(sales)
+)
+```
+
+### Conditional Transformations with if_else() and case_when()
+
+The `if_else()` function provides a vectorized if-else statement. It is stricter than base R's `ifelse()` because it checks that the true and false values have the same type.
+
+```{r}
+mutate(mtcars,
+  efficiency = if_else(mpg > 20, "efficient", "inefficient")
+) |> select(mpg, efficiency) |> head(10)
+```
+
+For multiple conditions, `case_when()` is more readable than nested `if_else()` calls. Each condition is written as a formula with the condition on the left of `~` and the result on the right. The `.default` argument handles values that do not match any condition.
+
+```{r}
+mutate(mtcars,
+  mpg_category = case_when(
+    mpg >= 30 ~ "excellent",
+    mpg >= 20 ~ "good",
+    mpg >= 15 ~ "moderate",
+    .default = "poor"
+  )
+) |> select(mpg, mpg_category) |> head(10)
+```
+
+```{r}
+# Classify iris flowers by sepal size
+mutate(iris,
+  sepal_size = case_when(
+    Sepal.Length > 6.5 ~ "large",
+    Sepal.Length > 5.5 ~ "medium",
+    .default = "small"
+  )
+) |> count(sepal_size, Species)
+```
+
+### Using across() Inside mutate()
+
+The `across()` function applies a transformation to multiple columns at once. This avoids repetitive code when you need to apply the same operation to many columns.
+
+```{r}
+# Round all numeric columns to 1 decimal place
+mutate(iris, across(where(is.numeric), \(x) round(x, 1))) |> head()
+```
+
+```{r}
+# Log-transform specific columns
+mutate(mtcars, across(c(hp, wt, disp), log)) |>
+  select(hp, wt, disp) |> head()
+```
+
+### transmute()
+
+The `transmute()` function works like `mutate()` but keeps only the newly created columns, dropping all others.
+
+```{r}
+transmute(mtcars,
+  car_name = rownames(mtcars),
+  hp_per_ton = hp / wt,
+  kpl = mpg * 0.425144
+) |> head()
+```
+
+
+## summarize() - Summarizing Data {#summarize}
+
+The `summarize()` function (also spelled `summarise()`) collapses a data frame into a single row of summary statistics. It is most powerful when combined with `group_by()`, but can also be used on its own.
+
+### Basic Summary Statistics
+
+```{r}
+summarize(iris,
+  mean_sepal_length = mean(Sepal.Length),
+  sd_sepal_length = sd(Sepal.Length),
+  median_sepal_length = median(Sepal.Length)
+)
+```
+
+```{r}
+summarize(mtcars,
+  avg_mpg = mean(mpg),
+  avg_hp = mean(hp),
+  min_wt = min(wt),
+  max_wt = max(wt)
+)
+```
+
+### Useful Summary Functions
+
+Here is a comprehensive list of functions commonly used inside `summarize()`:
+
+| Function | Purpose |
+|:---------------|:---------------------------------------|
+| `mean()` | Arithmetic mean |
+| `median()` | Median |
+| `sd()` | Standard deviation |
+| `IQR()` | Interquartile range |
+| `min()` | Minimum value |
+| `max()` | Maximum value |
+| `sum()` | Sum of values |
+| `n()` | Count of rows |
+| `n_distinct()` | Count of unique values |
+| `first()` | First value |
+| `last()` | Last value |
+| `nth()` | nth value |
+
+```{r}
+summarize(iris,
+  n_rows = n(),
+  n_species = n_distinct(Species),
+  iqr_sepal_length = IQR(Sepal.Length),
+  first_sepal = first(Sepal.Length),
+  last_sepal = last(Sepal.Length),
+  third_sepal = nth(Sepal.Length, 3)
+)
+```
+
+### Multiple Summaries with across()
+
+Rather than typing out a summary for every column, you can use `across()` to apply summary functions to multiple columns at once.
+
+```{r}
+# Mean of all numeric columns
+iris |>
+  summarize(across(where(is.numeric), mean))
+```
+
+```{r}
+# Multiple summary functions at once using a named list
+iris |>
+  summarize(across(
+    where(is.numeric),
+    list(mean = mean, sd = sd),
+    .names = "{.col}_{.fn}"
+  ))
+```
+
+The `.names` argument controls the naming of the output columns. The `{.col}` placeholder is replaced by the column name and `{.fn}` by the function name.
+
+```{r}
+# Summarize selected columns with multiple functions
+mtcars |>
+  summarize(across(
+    c(mpg, hp, wt),
+    list(avg = mean, minimum = min, maximum = max),
+    .names = "{.fn}_{.col}"
+  ))
+```
+
+
+## arrange() - Sorting Rows {#arrange}
+
+The `arrange()` function reorders rows. By default, it sorts in ascending order.
+
+```{r}
+# Sort mtcars by mpg (ascending)
+arrange(mtcars, mpg) |> head()
+```
+
+### Descending Order
+
+Use `desc()` to sort in descending order.
+
+```{r}
+# Sort by mpg, highest first
+arrange(mtcars, desc(mpg)) |> head()
+```
+
+### Sorting by Multiple Columns
+
+When you sort by multiple columns, ties in the first column are broken by the second column, and so on.
+
+```{r}
+# Sort by number of cylinders, then by mpg within each cylinder group
+arrange(mtcars, cyl, desc(mpg)) |> head(12)
+```
+
+```{r}
+# Sort iris by Species, then by Sepal.Length within species
+arrange(iris, Species, desc(Sepal.Length)) |> head(10)
+```
+
+Note that `NA` values are always sorted to the end, regardless of whether you use ascending or descending order.
+
+
+## group_by() - Grouped Operations {#groupby}
+
+The `group_by()` function does not change the data itself. Instead, it adds grouping metadata so that subsequent operations (especially `summarize()`, `mutate()`, and `filter()`) are performed separately for each group.
+
+### Grouped Summaries
+
+This is the most common use of `group_by()`: computing summary statistics for each group.
+
+```{r}
+iris |>
+  group_by(Species) |>
+  summarize(
+    mean_sepal_length = mean(Sepal.Length),
+    mean_sepal_width = mean(Sepal.Width),
+    mean_petal_length = mean(Petal.Length),
+    mean_petal_width = mean(Petal.Width),
+    count = n()
+  )
+```
+
+```{r}
+mtcars |>
+  group_by(cyl) |>
+  summarize(
+    avg_mpg = mean(mpg),
+    avg_hp = mean(hp),
+    n_cars = n()
+  )
+```
+
+### Multiple Grouping Variables
+
+You can group by more than one variable. The summary will be computed for every combination of the grouping variables.
+
+```{r}
+mtcars |>
+  group_by(cyl, am) |>
+  summarize(
+    avg_mpg = mean(mpg),
+    n_cars = n(),
+    .groups = "drop"
+  )
+```
+
+The `.groups` argument in `summarize()` controls what happens to the grouping after summarization. Setting `.groups = "drop"` removes all grouping. The default behavior (`.groups = "drop_last"`) drops only the last grouping variable, leaving the remaining groups in place.
+
+### Grouped Mutate
+
+When `mutate()` is applied to grouped data, calculations are performed within each group. This is useful for computing group-relative statistics.
+
+```{r}
+# Compute each flower's deviation from its species mean
+iris |>
+  group_by(Species) |>
+  mutate(
+    sepal_deviation = Sepal.Length - mean(Sepal.Length)
+  ) |>
+  select(Species, Sepal.Length, sepal_deviation) |>
+  head(10)
+```
+
+```{r}
+# Rank cars within each cylinder group by mpg
+mtcars |>
+  group_by(cyl) |>
+  mutate(mpg_rank = min_rank(desc(mpg))) |>
+  select(cyl, mpg, mpg_rank) |>
+  arrange(cyl, mpg_rank) |>
+  head(12)
+```
+
+### Grouped Filter
+
+A grouped `filter()` applies the condition within each group. This lets you write filters relative to group statistics.
+
+```{r}
+# Keep only cars with above-average mpg within their cylinder group
+mtcars |>
+  group_by(cyl) |>
+  filter(mpg > mean(mpg)) |>
+  select(cyl, mpg) |>
+  arrange(cyl, desc(mpg))
+```
+
+### Removing Grouping with ungroup()
+
+Grouping persists until explicitly removed. If you forget to ungroup, subsequent operations may produce unexpected results. Use `ungroup()` to remove grouping.
+
+```{r}
+iris_grouped <- iris |> group_by(Species)
+
+# Check the groups
+group_vars(iris_grouped)
+
+# Remove grouping
+iris_ungrouped <- iris_grouped |> ungroup()
+group_vars(iris_ungrouped)
+```
+
+
+## Combining Operations {#combining}
+
+The real power of dplyr emerges when you chain multiple verbs together using the pipe operator. Each step flows naturally into the next, creating readable analysis pipelines.
+
+### Example: Analyzing Fuel Efficiency
+
+```{r}
+mtcars |>
+  mutate(car_name = rownames(mtcars)) |>
+  filter(cyl %in% c(4, 6)) |>
+  select(car_name, mpg, cyl, hp, wt) |>
+  group_by(cyl) |>
+  mutate(mpg_rank = min_rank(desc(mpg))) |>
+  arrange(cyl, mpg_rank) |>
+  filter(mpg_rank <= 3) |>
+  ungroup()
+```
+
+This pipeline answers the question: "What are the top 3 most fuel-efficient cars in the 4-cylinder and 6-cylinder groups?"
+
+### Example: Species Comparison
+
+```{r}
+iris |>
+  group_by(Species) |>
+  summarize(
+    across(everything(), list(mean = mean, sd = sd)),
+    .groups = "drop"
+  ) |>
+  mutate(across(where(is.numeric), \(x) round(x, 2)))
+```
+
+### Example: Car Performance Profile
+
+```{r}
+mtcars |>
+  mutate(
+    transmission = if_else(am == 1, "manual", "automatic"),
+    engine = if_else(vs == 1, "straight", "V-shaped")
+  ) |>
+  group_by(transmission, engine) |>
+  summarize(
+    n = n(),
+    avg_mpg = round(mean(mpg), 1),
+    avg_hp = round(mean(hp), 1),
+    avg_qsec = round(mean(qsec), 1),
+    .groups = "drop"
+  ) |>
+  arrange(desc(avg_mpg))
+```
+
+
+## Joining Data {#joins}
+
+In practice, data is often spread across multiple tables that need to be combined. The dplyr package provides a family of join functions modeled after SQL joins.
+
+### Example Datasets for Joins
+
+Let us create two small data frames to illustrate joins clearly.
+
+```{r}
+# A table of students and their majors
+students <- tibble(
+  student_id = c(1, 2, 3, 4, 5),
+  name = c("Alice", "Bob", "Carol", "David", "Eve"),
+  major = c("Statistics", "CS", "Statistics", "Math", "CS")
+)
+students
+
+# A table of students and their GPAs (note: not all students appear)
+grades <- tibble(
+  student_id = c(1, 2, 3, 6, 7),
+  gpa = c(3.8, 3.5, 3.9, 3.2, 3.7),
+  year = c(2023, 2023, 2024, 2023, 2024)
+)
+grades
+```
+
+Notice that students 4 and 5 appear only in `students`, while students 6 and 7 appear only in `grades`. Students 1, 2, and 3 appear in both.
+
+### inner_join()
+
+`inner_join()` keeps only rows that have matching keys in **both** tables.
+
+```{r}
+inner_join(students, grades, by = "student_id")
+```
+
+Only students 1, 2, and 3 appear because they are the only ones present in both tables.
+
+### left_join()
+
+`left_join()` keeps all rows from the **left** (first) table and matches from the right. Unmatched rows from the right table are filled with `NA`.
+
+```{r}
+left_join(students, grades, by = "student_id")
+```
+
+All five students from the `students` table are kept. David and Eve have `NA` for gpa and year because they had no match in `grades`.
+
+### right_join()
+
+`right_join()` keeps all rows from the **right** (second) table and matches from the left.
+
+```{r}
+right_join(students, grades, by = "student_id")
+```
+
+All rows from `grades` are kept. Students 6 and 7 have `NA` for name and major.
+
+### full_join()
+
+`full_join()` keeps all rows from **both** tables, filling in `NA` where there is no match.
+
+```{r}
+full_join(students, grades, by = "student_id")
+```
+
+### semi_join()
+
+`semi_join()` returns rows from the left table that have a match in the right table, but does **not** add columns from the right table. Think of it as a filter using the right table.
+
+```{r}
+semi_join(students, grades, by = "student_id")
+```
+
+### anti_join()
+
+`anti_join()` returns rows from the left table that do **not** have a match in the right table. It is the inverse of `semi_join()`.
+
+```{r}
+anti_join(students, grades, by = "student_id")
+```
+
+David and Eve are returned because they have no matching records in `grades`.
+
+### Joining with Different Column Names
+
+When the key columns have different names in the two tables, use the `join_by()` helper or a named vector in the `by` argument.
+
+```{r}
+# Suppose the grades table used "id" instead of "student_id"
+grades_renamed <- grades |> rename(id = student_id)
+
+# Using join_by()
+left_join(students, grades_renamed, by = join_by(student_id == id))
+```
+
+### Joining on Multiple Keys
+
+You can join on multiple columns by specifying several names in the `by` argument.
+
+```{r}
+# Create example tables with composite keys
+orders <- tibble(
+  customer = c("A", "A", "B", "B"),
+  product = c("X", "Y", "X", "Z"),
+  quantity = c(10, 5, 8, 12)
+)
+
+prices <- tibble(
+  customer = c("A", "A", "B", "C"),
+  product = c("X", "Y", "X", "X"),
+  price = c(2.50, 3.00, 2.75, 2.50)
+)
+
+inner_join(orders, prices, by = c("customer", "product"))
+```
+
+
+## Other Useful Functions {#other-functions}
+
+Beyond the core verbs, dplyr includes many additional functions that handle common tasks.
+
+### The slice() Family
+
+The `slice()` functions select rows by position rather than by condition.
+
+```{r}
+# Select rows 5 through 10
+slice(iris, 5:10)
+```
+
+```{r}
+# First 5 rows
+slice_head(iris, n = 5)
+```
+
+```{r}
+# Last 3 rows
+slice_tail(mtcars, n = 3)
+```
+
+```{r}
+# Random sample of rows
+set.seed(42)
+slice_sample(iris, n = 5)
+```
+
+```{r}
+# Random fraction of rows
+set.seed(42)
+slice_sample(iris, prop = 0.05)
+```
+
+```{r}
+# Rows with the 3 smallest values of mpg
+slice_min(mtcars, mpg, n = 3)
+```
+
+```{r}
+# Rows with the 3 largest values of hp
+slice_max(mtcars, hp, n = 3)
+```
+
+### distinct()
+
+The `distinct()` function removes duplicate rows. You can specify columns to consider; if a subset of columns is given, only the first occurrence of each unique combination is kept.
+
+```{r}
+# Unique combinations of cyl and am
+distinct(mtcars, cyl, am)
+```
+
+```{r}
+# Keep all columns while de-duplicating by cyl
+distinct(mtcars, cyl, .keep_all = TRUE)
+```
+
+### count() and add_count()
+
+The `count()` function is a shortcut for `group_by()` followed by `summarize(n = n())`. It is extremely convenient for quick frequency tables.
+
+```{r}
+count(iris, Species)
+```
+
+```{r}
+# Count with sorting
+count(mtcars, cyl, sort = TRUE)
+```
+
+```{r}
+# Count by multiple variables
+count(mtcars, cyl, am)
+```
+
+The `add_count()` function does the same but adds the count as a new column rather than collapsing the data frame.
+
+```{r}
+# Add a column with the count of each species
+iris |>
+  add_count(Species, name = "species_count") |>
+  select(Species, species_count) |>
+  distinct()
+```
+
+### pull()
+
+The `pull()` function extracts a single column as a vector rather than a data frame. This is useful when you need a vector for further computation.
+
+```{r}
+# Extract mpg as a vector
+mpg_values <- pull(mtcars, mpg)
+mean(mpg_values)
+```
+
+```{r}
+# Pull the last column
+pull(iris, last_col()) |> head(10)
+```
+
+### rename() and rename_with()
+
+While `select()` can rename columns, it drops unmentioned columns. The `rename()` function renames columns while keeping all other columns intact.
+
+```{r}
+rename(iris, sepal_length = Sepal.Length, sepal_width = Sepal.Width) |> head(3)
+```
+
+The `rename_with()` function applies a renaming function to selected columns.
+
+```{r}
+# Convert all column names to lowercase
+rename_with(iris, tolower) |> head(3)
+```
+
+```{r}
+# Replace dots with underscores in column names
+rename_with(iris, \(x) gsub("\\.", "_", x)) |> head(3)
+```
+
+```{r}
+# Apply tolower only to columns that start with "Sepal"
+rename_with(iris, tolower, starts_with("Sepal")) |> head(3)
+```
+
+### relocate()
+
+The `relocate()` function moves columns to a new position. By default, it moves the specified columns to the front.
+
+```{r}
+# Move Species to the front
+relocate(iris, Species) |> head(3)
+```
+
+```{r}
+# Move Petal columns after Species
+relocate(iris, starts_with("Petal"), .after = Species) |> head(3)
+```
+
+```{r}
+# Move numeric columns before factor columns
+relocate(iris, where(is.numeric), .before = where(is.factor)) |> head(3)
+```
+
+### bind_rows() and bind_cols()
+
+These functions combine data frames by stacking rows or appending columns.
+
+```{r}
+# Bind rows: stack data frames vertically
+df1 <- tibble(x = 1:3, y = c("a", "b", "c"))
+df2 <- tibble(x = 4:6, y = c("d", "e", "f"))
+bind_rows(df1, df2)
+```
+
+```{r}
+# bind_rows() can add an .id column to track the source
+bind_rows(first = df1, second = df2, .id = "source")
+```
+
+```{r}
+# Bind columns: combine data frames side by side
+df3 <- tibble(z = c(10, 20, 30))
+bind_cols(df1, df3)
+```
+
+Note that `bind_cols()` requires the data frames to have the same number of rows.
+
+
+## Working with across() {#across}
+
+The `across()` function is a powerful tool for applying transformations to multiple columns simultaneously. It can be used inside `mutate()`, `summarize()`, and other dplyr verbs.
+
+### Basic Syntax
+
+The basic syntax is `across(.cols, .fns)`, where `.cols` specifies which columns to operate on and `.fns` specifies the function(s) to apply.
+
+```{r}
+# Scale all numeric columns to have mean 0 and sd 1
+iris |>
+  mutate(across(where(is.numeric), scale)) |>
+  head()
+```
+
+### Column Selection Methods
+
+You can select columns for `across()` using any of the tidyselect helpers.
+
+```{r}
+# Using where() to select by type
+iris |>
+  summarize(across(where(is.numeric), mean))
+```
+
+```{r}
+# Using starts_with()
+iris |>
+  summarize(across(starts_with("Sepal"), list(mean = mean, sd = sd)))
+```
+
+```{r}
+# Using everything() - all columns (works best when all are numeric)
+mtcars |>
+  summarize(across(everything(), mean)) |>
+  round(2)
+```
+
+```{r}
+# Using specific column names
+mtcars |>
+  summarize(across(c(mpg, hp, wt), median))
+```
+
+### Applying Multiple Functions
+
+Pass a named list to `.fns` to apply multiple functions. The `.names` argument controls the naming of the resulting columns.
+
+```{r}
+iris |>
+  group_by(Species) |>
+  summarize(
+    across(
+      starts_with("Petal"),
+      list(
+        mean = \(x) mean(x),
+        sd = \(x) sd(x),
+        min = \(x) min(x),
+        max = \(x) max(x)
+      ),
+      .names = "{.col}__{.fn}"
+    ),
+    .groups = "drop"
+  )
+```
+
+### Using across() with mutate()
+
+```{r}
+# Convert all numeric columns from raw values to percentiles (within species)
+iris |>
+  group_by(Species) |>
+  mutate(across(
+    where(is.numeric),
+    \(x) percent_rank(x),
+    .names = "{.col}_pctile"
+  )) |>
+  select(Species, ends_with("pctile")) |>
+  head(10)
+```
+
+```{r}
+# Apply different functions to different columns using multiple across() calls
+mtcars |>
+  mutate(
+    across(c(mpg, hp), \(x) round(x, 0)),
+    across(c(wt, qsec), \(x) round(x, 1))
+  ) |>
+  select(mpg, hp, wt, qsec) |>
+  head()
+```
+
+### Combining across() with case_when()
+
+```{r}
+# Categorize multiple numeric columns
+iris |>
+  mutate(across(
+    where(is.numeric),
+    \(x) case_when(
+      x > mean(x) + sd(x) ~ "high",
+      x < mean(x) - sd(x) ~ "low",
+      .default = "medium"
+    ),
+    .names = "{.col}_cat"
+  )) |>
+  select(Species, ends_with("_cat")) |>
+  head(10)
+```
+
+
+## Summary
+
+The dplyr package provides a complete and coherent grammar for data manipulation. Its six core verbs --- `filter()`, `select()`, `mutate()`, `summarize()`, `arrange()`, and `group_by()` --- cover the vast majority of data wrangling tasks. Combined with the pipe operator, these verbs enable you to build readable, step-by-step analysis pipelines. The join functions handle the common need to combine data from multiple sources, and helper functions like `across()`, `count()`, `slice()`, and `relocate()` provide additional convenience for everyday tasks.
+
+The consistent design of dplyr --- every function takes a data frame first and returns a data frame --- means that once you learn one verb, the others follow naturally. As you gain experience, you will find that even complex transformations can be expressed as a clear sequence of simple steps. The next chapter on tidyr will complement your dplyr skills by covering how to reshape data between wide and long formats.

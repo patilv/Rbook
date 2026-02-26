@@ -1,6 +1,13 @@
-#	Relationships between variables {#multivar}
+# Relationships Between Variables {#multivar}
 
-##	Between continuous variables: Correlations
+```{r include=FALSE}
+library(tidyverse)
+opts_chunk$set(echo=TRUE, warning=FALSE, message=FALSE)
+```
+
+This chapter covers bivariate and multivariate analysis. We include both base R and ggplot2 visualizations. For a comprehensive treatment of ggplot2, see Chapters \@ref(ggplot2basics) and \@ref(ggplot2customize).
+
+## Between continuous variables: Correlations
 
 ### Plotting
 
@@ -56,11 +63,35 @@ abline( lm(corrdata$NumVar6~corrdata$NumVar1),col="blue",) # regression line (y~
 
 ### Correlations between two numeric variables
 
-Assumptions of interval/ratio scaled variables, presence of linear relationships, absence of extreme outliers, and normality of the variables are made when conducting these tests. 
+Assumptions of interval/ratio scaled variables, presence of linear relationships, absence of extreme outliers, and normality of the variables are made when conducting these tests.
+
+**Base R:**
 
 ```{r}
-plot(iris$Sepal.Length,iris$Petal.Length,col="red",xlab="Sepal.Length",ylab="Petal.Length")
-abline(lm(iris$Petal.Length~iris$Sepal.Length),col="blue")
+plot(iris$Sepal.Length, iris$Petal.Length, col = "red", xlab = "Sepal.Length", ylab = "Petal.Length")
+abline(lm(iris$Petal.Length ~ iris$Sepal.Length), col = "blue")
+```
+
+**ggplot2:**
+
+```{r}
+ggplot(iris, aes(x = Sepal.Length, y = Petal.Length)) +
+  geom_point(color = "red") +
+  geom_smooth(method = "lm", se = TRUE, color = "blue") +
+  labs(x = "Sepal Length", y = "Petal Length",
+       title = "Sepal Length vs Petal Length") +
+  theme_minimal()
+```
+
+We can color by species to reveal group structure:
+
+```{r}
+ggplot(iris, aes(x = Sepal.Length, y = Petal.Length, color = Species)) +
+  geom_point() +
+  geom_smooth(method = "lm", se = FALSE) +
+  labs(x = "Sepal Length", y = "Petal Length",
+       title = "Sepal Length vs Petal Length by Species") +
+  theme_minimal()
 ```
 
 Pearson Correlation coefficient
@@ -123,7 +154,7 @@ rcorr(as.matrix(iris[,1:4]), type="pearson") # type can be pearson or spearman
 
 ## Relationships between factor variables
 
-Let us revert back to our use of the `survey` dataset and focus on the `Sex` and `Exer`variables. Below, we look at the structure of the dataset and summarize each of the three variables.
+Let us revert back to our use of the `survey` dataset and focus on the `Sex` and `Exer` variables. Below, we look at the structure of the dataset and summarize each of the three variables.
 
 ```{r}
 str(survey)
@@ -140,23 +171,53 @@ summary(survey$Exer)
 A cross-tab (or a cross-tabulation) presents joint-frequencies of two or more variables. For example, if we were interested in finding how many of the 118 Females engaged in different levels of Exercise, we could use a cross-tab to answer that.
 
 ```{r}
-crosstab=table(survey$Exer,survey$Sex)
+crosstab <- table(survey$Exer, survey$Sex)
 crosstab
+```
+
+### Tidyverse cross-tabulation
+
+```{r}
+survey %>%
+  filter(!is.na(Sex), !is.na(Exer)) %>%
+  count(Sex, Exer) %>%
+  pivot_wider(names_from = Sex, values_from = n, values_fill = 0)
 ```
 
 We could also plot that data in the form of stacked or dodged bar graphs.
 
-```{r}
-barplot(crosstab,beside=TRUE, legend=levels(unique(survey$Exer)),args.legend=list(
-      x= 8,y=70))
-```
-
+**Base R:**
 
 ```{r}
-barplot(crosstab,legend=levels(unique(survey$Exer)),args.legend=list(
-      x= 1.75,y=150,horiz=TRUE))
+barplot(crosstab, beside = TRUE, legend = levels(unique(survey$Exer)),
+        args.legend = list(x = 8, y = 70))
 ```
 
+```{r}
+barplot(crosstab, legend = levels(unique(survey$Exer)),
+        args.legend = list(x = 1.75, y = 150, horiz = TRUE))
+```
+
+**ggplot2:**
+
+```{r}
+survey %>%
+  filter(!is.na(Sex), !is.na(Exer)) %>%
+  ggplot(aes(x = Sex, fill = Exer)) +
+  geom_bar(position = "dodge") +
+  labs(title = "Exercise Frequency by Sex", y = "Count", fill = "Exercise") +
+  theme_minimal()
+```
+
+```{r}
+survey %>%
+  filter(!is.na(Sex), !is.na(Exer)) %>%
+  ggplot(aes(x = Sex, fill = Exer)) +
+  geom_bar(position = "fill") +
+  labs(title = "Proportion of Exercise Frequency by Sex", y = "Proportion", fill = "Exercise") +
+  scale_y_continuous(labels = scales::percent) +
+  theme_minimal()
+```
 
 If we now wanted to check if the tendency to exercise was independent of the gender, we could use the Chi-square test of independence.
 
@@ -170,54 +231,109 @@ Interpretation: the p-value of .057 suggests that there is no evidence of the pr
 
 
 
-##	Between factor and continuous variables
+## Between factor and continuous variables
 
-In such cases, one may be interested in studying how the mean scores of the continuous variable differs across multiple levels of the factor variable
+In such cases, one may be interested in studying how the mean scores of the continuous variable differs across multiple levels of the factor variable.
 
 ### Two levels of a factor level and one continuous variable - t-test
 
-Let us check how the mean height of different genders in the `survey` data.
+Let us check the mean height of different genders in the `survey` data.
+
+**Base R:**
 
 ```{r}
-aggregate(survey$Height,list(survey$Sex),mean, na.rm=T)
+aggregate(survey$Height, list(survey$Sex), mean, na.rm = T)
+```
+
+**Tidyverse:**
+
+```{r}
+survey %>%
+  filter(!is.na(Sex), !is.na(Height)) %>%
+  group_by(Sex) %>%
+  summarize(mean_height = mean(Height))
 ```
 
 The distribution of Height across the two levels can be studied using a box plot.
 
+**Base R:**
+
 ```{r}
-plot(survey$Height~survey$Sex)
+plot(survey$Height ~ survey$Sex)
 ```
 
+**ggplot2:**
+
+```{r}
+survey %>%
+  filter(!is.na(Sex), !is.na(Height)) %>%
+  ggplot(aes(x = Sex, y = Height, fill = Sex)) +
+  geom_boxplot() +
+  geom_jitter(width = 0.2, alpha = 0.3) +
+  labs(title = "Height Distribution by Sex", y = "Height (cm)") +
+  theme_minimal() +
+  theme(legend.position = "none")
+```
 
 Although males seem to be taller than females, it is unclear if the difference being observed is statistically significant. In such a case, we could use an independent samples t-test to answer the question.
 
 ```{r}
-t.test(survey$Height~survey$Sex, alternative='less', conf.level=.99, var.equal=FALSE)
+t.test(survey$Height ~ survey$Sex, alternative = 'less', conf.level = .99, var.equal = FALSE)
 ```
 
 Note that the mean height of females is lower than the mean height of males. Hence the test-statistic is negative. The result suggests that mean height of females is less than the mean height of men. (the p-value is less than .01 and the t-value observed lies in the 99 percent confidence interval.)
 
-### More than two levels of a factor variable and one continuous variable.- One-Way ANOVA
+### More than two levels of a factor variable and one continuous variable - One-Way ANOVA
 
 Let us check the mean height of people who engage in different levels of Exercising.
 
+**Base R:**
 
 ```{r}
-aggregate(survey$Height,list(survey$Exer),mean, na.rm=T)
+aggregate(survey$Height, list(survey$Exer), mean, na.rm = T)
 ```
 
+**Tidyverse:**
+
 ```{r}
-plot(survey$Height~survey$Exer)
+survey %>%
+  filter(!is.na(Exer), !is.na(Height)) %>%
+  group_by(Exer) %>%
+  summarize(
+    n = n(),
+    mean_height = mean(Height),
+    sd_height = sd(Height)
+  )
+```
+
+**Base R box plot:**
+
+```{r}
+plot(survey$Height ~ survey$Exer)
+```
+
+**ggplot2:**
+
+```{r}
+survey %>%
+  filter(!is.na(Exer), !is.na(Height)) %>%
+  ggplot(aes(x = Exer, y = Height, fill = Exer)) +
+  geom_boxplot() +
+  geom_jitter(width = 0.2, alpha = 0.3) +
+  labs(title = "Height by Exercise Frequency",
+       x = "Exercise Level", y = "Height (cm)") +
+  theme_minimal() +
+  theme(legend.position = "none")
 ```
 
 Interestingly, we find that those who engage in frequent exercise have a higher mean height than those who engage in some exercise. In a similar vein, those who engage in some exercise seem to have a higher mean height than those who do not engage in any exercise. But, are these differences statistically significant?
 
-Since we have more than two levels of the factor variable, one will have to use an ANOVA (Analysis of Variance). 
+Since we have more than two levels of the factor variable, one will have to use an ANOVA (Analysis of Variance).
 
 The Null hypothesis is that the means of all groups is the same and the alternate is that at least one mean is different.
 
 ```{r}
-results=aov(survey$Height ~ survey$Exer)
+results <- aov(survey$Height ~ survey$Exer)
 summary(results)
 ```
 
@@ -226,5 +342,5 @@ The findings suggest that we have evidence that at least one of the three means 
 We can do a multiple-comparison of means to test that.
 
 ```{r}
-TukeyHSD(results,conf.level = .99)
+TukeyHSD(results, conf.level = .99)
 ```

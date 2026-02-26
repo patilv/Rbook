@@ -1,0 +1,1022 @@
+# R Markdown {#rmarkdown}
+
+```{r include=FALSE}
+library(knitr)
+opts_chunk$set(echo=TRUE, warning=FALSE, message=FALSE)
+```
+
+R Markdown is one of the most important tools in the modern R ecosystem. It allows you to combine your prose, your code, and the output of your code into a single, polished document. Whether you are writing a homework assignment, a business report, a research paper, or even a book (this book is written in R Markdown!), R Markdown provides a unified framework for reproducible, dynamic documents. This chapter will walk you through everything you need to get started.
+
+## What is R Markdown? {#what-is-rmarkdown}
+
+R Markdown is a file format (with the `.Rmd` extension) that combines two powerful ideas:
+
+1. **Literate programming** --- the concept, introduced by Donald Knuth, that code and documentation should live together in the same document rather than in separate files.
+2. **Reproducible research** --- the principle that any analysis should be fully reproducible from source data to final report by anyone, at any time.
+
+An R Markdown document is a plain-text file that interweaves **narrative text** (written in Markdown) with **code chunks** (written in R or other languages). When you *render* (or *knit*) the document, R Markdown:
+
+- Executes all the code chunks.
+- Captures the output (tables, figures, printed results).
+- Weaves the text and output together into a finished document.
+
+The output can be an HTML page, a PDF, a Word document, a slideshow, a dashboard, a website, or even a book. The workflow relies on two key R packages:
+
+- **`knitr`** --- executes the code chunks and produces a Markdown (`.md`) file.
+- **`rmarkdown`** --- converts the Markdown file into the final output format using Pandoc.
+
+You can install or update both packages with:
+
+```{r eval=FALSE}
+install.packages("rmarkdown")
+install.packages("knitr")
+```
+
+## The Three Components of an R Markdown Document {#three-components}
+
+Every `.Rmd` file is made up of exactly three types of content:
+
+1. **YAML header** --- A block of metadata at the very top of the file, enclosed between `---` lines. It controls the title, author, date, and output format.
+2. **Markdown text** --- The narrative portions of your document, written in Markdown syntax.
+3. **Code chunks** --- Blocks of R code (or other languages) that are executed when the document is rendered.
+
+Here is the simplest possible R Markdown document:
+
+````
+---
+title: "My First Report"
+author: "Your Name"
+date: "2024-01-15"
+output: html_document
+---
+
+## Introduction
+
+This is my first R Markdown document.
+
+```{r}`r ''`
+summary(iris)
+```
+````
+
+The sections below cover each component in detail.
+
+## YAML Header {#yaml-header}
+
+The YAML (YAML Ain't Markup Language) header sits at the very top of the `.Rmd` file. It is delimited by three dashes (`---`) on the lines above and below it. The YAML header controls global document settings.
+
+### Basic Fields
+
+The most common fields are `title`, `author`, `date`, and `output`:
+
+````
+---
+title: "Quarterly Sales Report"
+author: "Vivek H. Patil"
+date: "2024-09-01"
+output: html_document
+---
+````
+
+The `date` field can be made dynamic so that it always reflects the date the document was last rendered:
+
+````
+date: "`r knitr::inline_expr('Sys.Date()')`"
+````
+
+### Output Formats
+
+R Markdown supports many output formats. The three most common are:
+
+| Format            | YAML value        | Description                  |
+|:------------------|:------------------|:-----------------------------|
+| HTML              | `html_document`   | Interactive web page         |
+| PDF               | `pdf_document`    | Requires LaTeX (or tinytex)  |
+| Word              | `word_document`   | Microsoft Word `.docx` file  |
+
+You can specify multiple output formats:
+
+````
+---
+output:
+  html_document:
+    toc: true
+  pdf_document:
+    toc: true
+  word_document: default
+---
+````
+
+### Table of Contents
+
+Add a table of contents by setting `toc: true` under your output format:
+
+````
+---
+output:
+  html_document:
+    toc: true
+    toc_depth: 3
+    toc_float: true
+---
+````
+
+The `toc_float: true` option (HTML only) makes the table of contents float on the left side of the page as the reader scrolls, which is very convenient for long documents.
+
+### Themes and Appearance
+
+For HTML output, you can select from several built-in Bootstrap themes:
+
+````
+---
+output:
+  html_document:
+    theme: cerulean
+    highlight: tango
+---
+````
+
+Available themes include: `default`, `cerulean`, `cosmo`, `flatly`, `journal`, `lumen`, `paper`, `readable`, `sandstone`, `simplex`, `spacelab`, `united`, and `yeti`.
+
+Available syntax-highlighting styles include: `default`, `tango`, `pygments`, `kate`, `monochrome`, `espresso`, `zenburn`, `haddock`, and `breezedark`.
+
+### Code Folding
+
+For HTML output, you can allow readers to show or hide code by setting `code_folding`:
+
+````
+---
+output:
+  html_document:
+    code_folding: hide
+---
+````
+
+Setting `code_folding: hide` means all code chunks start hidden but can be revealed with a click. Setting it to `show` means all code starts visible but can be hidden. This is excellent for reports aimed at audiences who may or may not want to see the underlying code.
+
+### A Full YAML Example
+
+Here is a more complete YAML header that uses many of these options:
+
+````
+---
+title: "Sales Analysis Q3 2024"
+author: "Vivek H. Patil"
+date: "`r knitr::inline_expr('format(Sys.Date(), \"%B %d, %Y\")')`"
+output:
+  html_document:
+    toc: true
+    toc_depth: 3
+    toc_float: true
+    number_sections: true
+    theme: flatly
+    highlight: tango
+    code_folding: hide
+    df_print: paged
+---
+````
+
+## Markdown Syntax {#markdown-syntax}
+
+The text in an R Markdown document uses Markdown, a lightweight markup language designed for easy reading and writing. Below is a tour of the most commonly used Markdown syntax elements.
+
+### Headers
+
+Headers are created with the `#` symbol. The number of `#` symbols indicates the level:
+
+````
+# Level 1 Header
+## Level 2 Header
+### Level 3 Header
+#### Level 4 Header
+##### Level 5 Header
+###### Level 6 Header
+````
+
+In a bookdown document like this book, a single `#` creates a chapter-level heading and `##` creates a section within that chapter.
+
+### Emphasis: Bold and Italic
+
+- *Italic* text is wrapped in single asterisks or underscores: `*italic*` or `_italic_`
+- **Bold** text is wrapped in double asterisks or underscores: `**bold**` or `__bold__`
+- ***Bold italic*** uses triple asterisks: `***bold italic***`
+- ~~Strikethrough~~ uses double tildes: `~~strikethrough~~`
+
+### Lists
+
+**Unordered lists** use `-`, `*`, or `+` as bullets:
+
+````
+- Item one
+- Item two
+  - Sub-item 2a
+  - Sub-item 2b
+- Item three
+````
+
+This renders as:
+
+- Item one
+- Item two
+  - Sub-item 2a
+  - Sub-item 2b
+- Item three
+
+**Ordered lists** use numbers followed by a period:
+
+````
+1. First item
+2. Second item
+3. Third item
+````
+
+This renders as:
+
+1. First item
+2. Second item
+3. Third item
+
+Note: Markdown is flexible about the actual numbers you use. Even if you type `1. 1. 1.`, the output will be numbered `1. 2. 3.`.
+
+### Links
+
+Create a hyperlink using `[display text](URL)`:
+
+````
+[Visual Analytics Course](http://patilv.com/VizAnalytics4Biz/)
+````
+
+This renders as: [Visual Analytics Course](http://patilv.com/VizAnalytics4Biz/)
+
+### Images
+
+Insert an image with `![alt text](path/to/image.png)`:
+
+````
+![R Logo](https://www.r-project.org/Rlogo.png)
+````
+
+For more control over image size and alignment within R Markdown, it is generally better to use `knitr::include_graphics()` inside a code chunk, which we cover in Section \@ref(figures-and-images).
+
+### Blockquotes
+
+Prefix a line with `>` to create a blockquote:
+
+````
+> "The purpose of computing is insight, not numbers."
+> --- Richard Hamming
+````
+
+This renders as:
+
+> "The purpose of computing is insight, not numbers."
+> --- Richard Hamming
+
+### Horizontal Rules
+
+Create a horizontal rule (divider line) with three or more dashes, asterisks, or underscores:
+
+````
+---
+````
+
+### Inline Code
+
+To display code inline (without executing it), wrap the text in single backticks:
+
+````
+Use the `summary()` function to get descriptive statistics.
+````
+
+This renders as: Use the `summary()` function to get descriptive statistics.
+
+### Tables
+
+You can create simple tables in Markdown using pipes (`|`) and dashes (`-`):
+
+````
+| Name    | Age | City     |
+|:--------|----:|:--------:|
+| Alice   |  30 | Seattle  |
+| Bob     |  25 | Portland |
+| Charlie |  35 | Denver   |
+````
+
+This renders as:
+
+| Name    | Age | City     |
+|:--------|----:|:--------:|
+| Alice   |  30 | Seattle  |
+| Bob     |  25 | Portland |
+| Charlie |  35 | Denver   |
+
+The colons in the separator row control alignment:
+
+- `:---` = left-aligned
+- `---:` = right-aligned
+- `:---:` = centered
+
+For data-driven tables, it is much better to generate them from R code using `knitr::kable()` or the `kableExtra` package, as discussed in Section \@ref(tables-in-rmarkdown).
+
+### Footnotes
+
+Add footnotes using `[^label]` in the text and `[^label]: text` for the definition:
+
+````
+R Markdown is built on Pandoc[^1].
+
+[^1]: Pandoc is a universal document converter created by John MacFarlane.
+````
+
+### Math Equations
+
+R Markdown supports LaTeX math notation. Use single dollar signs for **inline math** and double dollar signs for **display math**.
+
+**Inline math**: Writing `$\bar{x} = \frac{1}{n}\sum_{i=1}^{n} x_i$` produces $\bar{x} = \frac{1}{n}\sum_{i=1}^{n} x_i$.
+
+**Display math**: Writing
+
+````
+$$
+\hat{\beta} = (X^T X)^{-1} X^T y
+$$
+````
+
+produces:
+
+$$
+\hat{\beta} = (X^T X)^{-1} X^T y
+$$
+
+A few more examples of useful math notation:
+
+- Superscripts and subscripts: `$x^2$` produces $x^2$; `$x_i$` produces $x_i$.
+- Greek letters: `$\alpha$`, `$\beta$`, `$\sigma$`, `$\mu$` produce $\alpha$, $\beta$, $\sigma$, $\mu$.
+- Square root: `$\sqrt{x}$` produces $\sqrt{x}$.
+- Fractions: `$\frac{a}{b}$` produces $\frac{a}{b}$.
+
+## Code Chunks {#code-chunks}
+
+Code chunks are the heart of an R Markdown document. They contain the R code that gets executed when the document is rendered.
+
+### Inserting a Code Chunk
+
+A code chunk starts with ```` ```{r} ```` and ends with ```` ``` ````. In RStudio, you can insert a chunk quickly with the keyboard shortcut **Ctrl+Alt+I** (Windows/Linux) or **Cmd+Option+I** (Mac).
+
+Here is a simple chunk that prints the first few rows of the `mtcars` dataset:
+
+```{r}
+head(mtcars)
+```
+
+### Naming Chunks
+
+You can give a chunk a name by placing it immediately after the `r` in the chunk header. Named chunks make it easier to navigate your document, debug errors, and reference figures.
+
+````
+```{r mpg-summary}`r ''`
+summary(mtcars$mpg)
+```
+````
+
+```{r mpg-summary}
+summary(mtcars$mpg)
+```
+
+Chunk names should be short, descriptive, and use only letters, numbers, and dashes (no spaces or underscores).
+
+### Chunk Options
+
+Chunk options control how each chunk behaves. They are placed after the chunk name (or after `r` if unnamed), separated by commas. Below is a comprehensive reference of the most important options.
+
+#### Controlling What Appears in the Output
+
+| Option     | Default | Description                                                        |
+|:-----------|:--------|:-------------------------------------------------------------------|
+| `echo`     | `TRUE`  | Show the source code in the output?                                |
+| `eval`     | `TRUE`  | Actually run the code?                                             |
+| `include`  | `TRUE`  | Include anything (code + output) in the document?                  |
+| `results`  | `"markup"` | How to display text output: `"markup"`, `"asis"`, `"hold"`, `"hide"` |
+
+**`echo`**: Set `echo=FALSE` to hide the code but show its output. This is useful for reports where the audience does not need to see the code:
+
+```{r echo-demo, echo=FALSE}
+mean(mtcars$mpg)
+```
+
+The value above was produced by `mean(mtcars$mpg)`, but the code is hidden because `echo=FALSE` was set.
+
+**`eval`**: Set `eval=FALSE` to display code without running it. This is useful for showing example code:
+
+```{r eval-demo, eval=FALSE}
+install.packages("tidyverse")
+```
+
+**`include`**: Set `include=FALSE` to run the code silently. The code executes (so its side effects like loading packages or setting variables happen) but nothing appears in the document. This is ideal for setup chunks:
+
+````
+```{r setup, include=FALSE}`r ''`
+library(tidyverse)
+library(knitr)
+opts_chunk$set(echo = TRUE)
+```
+````
+
+**`results`**: Controls how text results are rendered.
+
+- `results="markup"` --- the default, wraps output in a code block.
+- `results="asis"` --- writes raw output directly into the document (useful when generating Markdown or HTML from R).
+- `results="hold"` --- holds all output pieces and displays them together at the end of the chunk.
+- `results="hide"` --- suppresses text output entirely (but plots still appear).
+
+#### Controlling Messages and Warnings
+
+| Option    | Default | Description                                      |
+|:----------|:--------|:-------------------------------------------------|
+| `message` | `TRUE`  | Display messages generated by the code?           |
+| `warning` | `TRUE`  | Display warnings generated by the code?           |
+| `error`   | `FALSE` | Allow errors without stopping the document build? |
+
+Setting `message=FALSE` and `warning=FALSE` is very common, especially for chunks that load packages (which often produce startup messages):
+
+```{r load-packages, message=FALSE, warning=FALSE}
+library(ggplot2)
+library(dplyr)
+```
+
+Setting `error=TRUE` allows the document to keep rendering even if a chunk produces an error. The error message is included in the output. This can be useful for teaching or debugging:
+
+```{r error-demo, error=TRUE}
+log("not a number")
+```
+
+#### Controlling Figures
+
+| Option      | Default | Description                                        |
+|:------------|:--------|:---------------------------------------------------|
+| `fig.width` | `7`     | Width of the plot in inches                         |
+| `fig.height`| `5`     | Height of the plot in inches                        |
+| `fig.cap`   | `NULL`  | Figure caption (enables cross-referencing in bookdown) |
+| `fig.align` | `"default"` | Alignment: `"left"`, `"center"`, or `"right"`  |
+| `out.width` | `NULL`  | Width in the output document (e.g., `"80%"`, `"400px"`) |
+| `out.height`| `NULL`  | Height in the output document                       |
+
+```{r iris-scatter, fig.width=6, fig.height=4, fig.cap="Scatter plot of sepal length versus sepal width, colored by species.", fig.align="center"}
+ggplot(iris, aes(x = Sepal.Length, y = Sepal.Width, color = Species)) +
+  geom_point(size = 2) +
+  labs(title = "Iris: Sepal Dimensions",
+       x = "Sepal Length (cm)",
+       y = "Sepal Width (cm)") +
+  theme_minimal()
+```
+
+#### Other Useful Options
+
+| Option     | Default  | Description                                                  |
+|:-----------|:---------|:-------------------------------------------------------------|
+| `cache`    | `FALSE`  | Cache the results of this chunk? Speeds up re-renders.       |
+| `collapse` | `FALSE`  | Merge code and output into a single block?                   |
+| `comment`  | `"##"`   | String to prepend to each line of text output.               |
+
+**`cache`**: When set to `TRUE`, knitr saves the results of the chunk and skips re-execution on subsequent renders if the code has not changed. This is invaluable for chunks that take a long time to run (e.g., fitting complex models). Be aware that caching can sometimes lead to stale results if dependencies change --- see Section \@ref(tips-and-best-practices) for advice.
+
+**`collapse`**: When `TRUE`, code and output are merged into one block instead of being separated:
+
+```{r collapse-demo, collapse=TRUE}
+x <- 1:5
+x
+sum(x)
+```
+
+**`comment`**: The default comment prefix is `##`. You can change it:
+
+```{r comment-demo, comment=""}
+head(iris, 3)
+```
+
+Setting `comment=""` removes the prefix entirely, which can produce cleaner output.
+
+### Global Chunk Options {#global-chunk-options}
+
+Instead of setting the same options on every chunk, you can set defaults for the entire document using `knitr::opts_chunk$set()` in a setup chunk. This is typically the very first chunk in the document:
+
+````
+```{r setup, include=FALSE}`r ''`
+knitr::opts_chunk$set(
+  echo = TRUE,
+  warning = FALSE,
+  message = FALSE,
+  fig.align = "center",
+  fig.width = 7,
+  fig.height = 5,
+  comment = ""
+)
+```
+````
+
+Any individual chunk can still override these defaults by specifying its own options.
+
+## Inline R Code {#inline-r-code}
+
+In addition to code chunks, you can embed R expressions directly in your narrative text using the syntax `` `r ` `` followed by the R expression. When the document is rendered, the expression is evaluated and its result is inserted into the text.
+
+For example, this source text:
+
+````
+The `iris` dataset contains `r knitr::inline_expr('nrow(iris)')` observations
+and `r knitr::inline_expr('ncol(iris)')` variables.
+````
+
+Renders as:
+
+The `iris` dataset contains `r nrow(iris)` observations and `r ncol(iris)` variables.
+
+This is extremely powerful for creating reports where numbers update automatically when the underlying data changes. Here are more examples:
+
+```{r inline-setup}
+avg_mpg <- mean(mtcars$mpg)
+max_hp <- max(mtcars$hp)
+n_cyl6 <- sum(mtcars$cyl == 6)
+```
+
+Now we can reference these computed values in text:
+
+- The average fuel efficiency across all cars is `r round(avg_mpg, 1)` miles per gallon.
+- The most powerful car has `r max_hp` horsepower.
+- There are `r n_cyl6` cars with 6 cylinders in the dataset.
+
+The key benefit is that if the data changes, all of these numbers update automatically the next time you knit the document. You never have to manually copy and paste numbers from R output into your text.
+
+## Output Formats in Detail {#output-formats}
+
+### HTML Documents
+
+HTML is the default and most feature-rich output format. Key options include:
+
+````
+---
+output:
+  html_document:
+    toc: true
+    toc_float:
+      collapsed: false
+      smooth_scroll: true
+    toc_depth: 3
+    number_sections: true
+    theme: flatly
+    highlight: tango
+    code_folding: hide
+    df_print: paged
+    self_contained: true
+---
+````
+
+- **`toc_float`**: Makes the table of contents float on the left, always visible. The `collapsed` sub-option controls whether only top-level headings are shown initially.
+- **`number_sections`**: Automatically numbers all section headings.
+- **`df_print`**: Controls how data frames are printed. The `"paged"` option creates a paginated table that readers can browse interactively.
+- **`self_contained`**: When `TRUE` (the default), all images and dependencies are embedded in a single HTML file, making it easy to share via email.
+
+### PDF Documents
+
+PDF output produces publication-quality documents but requires a LaTeX installation. The easiest way to get LaTeX is through the `tinytex` R package:
+
+```{r eval=FALSE}
+install.packages("tinytex")
+tinytex::install_tinytex()
+```
+
+A typical PDF YAML header:
+
+````
+---
+output:
+  pdf_document:
+    toc: true
+    toc_depth: 2
+    number_sections: true
+    fig_caption: true
+    latex_engine: xelatex
+    keep_tex: false
+---
+````
+
+- **`latex_engine`**: Choose from `pdflatex` (default), `xelatex`, or `lualatex`. Use `xelatex` or `lualatex` if you need Unicode characters or custom fonts.
+- **`keep_tex`**: Set to `TRUE` if you want to inspect (or further edit) the intermediate `.tex` file.
+- **`fig_caption`**: Enables figure captions for plots.
+
+### Word Documents
+
+Word output creates `.docx` files that are useful when collaborating with colleagues who use Microsoft Word:
+
+````
+---
+output:
+  word_document:
+    toc: true
+    toc_depth: 2
+    reference_docx: my-styles.docx
+---
+````
+
+The `reference_docx` option lets you supply a Word template file. Any styles defined in that template (fonts, heading styles, margins) will be applied to the generated document. This is the primary way to control formatting in Word output.
+
+## Tables in R Markdown {#tables-in-rmarkdown}
+
+While you can create simple tables in raw Markdown (as shown in Section \@ref(markdown-syntax)), it is far more common to generate tables from R data using dedicated packages.
+
+### knitr::kable()
+
+The `kable()` function from the `knitr` package is the simplest way to produce a well-formatted table from a data frame:
+
+```{r kable-basic}
+kable(head(iris), caption = "First six rows of the iris dataset.")
+```
+
+You can control column alignment and the number of decimal places:
+
+```{r kable-formatted}
+mtcars_summary <- mtcars %>%
+  group_by(cyl) %>%
+  summarize(
+    Count = n(),
+    Avg_MPG = mean(mpg),
+    Avg_HP = mean(hp),
+    Avg_WT = mean(wt)
+  )
+
+kable(mtcars_summary,
+      digits = 2,
+      col.names = c("Cylinders", "Count", "Avg MPG", "Avg HP", "Avg Weight"),
+      align = c("c", "c", "r", "r", "r"),
+      caption = "Summary statistics of mtcars by number of cylinders.")
+```
+
+### kableExtra for Styling
+
+The `kableExtra` package extends `kable()` with extensive styling options for both HTML and PDF output:
+
+```{r eval=FALSE}
+install.packages("kableExtra")
+```
+
+```{r kableextra-demo}
+library(kableExtra)
+
+kable(mtcars_summary,
+      digits = 2,
+      col.names = c("Cylinders", "Count", "Avg MPG", "Avg HP", "Avg Weight"),
+      caption = "Styled summary of mtcars by cylinder count.") %>%
+  kable_styling(bootstrap_options = c("striped", "hover", "condensed"),
+                full_width = FALSE,
+                position = "center") %>%
+  column_spec(1, bold = TRUE) %>%
+  row_spec(0, bold = TRUE, color = "white", background = "#3366cc")
+```
+
+Some commonly used `kable_styling()` bootstrap options (for HTML):
+
+- `"striped"` --- alternating row colors.
+- `"hover"` --- highlight rows on mouse hover.
+- `"condensed"` --- reduce cell padding.
+- `"bordered"` --- add borders to all cells.
+- `"responsive"` --- add horizontal scrollbar on small screens.
+
+Other useful `kableExtra` functions include:
+
+- `add_header_above()` --- add a spanning header row above column names.
+- `pack_rows()` --- group rows under a label.
+- `footnote()` --- add footnotes to the table.
+- `scroll_box()` --- wrap a tall/wide table in a scrollable container.
+
+## Figures and Images {#figures-and-images}
+
+### R-Generated Plots
+
+Any code chunk that produces a plot will automatically include that plot in the output. Use chunk options to control size, caption, and alignment:
+
+```{r mtcars-boxplot, fig.width=7, fig.height=5, fig.cap="Distribution of miles per gallon by number of cylinders.", fig.align="center"}
+ggplot(mtcars, aes(x = factor(cyl), y = mpg, fill = factor(cyl))) +
+  geom_boxplot(show.legend = FALSE) +
+  labs(x = "Number of Cylinders", y = "Miles per Gallon") +
+  theme_minimal() +
+  scale_fill_brewer(palette = "Set2")
+```
+
+You can also use `out.width` to set the size as a percentage of the page width, which is often more convenient than specifying inches:
+
+```{r iris-density, out.width="80%", fig.cap="Density plot of petal length by species.", fig.align="center"}
+ggplot(iris, aes(x = Petal.Length, fill = Species)) +
+  geom_density(alpha = 0.5) +
+  labs(x = "Petal Length (cm)", y = "Density") +
+  theme_minimal()
+```
+
+### Multiple Plots in One Chunk
+
+A single chunk can produce multiple figures. By default each plot gets its own figure. You can arrange them side-by-side using `fig.show="hold"` combined with `out.width`:
+
+```{r side-by-side-plots, fig.show="hold", out.width="50%", fig.align="center"}
+ggplot(mtcars, aes(x = wt, y = mpg)) +
+  geom_point() +
+  labs(title = "MPG vs Weight") +
+  theme_minimal()
+
+ggplot(mtcars, aes(x = hp, y = mpg)) +
+  geom_point() +
+  labs(title = "MPG vs Horsepower") +
+  theme_minimal()
+```
+
+### External Images with knitr::include_graphics()
+
+To include an external image file, use `knitr::include_graphics()` inside a code chunk. This is preferred over Markdown image syntax because it gives you full access to chunk options for sizing and captioning:
+
+````
+```{r external-image, out.width="50%", fig.align="center", fig.cap="The R logo."}`r ''`
+knitr::include_graphics("path/to/image.png")
+```
+````
+
+The path should be relative to the `.Rmd` file's location. You can use URLs as well:
+
+```{r r-logo, echo=TRUE, out.width="15%", fig.align="center", fig.cap="The R Project logo."}
+knitr::include_graphics("https://www.r-project.org/Rlogo.png")
+```
+
+## Cross-Referencing {#cross-referencing}
+
+Bookdown (the package used to build this book) extends R Markdown with automatic cross-referencing of figures, tables, and sections. This is one of the most helpful features for longer documents.
+
+### Cross-Referencing Figures
+
+To cross-reference a figure, two conditions must be met:
+
+1. The code chunk must be **named** (e.g., `iris-scatter`).
+2. The chunk must have a **`fig.cap`** option.
+
+Then you can reference it in the text with `\@ref(fig:chunk-name)`. For example, writing `\@ref(fig:iris-scatter)` produces a reference to Figure \@ref(fig:iris-scatter), which was created earlier in this chapter.
+
+### Cross-Referencing Tables
+
+For tables, use `\@ref(tab:chunk-name)` where the chunk contains a `kable()` call with a `caption` argument. For example, `\@ref(tab:kable-formatted)` refers to Table \@ref(tab:kable-formatted).
+
+### Cross-Referencing Sections
+
+To cross-reference a section, give it a label using `{#label}` after the heading:
+
+````
+## My Section {#my-section}
+````
+
+Then reference it with `\@ref(my-section)`. For example, the YAML header is discussed in Section \@ref(yaml-header).
+
+### Summary of Cross-Reference Syntax
+
+| Element | Label syntax                     | Reference syntax               |
+|:--------|:---------------------------------|:-------------------------------|
+| Figure  | Chunk name + `fig.cap`           | `\@ref(fig:chunk-name)`       |
+| Table   | Chunk name + `kable(caption=...)` | `\@ref(tab:chunk-name)`      |
+| Section | `## Title {#label}`             | `\@ref(label)`                 |
+| Equation| `(\#eq:label)` after equation    | `\@ref(eq:label)`             |
+
+## Citations and Bibliography {#citations-bibliography}
+
+R Markdown has built-in support for citations and bibliographies through Pandoc.
+
+### Setting Up a Bibliography
+
+Create a bibliography file (usually with a `.bib` extension) containing your references in BibTeX format. Then reference it in the YAML header:
+
+````
+---
+bibliography: references.bib
+biblio-style: apalike
+link-citations: true
+---
+````
+
+A `.bib` file entry looks like this:
+
+````
+@book{wickham2017r,
+  title = {R for Data Science},
+  author = {Wickham, Hadley and Grolemund, Garrett},
+  year = {2017},
+  publisher = {O'Reilly Media}
+}
+
+@article{knuth1984literate,
+  title = {Literate Programming},
+  author = {Knuth, Donald E.},
+  journal = {The Computer Journal},
+  volume = {27},
+  number = {2},
+  pages = {97--111},
+  year = {1984}
+}
+````
+
+### Citing References
+
+Use `@key` for an in-text citation and `[@key]` for a parenthetical citation:
+
+| Syntax                     | Output                                  |
+|:---------------------------|:----------------------------------------|
+| `@wickham2017r`            | Wickham and Grolemund (2017)            |
+| `[@wickham2017r]`          | (Wickham and Grolemund, 2017)           |
+| `[@wickham2017r; @knuth1984literate]` | (Wickham and Grolemund, 2017; Knuth, 1984) |
+| `[-@wickham2017r]`         | (2017) --- suppresses the author name   |
+
+The bibliography is automatically appended at the end of the document (or at the location of a `# References` heading, if one exists).
+
+### Automatically Citing R Packages
+
+The `knitr::write_bib()` function can automatically generate `.bib` entries for R packages:
+
+```{r eval=FALSE}
+knitr::write_bib(c("knitr", "rmarkdown", "ggplot2"), file = "packages.bib")
+```
+
+This creates BibTeX entries with citation keys like `R-knitr`, `R-rmarkdown`, and `R-ggplot2`.
+
+## Rendering Documents {#rendering-documents}
+
+### The Knit Button
+
+The easiest way to render an R Markdown document is to click the **Knit** button at the top of the RStudio editor pane. The dropdown arrow next to the button lets you choose among the output formats specified in your YAML header.
+
+### rmarkdown::render()
+
+You can also render documents programmatically from the R console or from a script:
+
+```{r eval=FALSE}
+rmarkdown::render("my-report.Rmd")
+```
+
+By default, `render()` uses the output format specified in the YAML header. You can override it:
+
+```{r eval=FALSE}
+rmarkdown::render("my-report.Rmd", output_format = "pdf_document")
+```
+
+You can also render to all formats listed in the YAML at once:
+
+```{r eval=FALSE}
+rmarkdown::render("my-report.Rmd", output_format = "all")
+```
+
+To render to a specific output file name or directory:
+
+```{r eval=FALSE}
+rmarkdown::render(
+  input = "my-report.Rmd",
+  output_file = "final-report.html",
+  output_dir = "output/"
+)
+```
+
+### The Rendering Process
+
+When you knit an R Markdown document, the following steps happen under the hood:
+
+1. **knitr** reads the `.Rmd` file and executes all code chunks, producing a `.md` (Markdown) file with the code output woven in.
+2. **Pandoc** (a universal document converter bundled with RStudio) converts the `.md` file into the final output format (HTML, PDF, Word, etc.).
+3. For PDF output, Pandoc first creates a `.tex` file, which is then compiled by a LaTeX engine (pdflatex, xelatex, or lualatex).
+
+Understanding this pipeline helps with debugging: if you get an error about LaTeX, the issue is likely in step 3, and you may need to install missing LaTeX packages with `tinytex::tlmgr_install("package-name")`.
+
+## Tips and Best Practices {#tips-and-best-practices}
+
+### 1. Always Start with a Setup Chunk
+
+The first chunk in every document should be a named `setup` chunk that loads packages and sets global chunk options:
+
+````
+```{r setup, include=FALSE}`r ''`
+knitr::opts_chunk$set(
+  echo = TRUE,
+  message = FALSE,
+  warning = FALSE,
+  fig.align = "center"
+)
+library(tidyverse)
+library(knitr)
+```
+````
+
+RStudio treats a chunk named `setup` specially --- it is automatically run before any other chunk when you execute chunks interactively.
+
+### 2. Name Your Chunks
+
+Always name your code chunks. Named chunks provide several benefits:
+
+- **Easier navigation**: RStudio's chunk navigator (bottom-left of the editor) shows chunk names, making it easy to jump between sections.
+- **Better error messages**: When an error occurs, knitr reports the name of the chunk that failed, making debugging much faster.
+- **Cross-referencing**: As discussed in Section \@ref(cross-referencing), named chunks are required for figure and table cross-references.
+- **Cache management**: Cached chunk files use the chunk name, making it clear which cache files correspond to which chunks.
+
+### 3. Use Caching Wisely
+
+For chunks that take a long time to run (e.g., fitting models, downloading data, or running simulations), set `cache=TRUE` to avoid re-running them every time you knit:
+
+```{r eval=FALSE}
+```{r expensive-model, cache=TRUE}
+model <- lm(mpg ~ wt + hp + cyl, data = mtcars)
+```
+```
+
+However, be aware of caching pitfalls:
+
+- A cached chunk only re-runs when **its own code** changes. It does not automatically detect changes in upstream chunks, external data files, or package versions.
+- Use `dependson` to declare dependencies: `cache=TRUE, dependson="data-cleaning"` will invalidate the cache when the `data-cleaning` chunk changes.
+- When in doubt, delete the cache directory (named `*_cache/`) and re-knit from scratch.
+
+### 4. Keep Chunks Focused
+
+Each chunk should do one thing. Avoid writing mega-chunks with hundreds of lines of code. Short, focused chunks are:
+
+- Easier to read.
+- Easier to debug (the error message points to a specific chunk).
+- Easier to cache (only the changed chunk needs to re-run).
+
+### 5. Use Child Documents for Large Projects
+
+For very long documents, you can split content across multiple `.Rmd` files and include them as child documents:
+
+````
+```{r child="sections/data-cleaning.Rmd"}`r ''`
+```
+````
+
+This keeps each file manageable while producing a single unified output.
+
+### 6. Use `df_print` for Better Data Frame Output
+
+In the YAML header, set `df_print: paged` (for HTML) to make data frames display as interactive, paginated tables:
+
+````
+---
+output:
+  html_document:
+    df_print: paged
+---
+````
+
+Other options include `"default"`, `"kable"` (uses `knitr::kable()` automatically), and `"tibble"`.
+
+### 7. Version Control Your .Rmd Files
+
+R Markdown files are plain text, which makes them ideal for version control with Git. Commit the `.Rmd` source files (and any data files), but consider adding the output files (`.html`, `.pdf`) to `.gitignore` since they can be regenerated from the source at any time.
+
+### 8. Use Parameterized Reports
+
+For reports that need to be generated with different inputs (e.g., different dates, regions, or product lines), use parameters in the YAML header:
+
+````
+---
+title: "Regional Sales Report"
+params:
+  region: "West"
+  year: 2024
+output: html_document
+---
+````
+
+Access parameters in your code with `params$region` and `params$year`. Then render with custom values:
+
+```{r eval=FALSE}
+rmarkdown::render("report.Rmd", params = list(region = "East", year = 2023))
+```
+
+### 9. Useful Keyboard Shortcuts in RStudio
+
+| Shortcut (Windows/Linux)     | Shortcut (Mac)               | Action                        |
+|:-----------------------------|:-----------------------------|:------------------------------|
+| Ctrl+Alt+I                   | Cmd+Option+I                 | Insert a new code chunk       |
+| Ctrl+Shift+Enter             | Cmd+Shift+Enter              | Run the current chunk         |
+| Ctrl+Enter                   | Cmd+Enter                    | Run the current line/selection|
+| Ctrl+Shift+K                 | Cmd+Shift+K                  | Knit the document             |
+| Ctrl+Shift+C                 | Cmd+Shift+C                  | Comment/uncomment lines       |
+
+### 10. Quick Reference
+
+The RStudio team provides an excellent R Markdown cheat sheet and reference guide. You can access them from within RStudio via **Help > Cheat Sheets > R Markdown Cheat Sheet**. The official documentation is also available at [https://rmarkdown.rstudio.com](https://rmarkdown.rstudio.com).
+
+## Summary {#rmarkdown-summary}
+
+R Markdown is a remarkably versatile tool that bridges the gap between analysis and communication. In this chapter, we covered:
+
+- The **three components** of every `.Rmd` file: the YAML header, Markdown text, and code chunks.
+- **YAML header** options for controlling titles, output formats, tables of contents, themes, and code folding.
+- **Markdown syntax** for formatting text, including headers, emphasis, lists, links, images, tables, footnotes, and math equations.
+- **Code chunks** and their many options for controlling what is shown, what is executed, and how figures are displayed.
+- **Inline R code** for embedding computed values directly in narrative text.
+- **Output formats** including HTML, PDF, and Word, each with their own configuration options.
+- How to create polished **tables** with `knitr::kable()` and `kableExtra`.
+- How to include and control **figures and images**.
+- **Cross-referencing** figures, tables, and sections in bookdown.
+- **Citations and bibliography** management with `.bib` files.
+- **Rendering** documents with the Knit button or `rmarkdown::render()`.
+- **Best practices** for organizing and maintaining R Markdown documents.
+
+As you work through the rest of this book and the course at [http://patilv.com/VizAnalytics4Biz/](http://patilv.com/VizAnalytics4Biz/), you will use R Markdown extensively. The more you practice, the more natural the workflow becomes.
