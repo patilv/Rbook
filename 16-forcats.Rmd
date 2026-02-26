@@ -7,13 +7,13 @@ knitr::opts_chunk$set(echo = TRUE, warning = FALSE, message = FALSE)
 
 ## Factors = Categories. That's It.
 
-If you've ever made a bar chart in R and wondered why the bars are in alphabetical order instead of something useful --- congratulations, you've discovered why factors exist.
+If you have ever made a bar chart in R and wondered why the bars are in alphabetical order instead of something useful --- congratulations, you have discovered why factors exist.
 
-A **factor** is R's way of handling categorical data: things like survey responses ("Agree", "Neutral", "Disagree"), product categories, regions, departments, or customer segments. Under the hood, a factor is a character variable with a defined set of allowed values (called **levels**) in a specific order.
+A **factor** is just R's fancy word for a categorical variable: things like survey responses ("Agree", "Neutral", "Disagree"), product categories, regions, departments, or customer segments. Under the hood, it is a text variable with a defined set of allowed values (called **levels**) in a specific order.
 
-Why should you care about the order? Because **ggplot2 uses factor order to arrange your charts**. Alphabetical bars are almost never what you want in a business presentation. The **forcats** package (part of the tidyverse, loaded automatically) gives you simple tools to control that order.
+Why should you care about the order? One reason: **ggplot2 uses factor order to arrange your charts**. Alphabetical bars are the data visualization equivalent of an unsorted resume --- technically complete, but nobody wants to read it.
 
-Let's see the problem first.
+The **forcats** package (part of the tidyverse, loaded automatically) gives you simple tools to fix that. Let's see the problem first.
 
 
 ## The Problem: Alphabetical Everything
@@ -26,19 +26,19 @@ satisfaction <- c("Low", "Medium", "High", "Low", "High")
 factor(satisfaction)
 ```
 
-The levels are "High", "Low", "Medium" --- alphabetical, not logical. You want "Low", "Medium", "High". That's what factor manipulation is all about.
+The levels are "High", "Low", "Medium" --- alphabetical, not logical. You want "Low", "Medium", "High." That is the entire reason this chapter exists.
 
 ```{r}
 # Fix it by specifying levels
 factor(satisfaction, levels = c("Low", "Medium", "High"))
 ```
 
-The forcats package makes this kind of thing much easier, especially when you're working with real data that has dozens of categories.
+This manual approach works for three levels. When you have real data with dozens of categories, forcats makes it painless.
 
 
 ## The Dataset: General Social Survey
 
-We'll use `gss_cat`, a dataset built into forcats with survey data from the General Social Survey. It has several factor columns --- perfect for practice.
+We will use `gss_cat`, a dataset built into forcats with survey data from the General Social Survey. It has several factor columns --- perfect guinea pig.
 
 ```{r}
 glimpse(gss_cat)
@@ -47,9 +47,11 @@ glimpse(gss_cat)
 
 ## `fct_reorder()` --- THE Most Important Function
 
-If you learn one thing from this chapter, make it `fct_reorder()`. It reorders a factor based on the values of another variable. Translation: **it sorts your bar chart bars**.
+If you learn one thing from this chapter, make it this one. `fct_reorder()` reorders a factor by the values of another variable. In plain English: **it sorts your bar chart bars so they actually make sense.**
 
-Here's the before and after. First, without reordering:
+Think of it this way: if your bar chart were a PowerPoint slide, `fct_reorder()` is the difference between your manager saying "what am I looking at?" and "great insight." Here is the before-and-after.
+
+Without reordering:
 
 ```{r fig.cap="Religion by TV hours, unsorted. Good luck finding patterns here."}
 relig_summary <- gss_cat %>%
@@ -76,9 +78,7 @@ ggplot(relig_summary, aes(x = avg_tv, y = fct_reorder(relig, avg_tv))) +
   theme_minimal()
 ```
 
-See the difference? Same data, but the sorted version tells a story instantly. This is the difference between a chart your manager glances at and one they actually understand.
-
-Here's another example with a bar chart:
+Same data. Sorted version tells a story instantly. This is the difference between a chart that gets glanced at and one that gets discussed.
 
 ```{r fig.cap="Mean petal length by iris species, sorted by value."}
 iris %>%
@@ -90,12 +90,12 @@ iris %>%
   theme_minimal()
 ```
 
-**Rule of thumb:** If you're making a bar chart or dot plot with categories, use `fct_reorder()`. Always. Your audience will thank you.
+**Rule of thumb:** Making a bar chart or dot plot with categories? Use `fct_reorder()`. Always. No exceptions. Your audience will thank you by not falling asleep.
 
 
 ## `fct_infreq()` --- Sort by Count
 
-Sometimes you just want bars sorted by how many observations are in each category --- most common first. That's `fct_infreq()`.
+Sometimes you just want bars sorted by how many observations are in each category --- most popular first, like a bestseller list. That is `fct_infreq()`.
 
 ```{r fig.cap="Marital status bars sorted by frequency. Most common categories jump out immediately."}
 gss_cat %>%
@@ -106,7 +106,7 @@ gss_cat %>%
   theme_minimal()
 ```
 
-Combine it with `fct_rev()` for a horizontal bar chart that reads top-to-bottom:
+Combine it with `fct_rev()` for a horizontal bar chart that reads top-to-bottom (the way humans naturally read):
 
 ```{r fig.cap="Horizontal bars with the most common status at the top."}
 gss_cat %>%
@@ -120,9 +120,7 @@ gss_cat %>%
 
 ## `fct_relevel()` --- Manual Ordering
 
-Sometimes you need a specific order that isn't alphabetical or by frequency. Maybe you want "Never married" first because that's your reference group, or you need income brackets from low to high.
-
-`fct_relevel()` lets you move specific levels to wherever you want.
+Sometimes you need a specific order that is not alphabetical or by frequency. Maybe "Never married" is your reference group in a regression, or you need income brackets from low to high. `fct_relevel()` lets you move specific levels wherever you want --- like rearranging slides in a deck.
 
 ```{r}
 # Default level order
@@ -158,12 +156,12 @@ gss_cat %>%
   theme_minimal()
 ```
 
-Now the bars tell a life-stage story: never married, married, separated, divorced, widowed. Much more intuitive than alphabetical.
+Now the bars tell a life-stage story: never married, married, separated, divorced, widowed. Much more intuitive than whatever "alphabetical" was trying to communicate.
 
 
 ## `fct_recode()` --- Rename Your Categories
 
-Survey data often comes with cryptic or inconsistent labels. `fct_recode()` lets you rename levels with a simple `"new name" = "old name"` syntax.
+Survey data often arrives with labels that look like someone's internal database codes. `fct_recode()` lets you rename levels with a simple `"new name" = "old name"` syntax. Think of it as "Find and Replace" for category labels.
 
 ```{r}
 gss_cat %>%
@@ -178,12 +176,12 @@ gss_cat %>%
   count(partyid)
 ```
 
-This is also great when your data has labels like "1", "2", "3" that should really say "Strongly Disagree", "Neutral", "Strongly Agree".
+Also great when your data has labels like "1", "2", "3" that should really say "Strongly Disagree", "Neutral", "Strongly Agree." Your stakeholders should never have to decode numbers on a chart.
 
 
 ## `fct_collapse()` --- Merge Categories Together
 
-Sometimes you have too many categories and need to combine them. `fct_collapse()` merges multiple levels into new groups.
+Sometimes you have too many categories and need to consolidate. `fct_collapse()` merges multiple levels into new groups. Think of it as the "department reorganization" of your data --- fewer groups, cleaner org chart.
 
 ```{r}
 gss_cat %>%
@@ -196,7 +194,7 @@ gss_cat %>%
   count(partyid)
 ```
 
-And the chart payoff --- a clean, simple political affiliation plot:
+And the chart payoff --- a clean, executive-summary-ready political affiliation plot:
 
 ```{r fig.cap="Political affiliation after collapsing into four clean groups."}
 gss_cat %>%
@@ -217,12 +215,12 @@ gss_cat %>%
   theme_minimal()
 ```
 
-Went from 10 confusing categories to 4 clear ones. Your stakeholders will actually understand this chart.
+Went from 10 confusing categories to 4 clean ones. That is a chart your VP can actually read from across the conference table.
 
 
 ## `fct_lump()` --- "Show Me the Top N, Lump the Rest"
 
-This is a lifesaver when you have a variable with 30+ categories. Nobody wants a bar chart with 30 bars. `fct_lump_n()` keeps the top N categories and lumps everything else into "Other."
+This is the function you reach for when you have a variable with 30+ categories. Nobody wants a bar chart with 30 bars --- that is not a chart, that is a picket fence. `fct_lump_n()` keeps the top N categories and lumps everything else into "Other."
 
 ```{r}
 # Keep the 4 most common religions, lump the rest
@@ -257,15 +255,15 @@ gss_cat %>%
 There are a few variants depending on how you want to decide what gets lumped:
 
 - `fct_lump_n(x, n = 5)` --- keep top 5
-- `fct_lump_prop(x, prop = 0.10)` --- keep categories representing at least 10% of data
+- `fct_lump_prop(x, prop = 0.10)` --- keep categories with at least 10% of the data
 - `fct_lump_min(x, min = 100)` --- keep categories with at least 100 observations
 
-Pick the one that matches your question.
+Pick whichever matches your question.
 
 
 ## Bonus: Making mtcars Charts Better with Factors
 
-The `mtcars` dataset has variables like `cyl` (cylinders) and `am` (transmission) coded as numbers. They're really categories. Converting them to factors with meaningful labels instantly makes your charts more professional.
+The `mtcars` dataset has variables like `cyl` (cylinders) and `am` (transmission) coded as numbers. They are really categories wearing a numerical disguise. Converting them to factors with meaningful labels instantly makes your charts presentation-ready.
 
 ```{r fig.cap="Mean MPG by cylinders and transmission. Labeled factors make this chart presentation-ready."}
 mtcars %>%
@@ -283,12 +281,12 @@ mtcars %>%
   theme_minimal()
 ```
 
-Without factors, those bars would just say "0" and "1" for transmission. With factors, they say "Automatic" and "Manual." Small change, big impact.
+Without factors, those bars would just say "0" and "1" for transmission. With factors, they say "Automatic" and "Manual." Small change, enormous difference in whether your audience has any idea what they are looking at.
 
 
 ## `fct_reorder2()` --- Aligning Legends with Lines
 
-Quick bonus for line charts. When you have multiple lines, the legend should match the visual order of the lines at the right edge of the plot. `fct_reorder2()` does this automatically.
+Quick bonus for line charts. When you have multiple lines, the legend should match the visual order of the lines at the right edge of the plot. `fct_reorder2()` handles this automatically --- a small detail that makes your charts look polished.
 
 ```{r fig.cap="Line chart where the legend order matches the line positions at the right edge."}
 gss_cat %>%
@@ -309,7 +307,7 @@ gss_cat %>%
 
 ## Quick Reference
 
-Here's your factor toolkit at a glance:
+Your factor toolkit at a glance:
 
 | What you want to do | Function | When to use it |
 |:---------------------|:---------|:---------------|
@@ -317,8 +315,8 @@ Here's your factor toolkit at a glance:
 | Sort bars by count | `fct_infreq()` | "Show me what's most common" |
 | Reverse the order | `fct_rev()` | Horizontal bar charts (top to bottom) |
 | Set a custom order | `fct_relevel()` | Life stages, survey scales, custom sorts |
-| Rename categories | `fct_recode()` | Cryptic labels need fixing |
+| Rename categories | `fct_recode()` | Cryptic labels need human-readable names |
 | Merge categories | `fct_collapse()` | Too many groups, need to simplify |
 | Keep top N, lump rest | `fct_lump_n()` | 30 categories? Nobody wants that chart |
 
-The single most impactful habit from this chapter: **always use `fct_reorder()` or `fct_infreq()` in your ggplot2 charts.** Alphabetical ordering is almost never the most informative ordering, and a well-ordered factor is the difference between a confusing chart and one that tells a clear story.
+The single most impactful habit from this chapter: **always use `fct_reorder()` or `fct_infreq()` in your ggplot2 charts.** Alphabetical ordering is almost never the most informative ordering. A well-ordered factor is the difference between a confusing chart and one that gets you promoted. Well, maybe not promoted --- but at least not asked to redo it.
