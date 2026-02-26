@@ -6,122 +6,80 @@ library(lubridate)
 knitr::opts_chunk$set(echo = TRUE, warning = FALSE, message = FALSE)
 ```
 
-Dates and times are among the most deceptively difficult data types in programming. They seem straightforward on the surface --- everyone knows what "January 15, 2025" means --- but beneath that simplicity lies a thicket of complications. Months have different numbers of days. Years can be leap years. Time zones shift boundaries. Daylight saving time creates hours that happen twice and hours that do not happen at all. Even the seemingly simple question "how many days are between these two dates?" can have a surprising answer when a daylight saving transition falls in between.
+## Dates Are Weird. Lubridate Makes Them Less Weird.
 
-Base R provides tools for working with dates and times, but their interfaces are inconsistent and their behavior can be unintuitive. The **lubridate** package, created by Garrett Grolemund and Hadley Wickham, provides a consistent, human-friendly toolkit for parsing, manipulating, and performing arithmetic with dates and times. It is not loaded automatically with `library(tidyverse)`, so you must load it explicitly.
+Dates look simple. Everyone knows what "January 15, 2025" means. But try to do math with dates and things get strange fast. Months have different numbers of days. Years sometimes have an extra day. And don't even get me started on daylight saving time.
 
-## Date and Time Classes in R
+Base R has tools for dates, but they require you to memorize format strings like `"%m/%d/%Y"` (and yes, the capital Y matters). The **lubridate** package takes a different approach: just tell it what order the year, month, and day appear in, and it figures out the rest.
 
-Before diving into lubridate's functions, it helps to understand R's three main date/time classes.
+One important note: lubridate is NOT loaded automatically with `library(tidyverse)`. You need to load it separately:
 
-| Class | Stores | Created by | Example |
-|:------------|:---------------------------------|:---------------------------|:-------------------------|
-| `Date` | A date (no time) | `as.Date()`, lubridate | `2025-06-15` |
-| `POSIXct` | A date and time | `as.POSIXct()`, lubridate | `2025-06-15 14:30:00` |
-| `hms` | A time of day (no date) | `hms::hms()` | `14:30:00` |
-
-Internally, R stores `Date` objects as the number of days since January 1, 1970 (the Unix epoch), and `POSIXct` objects as the number of seconds since the same epoch. This numeric representation is what makes date arithmetic possible.
-
-```{r}
-# A Date object is stored as days since 1970-01-01
-d <- as.Date("2025-01-15")
-d
-unclass(d)  # number of days since the epoch
+```{r eval=FALSE}
+library(lubridate)
 ```
 
-```{r}
-# A POSIXct object is stored as seconds since 1970-01-01
-dt <- as.POSIXct("2025-01-15 10:30:00", tz = "UTC")
-dt
-unclass(dt)  # number of seconds since the epoch
-```
-
-Understanding this internal representation helps explain why lubridate's arithmetic functions work the way they do.
+Let's jump in.
 
 
-## Creating Dates and Times
+## Parsing Dates: `ymd()`, `mdy()`, `dmy()`
 
-Lubridate provides several families of functions for creating date and time objects. The most convenient are the parsing functions that automatically detect the format of a date string based on the order of its components.
+This is the single best thing about lubridate. Instead of memorizing format codes, you just pick the function that matches the order of your date components.
 
-### Parsing Dates from Strings
-
-The key insight behind lubridate's parsing functions is that you only need to specify the **order** of the year, month, and day components --- not the exact format. The function name tells lubridate what order to expect.
+**Year-Month-Day?** Use `ymd()`:
 
 ```{r}
-# Year-Month-Day
 ymd("2025-06-15")
 ymd("2025/06/15")
 ymd("20250615")
 ```
 
+**Month-Day-Year (the American way)?** Use `mdy()`:
+
 ```{r}
-# Month-Day-Year (common US format)
 mdy("06-15-2025")
 mdy("June 15, 2025")
 mdy("Jun 15 2025")
 ```
 
+**Day-Month-Year (the rest-of-the-world way)?** Use `dmy()`:
+
 ```{r}
-# Day-Month-Year (common European format)
 dmy("15-06-2025")
 dmy("15 June 2025")
 dmy("15/06/2025")
 ```
 
-Notice that each function handles a wide variety of separators, abbreviations, and formats --- all you need to specify is the order. This is far more convenient than base R's `as.Date()`, which requires an explicit format string like `"%m/%d/%Y"`.
+Notice that each function handles slashes, dashes, spaces, full month names, and abbreviations. You just tell it the order and lubridate does the rest. Compare that with base R's `as.Date("06/15/2025", format = "%m/%d/%Y")` and you'll never look back.
 
-### Parsing Date-Times from Strings
-
-Adding `_hms`, `_hm`, or `_h` to the function name tells lubridate to also parse time components (hours, minutes, seconds).
+These functions are vectorized, so they work on entire columns:
 
 ```{r}
-# Date-time with hours, minutes, and seconds
-ymd_hms("2025-06-15 14:30:45")
-ymd_hms("2025/06/15 14:30:45")
+date_strings <- c("January 1, 2025", "February 14, 2025", "July 4, 2025", "December 25, 2025")
+mdy(date_strings)
 ```
 
+
+## Adding Time: `ymd_hms()` and Friends
+
+Need date AND time? Just add `_hms` (hours, minutes, seconds) to the function name:
+
 ```{r}
-# Date-time with hours and minutes only
-ymd_hm("2025-06-15 14:30")
+ymd_hms("2025-06-15 14:30:45")
 mdy_hm("June 15, 2025 2:30 PM")
 ```
 
+You can also specify a time zone:
+
 ```{r}
-# Specify a time zone
 ymd_hms("2025-06-15 14:30:45", tz = "America/New_York")
-ymd_hms("2025-06-15 14:30:45", tz = "Europe/London")
 ```
 
-By default, lubridate's parsing functions return dates in UTC. If your data represents times in a specific time zone, always specify the `tz` argument.
 
-### Parsing Vectors of Dates
+## Building Dates from Separate Columns
 
-These functions are vectorized, so they work naturally on entire columns of data.
-
-```{r}
-date_strings <- c("2025-01-15", "2025-03-22", "2025-07-04", "2025-12-25")
-ymd(date_strings)
-```
+Sometimes your data has year, month, and day in separate columns (looking at you, Excel exports). `make_date()` puts them together:
 
 ```{r}
-us_dates <- c("January 1, 2025", "February 14, 2025", "July 4, 2025", "December 25, 2025")
-mdy(us_dates)
-```
-
-### Creating Dates from Individual Components
-
-When your data has year, month, and day in separate columns, use `make_date()` or `make_datetime()` to assemble them into a proper date object.
-
-```{r}
-make_date(year = 2025, month = 6, day = 15)
-```
-
-```{r}
-make_datetime(year = 2025, month = 6, day = 15, hour = 14, min = 30, sec = 0)
-```
-
-```{r}
-# These functions are vectorized, making them ideal for use inside mutate()
 event_data <- tibble(
   event = c("Conference", "Workshop", "Seminar", "Retreat"),
   yr = c(2025, 2025, 2025, 2026),
@@ -129,150 +87,53 @@ event_data <- tibble(
   dy = c(10, 22, 5, 15)
 )
 
-event_data |>
+event_data %>%
   mutate(event_date = make_date(yr, mo, dy))
 ```
 
-### Converting from Other Types
 
-Lubridate provides `as_date()` and `as_datetime()` for converting between date types and from numeric values.
+## Today and Now
 
-```{r}
-# Convert a datetime to a date (drops the time component)
-dt <- ymd_hms("2025-06-15 14:30:00")
-as_date(dt)
-```
-
-```{r}
-# Convert a date to a datetime (sets time to midnight)
-d <- ymd("2025-06-15")
-as_datetime(d)
-```
-
-```{r}
-# Convert from a numeric value (days since epoch for dates, seconds for datetimes)
-as_date(20000)        # 20000 days after 1970-01-01
-as_datetime(1750000000)  # 1.75 billion seconds after the epoch
-```
-
-### Getting the Current Date and Time
-
-The `today()` and `now()` functions return the current date and date-time, respectively.
+Need the current date or time? Easy:
 
 ```{r}
 today()
 now()
 ```
 
-```{r}
-# Specify a time zone
-now("America/Chicago")
-now("Asia/Tokyo")
-```
+These are surprisingly useful for things like calculating how many days until a deadline or filtering data to "last 30 days."
 
 
-## Getting and Setting Components
+## Extracting Components: Year, Month, Day, etc.
 
-Once you have a date or datetime object, you often need to extract individual components --- the year, the month, the day of the week, and so on. Lubridate provides a complete set of accessor functions for this purpose.
-
-### Extracting Components
+Once you have a proper date object, you can pull it apart into pieces. This is where dates become really useful for business analysis --- think "sales by month" or "orders by day of week."
 
 ```{r}
 dt <- ymd_hms("2025-06-15 14:30:45")
 
 year(dt)
 month(dt)
-mday(dt)    # day of the month
-yday(dt)    # day of the year
-wday(dt)    # day of the week (1 = Sunday by default)
+mday(dt)      # day of the month
+wday(dt)      # day of the week (1 = Sunday by default)
 hour(dt)
-minute(dt)
-second(dt)
+quarter(dt)
 ```
 
-### Labels for Month and Day of Week
-
-By default, `month()` and `wday()` return numeric values. Setting `label = TRUE` returns an ordered factor with abbreviated names, which is especially useful for plotting.
+Want month names instead of numbers? Set `label = TRUE`:
 
 ```{r}
 month(dt, label = TRUE)
-month(dt, label = TRUE, abbr = FALSE)  # full month name
+month(dt, label = TRUE, abbr = FALSE)
 ```
+
+Same for day of the week:
 
 ```{r}
 wday(dt, label = TRUE)
-wday(dt, label = TRUE, abbr = FALSE)  # full day name
+wday(dt, label = TRUE, abbr = FALSE)
 ```
 
-You can also change the start of the week. By default, `wday()` uses Sunday as day 1 (the US convention). Set `week_start = 1` to use Monday as day 1 (the ISO convention).
-
-```{r}
-# Sunday = 1 (default)
-wday(ymd("2025-06-15"))
-
-# Monday = 1
-wday(ymd("2025-06-15"), week_start = 1)
-```
-
-### Additional Component Functions
-
-```{r}
-dt <- ymd_hms("2025-06-15 14:30:45")
-
-# Quarter of the year
-quarter(dt)
-
-# Week of the year
-week(dt)
-isoweek(dt)  # ISO 8601 week number
-
-# Whether the year is a leap year
-leap_year(2024)
-leap_year(2025)
-
-# AM or PM
-am(dt)
-pm(dt)
-```
-
-### Setting Components
-
-Each accessor function can also be used as a setter by assigning a value to it. This modifies the date in place.
-
-```{r}
-dt <- ymd_hms("2025-06-15 14:30:45")
-dt
-
-year(dt) <- 2026
-dt
-
-month(dt) <- 1
-dt
-
-mday(dt) <- 20
-dt
-
-hour(dt) <- 9
-dt
-```
-
-### Using update() for Multiple Changes
-
-The `update()` function lets you change multiple components at once without modifying the original object.
-
-```{r}
-dt <- ymd_hms("2025-06-15 14:30:45")
-
-# Change the year, month, and hour simultaneously
-update(dt, year = 2026, month = 12, hour = 8)
-
-# The original object is unchanged
-dt
-```
-
-### Extracting Components in Data Frames
-
-These functions integrate naturally with dplyr's `mutate()`.
+Here's how this looks in a real workflow --- breaking a transaction date into analysis-friendly components:
 
 ```{r}
 sales_data <- tibble(
@@ -284,218 +145,67 @@ sales_data <- tibble(
   amount = c(150, 280, 95, 420, 175, 310)
 )
 
-sales_data |>
+sales_data %>%
   mutate(
-    sale_year = year(transaction_date),
     sale_month = month(transaction_date, label = TRUE),
     sale_day = wday(transaction_date, label = TRUE),
-    sale_hour = hour(transaction_date),
     sale_quarter = quarter(transaction_date)
   )
 ```
 
+Now you can group by month, day of week, or quarter. That's how you answer questions like "Do we sell more on weekdays or weekends?" or "Which quarter had the highest revenue?"
 
-## Time Spans
 
-One of lubridate's most valuable features is its system for representing and computing with time spans. There are three distinct types, each suited to different situations.
+## Date Math: Adding and Subtracting Time
 
-### Durations: Exact Number of Seconds
+This is one of the best parts. You can just add time to dates. Lubridate gives you two ways to think about it:
 
-A **duration** represents an exact number of seconds. Because it uses a fixed unit, durations are mathematically precise but do not always align with human intuition about time. For example, a "duration of one year" is always exactly 365.25 days (31,557,600 seconds), regardless of whether the actual year is a leap year.
-
-```{r}
-dseconds(30)
-dminutes(5)
-dhours(2)
-ddays(7)
-dweeks(4)
-dyears(1)
-```
+**Durations** --- exact amounts of time measured in seconds:
 
 ```{r}
-# Durations can be added to dates
 ymd("2025-01-01") + ddays(30)
 ymd("2025-01-01") + dweeks(2)
 ymd_hms("2025-06-15 10:00:00") + dhours(3)
 ```
 
-```{r}
-# Duration arithmetic
-ddays(5) + dhours(12)
-dweeks(2) - ddays(3)
-3 * dhours(8)
-```
-
-Because durations are stored as seconds internally, they can produce unexpected results across daylight saving time boundaries. For clock-time calculations, periods (described next) are usually more appropriate.
-
-### Periods: Human-Friendly Time Spans
-
-A **period** represents a time span in human units --- years, months, weeks, days, hours, minutes, and seconds. Unlike durations, periods respect the varying lengths of months and years. Adding "one month" to January 31 gives February 28 (or 29), not a fixed number of seconds later.
+**Periods** --- calendar-aware amounts (respects different month lengths):
 
 ```{r}
-seconds(30)
-minutes(5)
-hours(2)
-days(7)
-weeks(4)
-months(3)
-years(1)
-```
-
-```{r}
-# Periods respect calendar irregularities
-ymd("2025-01-31") + months(1)   # February doesn't have 31 days
-ymd("2024-02-29") + years(1)    # 2025 is not a leap year
-```
-
-```{r}
-# Adding periods to dates
 ymd("2025-01-01") + months(6)
+ymd("2025-01-31") + months(1)    # February doesn't have 31 days, so you get NA
 ymd("2025-03-15") + years(2) + months(3) + days(10)
 ```
 
-```{r}
-# Period arithmetic
-months(6) + days(15)
-years(1) - months(3)
-```
+**When to use which?** Use durations when you need an exact elapsed time ("How many seconds did this process take?"). Use periods when you need calendar math ("What's the date 3 months from now?"). For most business analysis, periods are what you want.
 
-### When to Use Durations vs. Periods
-
-The choice between durations and periods depends on what question you are asking:
-
-- Use **durations** when you need an exact physical elapsed time (e.g., "How many seconds did this process take?").
-- Use **periods** when you need calendar-aware arithmetic (e.g., "What date is three months from now?").
+You can also just subtract dates to get the difference:
 
 ```{r}
-# Durations: exact elapsed time
-start <- ymd_hms("2025-03-09 01:00:00", tz = "America/New_York")
-start + dhours(2)   # exactly 7200 seconds later
-
-# Periods: calendar-based
-start + hours(2)    # two clock-hours later (may differ from duration across DST)
+as.numeric(ymd("2025-12-31") - ymd("2025-01-01"))
 ```
 
-### Intervals: A Span with a Start and End
+That's the number of days between two dates. Simple.
 
-An **interval** represents the time span between two specific points in time. Unlike durations and periods, an interval knows exactly when it starts and ends, which makes it possible to convert it precisely to any unit.
 
-```{r}
-# Create an interval
-start_date <- ymd("2025-01-01")
-end_date <- ymd("2025-07-15")
+## Intervals: Did This Event Happen During This Period?
 
-my_interval <- interval(start_date, end_date)
-my_interval
-```
-
-```{r}
-# The %--% operator is a shorthand for interval()
-my_interval <- ymd("2025-01-01") %--% ymd("2025-07-15")
-my_interval
-```
-
-```{r}
-# Get the start and end of an interval
-int_start(my_interval)
-int_end(my_interval)
-```
-
-```{r}
-# Get the length of an interval in seconds
-int_length(my_interval)
-```
-
-```{r}
-# Divide an interval by a period to get the number of complete units
-my_interval / months(1)    # approximately how many months
-my_interval / days(1)      # how many days
-my_interval / weeks(1)     # how many weeks
-```
-
-### Testing Whether a Date Falls Within an Interval
-
-The `%within%` operator tests whether a date or datetime falls inside an interval.
+An interval is just a span of time with a start and end. The main use case is checking whether a date falls within a range.
 
 ```{r}
 spring_semester <- ymd("2025-01-13") %--% ymd("2025-05-09")
 
 ymd("2025-03-15") %within% spring_semester
 ymd("2025-06-01") %within% spring_semester
-ymd("2025-01-13") %within% spring_semester  # start date is included
 ```
 
-```{r}
-# Test multiple dates at once
-test_dates <- ymd(c("2025-01-01", "2025-02-14", "2025-04-30", "2025-06-15"))
-test_dates %within% spring_semester
-```
-
-### Comparing and Overlapping Intervals
-
-```{r}
-# Do two intervals overlap?
-semester1 <- ymd("2025-01-13") %--% ymd("2025-05-09")
-semester2 <- ymd("2025-08-25") %--% ymd("2025-12-12")
-summer <- ymd("2025-05-10") %--% ymd("2025-08-24")
-
-int_overlaps(semester1, summer)
-int_overlaps(semester1, semester2)
-```
+Useful for questions like "Did this sale happen during our Q2 promotion?" or "Was this employee hired during the pandemic?"
 
 
-## Rounding Dates
+## Rounding Dates: Grouping by Time Period
 
-Lubridate provides three functions for rounding dates to a specified unit: `floor_date()`, `ceiling_date()`, and `round_date()`. These are invaluable for grouping dates into bins --- for example, aggregating daily data to monthly totals.
+`floor_date()` rounds a date down to the nearest unit. This is incredibly useful for aggregating data --- turning daily transactions into monthly summaries, for example.
 
 ```{r}
-dt <- ymd_hms("2025-06-15 14:35:22")
-
-# Round down (floor) to various units
-floor_date(dt, unit = "year")
-floor_date(dt, unit = "month")
-floor_date(dt, unit = "week")
-floor_date(dt, unit = "day")
-floor_date(dt, unit = "hour")
-floor_date(dt, unit = "minute")
-```
-
-```{r}
-# Round up (ceiling)
-ceiling_date(dt, unit = "month")
-ceiling_date(dt, unit = "hour")
-```
-
-```{r}
-# Round to nearest
-round_date(dt, unit = "hour")    # 14:35 rounds to 15:00
-round_date(dt, unit = "month")   # June 15 rounds to July (past midpoint)
-```
-
-### Rounding with Custom Intervals
-
-You can specify multi-unit intervals for rounding.
-
-```{r}
-dt <- ymd_hms("2025-06-15 14:35:22")
-
-# Round to the nearest 15-minute interval
-floor_date(dt, unit = "15 minutes")
-ceiling_date(dt, unit = "15 minutes")
-
-# Round to the nearest 6-hour block
-floor_date(dt, unit = "6 hours")
-
-# Round to 2-month intervals
-floor_date(dt, unit = "2 months")
-```
-
-### Rounding in Data Pipelines
-
-Rounding is especially useful for aggregating data by time period.
-
-```{r}
-# Daily transactions aggregated to monthly totals
 transactions <- tibble(
   date = ymd(c(
     "2025-01-05", "2025-01-18", "2025-01-29",
@@ -505,316 +215,86 @@ transactions <- tibble(
   revenue = c(1200, 950, 1100, 1350, 800, 1500, 1050, 1200, 900)
 )
 
-transactions |>
-  mutate(month = floor_date(date, unit = "month")) |>
-  group_by(month) |>
+transactions %>%
+  mutate(month = floor_date(date, unit = "month")) %>%
+  group_by(month) %>%
   summarize(
     total_revenue = sum(revenue),
     n_transactions = n()
   )
 ```
 
+You can also round to weeks, quarters, or even custom intervals like "15 minutes" or "6 hours" if you're working with high-frequency data.
 
-## Time Zones
 
-Time zones are one of the most confusing aspects of working with date-time data. Lubridate provides two key functions for dealing with them, and understanding the difference between them is critical.
+## Time Zones: The One Paragraph Version
 
-### Viewing Time Zones
-
-```{r}
-# The current time in different zones
-now("America/New_York")
-now("America/Los_Angeles")
-now("Europe/London")
-now("Asia/Tokyo")
-```
-
-```{r}
-# List a sample of available time zones (there are hundreds)
-head(OlsonNames(), 20)
-```
-
-```{r}
-# How many time zones are available?
-length(OlsonNames())
-```
-
-### with_tz(): Change the Display
-
-The `with_tz()` function changes how a datetime is **displayed** without changing the underlying instant in time. It answers the question: "What time is it in another time zone at this same moment?"
+Time zones are complicated, but here's what you need to know. `with_tz()` converts a time for display ("What time is this New York meeting in Tokyo?") without changing the actual moment. `force_tz()` corrects a mislabeled time zone ("This was recorded as UTC but it was actually Eastern"). If you're working with data from a single time zone, you probably don't need either of these.
 
 ```{r}
 meeting_time <- ymd_hms("2025-06-15 10:00:00", tz = "America/New_York")
-meeting_time
-
-# What time is this meeting in London?
-with_tz(meeting_time, tzone = "Europe/London")
-
-# What time is this meeting in Tokyo?
-with_tz(meeting_time, tzone = "Asia/Tokyo")
-
-# What time is this meeting in Los Angeles?
-with_tz(meeting_time, tzone = "America/Los_Angeles")
+with_tz(meeting_time, tzone = "Asia/Tokyo")    # same moment, displayed in Tokyo time
 ```
 
-The underlying moment in time is the same in all four cases --- only the display changes.
 
-### force_tz(): Change the Clock Time
+## Practical Example: Analyzing Economic Trends
 
-The `force_tz()` function changes the **time zone label** without changing the clock-face time. It answers the question: "This datetime was recorded without a time zone, and I know it was actually in this zone."
-
-```{r}
-# Suppose a time was recorded as UTC but was actually Eastern Time
-recorded <- ymd_hms("2025-06-15 10:00:00", tz = "UTC")
-recorded
-
-# Correct the time zone: the clock reading 10:00 was actually in New York
-corrected <- force_tz(recorded, tzone = "America/New_York")
-corrected
-
-# Notice the underlying instant has changed
-with_tz(recorded, tzone = "America/New_York")   # with_tz: same instant, different display
-with_tz(corrected, tzone = "UTC")               # force_tz changed the actual instant
-```
-
-The distinction is crucial:
-
-- **`with_tz()`**: Same instant, different label. Use when converting for display.
-- **`force_tz()`**: Different instant, same clock reading. Use when correcting a mislabeled time zone.
-
-
-## Practical Examples
-
-Let us put lubridate's tools to work in realistic data analysis scenarios, integrating with dplyr and ggplot2.
-
-### Analyzing the Economics Dataset
-
-The built-in `economics` dataset from ggplot2 contains monthly US economic data from 1967 to 2015. The `date` column is already a Date object, making it an excellent playground for lubridate.
+Let's use lubridate with the built-in `economics` dataset to do some real analysis. This dataset has monthly US economic data from 1967 to 2015.
 
 ```{r}
-data(economics)
-glimpse(economics)
-```
-
-```{r}
-# Add time components for analysis
-econ_enhanced <- economics |>
-  mutate(
-    year = year(date),
-    month = month(date, label = TRUE),
-    decade = floor_date(date, unit = "10 years")
-  )
-
-head(econ_enhanced)
-```
-
-```{r}
-# Average unemployment rate by decade
-econ_enhanced |>
-  group_by(decade) |>
-  summarize(
-    avg_unemploy = mean(unemploy),
-    avg_pop = mean(pop),
-    n_months = n()
-  )
-```
-
-```{r}
-# Monthly unemployment trend (averaged across all years)
-econ_enhanced |>
-  group_by(month) |>
-  summarize(avg_unemploy = mean(unemploy)) |>
-  ggplot(aes(x = month, y = avg_unemploy)) +
-  geom_col(fill = "steelblue") +
-  labs(
-    title = "Average US Unemployment by Month (1967-2015)",
-    x = "Month",
-    y = "Unemployment (thousands)"
-  ) +
-  theme_minimal()
-```
-
-```{r}
-# Unemployment over time, colored by decade
-economics |>
-  mutate(decade = factor(10 * (year(date) %/% 10))) |>
+economics %>%
+  mutate(decade = factor(10 * (year(date) %/% 10))) %>%
   ggplot(aes(x = date, y = unemploy, color = decade)) +
   geom_line() +
   labs(
     title = "US Unemployment Over Time",
-    x = "Date",
-    y = "Unemployment (thousands)",
-    color = "Decade"
+    x = "Date", y = "Unemployment (thousands)", color = "Decade"
   ) +
   theme_minimal()
 ```
 
-### Calculating Age from a Birthdate
-
-A common task is computing a person's age from their date of birth. This requires an interval divided by years.
-
 ```{r}
-people <- tibble(
-  name = c("Alice", "Bob", "Carol", "David", "Eve"),
-  birthdate = ymd(c("1990-05-20", "1985-11-03", "2000-02-29", "1978-08-15", "1995-12-01"))
-)
-
-people |>
-  mutate(
-    age = as.numeric(interval(birthdate, today()) / years(1)),
-    age_years = floor(age)
-  )
-```
-
-Note the handling of Carol's leap year birthday --- the interval-based calculation correctly accounts for this edge case.
-
-### Time Between Events
-
-Calculating the elapsed time between successive events is a pattern that appears in many domains --- customer transactions, medical visits, machine maintenance logs.
-
-```{r}
-service_log <- tibble(
-  machine_id = c("A", "A", "A", "B", "B", "B", "B"),
-  service_date = ymd(c(
-    "2025-01-10", "2025-03-22", "2025-06-15",
-    "2025-01-05", "2025-02-18", "2025-05-01", "2025-07-20"
-  )),
-  service_type = c("routine", "repair", "routine",
-                   "routine", "routine", "repair", "routine")
-)
-
-service_log |>
-  group_by(machine_id) |>
-  arrange(service_date) |>
-  mutate(
-    days_since_last = as.numeric(service_date - lag(service_date)),
-    cumulative_days = as.numeric(service_date - first(service_date))
-  )
-```
-
-### Working with Business Days and Weekends
-
-Lubridate makes it easy to identify weekdays and weekends.
-
-```{r}
-# Generate a sequence of dates
-dates_in_june <- tibble(
-  date = seq(ymd("2025-06-01"), ymd("2025-06-30"), by = "day")
-)
-
-dates_in_june |>
-  mutate(
-    day_name = wday(date, label = TRUE, abbr = FALSE),
-    is_weekend = wday(date) %in% c(1, 7),
-    day_type = if_else(is_weekend, "Weekend", "Weekday")
-  ) |>
-  count(day_type)
-```
-
-### Grouping and Summarizing by Time Periods
-
-```{r}
-# Simulate daily website traffic
-set.seed(42)
-web_traffic <- tibble(
-  date = seq(ymd("2025-01-01"), ymd("2025-12-31"), by = "day"),
-  visits = rpois(365, lambda = 500) + round(100 * sin(2 * pi * (1:365) / 365))
-)
-
-# Weekly summary
-web_traffic |>
-  mutate(week = floor_date(date, unit = "week")) |>
-  group_by(week) |>
-  summarize(
-    total_visits = sum(visits),
-    avg_daily_visits = mean(visits),
-    peak_day = date[which.max(visits)]
-  ) |>
-  head(10)
-```
-
-```{r}
-# Monthly summary with visualization
-web_traffic |>
-  mutate(month = floor_date(date, unit = "month")) |>
-  group_by(month) |>
-  summarize(total_visits = sum(visits)) |>
-  ggplot(aes(x = month, y = total_visits)) +
-  geom_col(fill = "darkorange") +
-  scale_x_date(date_labels = "%b", date_breaks = "1 month") +
+economics %>%
+  mutate(month = month(date, label = TRUE)) %>%
+  group_by(month) %>%
+  summarize(avg_unemploy = mean(unemploy)) %>%
+  ggplot(aes(x = month, y = avg_unemploy)) +
+  geom_col(fill = "steelblue") +
   labs(
-    title = "Monthly Website Traffic (2025)",
-    x = "Month",
-    y = "Total Visits"
+    title = "Average US Unemployment by Month (1967-2015)",
+    x = "Month", y = "Unemployment (thousands)"
   ) +
   theme_minimal()
 ```
 
-### Creating Date Sequences
-
-The base R `seq()` function works with lubridate dates to create regular sequences.
-
 ```{r}
-# Daily sequence
-seq(ymd("2025-01-01"), ymd("2025-01-10"), by = "day")
-```
-
-```{r}
-# Weekly sequence
-seq(ymd("2025-01-01"), ymd("2025-03-31"), by = "week")
-```
-
-```{r}
-# Monthly sequence
-seq(ymd("2025-01-01"), ymd("2025-12-01"), by = "month")
-```
-
-```{r}
-# Custom interval: every 2 weeks
-seq(ymd("2025-01-01"), ymd("2025-06-30"), by = "2 weeks")
-```
-
-### Filtering Data by Date Ranges
-
-Combining lubridate with dplyr's `filter()` and `between()` makes date-range queries clean and readable.
-
-```{r}
-# Filter the economics dataset to the 2000s decade
-economics |>
-  filter(date >= ymd("2000-01-01"), date < ymd("2010-01-01")) |>
-  head()
-```
-
-```{r}
-# Filter to a specific quarter
-economics |>
-  filter(year(date) == 2008, quarter(date) == 4) |>
-  head()
-```
-
-```{r}
-# Use between() for date ranges
-economics |>
-  filter(between(date, ymd("2007-06-01"), ymd("2009-06-01"))) |>
+# Filter to the Great Recession and plot
+economics %>%
+  filter(between(date, ymd("2007-06-01"), ymd("2009-06-01"))) %>%
   ggplot(aes(x = date, y = unemploy)) +
   geom_line(color = "firebrick", linewidth = 1) +
   labs(
     title = "US Unemployment During the Great Recession",
-    x = "Date",
-    y = "Unemployment (thousands)"
+    x = "Date", y = "Unemployment (thousands)"
   ) +
   theme_minimal()
 ```
 
+See how `year()`, `month()`, `between()`, and `ymd()` all work together seamlessly with dplyr and ggplot2? That's the whole point.
 
-## Summary
 
-The lubridate package transforms date and time manipulation from a frustrating chore into a straightforward task. Its key contributions include:
+## Quick Reference
 
-- **Parsing functions** (`ymd()`, `mdy()`, `dmy()`, and their `_hms` variants) that automatically detect date formats based on component order.
-- **Component extractors** (`year()`, `month()`, `mday()`, `wday()`, `hour()`, `minute()`, `second()`) that pull apart dates and also serve as setters.
-- **Three types of time spans**: durations (exact seconds), periods (human-friendly calendar units), and intervals (start-to-end spans).
-- **Rounding functions** (`floor_date()`, `ceiling_date()`, `round_date()`) for binning dates into time periods.
-- **Time zone tools** (`with_tz()` for display conversion, `force_tz()` for correcting mislabeled zones).
+| What you want to do | Function |
+|:---------------------|:---------|
+| Parse a date string | `ymd()`, `mdy()`, `dmy()` (match the order) |
+| Parse date + time | `ymd_hms()`, `mdy_hm()`, etc. |
+| Build from components | `make_date()`, `make_datetime()` |
+| Current date/time | `today()`, `now()` |
+| Extract year, month, etc. | `year()`, `month()`, `mday()`, `wday()`, `quarter()` |
+| Add calendar time | `+ months()`, `+ years()`, `+ days()` |
+| Add exact time | `+ dhours()`, `+ ddays()`, `+ dweeks()` |
+| Round to period | `floor_date()`, `ceiling_date()`, `round_date()` |
+| Check if date is in range | `%within%` with intervals (`%--%`) |
 
-When working with dates in your data analyses, lubridate integrates seamlessly with dplyr for data wrangling and ggplot2 for visualization. The patterns demonstrated in this chapter --- extracting components, computing intervals, grouping by time period, and filtering by date ranges --- will cover the vast majority of date-related tasks you encounter in practice.
+Dates are weird in every language. But with lubridate, they're manageable. Parse them, extract what you need, do the math, and get on with your analysis.

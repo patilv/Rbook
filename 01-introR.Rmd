@@ -15,22 +15,30 @@ opts_chunk$set(echo=FALSE, warning=FALSE, message=FALSE)
 include_graphics(c("01files/jchambers.jpg","01files/small-ihaka.gif","01files/small-robert.gif"))
 ```
 
-R is a programming language and an environment for statistical computing and graphics. It was created by Ross Ihaka and Robert Gentleman at the University of Auckland in New Zealand. The project was conceived in 1992. It is based on the **S** language, that was created by John Chambers while he was at Bell Labs. S is now owned by TIBCO. R and S are often called "elegant" for they were created by statisticians for statisticians.
+Alright, let's get the big question out of the way first: **What is R?**
 
-The website of the R-Project is: [http://www.r-project.org](http://www.r-project.org)
+R is a programming language built specifically for working with data -- crunching numbers, running analyses, and making charts so beautiful your manager will think you hired a graphic designer. If Excel is the reliable sedan you drove in college, R is the Tesla you're about to upgrade to. Same basic job (getting you from point A to point B), but a *wildly* different experience once you're behind the wheel.
+
+R was created by two professors -- Ross Ihaka and Robert Gentleman -- at the University of Auckland in New Zealand. (Yes, the same country where they filmed *Lord of the Rings*. Clearly a land of epic creations.) They started the project in 1992, and it's based on an older language called **S**, which was built by John Chambers at Bell Labs. S is now owned by TIBCO. Both R and S were originally built by statisticians, for statisticians -- but don't let that scare you. These days, R is used by marketing analysts tracking campaign performance, finance teams modeling risk, consultants building client dashboards, and basically anyone whose job involves making sense of messy data. Sound familiar?
+
+The official R website is here: [http://www.r-project.org](http://www.r-project.org)
 
 
 ```{r}
 include_graphics("01files/Rlogo.png")
 ```
 
-## Why use R?
+## Why Use R? (Or: Why Can't I Just Stick with Excel?)
 
-There are many benefits to R. Since these have been covered by many other books on R, I will not dwell on it here in detail. Here are 9 reasons why I use R.
+Look, we need to talk. Excel is great. We all love Excel. You've been using it since high school, and it has served you well. But at some point, you're going to hit a wall -- maybe you have 500,000 rows of customer transaction data, or you need to run the same weekly sales report every Monday, or your director wants a visualization that doesn't look like it was made during the Clinton administration. That's where R comes in.
 
-1. R is available as a free and open source software. As such, there is no need to reinvent the wheel by writing code for tasks for which functions have already been written. The availability of open source code also means that one can tinker with the software without any limitations presented by proprietary software.
-2. The reproducibility of analysis is greatly enhanced in **R** because it is script-based. In software that uses point-and-click mechanisms in graphical user interfaces to perform operations (without any corresponding code generation), the ability to reproduce an analysis requires one to either memorize or record the analysis process.
-3. New routines generally appear in **R** before any other statistical system introduces them.
+Here are 9 reasons why R is worth adding to your toolkit:
+
+1. **It's free.** Like, *actually* free. No license fees, no subscriptions, no "your 14-day trial has expired, please enter a credit card" pop-ups. As a student already paying for textbooks, meal plans, and an unreasonable amount of coffee, you're welcome. Because R is open source, thousands of people around the world contribute code and tools that you can use instantly -- no purchasing department approval required.
+
+2. **Your work is reproducible.** Ever spend an hour clicking through menus in some software, get your results, and then your professor says "can you run that again with last quarter's data?" In R, your entire analysis is saved as a script -- basically a set of instructions. Change one line, hit run, done. It's like having a recipe instead of trying to remember what you threw in the pot last Tuesday.
+
+3. **R is always on the cutting edge.** New statistical methods and data science techniques show up in R before they appear in almost any other software. If something is new and exciting in the analytics world, R probably already has it. Your future employer will notice.
 
 ```{r}
 include_graphics("01files/fig_10_cran1.png")
@@ -38,56 +46,72 @@ include_graphics("01files/fig_10_cran1.png")
 
 Source: [Muenchen, Robert A, The Popularity of Data Analysis Software.](http://r4stats.com/articles/popularity/), Retrieved 8/15/2013
 
-4. Graphics that are produced by **R** can be mindblowing. It is not a surprise that many reputable news outlets that rely on data graphics to communicate stories use R. The **ggplot2** package, in particular, has become the gold standard for creating publication-quality visualizations.
-5. The **R** environment uses the Internet for distributing packages and any updates to R can be downloaded from the web. Thus, there is no need for software media.
-6. The software is compatible with many operating systems --- Unix, Mac OSX, and Windows.
-7. It supports connectivity with many database systems and allows for import of data from different formats.
-8. You wouldn't want to not use the software that was featured in a cool [New York Times story by Ashlee Vance.](http://www.nytimes.com/2009/01/07/technology/business-computing/07program.html)
-9. Although I have listed this point at the very end of this list, it is probably the number one reason for my using the software. The community support for **R** users is simply outstanding. The global user-base for the software is 250,000--2 million people and many of these users selflessly devote their time to support and assist other users. The pay-it-forward mechanism holds so true for many in the user-base.
+4. **The graphics are stunning.** Seriously, the charts and visualizations you can create in R will make your PowerPoint presentations look like they belong in a Fortune 500 boardroom, not a middle school science fair. The **ggplot2** package in particular is the gold standard -- organizations like the BBC, The New York Times, and FiveThirtyEight use R for their data graphics. Imagine casually dropping *that* into a job interview. "Oh, I use the same visualization tools as the New York Times. No big deal."
 
-Although R provides a command line interface for programming, which can be a limitation for people who are starting out in it, there are integrated development environments from companies like RStudio (now Posit) and Revolution Analytics (now with Microsoft) that make an R-user more productive. In particular, the **RStudio IDE** has become the de facto environment for R programming, offering a rich set of features for code editing, debugging, package management, and R Markdown authoring.
+5. **Updates are a breeze.** Everything is distributed over the internet. No CDs, no USB drives, no submitting a help desk ticket and waiting three weeks for IT to install something. You download what you need, when you need it.
+
+6. **It works on everything.** Mac, Windows, Linux -- R doesn't care what computer you have. Your group project members can all use different machines and still run the same code. (If only the rest of group projects were that easy.)
+
+7. **It plays well with others.** R can connect to databases, read Excel files, pull in CSV data, handle SPSS files -- basically whatever format your data lives in, R can probably import it. That random `.xlsx` file your internship supervisor emailed you at 5pm on a Friday? R's got you.
+
+8. **It was featured in The New York Times.** No, really. [Ashlee Vance wrote about it.](http://www.nytimes.com/2009/01/07/technology/business-computing/07program.html) When the *New York Times* thinks your software is worth a feature story, you know it's the real deal.
+
+9. **The community is incredible.** This might honestly be the best reason. R has somewhere between 250,000 and 2 million users worldwide, and a huge number of them genuinely enjoy helping beginners. Got stuck at midnight before a deadline? Post a question online and someone -- probably in a different time zone where it's a perfectly reasonable hour -- will likely answer within hours. It's like having a giant study group that never sleeps.
+
+Now, here's the one thing that makes people nervous: R uses a command line. You type code instead of clicking buttons. I know, I know -- that might sound intimidating if you've never programmed before. But here's the good news: you don't have to stare at a scary blank terminal. There's a fantastic program called **RStudio** (made by a company now called Posit) that gives you a friendly, modern workspace with helpful features like auto-complete, built-in help files, and a window to see your plots right next to your code. It's the difference between building furniture with just a hammer and building it with a fully equipped workshop. We'll get you set up with RStudio in the next chapter -- it's painless, I promise.
+
+Robert Muenchen has been tracking the popularity of data analysis software for years, and his regularly updated article is a great read if you're curious about how R stacks up against SPSS, SAS, Stata, and others. Check it out at [http://r4stats.com/articles/popularity/](http://r4stats.com/articles/popularity/).
+
+If you want to explore what R can do in specific business fields -- marketing analytics, finance, econometrics, supply chain, you name it -- the [CRAN Task Views](https://cran.r-project.org/web/views/) page has a massive listing of packages organized by topic. And for the really bleeding-edge stuff, developers often host their latest work on [GitHub](https://www.github.com).
 
 
-Robert Muenchen has been tracking the popularity of data analysis software for a few years and he has an excellent article that is regularly updated with the latest statistics that compare the growth of R versus other software like SPSS and SAS. His article can be accessed from [http://r4stats.com/articles/popularity/](http://r4stats.com/articles/popularity/).
+## R -- The Environment and Software
 
+Let me give you an analogy that'll make this click.
 
-R packages that help users accomplish different tasks can be found for many fields of study. The listing from the R-project site at [CRAN Task Views](https://cran.r-project.org/web/views/) provides a broad listing of the different fields that have been supported. Please note that many developmental versions of packages are not listed. These are typically hosted at other websites, such as [GitHub](https://www.github.com).
+Imagine it's your first day at a new job. Someone hands you a company laptop. Out of the box, it comes with the basics -- a web browser, a calculator, maybe Microsoft Notepad. Functional, but not exactly exciting. That's **base R**. It can do a lot right out of the gate: math, basic statistics, simple charts. It's solid.
 
+But then your manager asks you to build a customer segmentation model, or create an interactive dashboard for the quarterly business review. You need specialized tools. So you go to the app store and download exactly what you need. In R, these specialized tools are called **packages** -- and there are over 20,000 of them. They cover everything from sentiment analysis of Amazon reviews to stock portfolio optimization to mapping sales territories.
 
-## R - Environment and Software
+Sometimes a package needs other packages to work properly. (Kind of like how some apps require you to update your operating system first.) These are called **dependencies**, and R handles them automatically -- it'll download whatever supporting software it needs without you having to lift a finger.
 
-I like to understand this using the metaphor of a physical library. Imagine walking into such a library. (Okay, I know that these are becoming extinct, thanks to ebooks like this one.) When we walk into this library, you are able to accomplish some tasks by talking to the librarian, who refers to the books s/he has access to at the desk. For tasks that the librarian is unable to help with, you check-out a book that helps you with the tasks that you were trying to accomplish. If you are unable to find a book that helps with your task, you decide to sit down and write your own book to perform those tasks.
+And here's the really cool part: if nobody on the entire planet has written a package for the specific, niche thing you need to do (unlikely, but possible), you can build your own and share it with the world. That's the beauty of open source -- everyone contributes, everyone benefits.
 
-Base **R** is akin to the library and the librarian. A task in the earlier example can be similar to an analysis that needs to be conducted on some data. The **R** software comes with a certain set of books, which are called *packages*. These packages are capable of conducting a certain set of analyses. However, when the need to perform additional analyses that cannot be conducted by base **R** arises, one can download additional **R** packages that may be available for that purpose. These downloaded packages are like the books that are checked out from the library. Please note that many a times, the packages may have dependencies, that are either installed along with the package installation commands, or may have to be installed separately. In the event no one in the world has thought of your problem and written a package to perform the analysis, you can always write your own package that does that and contribute it for the greater good.
 
 ## The Tidyverse
 
-One of the most important developments in the R ecosystem has been the creation of the **tidyverse** --- a collection of R packages designed for data science that share a common design philosophy, grammar, and data structures. The tidyverse was primarily created by Hadley Wickham and is maintained by the team at Posit (formerly RStudio).
+Okay, buckle up, because I'm about to introduce you to something that's going to make your data life *significantly* better.
 
-The core tidyverse packages include:
+The **tidyverse** is a collection of R packages that were designed to work together seamlessly. Think of it like this: base R is a kitchen where all the utensils are scattered across random drawers. The tidyverse is that same kitchen after someone from The Container Store organized the whole thing. Everything has a place, everything works together, and you can actually find what you need.
 
-- **ggplot2**: A system for creating graphics based on the Grammar of Graphics
-- **dplyr**: A grammar of data manipulation
-- **tidyr**: Tools for creating tidy data
-- **readr**: Fast and friendly reading of rectangular data (CSV, TSV, etc.)
-- **purrr**: Functional programming tools
-- **tibble**: A modern reimagining of the data frame
-- **stringr**: Consistent tools for working with strings
-- **forcats**: Tools for working with categorical variables (factors)
+The tidyverse was created primarily by Hadley Wickham -- kind of a celebrity in the data world (he has fans, conference talks, the whole deal) -- and is maintained by the team at Posit.
 
-You can install the entire tidyverse with a single command:
+Here's what's in the toolkit:
+
+- **ggplot2**: Makes beautiful charts and graphs. This is the package that'll make your classmates' and coworkers' jaws drop during presentations.
+- **dplyr**: Lets you filter, sort, group, and summarize data. It's basically what you *wish* Excel pivot tables were. Seriously -- once you use `dplyr`, you'll feel betrayed by pivot tables.
+- **tidyr**: Helps you reshape messy data into clean, "tidy" formats. Because real-world data from CRM systems, surveys, and databases is almost always a disaster.
+- **readr**: Reads CSV files and other data formats quickly and cleanly. Perfect for loading that sales report your boss just emailed you.
+- **purrr**: Automates repetitive tasks so you don't have to copy-paste the same analysis fifty times. (Also, the name is a cat pun. Data scientists are fun at parties, apparently.)
+- **tibble**: A smarter, more user-friendly version of R's data frame -- basically a spreadsheet that lives inside R and behaves itself.
+- **stringr**: Tools for working with text data. Great for cleaning up messy customer survey responses where someone typed "Strongly   agrEE " instead of "Strongly Agree."
+- **forcats**: Helps you work with categorical data -- things like "Freshman/Sophomore/Junior/Senior," product categories, or customer segments.
+
+Installing the whole collection takes one line of code:
 
 ```{r eval=FALSE, echo=TRUE}
 install.packages("tidyverse")
 ```
 
-And load it with:
+And loading it into your session is just as easy:
 
 ```{r eval=FALSE, echo=TRUE}
 library(tidyverse)
 ```
 
-Throughout this book, we will use both base R and tidyverse approaches. The tidyverse is covered in depth in Chapters \@ref(tidyverse) through \@ref(purrr). For the companion data visualization course, see [Visual Analytics and Data Storytelling](http://patilv.com/VizAnalytics4Biz/).
+Throughout this book, we'll use both base R and tidyverse approaches so you're comfortable with both. The tidyverse gets its own deep dive in Chapters \@ref(tidyverse) through \@ref(purrr). And if you want to take your data visualization skills even further, check out the companion course: [Visual Analytics and Data Storytelling](http://patilv.com/VizAnalytics4Biz/).
+
+Trust me -- once you start using the tidyverse, you'll wonder how you ever lived without it. It's like switching from a flip phone to a smartphone. Same basic concept, completely different quality of life.
 
 
 ## A Recently Released Video on R
@@ -95,6 +119,4 @@ Throughout this book, we will use both base R and tidyverse approaches. The tidy
 From the [R Consortium](https://www.r-consortium.org/) <br>
 <center>
 <iframe width="560" height="315" src="https://www.youtube.com/embed/XcBLEVknqvY" frameborder="0" allowfullscreen></iframe>
-
-
 

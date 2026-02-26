@@ -1,573 +1,185 @@
-# Working with Strings {#stringr}
+# Working with Text Data {#stringr}
 
 ```{r include=FALSE}
 library(tidyverse)
 knitr::opts_chunk$set(echo = TRUE, warning = FALSE, message = FALSE)
 ```
 
-## Introduction
+## Why You Need This
 
-Much of the data we encounter in practice is not purely numeric. Survey responses, product reviews, addresses, names, dates stored as text, log files, and social media posts are all examples of string (character) data. Being able to manipulate and clean strings is therefore a critical skill for any data analyst.
+Here is an uncomfortable truth: a terrifying amount of real business data is just text. Survey responses. Product names. Customer addresses. Free-form comments from your NPS survey that say things like "  GREAT product!!  " and "great   Product" --- which are obviously the same sentiment, but R treats them as completely different values.
 
-Base R provides several functions for working with strings --- `grep()`, `gsub()`, `substr()`, `nchar()`, `paste()`, and others --- but the naming conventions are inconsistent and the argument orders vary from function to function. The **stringr** package, part of the tidyverse, solves this problem by providing a cohesive set of functions that all begin with the `str_` prefix. Every stringr function takes the string as its first argument, making it natural to use with the pipe operator (`%>%` or `|>`).
+The **stringr** package is your cleanup crew. Every function starts with `str_`, takes the string first (so it works beautifully with the pipe), and does exactly what its name suggests. Let's get into it.
 
-Under the hood, stringr is built on top of the **stringi** package, which provides a comprehensive and highly optimized set of string processing functions based on the ICU (International Components for Unicode) library. This means stringr gives you a clean, user-friendly interface backed by a powerful engine that handles international text and edge cases correctly.
-
-Let us get started.
 
 ## String Basics
 
-### Creating Strings
-
-In R, strings are created by surrounding text with either double quotes or single quotes. Double quotes are the preferred convention.
+Strings in R live inside quotes. Double quotes are the convention.
 
 ```{r}
-string1 <- "This is a string"
-string2 <- 'This is also a string'
-string1
-string2
+product <- "Wireless Bluetooth Speaker"
+product
 ```
 
-If your string itself contains a double quote, you can use single quotes on the outside, or escape the inner double quote with a backslash.
+If your string contains a quote, escape it with a backslash or wrap in single quotes:
 
 ```{r}
-string3 <- 'She said, "Hello!"'
-string4 <- "She said, \"Hello!\""
-string3
-string4
+tagline <- 'She said, "Take my money!"'
+tagline
 ```
 
-### Special Characters
-
-Certain characters have special meaning when preceded by a backslash. These are called escape sequences.
-
-- `\n` --- newline
-- `\t` --- tab
-- `\\` --- a literal backslash
-- `\"` --- a literal double quote
-
-To see the actual content of a string (with the escape sequences rendered), use `writeLines()`.
+`str_length()` counts characters --- handy for flagging those one-word survey responses from people who clearly wanted to leave early:
 
 ```{r}
-example <- "First line\nSecond line\tTabbed"
-writeLines(example)
+responses <- c("Great product!", "OK", "This changed my life and I want to tell everyone", "N/A")
+str_length(responses)
 ```
 
-### String Length
 
-The `str_length()` function returns the number of characters in each string.
+## Combining Strings with `str_c()`
 
-```{r}
-fruits <- c("apple", "banana", "kiwi", "strawberry", "fig")
-str_length(fruits)
-```
-
-Note that `str_length()` is vectorized --- it works on an entire vector at once. Compare this with base R's `nchar()`, which does the same thing but does not follow the `str_` naming convention.
+`str_c()` glues strings together. Think `paste()`, but tidyverse-flavored.
 
 ```{r}
-str_length(c("", " ", NA))
-```
-
-An empty string has length 0, a string containing a single space has length 1, and `NA` returns `NA`.
-
-### Combining Strings with `str_c()`
-
-The `str_c()` function concatenates strings. It is the stringr equivalent of `paste()` and `paste0()`.
-
-```{r}
-str_c("Hello", "World")
+str_c("Q", 1:4)
 str_c("Hello", "World", sep = " ")
-str_c("Hello", "World", sep = ", ")
 ```
 
-Like other stringr functions, `str_c()` is vectorized.
+The `collapse` argument squashes a vector into one string --- great for building labels:
 
 ```{r}
-names <- c("Alice", "Bob", "Charlie")
-str_c("Hello, ", names, "!")
+departments <- c("Marketing", "Finance", "Operations")
+str_c(departments, collapse = ", ")
+str_c(departments, collapse = " & ")
 ```
 
-The `collapse` argument is used to combine a vector of strings into a single string.
 
-```{r}
-str_c(names, collapse = ", ")
-str_c(names, collapse = " and ")
-```
+## Changing Case --- Your Most-Used Trick
 
-You can use both `sep` and `collapse` together. The `sep` is applied first (element-wise), and then `collapse` reduces the result to a single string.
-
-```{r}
-prefixes <- c("Dr.", "Mr.", "Ms.")
-str_c(prefixes, names, sep = " ", collapse = "; ")
-```
-
-### Extracting Substrings with `str_sub()`
-
-The `str_sub()` function extracts or replaces substrings by position. It takes `start` and `end` arguments.
-
-```{r}
-x <- "Strawberry"
-str_sub(x, 1, 5)
-str_sub(x, 6, 10)
-```
-
-Negative indices count from the end of the string.
-
-```{r}
-str_sub(x, -5, -1)
-```
-
-`str_sub()` is also vectorized and can be used on the left-hand side of an assignment to replace substrings.
-
-```{r}
-fruits_copy <- fruits
-str_sub(fruits_copy, 1, 1) <- str_to_upper(str_sub(fruits_copy, 1, 1))
-fruits_copy
-```
-
-## Detecting Patterns
-
-One of the most common tasks with strings is checking whether they contain a particular pattern. stringr provides several functions for pattern detection.
-
-### `str_detect()` --- Logical Matching
-
-`str_detect()` returns a logical vector indicating whether each string matches the given pattern.
-
-```{r}
-colors <- c("red", "green", "blue", "redwood", "forest green", "navy blue")
-str_detect(colors, "red")
-str_detect(colors, "green")
-```
-
-This is especially useful for filtering data frames.
-
-```{r}
-color_df <- tibble(color = colors, id = 1:6)
-color_df %>% filter(str_detect(color, "blue"))
-```
-
-### `str_which()` --- Index Positions
-
-`str_which()` returns the integer indices of strings that match the pattern, similar to base R's `which()`.
-
-```{r}
-str_which(colors, "green")
-```
-
-### `str_count()` --- Counting Matches
-
-`str_count()` counts the number of times a pattern appears in each string.
-
-```{r}
-sentences <- c("the cat sat on the mat",
-               "the dog chased the cat",
-               "no animals here")
-str_count(sentences, "the")
-str_count(sentences, "cat")
-```
-
-### `str_locate()` and `str_locate_all()`
-
-These functions return the start and end positions of pattern matches. `str_locate()` returns the position of the first match; `str_locate_all()` returns all matches.
-
-```{r}
-str_locate("the cat sat on the mat", "the")
-str_locate_all("the cat sat on the mat", "the")
-```
-
-## Extracting and Replacing
-
-### Extracting Matches
-
-`str_extract()` returns the first match of a pattern in each string, while `str_extract_all()` returns all matches.
-
-```{r}
-mixed_text <- c("Order 1234 placed", "Invoice 5678 pending", "No number here", "Items 91011 and 1213")
-str_extract(mixed_text, "\\d+")
-str_extract_all(mixed_text, "\\d+")
-```
-
-The pattern `\\d+` matches one or more digits. We will cover regular expressions in more detail later in this chapter.
-
-### Replacing Patterns
-
-`str_replace()` replaces the first match of a pattern, while `str_replace_all()` replaces all matches.
-
-```{r}
-messy <- c("hello   world", "  too   many   spaces  ")
-str_replace(messy, "\\s+", " ")
-str_replace_all(messy, "\\s+", " ")
-```
-
-Here, `\\s+` matches one or more whitespace characters. Notice that `str_replace()` only fixes the first occurrence, while `str_replace_all()` fixes all of them.
-
-### Removing Patterns
-
-`str_remove()` and `str_remove_all()` are convenient shortcuts for replacing with an empty string.
-
-```{r}
-phone_numbers <- c("(555) 123-4567", "(800) 555-0199", "(312) 867-5309")
-# Remove non-digit characters to get clean phone numbers
-str_remove_all(phone_numbers, "[^0-9]")
-```
-
-Here is a practical example of cleaning phone numbers into a standardized format.
-
-```{r}
-clean_phones <- phone_numbers %>%
-  str_remove_all("[^0-9]") %>%
-  str_replace("(\\d{3})(\\d{3})(\\d{4})", "\\1-\\2-\\3")
-clean_phones
-```
-
-### Extracting Dates from Text
-
-```{r}
-log_entries <- c("Error on 2024-01-15: file not found",
-                 "Warning on 2024-02-20: low memory",
-                 "Info on 2024-03-05: process started")
-str_extract(log_entries, "\\d{4}-\\d{2}-\\d{2}")
-```
-
-## Modifying Strings
-
-### Changing Case
-
-stringr provides four case-conversion functions.
-
-```{r}
-sample_text <- "the QUICK brown FOX"
-str_to_lower(sample_text)
-str_to_upper(sample_text)
-str_to_title(sample_text)
-str_to_sentence(sample_text)
-```
-
-These are useful for standardizing data. For example, ensuring all city names follow title case.
+When survey respondents type "NEW YORK", "new york", and "New york" --- those are three different values to R. One line fixes it:
 
 ```{r}
 cities <- c("new york", "LOS ANGELES", "chicago", "SAN FRANCISCO")
 str_to_title(cities)
 ```
 
-### Trimming and Squishing Whitespace
-
-`str_trim()` removes whitespace from the beginning and end of a string. `str_squish()` additionally reduces internal whitespace to single spaces.
+The full case family:
 
 ```{r}
-padded <- "   too  much   space   "
-str_trim(padded)
-str_squish(padded)
+sample_text <- "the QUICK brown FOX"
+str_to_lower(sample_text)
+str_to_upper(sample_text)
+str_to_title(sample_text)
 ```
 
-`str_trim()` has a `side` argument that can be set to `"left"`, `"right"`, or `"both"` (the default).
+You will use these every single time you clean survey data, product categories, or anything where humans had a keyboard and zero standards.
+
+
+## Trimming Whitespace
+
+Extra spaces are the silent killer of data joins. If one spreadsheet has "Marketing" and another has "  Marketing  ", your `left_join()` will silently drop rows and you will silently lose your mind.
 
 ```{r}
-str_trim(padded, side = "left")
-str_trim(padded, side = "right")
+messy <- "   too  much   space   "
+str_trim(messy)       # removes leading/trailing spaces
+str_squish(messy)     # also collapses internal spaces to one
 ```
 
-### Padding Strings
+`str_squish()` handles everything. Use it by default.
 
-`str_pad()` adds characters (spaces by default) to a string to bring it to a specified width. This is useful for creating fixed-width output or aligning text.
+
+## Detecting Patterns with `str_detect()`
+
+"Does this string contain this word?" That is `str_detect()`. It returns TRUE/FALSE, which makes it perfect inside `filter()`.
 
 ```{r}
-ids <- c("1", "23", "456", "7890")
-str_pad(ids, width = 5, side = "left", pad = "0")
+products <- c("iPhone 15 Pro", "Samsung Galaxy S24", "iPhone 15", "Google Pixel 8", "iPhone SE")
+str_detect(products, "iPhone")
 ```
 
-### Wrapping and Truncating
-
-`str_wrap()` wraps a long string to a specified width, inserting newlines. `str_trunc()` truncates a string to a specified maximum width, adding an ellipsis.
+Inside a data frame --- this is where it gets useful:
 
 ```{r}
-long_text <- "This is a very long sentence that we might want to wrap to a certain width so that it displays nicely in a narrow column or output window."
-cat(str_wrap(long_text, width = 40))
-```
-
-```{r}
-str_trunc(long_text, width = 50)
-str_trunc(long_text, width = 50, side = "left")
-str_trunc(long_text, width = 50, side = "center")
-```
-
-## Splitting and Combining
-
-### Splitting Strings
-
-`str_split()` splits a string into pieces based on a pattern and returns a list.
-
-```{r}
-csv_line <- "Alice,30,New York"
-str_split(csv_line, ",")
-```
-
-When working with a vector of strings, `str_split()` returns a list with one element per input string.
-
-```{r}
-csv_lines <- c("Alice,30,New York", "Bob,25,Chicago", "Charlie,35,Denver")
-str_split(csv_lines, ",")
-```
-
-`str_split_fixed()` returns a character matrix with a fixed number of columns, which is often more convenient.
-
-```{r}
-str_split_fixed(csv_lines, ",", n = 3)
-```
-
-You can also limit the number of splits with the `n` argument in `str_split()`.
-
-```{r}
-str_split("one-two-three-four", "-", n = 2)
-```
-
-### Flattening with `str_flatten()`
-
-`str_flatten()` collapses a character vector into a single string. It is similar to using `str_c()` with the `collapse` argument.
-
-```{r}
-words <- c("R", "is", "great", "for", "data", "analysis")
-str_flatten(words, collapse = " ")
-str_flatten(words, collapse = "-")
-```
-
-`str_flatten_comma()` is a convenient shortcut for comma-separated lists.
-
-```{r}
-items <- c("apples", "bananas", "cherries")
-str_flatten_comma(items)
-str_flatten_comma(items, last = ", and ")
-```
-
-## Regular Expressions Basics
-
-Regular expressions (regex) are a powerful language for describing patterns in strings. Most stringr functions accept regular expressions as their pattern argument. While a full treatment of regular expressions would fill a book on its own, here we cover the most useful building blocks.
-
-### Literal Characters
-
-The simplest patterns are literal strings. When you search for `"cat"`, it matches the exact sequence of characters c-a-t.
-
-```{r}
-animals <- c("cat", "concatenate", "scat", "dog", "caterpillar")
-str_detect(animals, "cat")
-str_extract(animals, "cat")
-```
-
-### Anchors
-
-Anchors specify where in the string the match must occur.
-
-- `^` matches the start of the string
-- `$` matches the end of the string
-
-```{r}
-str_detect(animals, "^cat")
-str_detect(animals, "cat$")
-```
-
-Using `^cat` matches only strings that begin with "cat" (cat and caterpillar). Using `cat$` matches only strings that end with "cat" (cat and scat).
-
-### Character Classes
-
-Character classes let you match any one of a set of characters.
-
-- `[abc]` --- matches a, b, or c
-- `[a-z]` --- matches any lowercase letter
-- `[A-Z]` --- matches any uppercase letter
-- `[0-9]` --- matches any digit
-- `[^abc]` --- matches anything except a, b, or c
-
-There are also shorthand character classes (note the double backslash in R strings):
-
-- `\\d` --- any digit (equivalent to `[0-9]`)
-- `\\D` --- any non-digit
-- `\\w` --- any word character (letters, digits, underscore)
-- `\\W` --- any non-word character
-- `\\s` --- any whitespace (space, tab, newline)
-- `\\S` --- any non-whitespace character
-
-```{r}
-test_strings <- c("abc123", "def456", "ghi", "789", "ab1cd2")
-str_extract(test_strings, "[0-9]+")
-str_extract(test_strings, "\\d+")
-str_extract_all(test_strings, "[a-z]+")
-```
-
-### Quantifiers
-
-Quantifiers specify how many times a pattern should be matched.
-
-- `*` --- zero or more times
-- `+` --- one or more times
-- `?` --- zero or one time (optional)
-- `{n}` --- exactly n times
-- `{n,}` --- n or more times
-- `{n,m}` --- between n and m times
-
-```{r}
-codes <- c("A1", "AB12", "ABC123", "ABCD1234", "A")
-str_extract(codes, "[A-Z]{2,3}")
-str_extract(codes, "[A-Z]+\\d+")
-str_extract(codes, "[A-Z]{1,2}\\d{1,2}")
-```
-
-```{r}
-# Matching optional characters
-spellings <- c("color", "colour", "colored", "coloured")
-str_detect(spellings, "colou?r")
-```
-
-### Alternation
-
-The `|` operator acts as an OR, matching either the pattern on its left or the pattern on its right.
-
-```{r}
-pets <- c("I have a cat", "I have a dog", "I have a bird", "I have a cat and a dog")
-str_extract(pets, "cat|dog")
-str_extract_all(pets, "cat|dog")
-```
-
-### Grouping with Parentheses
-
-Parentheses group sub-patterns together and create capturing groups that can be referenced in replacements.
-
-```{r}
-dates <- c("2024-01-15", "2024-02-20", "2024-12-25")
-# Rearrange from YYYY-MM-DD to MM/DD/YYYY
-str_replace(dates, "(\\d{4})-(\\d{2})-(\\d{2})", "\\2/\\3/\\1")
-```
-
-Here, `\\1`, `\\2`, and `\\3` are backreferences to the first, second, and third captured groups, respectively.
-
-```{r}
-# Extract just the year and month
-str_extract(dates, "\\d{4}-\\d{2}")
-```
-
-### Practical Regex Examples
-
-Here are a few common patterns you may find useful.
-
-```{r}
-# Email-like patterns
-texts <- c("Contact me at alice@example.com for details",
-           "Send to bob.smith@company.org or call",
-           "No email here")
-str_extract(texts, "[\\w.]+@[\\w.]+\\.[a-z]+")
-```
-
-```{r}
-# US zip codes (5 digits, optionally followed by dash and 4 digits)
-addresses <- c("New York, NY 10001", "Chicago, IL 60614-2345", "Denver, CO 80202")
-str_extract(addresses, "\\d{5}(-\\d{4})?")
-```
-
-## Sorting Strings
-
-### `str_sort()` and `str_order()`
-
-`str_sort()` returns the sorted strings, while `str_order()` returns the integer indices that would sort them.
-
-```{r}
-fruits_unsorted <- c("banana", "apple", "cherry", "date", "elderberry")
-str_sort(fruits_unsorted)
-str_order(fruits_unsorted)
-```
-
-Both functions accept a `decreasing` argument.
-
-```{r}
-str_sort(fruits_unsorted, decreasing = TRUE)
-```
-
-They also handle locale-aware sorting with the `locale` argument, which can be important for non-English text.
-
-```{r}
-# Numeric sorting: compare default vs. numeric
-versions <- c("version2", "version10", "version1", "version20", "version3")
-str_sort(versions)
-str_sort(versions, numeric = TRUE)
-```
-
-The `numeric = TRUE` argument ensures that numbers embedded in strings are sorted numerically rather than lexicographically.
-
-## Practical Examples
-
-Let us put everything together with some realistic data cleaning scenarios.
-
-### Standardizing Names
-
-Messy name data is one of the most common problems in practice. Here is a data frame with inconsistent formatting.
-
-```{r}
-messy_names <- tibble(
-  raw_name = c("  john DOE ", "JANE   smith", "  Bob  JOHNSON  ",
-               "alice   Williams", "CHARLIE  brown ", " diana PRINCE")
+product_df <- tibble(
+  product = c("iPhone 15 Pro", "Samsung Galaxy S24", "iPhone 15", "Google Pixel 8"),
+  revenue = c(45000, 32000, 38000, 15000)
 )
 
-clean_names <- messy_names %>%
-  mutate(
-    clean_name = raw_name %>%
-      str_squish() %>%
-      str_to_title()
-  )
-clean_names
+product_df %>% filter(str_detect(product, "iPhone"))
 ```
 
-### Extracting Information from Unstructured Text
+You just filtered to Apple products without needing a separate category column. Your manager will never know how easy that was.
 
-Suppose we have product descriptions and need to extract prices and product codes.
+
+## Replacing Text with `str_replace()`
+
+`str_replace()` fixes the first match. `str_replace_all()` fixes every match.
 
 ```{r}
-products <- tibble(
-  description = c(
-    "Widget A (SKU: WDG-001) - Price: $29.99",
-    "Gadget B (SKU: GDG-042) - Price: $149.50",
-    "Thingamajig (SKU: THG-100) - Price: $5.00",
-    "Doohickey XL (SKU: DHK-007) - Price: $89.95",
-    "Whatchamacallit (SKU: WCL-999) - Price: $12.49"
-  )
-)
-
-products_parsed <- products %>%
-  mutate(
-    sku = str_extract(description, "SKU: ([A-Z]{3}-\\d{3})", group = 1),
-    price_text = str_extract(description, "\\$[\\d.]+"),
-    price = as.numeric(str_remove(price_text, "\\$")),
-    product_name = str_extract(description, "^[^(]+") %>% str_trim()
-  )
-products_parsed %>% select(product_name, sku, price)
+reviews <- c("This product is gr8", "Loved it!! Will buy again!!", "Good product, good price")
+str_replace_all(reviews, "!!", "!")
 ```
 
-### Parsing Addresses
-
-Addresses are notoriously messy. Here is an example of extracting components from semi-structured address strings.
+Standardizing how people wrote "percent":
 
 ```{r}
-addresses_df <- tibble(
-  full_address = c(
-    "123 Main St, Springfield, IL 62704",
-    "456 Oak Ave, Suite 200, Chicago, IL 60614",
-    "789 Pine Rd, Denver, CO 80202",
-    "1010 Elm Blvd, Apt 3B, Portland, OR 97201",
-    "222 Maple Dr, Seattle, WA 98101"
-  )
-)
-
-addresses_parsed <- addresses_df %>%
-  mutate(
-    state = str_extract(full_address, "[A-Z]{2}(?=\\s+\\d{5})"),
-    zip = str_extract(full_address, "\\d{5}$"),
-    # Extract city: the word(s) before ", STATE ZIP"
-    city = str_extract(full_address, "[A-Za-z ]+(?=,\\s+[A-Z]{2}\\s+\\d{5})") %>%
-      str_trim()
-  )
-addresses_parsed %>% select(city, state, zip)
+responses <- c("50 percent", "30%", "about 20 percent", "75%")
+str_replace_all(responses, " percent", "%")
 ```
 
-### A Complete Data Cleaning Pipeline
+`str_remove()` and `str_remove_all()` are shortcuts for replacing with nothing:
 
-Here is a more comprehensive example that demonstrates how stringr integrates with dplyr in a typical data cleaning workflow. Imagine we have received survey data with various formatting issues.
+```{r}
+prices <- c("$29.99", "$149.50", "$5.00")
+str_remove(prices, "\\$")
+```
+
+
+## Extracting Text with `str_extract()`
+
+Need to pull a number out of a messy string? `str_extract()` grabs the first match.
+
+```{r}
+order_notes <- c("Order 1234 placed", "Invoice 5678 pending", "Shipped item 91011")
+str_extract(order_notes, "\\d+")
+```
+
+That `\\d+` is a regular expression. Do not panic --- the next section covers the only ones you will ever need.
+
+
+## Regular Expressions: Just the 3 Patterns You Actually Need
+
+Regex has a reputation for looking like a cat walked across your keyboard. The good news: for business data cleaning, you only need three patterns.
+
+**Pattern 1: `\\d+` --- Find numbers**
+
+```{r}
+sales_notes <- c("Sold 15 units", "Returned 3 items", "Ordered 200 widgets")
+str_extract(sales_notes, "\\d+")
+```
+
+**Pattern 2: `[A-Za-z]+` --- Find words (letters only)**
+
+```{r}
+codes <- c("SKU-12345", "PROD-6789", "ITEM-111")
+str_extract(codes, "[A-Z]+")
+```
+
+**Pattern 3: `[\\w.]+@[\\w.]+` --- Find email-like patterns**
+
+```{r}
+messages <- c("Contact alice@example.com for details",
+              "Email bob.smith@company.org for info",
+              "No email here")
+str_extract(messages, "[\\w.]+@[\\w.]+")
+```
+
+That is it. Three patterns. If you need something fancier, Google "regex cheat sheet." No shame in that --- everyone does it, including the people who wrote the cheat sheet.
+
+
+## Putting It All Together: A Survey Data Cleaning Pipeline
+
+Here is a realistic scenario. You received survey data and it looks like it was filled out during an earthquake:
 
 ```{r}
 survey_raw <- tibble(
@@ -577,106 +189,110 @@ survey_raw <- tibble(
             "BOB@company.ORG", "alice.w@School.Edu", "charlie@EMAIL.com"),
   phone = c("(555) 123-4567", "555.234.5678", "555 345 6789",
             "5554567890", "(555)-567-8901"),
-  favorite_color = c("  Blue ", "RED", "  green  ", "BLUE", " Green"),
-  comments = c("Great survey!  Thanks!  ",
-               "   Needs   more   questions   ",
-               "N/A",
-               "",
-               "  Good job.   Very   thorough.  ")
+  favorite_color = c("  Blue ", "RED", "  green  ", "BLUE", " Green")
 )
 
 survey_clean <- survey_raw %>%
   mutate(
-    # Clean names
+    # Clean names: squish + title case
     respondent = respondent %>% str_squish() %>% str_to_title(),
 
-    # Standardize emails to lowercase
+    # Emails: just lowercase everything
     email = str_to_lower(email),
 
-    # Standardize phone numbers to XXX-XXX-XXXX
+    # Phone numbers: strip everything that isn't a digit, then reformat
     phone = phone %>%
       str_remove_all("[^0-9]") %>%
       str_replace("(\\d{3})(\\d{3})(\\d{4})", "\\1-\\2-\\3"),
 
-    # Standardize colors
-    favorite_color = favorite_color %>% str_squish() %>% str_to_lower(),
-
-    # Clean up comments
-    comments = comments %>%
-      str_squish() %>%
-      na_if("") %>%
-      na_if("N/A")
+    # Colors: squish + lowercase for consistency
+    favorite_color = favorite_color %>% str_squish() %>% str_to_lower()
   )
 
 survey_clean
 ```
 
-Let us verify the cleaned data looks correct by examining each column.
+Five lines of `mutate()` and the chaos is gone. Let's verify the colors standardized:
 
 ```{r}
-# Check distinct colors after standardization
 survey_clean %>% count(favorite_color)
 ```
 
-```{r}
-# Verify phone format
-survey_clean %>% select(respondent, phone)
-```
+Blue and green each appear twice. Order restored.
+
+
+## Cleaning Product Names
+
+Pulling structured data out of messy product descriptions --- you will do this more often than you think:
 
 ```{r}
-# Check which respondents left meaningful comments
-survey_clean %>%
-  filter(!is.na(comments)) %>%
-  select(respondent, comments)
+products <- tibble(
+  description = c(
+    "Widget A (SKU: WDG-001) - Price: $29.99",
+    "Gadget B (SKU: GDG-042) - Price: $149.50",
+    "Thingamajig (SKU: THG-100) - Price: $5.00"
+  )
+)
+
+products %>%
+  mutate(
+    sku = str_extract(description, "[A-Z]{3}-\\d{3}"),
+    price_raw = str_extract(description, "\\$[\\d.]+"),
+    price = as.numeric(str_remove(price_raw, "\\$")),
+    product_name = str_extract(description, "^[^(]+") %>% str_trim()
+  ) %>%
+  select(product_name, sku, price)
 ```
 
-### Working with stringr in Grouped Operations
+One messy text column became three clean, analysis-ready columns.
 
-stringr functions combine naturally with grouped dplyr operations.
+
+## Extracting Numbers from Sales Notes
+
+Pulling numbers out of free-text notes so you can actually do math with them:
 
 ```{r}
 sales_notes <- tibble(
-  region = c("North", "North", "South", "South", "East", "East", "West", "West"),
+  region = c("North", "North", "South", "South"),
   notes = c("Sold 15 units of product A",
             "Sold 8 units of product B",
             "Sold 22 units of product A",
-            "Sold 3 units of product C",
-            "Sold 11 units of product B",
-            "Sold 7 units of product A",
-            "Sold 19 units of product C",
-            "Sold 30 units of product A")
+            "Sold 3 units of product C")
 )
 
-sales_summary <- sales_notes %>%
+sales_notes %>%
   mutate(
     units = as.integer(str_extract(notes, "\\d+")),
     product = str_extract(notes, "product [A-C]")
   ) %>%
   group_by(region, product) %>%
-  summarize(total_units = sum(units), .groups = "drop") %>%
-  arrange(product, desc(total_units))
-
-sales_summary
+  summarize(total_units = sum(units), .groups = "drop")
 ```
 
-This example demonstrates how extracting structured information from text fields enables us to perform quantitative analysis on data that originally existed only as free-form notes.
+Text data became a proper summary table. Put that in the quarterly deck.
 
-## Summary
 
-The stringr package provides a consistent, expressive, and pipe-friendly toolkit for string manipulation in R. The key functions covered in this chapter include:
+## Quick Reference
 
-| Task | Functions |
-|------|-----------|
-| Measure length | `str_length()` |
-| Combine | `str_c()`, `str_flatten()` |
-| Extract substrings | `str_sub()` |
-| Detect patterns | `str_detect()`, `str_which()`, `str_count()`, `str_locate()` |
-| Extract matches | `str_extract()`, `str_extract_all()` |
-| Replace / remove | `str_replace()`, `str_replace_all()`, `str_remove()`, `str_remove_all()` |
-| Change case | `str_to_lower()`, `str_to_upper()`, `str_to_title()`, `str_to_sentence()` |
-| Whitespace | `str_trim()`, `str_squish()`, `str_pad()` |
-| Wrap / truncate | `str_wrap()`, `str_trunc()` |
-| Split | `str_split()`, `str_split_fixed()` |
-| Sort | `str_sort()`, `str_order()` |
+The functions you will actually use:
 
-Combined with a basic understanding of regular expressions --- anchors, character classes, quantifiers, alternation, and grouping --- these functions equip you to handle the vast majority of string manipulation tasks that arise in data analysis.
+| What you want to do | Function |
+|:---------------------|:---------|
+| Glue strings together | `str_c()` |
+| Lowercase / uppercase / title case | `str_to_lower()`, `str_to_upper()`, `str_to_title()` |
+| Remove extra whitespace | `str_trim()`, `str_squish()` |
+| Does it contain this pattern? | `str_detect()` |
+| Pull out matching text | `str_extract()` |
+| Find and replace | `str_replace()`, `str_replace_all()` |
+| Delete a pattern | `str_remove()`, `str_remove_all()` |
+| How many characters? | `str_length()` |
+
+And the three regex patterns that handle most problems:
+
+| Pattern | What it finds | Example |
+|:--------|:-------------|:--------|
+| `\\d+` | Numbers | "Order **1234** placed" |
+| `[A-Za-z]+` | Words (letters) | "**SKU**-12345" |
+| `[\\w.]+@[\\w.]+` | Email addresses | "**alice@example.com**" |
+
+That is stringr. Clean your text, extract what you need, get back to the analysis that actually matters.

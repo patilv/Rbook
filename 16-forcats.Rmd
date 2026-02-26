@@ -1,399 +1,172 @@
-# Working with Factors {#forcats}
+# Wrangling Categories with forcats {#forcats}
 
 ```{r include=FALSE}
 library(tidyverse)
 knitr::opts_chunk$set(echo = TRUE, warning = FALSE, message = FALSE)
 ```
 
-Categorical data is everywhere in real-world analysis: survey responses, product categories, geographic regions, education levels, and Likert-scale ratings. In R, the factor data type is purpose-built for representing categorical variables. Factors look like character strings on the surface, but underneath they carry a fixed set of allowed values --- called **levels** --- and an explicit ordering of those levels. The **forcats** package, a core member of the tidyverse, provides a comprehensive toolkit for creating, inspecting, reordering, and modifying factors. This chapter covers forcats in depth, with extensive examples showing how factor manipulation directly improves data analysis and visualization.
+## Factors = Categories. That's It.
 
-The forcats package is loaded automatically when you call `library(tidyverse)`, so you do not need to load it separately.
+If you've ever made a bar chart in R and wondered why the bars are in alphabetical order instead of something useful --- congratulations, you've discovered why factors exist.
+
+A **factor** is R's way of handling categorical data: things like survey responses ("Agree", "Neutral", "Disagree"), product categories, regions, departments, or customer segments. Under the hood, a factor is a character variable with a defined set of allowed values (called **levels**) in a specific order.
+
+Why should you care about the order? Because **ggplot2 uses factor order to arrange your charts**. Alphabetical bars are almost never what you want in a business presentation. The **forcats** package (part of the tidyverse, loaded automatically) gives you simple tools to control that order.
+
+Let's see the problem first.
 
 
-## What Are Factors?
-
-A **factor** is R's data type for categorical variables. At its core, a factor is an integer vector with two additional attributes: a set of **levels** (the unique categories the variable can take) and an optional ordering. When you print a factor, R shows the character labels, but internally it stores integers that map to those labels.
-
-### Character vs. Factor
-
-Character vectors and factors can look identical when printed, but they behave differently in important ways.
+## The Problem: Alphabetical Everything
 
 ```{r}
 # A character vector
-char_vec <- c("low", "medium", "high", "low", "high")
-class(char_vec)
+satisfaction <- c("Low", "Medium", "High", "Low", "High")
+
+# When you make it a factor, R defaults to alphabetical order
+factor(satisfaction)
 ```
+
+The levels are "High", "Low", "Medium" --- alphabetical, not logical. You want "Low", "Medium", "High". That's what factor manipulation is all about.
 
 ```{r}
-# A factor
-fac_vec <- factor(c("low", "medium", "high", "low", "high"))
-class(fac_vec)
+# Fix it by specifying levels
+factor(satisfaction, levels = c("Low", "Medium", "High"))
 ```
 
-```{r}
-# The factor has levels
-levels(fac_vec)
-```
-
-Notice that the levels default to alphabetical order: "high", "low", "medium". This is rarely the order we want --- we typically want "low", "medium", "high". Controlling level order is one of the primary reasons to use factors.
-
-### Why Use Factors?
-
-There are three major reasons to use factors rather than plain character vectors:
-
-1. **Controlling order in plots.** When ggplot2 encounters a character variable, it orders categories alphabetically. With a factor, you control the exact order in which categories appear on an axis or in a legend. This is critical for creating clear, well-organized visualizations.
-
-2. **Statistical modeling.** Many modeling functions in R (such as `lm()` and `glm()`) treat factors specially, automatically creating dummy variables and using the first level as the reference category. Controlling levels lets you choose which category serves as the reference.
-
-3. **Data validation.** Factors remember all possible levels, even if some are not present in the current data. This is useful for ensuring that summary tables include all expected categories, including those with zero counts.
-
-### Factor Basics
-
-The `factor()` function is the most basic way to create a factor. The `levels()` function retrieves the levels, and `nlevels()` returns the count of levels.
-
-```{r}
-# Create a factor with explicit level order
-rating <- factor(
-  c("good", "excellent", "poor", "good", "excellent"),
-  levels = c("poor", "good", "excellent")
-)
-rating
-```
-
-```{r}
-levels(rating)
-```
-
-```{r}
-nlevels(rating)
-```
+The forcats package makes this kind of thing much easier, especially when you're working with real data that has dozens of categories.
 
 
-## Creating Factors
+## The Dataset: General Social Survey
 
-### Using factor()
-
-The `factor()` function is R's built-in tool for creating factors. The `levels` argument controls the order, and the `labels` argument optionally renames the levels.
-
-```{r}
-# Without specifying levels, order is alphabetical
-sizes <- factor(c("S", "M", "L", "XL", "M", "S"))
-levels(sizes)
-```
-
-```{r}
-# Specifying levels sets a meaningful order
-sizes_ordered <- factor(
-  c("S", "M", "L", "XL", "M", "S"),
-  levels = c("S", "M", "L", "XL")
-)
-levels(sizes_ordered)
-```
-
-```{r}
-# Using labels to rename levels
-gear_factor <- factor(
-  mtcars$gear,
-  levels = c(3, 4, 5),
-  labels = c("Three", "Four", "Five")
-)
-table(gear_factor)
-```
-
-### factor() vs. as.factor()
-
-The `factor()` function gives you full control over levels and labels. The `as.factor()` function is a simpler conversion that assigns alphabetical levels. Use `factor()` when you need to control level order; use `as.factor()` for quick conversions.
-
-```{r}
-# as.factor() uses alphabetical ordering
-as.factor(c("banana", "apple", "cherry"))
-```
-
-```{r}
-# factor() with explicit levels
-factor(c("banana", "apple", "cherry"), levels = c("apple", "banana", "cherry"))
-```
-
-### Using parse_factor() from readr
-
-The `parse_factor()` function from the readr package is stricter than `factor()`. It generates a warning when data contains values not included in the specified levels, which helps catch data entry errors.
-
-```{r}
-# parse_factor warns about values not in the levels
-parse_factor(
-  c("low", "medium", "high", "unknown"),
-  levels = c("low", "medium", "high")
-)
-```
-
-### Factors Remember All Levels
-
-An important property of factors is that they remember all possible levels, even if some levels are not present in the current data. This is useful for maintaining consistency across subsets.
-
-```{r}
-# Create a factor with all levels defined
-all_colors <- factor(
-  c("red", "blue"),
-  levels = c("red", "blue", "green", "yellow")
-)
-all_colors
-```
-
-```{r}
-# All four levels are retained, even though only two are present
-levels(all_colors)
-```
-
-```{r}
-# table() shows counts for all levels, including zeros
-table(all_colors)
-```
-
-This behavior is valuable when creating frequency tables or bar charts where you need to show that certain categories exist but have zero observations.
-
-
-## Inspecting Factors
-
-Before manipulating factors, it is important to understand what you are working with. Several functions help you inspect factor variables.
-
-### The gss_cat Dataset
-
-The `gss_cat` dataset, included in the forcats package, is a sample from the General Social Survey. It contains several factor variables and will serve as our primary example throughout this chapter.
+We'll use `gss_cat`, a dataset built into forcats with survey data from the General Social Survey. It has several factor columns --- perfect for practice.
 
 ```{r}
 glimpse(gss_cat)
 ```
 
-### levels() and nlevels()
 
-The `levels()` function returns the levels of a factor in order. The `nlevels()` function returns the count.
+## `fct_reorder()` --- THE Most Important Function
 
-```{r}
-levels(gss_cat$marital)
-```
+If you learn one thing from this chapter, make it `fct_reorder()`. It reorders a factor based on the values of another variable. Translation: **it sorts your bar chart bars**.
 
-```{r}
-nlevels(gss_cat$marital)
-```
+Here's the before and after. First, without reordering:
 
-```{r}
-levels(gss_cat$race)
-```
-
-### fct_count()
-
-The `fct_count()` function from forcats provides a quick frequency table as a tibble, which is easier to work with than base R's `table()`.
-
-```{r}
-fct_count(gss_cat$marital)
-```
-
-```{r}
-# Sort by frequency
-fct_count(gss_cat$marital, sort = TRUE)
-```
-
-### fct_unique()
-
-The `fct_unique()` function returns the unique values of a factor in the order of the levels (not in the order of first appearance, as `unique()` does for character vectors).
-
-```{r}
-fct_unique(gss_cat$race)
-```
-
-### table()
-
-Base R's `table()` function remains useful for quick cross-tabulations.
-
-```{r}
-table(gss_cat$race)
-```
-
-```{r}
-# Cross-tabulation of two factor variables
-table(gss_cat$race, gss_cat$marital)
-```
-
-
-## Reordering Factor Levels
-
-Reordering factor levels is the single most common factor manipulation task, especially when creating visualizations. The forcats package provides a family of `fct_*` functions for this purpose.
-
-### fct_relevel() --- Manual Reordering
-
-The `fct_relevel()` function lets you manually set the order of levels. You can move specific levels to the front, or place them at a specific position.
-
-```{r}
-# Default level order of marital status
-levels(gss_cat$marital)
-```
-
-```{r}
-# Move "Never married" to the first position
-gss_cat |>
-  mutate(marital = fct_relevel(marital, "Never married")) |>
-  pull(marital) |>
-  levels()
-```
-
-```{r}
-# Move "Married" to the second position
-gss_cat |>
-  mutate(marital = fct_relevel(marital, "Married", after = 1)) |>
-  pull(marital) |>
-  levels()
-```
-
-```{r}
-# Move "Widowed" to the end
-gss_cat |>
-  mutate(marital = fct_relevel(marital, "Widowed", after = Inf)) |>
-  pull(marital) |>
-  levels()
-```
-
-Here is how `fct_relevel()` affects a bar chart:
-
-```{r fig.cap="Default alphabetical level order for marital status."}
-gss_cat |>
-  ggplot(aes(x = marital)) +
-  geom_bar() +
-  labs(title = "Marital Status (default level order)", x = NULL, y = "Count") +
-  theme_minimal()
-```
-
-```{r fig.cap="Marital status reordered with fct_relevel."}
-gss_cat |>
-  mutate(marital = fct_relevel(marital,
-    "Never married", "Married", "Separated",
-    "Divorced", "Widowed", "No answer")) |>
-  ggplot(aes(x = marital)) +
-  geom_bar() +
-  labs(title = "Marital Status (manually reordered)", x = NULL, y = "Count") +
-  theme_minimal()
-```
-
-### fct_infreq() --- Order by Frequency
-
-The `fct_infreq()` function reorders levels from most frequent to least frequent. This is one of the most commonly used reordering functions for bar charts.
-
-```{r fig.cap="Marital status bars ordered by frequency using fct_infreq."}
-gss_cat |>
-  mutate(marital = fct_infreq(marital)) |>
-  ggplot(aes(x = marital)) +
-  geom_bar() +
-  labs(title = "Marital Status (ordered by frequency)", x = NULL, y = "Count") +
-  theme_minimal()
-```
-
-### fct_rev() --- Reverse Order
-
-The `fct_rev()` function reverses the order of levels. It is often used in combination with other reordering functions, especially for horizontal bar charts where you want the highest bar at the top.
-
-```{r fig.cap="Horizontal bar chart with levels reversed for top-to-bottom reading."}
-gss_cat |>
-  mutate(marital = fct_rev(fct_infreq(marital))) |>
-  ggplot(aes(y = marital)) +
-  geom_bar() +
-  labs(title = "Marital Status (reversed frequency order)", x = "Count", y = NULL) +
-  theme_minimal()
-```
-
-### fct_reorder() --- Reorder by Another Variable
-
-The `fct_reorder()` function is critical for ggplot2 bar charts. It reorders a factor by the values of another variable, using a summary function (default is `median`).
-
-```{r fig.cap="Religion ordered by median hours of TV watched per day."}
-relig_summary <- gss_cat |>
-  group_by(relig) |>
+```{r fig.cap="Religion by TV hours, unsorted. Good luck finding patterns here."}
+relig_summary <- gss_cat %>%
+  group_by(relig) %>%
   summarize(
-    tvhours = mean(tvhours, na.rm = TRUE),
+    avg_tv = mean(tvhours, na.rm = TRUE),
     n = n()
   )
 
-# Without reordering
-ggplot(relig_summary, aes(x = tvhours, y = relig)) +
+ggplot(relig_summary, aes(x = avg_tv, y = relig)) +
   geom_point() +
-  labs(title = "TV hours by religion (unordered)", x = "Mean hours of TV per day", y = NULL) +
+  labs(title = "TV Hours by Religion (unsorted chaos)",
+       x = "Mean TV hours per day", y = NULL) +
   theme_minimal()
 ```
 
-```{r fig.cap="Religion ordered by mean TV hours, making patterns far easier to read."}
-# With fct_reorder --- much easier to read
-ggplot(relig_summary, aes(x = tvhours, y = fct_reorder(relig, tvhours))) +
+Now with `fct_reorder()`:
+
+```{r fig.cap="Same data, but now sorted by value. The story jumps right out."}
+ggplot(relig_summary, aes(x = avg_tv, y = fct_reorder(relig, avg_tv))) +
   geom_point() +
-  labs(title = "TV hours by religion (ordered by TV hours)",
-       x = "Mean hours of TV per day", y = NULL) +
+  labs(title = "TV Hours by Religion (sorted --- much better)",
+       x = "Mean TV hours per day", y = NULL) +
   theme_minimal()
 ```
 
-The improvement is dramatic. Reordering the factor by the plotted value transforms a chaotic scatter of points into a clear, ranked list.
+See the difference? Same data, but the sorted version tells a story instantly. This is the difference between a chart your manager glances at and one they actually understand.
 
-Another example using the `iris` dataset:
+Here's another example with a bar chart:
 
-```{r fig.cap="Mean petal length by species, with species ordered by value."}
-iris |>
-  group_by(Species) |>
-  summarize(mean_petal = mean(Petal.Length)) |>
+```{r fig.cap="Mean petal length by iris species, sorted by value."}
+iris %>%
+  group_by(Species) %>%
+  summarize(mean_petal = mean(Petal.Length)) %>%
   ggplot(aes(x = mean_petal, y = fct_reorder(Species, mean_petal))) +
   geom_col(fill = "steelblue") +
   labs(title = "Mean Petal Length by Species", x = "Mean Petal Length", y = NULL) +
   theme_minimal()
 ```
 
-### fct_reorder2() --- Reorder for Line Plots
+**Rule of thumb:** If you're making a bar chart or dot plot with categories, use `fct_reorder()`. Always. Your audience will thank you.
 
-The `fct_reorder2()` function reorders a factor by two variables, which is useful for aligning the legend order with the endpoints of lines in a line plot.
 
-```{r fig.cap="Line plot with legend order matching the final data points."}
-by_age <- gss_cat |>
-  filter(!is.na(age)) |>
-  count(age, marital) |>
-  group_by(age) |>
-  mutate(prop = n / sum(n))
+## `fct_infreq()` --- Sort by Count
 
-ggplot(by_age, aes(x = age, y = prop, color = fct_reorder2(marital, age, prop))) +
-  geom_line(linewidth = 1) +
-  labs(title = "Marital status proportion by age",
-       x = "Age", y = "Proportion", color = "Marital Status") +
+Sometimes you just want bars sorted by how many observations are in each category --- most common first. That's `fct_infreq()`.
+
+```{r fig.cap="Marital status bars sorted by frequency. Most common categories jump out immediately."}
+gss_cat %>%
+  mutate(marital = fct_infreq(marital)) %>%
+  ggplot(aes(x = marital)) +
+  geom_bar(fill = "steelblue") +
+  labs(title = "Marital Status (sorted by frequency)", x = NULL, y = "Count") +
   theme_minimal()
 ```
 
-### fct_inorder() --- Order of First Appearance
+Combine it with `fct_rev()` for a horizontal bar chart that reads top-to-bottom:
 
-The `fct_inorder()` function sets levels in the order they first appear in the data. This is useful when your data is already sorted in a meaningful way.
-
-```{r}
-months_data <- c("Jan", "Mar", "Jan", "Feb", "Mar", "Feb")
-fct_inorder(months_data)
-```
-
-### fct_shift() --- Shift Levels
-
-The `fct_shift()` function shifts levels to the left (positive `n`) or to the right (negative `n`), wrapping around. This can be useful for rotating cyclical data like days of the week or months.
-
-```{r}
-days <- factor(c("Mon", "Tue", "Wed", "Thu", "Fri"),
-               levels = c("Mon", "Tue", "Wed", "Thu", "Fri"))
-levels(days)
-```
-
-```{r}
-# Shift levels left by 2 positions
-levels(fct_shift(days, n = 2))
+```{r fig.cap="Horizontal bars with the most common status at the top."}
+gss_cat %>%
+  mutate(marital = fct_rev(fct_infreq(marital))) %>%
+  ggplot(aes(y = marital)) +
+  geom_bar(fill = "darkorange") +
+  labs(title = "Marital Status (highest count at top)", x = "Count", y = NULL) +
+  theme_minimal()
 ```
 
 
-## Modifying Factor Levels
+## `fct_relevel()` --- Manual Ordering
 
-Beyond reordering, you often need to rename, combine, or collapse factor levels. The forcats package provides several functions for these tasks.
+Sometimes you need a specific order that isn't alphabetical or by frequency. Maybe you want "Never married" first because that's your reference group, or you need income brackets from low to high.
 
-### fct_recode() --- Rename Levels
-
-The `fct_recode()` function renames individual levels. The syntax is `new_name = "old_name"`.
+`fct_relevel()` lets you move specific levels to wherever you want.
 
 ```{r}
-gss_cat |>
+# Default level order
+levels(gss_cat$marital)
+```
+
+```{r}
+# Move "Never married" to the front
+gss_cat %>%
+  mutate(marital = fct_relevel(marital, "Never married")) %>%
+  pull(marital) %>%
+  levels()
+```
+
+```{r}
+# Move "Widowed" to the end
+gss_cat %>%
+  mutate(marital = fct_relevel(marital, "Widowed", after = Inf)) %>%
+  pull(marital) %>%
+  levels()
+```
+
+And the chart payoff:
+
+```{r fig.cap="Marital status in a custom order that tells a life-stage story."}
+gss_cat %>%
+  mutate(marital = fct_relevel(marital,
+    "Never married", "Married", "Separated",
+    "Divorced", "Widowed", "No answer")) %>%
+  ggplot(aes(x = marital)) +
+  geom_bar(fill = "steelblue") +
+  labs(title = "Marital Status (life-stage order)", x = NULL, y = "Count") +
+  theme_minimal()
+```
+
+Now the bars tell a life-stage story: never married, married, separated, divorced, widowed. Much more intuitive than alphabetical.
+
+
+## `fct_recode()` --- Rename Your Categories
+
+Survey data often comes with cryptic or inconsistent labels. `fct_recode()` lets you rename levels with a simple `"new name" = "old name"` syntax.
+
+```{r}
+gss_cat %>%
   mutate(partyid = fct_recode(partyid,
     "Republican (strong)"    = "Strong republican",
     "Republican (weak)"      = "Not str republican",
@@ -401,265 +174,107 @@ gss_cat |>
     "Independent (near dem)" = "Ind,near dem",
     "Democrat (weak)"        = "Not str democrat",
     "Democrat (strong)"      = "Strong democrat"
-  )) |>
+  )) %>%
   count(partyid)
 ```
 
-### fct_collapse() --- Combine Groups of Levels
+This is also great when your data has labels like "1", "2", "3" that should really say "Strongly Disagree", "Neutral", "Strongly Agree".
 
-The `fct_collapse()` function combines multiple levels into new groups. This is more efficient than calling `fct_recode()` multiple times when you want to merge several levels into one.
+
+## `fct_collapse()` --- Merge Categories Together
+
+Sometimes you have too many categories and need to combine them. `fct_collapse()` merges multiple levels into new groups.
 
 ```{r}
-gss_cat |>
+gss_cat %>%
   mutate(partyid = fct_collapse(partyid,
-    "Other"       = c("No answer", "Don't know", "Other party"),
     "Republican"  = c("Strong republican", "Not str republican"),
     "Independent" = c("Ind,near rep", "Independent", "Ind,near dem"),
-    "Democrat"    = c("Not str democrat", "Strong democrat")
-  )) |>
+    "Democrat"    = c("Not str democrat", "Strong democrat"),
+    "Other"       = c("No answer", "Don't know", "Other party")
+  )) %>%
   count(partyid)
 ```
 
-### fct_lump_*() --- Lump Rare Levels
+And the chart payoff --- a clean, simple political affiliation plot:
 
-The `fct_lump_*()` family of functions collapses infrequent levels into an "Other" category. There are several variants for different lumping strategies.
-
-**`fct_lump_n()`** keeps the `n` most frequent levels and lumps the rest.
-
-```{r}
-# Keep the 4 most common religions, lump the rest into "Other"
-gss_cat |>
-  mutate(relig = fct_lump_n(relig, n = 4)) |>
-  count(relig, sort = TRUE)
-```
-
-**`fct_lump_prop()`** keeps levels that appear in at least the specified proportion of observations.
-
-```{r}
-# Keep religions that represent at least 10% of respondents
-gss_cat |>
-  mutate(relig = fct_lump_prop(relig, prop = 0.10)) |>
-  count(relig, sort = TRUE)
-```
-
-**`fct_lump_min()`** keeps levels that appear at least `min` times.
-
-```{r}
-# Keep religions with at least 2000 respondents
-gss_cat |>
-  mutate(relig = fct_lump_min(relig, min = 2000)) |>
-  count(relig, sort = TRUE)
-```
-
-**`fct_lump_lowfreq()`** lumps together the least frequent levels, ensuring that "Other" is still the smallest category.
-
-```{r}
-gss_cat |>
-  mutate(relig = fct_lump_lowfreq(relig)) |>
-  count(relig, sort = TRUE)
-```
-
-### fct_other() --- Keep or Drop Specific Levels
-
-The `fct_other()` function replaces all levels except those you specify with "Other". You can use the `keep` argument to specify which levels to retain, or the `drop` argument to specify which levels to replace.
-
-```{r}
-# Keep only "Married" and "Never married", lump everything else
-gss_cat |>
-  mutate(marital = fct_other(marital, keep = c("Married", "Never married"))) |>
-  count(marital)
-```
-
-```{r}
-# Drop "No answer" into "Other", keep everything else
-gss_cat |>
-  mutate(marital = fct_other(marital, drop = "No answer")) |>
-  count(marital)
-```
-
-
-## Adding and Dropping Levels
-
-### fct_expand() --- Add New Levels
-
-The `fct_expand()` function adds new levels to a factor, even if no observations have those values. This is useful when you need to ensure that a factor includes all possible categories.
-
-```{r}
-# The iris Species factor has 3 levels
-levels(iris$Species)
-```
-
-```{r}
-# Add a hypothetical fourth species
-iris_expanded <- iris |>
-  mutate(Species = fct_expand(Species, "unknown"))
-levels(iris_expanded$Species)
-```
-
-```{r}
-# table() now shows the empty level
-table(iris_expanded$Species)
-```
-
-### fct_drop() --- Drop Unused Levels
-
-The `fct_drop()` function removes levels that have no observations. This is the inverse of `fct_expand()`.
-
-```{r}
-# Filter iris to only setosa, but the factor still has all three levels
-setosa_only <- iris |> filter(Species == "setosa")
-levels(setosa_only$Species)
-```
-
-```{r}
-# Drop unused levels
-setosa_only |>
-  mutate(Species = fct_drop(Species)) |>
-  pull(Species) |>
-  levels()
-```
-
-### Handling NAs as Factor Levels
-
-Sometimes `NA` values in a factor should be treated as an explicit category rather than as missing data. The forcats package provides functions to convert between `NA` values and explicit factor levels.
-
-**`fct_na_value_to_level()`** converts `NA` values to an explicit level (default name is "(Missing)").
-
-```{r}
-# Create a factor with some NAs
-responses <- factor(c("yes", "no", NA, "yes", NA, "no"))
-responses
-```
-
-```{r}
-# Convert NAs to an explicit level
-fct_na_value_to_level(responses, level = "No Response")
-```
-
-**`fct_na_level_to_value()`** does the reverse, converting a named level back to `NA`.
-
-```{r}
-# Convert the explicit level back to NA
-responses_with_level <- fct_na_value_to_level(responses, level = "No Response")
-fct_na_level_to_value(responses_with_level, extra_levels = "No Response")
-```
-
-This is particularly useful when you want `NA` counts to appear in bar charts or frequency tables, and then convert them back to proper `NA` values for statistical analysis.
-
-
-## Practical Examples with ggplot2
-
-Factor manipulation and data visualization go hand in hand. In this section, we bring together the techniques from this chapter to show how thoughtful factor handling transforms visualizations from confusing to clear.
-
-### Example 1: Reordering Bars by Value
-
-One of the most common visualization improvements is reordering bars by their values rather than displaying them alphabetically.
-
-```{r fig.cap="Income distribution from the GSS, with bars ordered by count."}
-gss_cat |>
-  filter(!is.na(rincome), rincome != "Not applicable") |>
-  mutate(rincome = fct_infreq(rincome)) |>
-  ggplot(aes(y = rincome)) +
-  geom_bar(fill = "steelblue") +
-  labs(title = "Reported Income (ordered by frequency)",
-       x = "Count", y = NULL) +
-  theme_minimal()
-```
-
-But for income, the natural ordering (low to high) is more meaningful than frequency ordering. We can use `fct_relevel()` or ensure the original factor order is preserved:
-
-```{r fig.cap="Income distribution preserving the natural low-to-high ordering."}
-gss_cat |>
-  filter(!is.na(rincome), rincome != "Not applicable") |>
-  ggplot(aes(y = rincome)) +
-  geom_bar(fill = "darkorange") +
-  labs(title = "Reported Income (natural order)",
-       x = "Count", y = NULL) +
-  theme_minimal()
-```
-
-### Example 2: Lumping Small Categories for Cleaner Plots
-
-Plots with too many categories become unreadable. Lumping rare categories into "Other" dramatically improves clarity.
-
-```{r fig.cap="All denominations shown, creating an overwhelming plot."}
-gss_cat |>
-  count(denom) |>
-  ggplot(aes(x = n, y = denom)) +
-  geom_point() +
-  labs(title = "Denomination (all levels --- hard to read)",
-       x = "Count", y = NULL) +
-  theme_minimal()
-```
-
-```{r fig.cap="Denominations lumped to the top 8, with the rest grouped as Other."}
-gss_cat |>
-  mutate(denom = fct_lump_n(denom, n = 8)) |>
-  count(denom) |>
-  mutate(denom = fct_reorder(denom, n)) |>
-  ggplot(aes(x = n, y = denom)) +
-  geom_point(size = 3, color = "steelblue") +
-  labs(title = "Denomination (top 8, rest lumped into Other)",
-       x = "Count", y = NULL) +
-  theme_minimal()
-```
-
-### Example 3: Controlling Legend Order in Line Plots
-
-When a line plot has multiple series, the legend should match the visual order of the lines at the right edge of the plot. The `fct_reorder2()` function achieves this.
-
-```{r fig.cap="Proportion of top 4 marital statuses by age with aligned legend."}
-gss_cat |>
-  filter(!is.na(age)) |>
-  mutate(marital = fct_lump_n(marital, n = 4)) |>
-  count(age, marital) |>
-  group_by(age) |>
-  mutate(prop = n / sum(n)) |>
-  ungroup() |>
-  ggplot(aes(x = age, y = prop, color = fct_reorder2(marital, age, prop))) +
-  geom_line(linewidth = 1) +
-  scale_color_brewer(palette = "Set1") +
-  labs(title = "Marital Status by Age",
-       x = "Age", y = "Proportion", color = "Status") +
-  theme_minimal()
-```
-
-### Example 4: Combining fct_collapse() with Visualization
-
-Collapsing factor levels before plotting is a common workflow for simplifying complex categorical data.
-
-```{r fig.cap="Political party affiliation after collapsing levels into broader groups."}
-gss_cat |>
+```{r fig.cap="Political affiliation after collapsing into four clean groups."}
+gss_cat %>%
   mutate(party = fct_collapse(partyid,
     "Republican"  = c("Strong republican", "Not str republican"),
     "Independent" = c("Ind,near rep", "Independent", "Ind,near dem"),
     "Democrat"    = c("Not str democrat", "Strong democrat"),
     "Other"       = c("No answer", "Don't know", "Other party")
-  )) |>
-  mutate(party = fct_infreq(party)) |>
+  )) %>%
+  mutate(party = fct_infreq(party)) %>%
   ggplot(aes(x = party, fill = party)) +
   geom_bar(show.legend = FALSE) +
   scale_fill_manual(values = c(
     "Democrat" = "blue", "Independent" = "gray50",
     "Republican" = "red", "Other" = "gray80"
   )) +
-  labs(title = "Political Affiliation (collapsed categories)",
-       x = NULL, y = "Count") +
+  labs(title = "Political Affiliation (simplified)", x = NULL, y = "Count") +
   theme_minimal()
 ```
 
-### Example 5: Using Factors with mtcars
+Went from 10 confusing categories to 4 clear ones. Your stakeholders will actually understand this chart.
 
-The `mtcars` dataset has several variables that are coded as numbers but are really categorical: `cyl`, `am`, `gear`, and `vs`. Converting them to factors with meaningful labels makes plots more informative.
 
-```{r fig.cap="Mean MPG by number of cylinders and transmission type with labeled factors."}
-mtcars |>
+## `fct_lump()` --- "Show Me the Top N, Lump the Rest"
+
+This is a lifesaver when you have a variable with 30+ categories. Nobody wants a bar chart with 30 bars. `fct_lump_n()` keeps the top N categories and lumps everything else into "Other."
+
+```{r}
+# Keep the 4 most common religions, lump the rest
+gss_cat %>%
+  mutate(relig = fct_lump_n(relig, n = 4)) %>%
+  count(relig, sort = TRUE)
+```
+
+The chart version --- before and after lumping:
+
+```{r fig.cap="All denominations shown. Way too many categories to be useful."}
+gss_cat %>%
+  count(denom) %>%
+  ggplot(aes(x = n, y = denom)) +
+  geom_point() +
+  labs(title = "All Denominations (information overload)", x = "Count", y = NULL) +
+  theme_minimal()
+```
+
+```{r fig.cap="Top 8 denominations with the rest lumped into Other. Now this is readable."}
+gss_cat %>%
+  mutate(denom = fct_lump_n(denom, n = 8)) %>%
+  count(denom) %>%
+  mutate(denom = fct_reorder(denom, n)) %>%
+  ggplot(aes(x = n, y = denom)) +
+  geom_point(size = 3, color = "steelblue") +
+  labs(title = "Top 8 Denominations (rest lumped into Other)",
+       x = "Count", y = NULL) +
+  theme_minimal()
+```
+
+There are a few variants depending on how you want to decide what gets lumped:
+
+- `fct_lump_n(x, n = 5)` --- keep top 5
+- `fct_lump_prop(x, prop = 0.10)` --- keep categories representing at least 10% of data
+- `fct_lump_min(x, min = 100)` --- keep categories with at least 100 observations
+
+Pick the one that matches your question.
+
+
+## Bonus: Making mtcars Charts Better with Factors
+
+The `mtcars` dataset has variables like `cyl` (cylinders) and `am` (transmission) coded as numbers. They're really categories. Converting them to factors with meaningful labels instantly makes your charts more professional.
+
+```{r fig.cap="Mean MPG by cylinders and transmission. Labeled factors make this chart presentation-ready."}
+mtcars %>%
   mutate(
     cyl = factor(cyl),
     transmission = factor(am, levels = c(0, 1), labels = c("Automatic", "Manual"))
-  ) |>
-  group_by(cyl, transmission) |>
-  summarize(mean_mpg = mean(mpg), .groups = "drop") |>
+  ) %>%
+  group_by(cyl, transmission) %>%
+  summarize(mean_mpg = mean(mpg), .groups = "drop") %>%
   ggplot(aes(x = cyl, y = mean_mpg, fill = transmission)) +
   geom_col(position = "dodge") +
   scale_fill_brewer(palette = "Set2") +
@@ -668,35 +283,42 @@ mtcars |>
   theme_minimal()
 ```
 
-### Example 6: Showing Empty Factor Levels
+Without factors, those bars would just say "0" and "1" for transmission. With factors, they say "Automatic" and "Manual." Small change, big impact.
 
-When comparing groups, it can be important to show categories with zero counts rather than silently omitting them. Factors make this possible with the `.drop = FALSE` argument in ggplot2 scales.
 
-```{r fig.cap="Bar chart showing all factor levels including those with zero count."}
-# Create a subset with only some species
-iris_subset <- iris |>
-  filter(Species != "versicolor")
+## `fct_reorder2()` --- Aligning Legends with Lines
 
-# Without .drop = FALSE, the versicolor bar disappears
-ggplot(iris_subset, aes(x = Species)) +
-  geom_bar(fill = "steelblue") +
-  scale_x_discrete(drop = FALSE) +
-  labs(title = "Iris species counts (empty level shown)",
-       x = NULL, y = "Count") +
+Quick bonus for line charts. When you have multiple lines, the legend should match the visual order of the lines at the right edge of the plot. `fct_reorder2()` does this automatically.
+
+```{r fig.cap="Line chart where the legend order matches the line positions at the right edge."}
+gss_cat %>%
+  filter(!is.na(age)) %>%
+  mutate(marital = fct_lump_n(marital, n = 4)) %>%
+  count(age, marital) %>%
+  group_by(age) %>%
+  mutate(prop = n / sum(n)) %>%
+  ungroup() %>%
+  ggplot(aes(x = age, y = prop, color = fct_reorder2(marital, age, prop))) +
+  geom_line(linewidth = 1) +
+  scale_color_brewer(palette = "Set1") +
+  labs(title = "Marital Status by Age",
+       x = "Age", y = "Proportion", color = "Status") +
   theme_minimal()
 ```
 
 
-## Summary
+## Quick Reference
 
-The forcats package transforms factor manipulation from a frustrating chore into a clean, predictable workflow. Its key functions fall into four categories:
+Here's your factor toolkit at a glance:
 
-| Task | Key Functions |
-|:--------------------------|:----------------------------------------------|
-| **Creating factors** | `factor()`, `parse_factor()`, `as.factor()` |
-| **Inspecting factors** | `levels()`, `nlevels()`, `fct_count()`, `fct_unique()` |
-| **Reordering levels** | `fct_relevel()`, `fct_infreq()`, `fct_rev()`, `fct_reorder()`, `fct_reorder2()`, `fct_inorder()`, `fct_shift()` |
-| **Modifying levels** | `fct_recode()`, `fct_collapse()`, `fct_lump_n()`, `fct_lump_prop()`, `fct_lump_min()`, `fct_lump_lowfreq()`, `fct_other()` |
-| **Adding/dropping levels** | `fct_expand()`, `fct_drop()`, `fct_na_value_to_level()`, `fct_na_level_to_value()` |
+| What you want to do | Function | When to use it |
+|:---------------------|:---------|:---------------|
+| Sort bars by a value | `fct_reorder()` | Almost every bar/dot chart |
+| Sort bars by count | `fct_infreq()` | "Show me what's most common" |
+| Reverse the order | `fct_rev()` | Horizontal bar charts (top to bottom) |
+| Set a custom order | `fct_relevel()` | Life stages, survey scales, custom sorts |
+| Rename categories | `fct_recode()` | Cryptic labels need fixing |
+| Merge categories | `fct_collapse()` | Too many groups, need to simplify |
+| Keep top N, lump rest | `fct_lump_n()` | 30 categories? Nobody wants that chart |
 
-The single most impactful skill from this chapter is using `fct_reorder()` and `fct_infreq()` to control the order of categories in ggplot2 visualizations. Alphabetical ordering is almost never the most informative ordering, and a well-ordered factor can transform a confusing plot into one that tells a clear story. As you work through the visualization-focused companion course, you will find yourself reaching for these functions constantly.
+The single most impactful habit from this chapter: **always use `fct_reorder()` or `fct_infreq()` in your ggplot2 charts.** Alphabetical ordering is almost never the most informative ordering, and a well-ordered factor is the difference between a confusing chart and one that tells a clear story.

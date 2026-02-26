@@ -3,7 +3,7 @@ title: "R and the Tidyverse: A Companion Guide"
 author: "Vivek H. Patil"
 date: "`r Sys.Date()`"
 site: bookdown::bookdown_site
-output: bookdown::gitbook
+output: bookdown::bs4_book
 bibliography: [book.bib, packages.bib]
 biblio-style: apalike
 link-citations: yes
@@ -15,26 +15,34 @@ fontsize: 12pt
 monofont: "Source Code Pro"
 monofontoptions: "Scale=0.7"
 github-repo: patilv/Rbook
-description: "A comprehensive companion guide for learning R and the tidyverse, designed to support the Visual Analytics and Data Storytelling course."
+description: "A beginner-friendly companion guide for learning R and the tidyverse. The secondary R reference for the Visual Analytics and Data Storytelling course."
 ---
 
 # Preface {-}
 
-This book is designed as a comprehensive companion resource for learning R programming with the tidyverse ecosystem. It serves two primary purposes:
+Welcome! If you are reading this, chances are you have been asked (or voluntarily chose) to learn R. Either way, you are in the right place.
 
-1. **A beginner-friendly R resource**: If you are new to R, this book will walk you through everything from installation to advanced data manipulation and visualization.
+This book has two jobs:
 
-2. **A companion to the data visualization course**: This book is the secondary R reference for the [Visual Analytics and Data Storytelling](http://patilv.com/VizAnalytics4Biz/) course. While that course focuses on the theory and practice of data visualization, this book provides the detailed R and tidyverse foundations you need to succeed.
+1. **Teach you R from scratch.** No prior programming experience needed. If you can use a spreadsheet, you can learn R. It is going to feel weird at first --- typing code instead of clicking buttons --- but stick with it. The payoff is worth it.
 
-The book is organized into five parts:
+2. **Be your R reference for the data visualization course.** This book is the companion to the [Visual Analytics and Data Storytelling](http://patilv.com/VizAnalytics4Biz/) course. That course teaches you *why* and *what* to visualize. This book teaches you *how* to make R do the work.
 
-- **Part I (Chapters 1--2)** gets you started with R and RStudio.
-- **Part II (Chapter 3)** covers R Markdown, the tool you will use to create reproducible reports, presentations, and dashboards.
-- **Part III (Chapters 4--12)** is the heart of the book --- a thorough tour of the tidyverse ecosystem, covering data import, wrangling, tidying, visualization, and working with strings, factors, dates, and functional programming.
-- **Part IV (Chapters 13--17)** covers exploratory data analysis and statistical testing using both base R and tidyverse approaches.
-- **Part V (Chapter 18)** covers advanced R Markdown topics including parameterized reports, presentations, and dashboards.
+### How this book is organized {-}
 
-The book presumes no prior experience with R. It does assume familiarity with basic statistical concepts. Please approach the content with an open mind --- R has a learning curve, but the payoff is enormous.
+- **Chapters 1--2**: Getting started. Installing R, finding your way around RStudio, and not panicking.
+- **Chapter 3**: R Markdown. The tool that lets you combine your writing and your code into one document (your professors will love this).
+- **Chapters 4--12**: The tidyverse. This is where the magic happens --- importing data, wrangling it into shape, making gorgeous plots, and working with text, categories, and dates.
+- **Chapters 13--17**: Data exploration and statistical analysis. Describing data, summary statistics, and hypothesis testing --- with both the old-school base R way and the tidyverse way.
+- **Chapter 18**: Advanced R Markdown. Presentations, dashboards, and other cool things you can build.
+
+### A few ground rules {-}
+
+- **You will make errors.** Everyone does. The error messages in R look scary, but they are usually telling you something simple, like you forgot a comma. Read them. Google them. You will be fine.
+- **Copy-paste is your friend (at first).** Run the code in this book. Then change small things and see what happens. That is how you learn.
+- **There is no dumb question.** If you are confused, someone else is too.
+
+Let's get started.
 
 ## About me {-}
 

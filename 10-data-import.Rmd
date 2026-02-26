@@ -6,9 +6,9 @@ opts_chunk$set(echo = TRUE, warning = FALSE, message = FALSE,
                comment = "#>", collapse = TRUE)
 ```
 
-Data analysis begins with data, and getting data into R is the essential first step in any analytical workflow. Data come in many formats --- CSV files, Excel spreadsheets, files from statistical software packages like SPSS and Stata, and R's own native formats. In this chapter, we cover the primary tools the tidyverse provides for importing data into R efficiently and reliably.
+Before you can analyze anything, you have to get data into R. That sounds obvious, but it trips people up more often than you'd think. Your boss emails you a CSV. A client sends over an Excel workbook with six tabs. Someone from the research team hands you a mysterious `.sav` file from SPSS. This chapter shows you how to handle all of it.
 
-The **readr** package is the tidyverse's answer to base R's data-reading functions. It is loaded automatically when you call `library(tidyverse)`, and it provides a family of functions --- `read_csv()`, `read_tsv()`, `read_delim()`, and others --- that are faster, more consistent, and more user-friendly than their base R counterparts. We also cover the **readxl** package for Excel files and the **haven** package for files produced by SPSS, Stata, and SAS.
+We'll use three packages: **readr** (for CSV and other text files), **readxl** (for Excel), and **haven** (for SPSS/Stata/SAS files). The first one loads automatically with the tidyverse; the other two you load separately.
 
 ```{r}
 library(tidyverse)
@@ -16,21 +16,21 @@ library(readxl)
 library(haven)
 ```
 
-## Reading CSV Files with readr
 
-Comma-separated value (CSV) files are one of the most common formats for storing tabular data. The `read_csv()` function from the readr package reads these files and returns a tibble.
+## Reading CSV Files {#csv}
 
-### read_csv() vs. base R read.csv()
+CSV files are the lingua franca of data. If someone says "I'll send you the data," there's a 90% chance it's a CSV. The function you want is `read_csv()` from the readr package.
 
-There are several important differences between `read_csv()` and base R's `read.csv()`:
+### Why read_csv() Instead of read.csv()?
 
-1. **Output type**: `read_csv()` returns a tibble, while `read.csv()` returns a standard data frame.
-2. **String handling**: `read_csv()` does not convert character columns to factors by default. In base R (prior to version 4.0), `read.csv()` used `stringsAsFactors = TRUE` by default, which was a frequent source of confusion.
-3. **Speed**: `read_csv()` is considerably faster than `read.csv()` for large files.
-4. **Column specification**: `read_csv()` prints a column specification so you can see what type each column was parsed as.
-5. **Parsing**: `read_csv()` uses a more sophisticated parser that handles many edge cases better.
+Base R has `read.csv()`. It works, but `read_csv()` is better in almost every way:
 
-Let us see `read_csv()` in action. One convenient feature of `read_csv()` is that it can read data directly from an inline string, which is useful for creating quick examples.
+- It's **faster**, especially on large files (like that 500,000-row sales export).
+- It returns a **tibble** instead of a plain data frame, so it prints nicely.
+- It **doesn't silently convert your text to factors**. (If you've ever had "Q1 Revenue" turn into a mystery number, you know the pain.)
+- It **tells you how it parsed each column**, so you can catch problems early.
+
+Let's see it in action. `read_csv()` can even read data from an inline string, which is handy for quick demos.
 
 ```{r}
 sample_data <- read_csv(
@@ -45,22 +45,11 @@ sample_data <- read_csv(
 sample_data
 ```
 
-Notice that `read_csv()` prints a message telling you how each column was parsed. The `name` column is character (`col_character()`), `age` is a double, `score` is a double, and `enrolled` is logical.
+See that message? It's telling you it read `name` as text, `age` and `score` as numbers, and `enrolled` as TRUE/FALSE. That's the kind of transparency you want.
 
-### Key Arguments of read_csv()
+### The Arguments You'll Actually Use
 
-The `read_csv()` function has several useful arguments that give you fine-grained control over how data is read.
-
-**file**: The path to the file (or an inline string, a URL, or a connection).
-
-**col_names**: By default, `read_csv()` treats the first row as column names. Set `col_names = FALSE` to generate default column names (`X1`, `X2`, ...), or pass a character vector to supply your own names.
-
-```{r}
-read_csv(
-  "1,2,3\n4,5,6\n7,8,9",
-  col_names = FALSE
-)
-```
+**col_names** -- By default, the first row is treated as column headers. If your file doesn't have headers (looking at you, legacy systems), set `col_names = FALSE` or supply your own names.
 
 ```{r}
 read_csv(
@@ -69,7 +58,7 @@ read_csv(
 )
 ```
 
-**na**: A character vector of strings to interpret as missing values. The default is `c("", "NA")`.
+**na** -- Different systems represent missing data differently. Some use blanks, some use "N/A", some use "." because... reasons. Tell R what to look for.
 
 ```{r}
 read_csv(
@@ -78,7 +67,7 @@ read_csv(
 )
 ```
 
-**skip**: Number of lines to skip before reading data. This is useful when files have metadata or comments at the top.
+**skip** -- If the file has junk at the top (report headers, timestamps, disclaimers), skip those lines.
 
 ```{r}
 read_csv(
@@ -87,16 +76,7 @@ read_csv(
 )
 ```
 
-**comment**: A string that identifies comment lines. Lines beginning with this string are ignored.
-
-```{r}
-read_csv(
-  "# This is a comment\nname,value\nAlice,10\n# Another comment\nBob,20",
-  comment = "#"
-)
-```
-
-**n_max**: The maximum number of data rows to read. This is helpful for previewing a large file without loading the entire thing.
+**n_max** -- Got a 2-million-row file and just want to peek at it? Read only the first few rows.
 
 ```{r}
 read_csv(
@@ -105,11 +85,31 @@ read_csv(
 )
 ```
 
-### Specifying Column Types with col_types
+### Specifying Column Types
 
-By default, readr guesses column types by inspecting the first 1000 rows of data. You can override this behavior using the `col_types` argument. There are two ways to specify column types: with a compact string or with the `cols()` function.
+Sometimes R guesses wrong. The classic example: zip codes. If a zip code starts with 0 (like 02134 for Boston), R will read it as the number 2134 and silently drop the leading zero. Not great.
 
-**Compact string notation** uses one letter per column: `c` = character, `i` = integer, `d` = double, `l` = logical, `f` = factor, `D` = date, `T` = datetime, `t` = time, `?` = guess, `_` or `-` = skip.
+```{r}
+# Problem: leading zero gets eaten
+problem_data <- read_csv(
+  "id,zipcode,amount\n1,02134,100\n2,10001,200\n3,90210,300"
+)
+
+problem_data
+```
+
+The fix: tell R that `zipcode` is text, not a number.
+
+```{r}
+fixed_data <- read_csv(
+  "id,zipcode,amount\n1,02134,100\n2,10001,200\n3,90210,300",
+  col_types = cols(zipcode = col_character())
+)
+
+fixed_data
+```
+
+You can also use a compact shorthand where each letter represents a type: `c` = character, `i` = integer, `d` = double, `l` = logical, `_` = skip the column entirely.
 
 ```{r}
 read_csv(
@@ -118,23 +118,7 @@ read_csv(
 )
 ```
 
-Notice that `score` remains a double (as specified by `d`), but `active` is now read as character (specified by `c`) instead of logical.
-
-**Using `cols()`** provides more readable and flexible type specification.
-
-```{r}
-read_csv(
-  "id,name,score,active\n1,Alice,92.5,TRUE\n2,Bob,88.0,FALSE",
-  col_types = cols(
-    id = col_integer(),
-    name = col_character(),
-    score = col_double(),
-    active = col_logical()
-  )
-)
-```
-
-You can also use `cols_only()` to read only specific columns.
+If you only need certain columns from a massive file, `cols_only()` lets you cherry-pick.
 
 ```{r}
 read_csv(
@@ -146,39 +130,27 @@ read_csv(
 )
 ```
 
+
 ## Other Delimited Files
 
-Not all delimited files use commas. The readr package provides functions for other common formats.
-
-### Tab-Separated Files
-
-Use `read_tsv()` for tab-separated files.
+Not everything is comma-separated. Some files use tabs, pipes, or semicolons. readr has you covered.
 
 ```{r}
+# Tab-separated
 read_tsv(
   "name\tage\tscore\nAlice\t25\t92.5\nBob\t30\t88.0"
 )
 ```
 
-### Custom Delimiters
-
-Use `read_delim()` when your file uses a delimiter other than a comma or tab --- for example, a semicolon or pipe character.
-
 ```{r}
+# Pipe-delimited (sometimes you'll see this from older database exports)
 read_delim(
   "name|age|score\nAlice|25|92.5\nBob|30|88.0",
   delim = "|"
 )
 ```
 
-```{r}
-read_delim(
-  "name;age;score\nAlice;25;92.5\nBob;30;88.0",
-  delim = ";"
-)
-```
-
-Note that in many European locales, CSV files use semicolons as delimiters and commas as decimal marks. The `read_csv2()` function handles this convention.
+If you're working with European-format CSVs (semicolons as delimiters, commas as decimal marks), use `read_csv2()`. This comes up more than you'd expect in international business.
 
 ```{r}
 read_csv2(
@@ -186,55 +158,25 @@ read_csv2(
 )
 ```
 
-### Fixed-Width Files
 
-Fixed-width files allocate a specific number of characters for each column. Use `read_fwf()` to read them.
+## Reading Excel Files {#excel}
 
-```{r}
-read_fwf(
-  "Alice  25  92.5\nBob    30  88.0",
-  fwf_widths(c(7, 4, 5), c("name", "age", "score"))
-)
-```
+Let's be honest: in business, Excel is king. Your quarterly reports, your budget forecasts, your customer lists -- they're probably all in `.xlsx` files. The **readxl** package handles these beautifully.
 
-You can also specify column positions explicitly.
+### The Basics
+
+`read_excel()` auto-detects whether a file is `.xls` or `.xlsx` and just works.
 
 ```{r}
-read_fwf(
-  "Alice  25  92.5\nBob    30  88.0",
-  fwf_positions(
-    start = c(1, 8, 12),
-    end = c(7, 9, 16),
-    col_names = c("name", "age", "score")
-  )
-)
-```
-
-## Reading Excel Files
-
-Excel files (.xls and .xlsx) are widely used in business and research. The **readxl** package provides functions for reading them. Unlike readr, readxl is not loaded automatically with `library(tidyverse)` --- you must load it explicitly with `library(readxl)`.
-
-### read_excel(), read_xls(), and read_xlsx()
-
-The `read_excel()` function automatically detects whether a file is .xls or .xlsx format. If you know the format, you can use `read_xls()` or `read_xlsx()` directly for a small performance gain.
-
-The readxl package ships with example Excel files you can use for practice.
-
-```{r}
-# List the example files bundled with readxl
-readxl_example()
-```
-
-```{r}
-# Read an example Excel file
+# readxl comes with example files for practice
 datasets_path <- readxl_example("datasets.xlsx")
 datasets_data <- read_excel(datasets_path)
 datasets_data
 ```
 
-### Selecting Sheets
+### Working with Sheets
 
-Excel workbooks often contain multiple sheets. Use the `sheet` argument to specify which sheet to read --- either by name or by position (1-indexed).
+Excel workbooks usually have multiple sheets -- maybe "Q1 Sales," "Q2 Sales," "Summary." You can pick which sheet to read.
 
 ```{r}
 # See what sheets are available
@@ -248,14 +190,14 @@ head(mtcars_data)
 ```
 
 ```{r}
-# Read a specific sheet by position
+# Or by position (the 4th sheet)
 quakes_data <- read_excel(datasets_path, sheet = 4)
 head(quakes_data)
 ```
 
-### Specifying Cell Ranges
+### Reading Specific Cell Ranges
 
-The `range` argument lets you read a specific rectangular region of cells. This uses Excel-style cell references.
+Sometimes you don't want the whole sheet. Maybe the data you need is in cells B2:F50, and there's a bunch of formatting garbage around it. The `range` argument uses Excel-style cell references, so it feels familiar.
 
 ```{r}
 # Read a specific cell range
@@ -263,21 +205,18 @@ read_excel(datasets_path, range = "mtcars!B1:D5")
 ```
 
 ```{r}
-# Read specific rows from a sheet
+# Read specific rows
 read_excel(datasets_path, sheet = "mtcars", range = cell_rows(1:6))
 ```
 
 ```{r}
-# Read specific columns from a sheet
+# Read specific columns
 read_excel(datasets_path, sheet = "mtcars", range = cell_cols("A:C"))
 ```
 
-### Other Useful Arguments
-
-Similar to readr functions, `read_excel()` supports `col_names`, `col_types`, `na`, and `skip` arguments.
+Just like `read_csv()`, you can use `na`, `skip`, `col_names`, and `n_max` to handle messy Excel files.
 
 ```{r}
-# Specify NA strings and skip rows
 read_excel(
   datasets_path,
   sheet = "iris",
@@ -287,103 +226,58 @@ read_excel(
 )
 ```
 
-## Reading Statistical Software Files
 
-Researchers and analysts often encounter data files created by statistical software packages. The **haven** package, part of the tidyverse, reads files from SPSS, Stata, and SAS.
+## SPSS, Stata, and SAS Files
 
-### SPSS Files (.sav)
-
-Use `read_sav()` to read SPSS data files.
+If someone hands you a `.sav` file (SPSS), a `.dta` file (Stata), or a `.sas7bdat` file (SAS), don't panic. The **haven** package reads all of them.
 
 ```{r eval=FALSE}
-# Read an SPSS file
+# SPSS
 spss_data <- read_sav("path/to/datafile.sav")
+
+# Stata
+stata_data <- read_dta("path/to/datafile.dta")
+
+# SAS
+sas_data <- read_sas("path/to/datafile.sas7bdat")
 ```
 
-Haven preserves SPSS value labels as a special `labelled` class. You can convert these labels to R factors using `as_factor()`.
+These files often have special "value labels" (like 1 = "Male", 2 = "Female"). Haven preserves those as a special `labelled` class. To convert them to regular R factors, use `as_factor()`.
 
 ```{r eval=FALSE}
 spss_data <- read_sav("path/to/datafile.sav") %>%
   mutate(across(where(is.labelled), as_factor))
 ```
 
-### Stata Files (.dta)
+You probably won't use these every day, but it's nice to know they exist when you need them.
 
-Use `read_dta()` to read Stata data files.
 
-```{r eval=FALSE}
-# Read a Stata file
-stata_data <- read_dta("path/to/datafile.dta")
-```
+## R's Own File Formats
 
-### SAS Files (.sas7bdat)
+R has two native formats for saving data: `.RData` and `.rds`. Here's the quick version:
 
-Use `read_sas()` to read SAS data files.
+- **`.RData`** files can store multiple objects. You load them with `load()`, and they pop back into your environment with their original names. The catch? They can overwrite things without warning.
+- **`.rds`** files store a single object. You read them with `readRDS()` and assign the result to whatever name you want. Much safer.
 
 ```{r eval=FALSE}
-# Read a SAS file
-sas_data <- read_sas("path/to/datafile.sas7bdat")
-```
-
-Each of these functions returns a tibble with variable labels and value labels preserved as attributes. The `as_factor()` function is useful for converting labelled vectors to standard R factors when needed.
-
-## Reading R Data Files
-
-R has its own native file formats for saving data. There are two primary types: `.RData` (or `.Rda`) files and `.rds` files. Understanding the difference between them is important.
-
-### .RData / .Rda Files
-
-`.RData` files (sometimes saved with the `.Rda` extension) can store multiple R objects. They are loaded using the `load()` function, which restores objects into your environment using their original names.
-
-```{r eval=FALSE}
-# Save multiple objects to an .RData file
+# Saving and loading .RData
 x <- 1:10
 y <- data.frame(a = 1:3, b = letters[1:3])
 save(x, y, file = "my_objects.RData")
+load("my_objects.RData")  # x and y are restored
 
-# Load them back - objects are restored with their original names
-load("my_objects.RData")
-```
-
-A key characteristic of `load()` is that you do not assign its result to a variable. Instead, the objects stored in the file are placed directly into your environment. This can be convenient, but it also means that `load()` may overwrite existing objects without warning.
-
-### .rds Files
-
-`.rds` files store a single R object and are read using `readRDS()`. Unlike `load()`, `readRDS()` returns the object, so you assign it to a variable name of your choosing.
-
-```{r eval=FALSE}
-# Save a single object
+# Saving and loading .rds (preferred)
 my_data <- tibble(name = c("Alice", "Bob"), score = c(92.5, 88.0))
 saveRDS(my_data, file = "my_data.rds")
-
-# Read it back with any name you like
 restored_data <- readRDS("my_data.rds")
 ```
 
-The `.rds` format is generally preferred because it gives you explicit control over the variable name and avoids accidental overwrites. It also makes code easier to read and reason about.
+For day-to-day work, prefer `.rds`. It's explicit, it's safe, and it won't accidentally overwrite your variables.
 
-### Key Differences
 
-| Feature            | `.RData` / `.Rda`                | `.rds`                          |
-|--------------------|----------------------------------|---------------------------------|
-| Objects stored     | Multiple                         | Single                          |
-| Function to load   | `load()`                         | `readRDS()`                     |
-| Assignment         | Objects restored by original name | You assign to a variable        |
-| Risk of overwrite  | Yes                              | No                              |
-| Preferred for      | Saving workspace snapshots       | Saving individual data objects  |
+## Writing Data Out
 
-## Writing and Exporting Data
-
-The readr package also provides functions for writing data to files. These parallel the reading functions and share several advantages over base R's `write.csv()`.
-
-### write_csv() and write_tsv()
-
-`write_csv()` writes a tibble (or data frame) to a CSV file. Compared to base R's `write.csv()`:
-
-- It does not write row names (which are rarely useful).
-- It always uses UTF-8 encoding.
-- It writes dates in ISO 8601 format.
-- It is faster for large data.
+You can also go the other direction -- save your clean data for someone else (or for future you).
 
 ```{r eval=FALSE}
 my_data <- tibble(
@@ -392,152 +286,25 @@ my_data <- tibble(
   date = as.Date(c("2025-01-15", "2025-02-20", "2025-03-10"))
 )
 
+# Write a CSV
 write_csv(my_data, "my_data.csv")
-```
 
-`write_tsv()` works identically but produces a tab-separated file.
-
-```{r eval=FALSE}
-write_tsv(my_data, "my_data.tsv")
-```
-
-### write_excel_csv()
-
-If the CSV file is intended to be opened in Microsoft Excel, use `write_excel_csv()`. It writes a UTF-8 byte order mark (BOM) at the beginning of the file, which tells Excel to use UTF-8 encoding.
-
-```{r eval=FALSE}
+# If someone will open it in Excel, use this version
+# (it handles special characters better)
 write_excel_csv(my_data, "my_data_excel.csv")
-```
 
-### write_rds()
-
-The readr package also provides `write_rds()`, a thin wrapper around `saveRDS()`, for saving R objects.
-
-```{r eval=FALSE}
+# Save as an R object (preserves column types perfectly)
 write_rds(my_data, "my_data.rds")
 ```
 
-One advantage of `write_rds()` and `read_rds()` (the readr version of `readRDS()`) is that they save and restore column type information perfectly, unlike CSV files which lose information about factors, dates, and datetime types.
+One thing to watch out for: when you save to CSV, you lose type information. Factors become plain text, dates become strings. If you need to preserve everything exactly, use `write_rds()`.
 
-## Parsing Vectors
-
-Under the hood, readr uses a family of `parse_*()` functions to convert character vectors into the appropriate type. Understanding these functions is useful when you need to handle tricky data or when you want to parse individual vectors outside of file-reading.
-
-### Numeric Parsers
-
-```{r}
-# parse_integer() for whole numbers
-parse_integer(c("1", "2", "3", "4"))
-```
-
-```{r}
-# parse_double() for decimal numbers
-parse_double(c("1.5", "2.7", "3.14"))
-```
-
-```{r}
-# parse_number() is flexible - it ignores non-numeric characters
-parse_number(c("$1,234.56", "45%", "Cost: 100"))
-```
-
-The `parse_number()` function is particularly useful for real-world data where numbers include currency symbols, percentage signs, or other formatting characters.
-
-### Locale-Specific Number Parsing
-
-Different countries use different conventions for decimal marks and grouping marks. Use the `locale` argument to handle these differences.
-
-```{r}
-# European format: comma as decimal mark, period as grouping mark
-parse_number("1.234,56", locale = locale(decimal_mark = ",", grouping_mark = "."))
-```
-
-### Character Parsing
-
-`parse_character()` is mainly useful for specifying encoding.
-
-```{r}
-# Specify encoding
-parse_character("Hello", locale = locale(encoding = "UTF-8"))
-```
-
-### Factor Parsing
-
-`parse_factor()` converts a character vector into a factor with specified levels.
-
-```{r}
-parse_factor(c("low", "medium", "high", "low"),
-             levels = c("low", "medium", "high"))
-```
-
-If the data contains values not in the specified levels, a warning is issued and those values are set to `NA`.
-
-```{r}
-parse_factor(c("low", "medium", "unknown", "high"),
-             levels = c("low", "medium", "high"))
-```
-
-### Date and Datetime Parsing
-
-`parse_date()` and `parse_datetime()` handle date and datetime strings. By default, `parse_date()` expects ISO 8601 format (YYYY-MM-DD) and `parse_datetime()` expects ISO 8601 datetime format.
-
-```{r}
-parse_date(c("2025-01-15", "2025-06-30", "2025-12-25"))
-```
-
-```{r}
-parse_datetime(c("2025-01-15T10:30:00", "2025-06-30T14:45:00"))
-```
-
-You can specify custom date formats using format strings.
-
-```{r}
-# Common US format: month/day/year
-parse_date(c("01/15/2025", "06/30/2025"), format = "%m/%d/%Y")
-```
-
-```{r}
-# Written month names
-parse_date(c("January 15, 2025", "June 30, 2025"), format = "%B %d, %Y")
-```
-
-The key format codes are:
-
-- `%Y`: 4-digit year, `%y`: 2-digit year
-- `%m`: month as number, `%b`: abbreviated month name, `%B`: full month name
-- `%d`: day of month
-- `%H`: hour (0--23), `%M`: minute, `%S`: second
 
 ## Handling Common Import Problems
 
-Real-world data files are messy. Here are some common problems you will encounter and how to solve them.
+Real-world data is messy. Here are the problems you'll hit most often and how to fix them.
 
-### Column Type Issues
-
-Sometimes readr's automatic type detection guesses wrong. This is the most common issue. The best practice is to read the file once, examine the column specification, and then re-read with explicit `col_types`.
-
-```{r}
-# A column that looks numeric but has a text entry
-problem_data <- read_csv(
-  "id,zipcode,amount\n1,02134,100\n2,10001,200\n3,90210,300"
-)
-
-# Notice that zipcode is read as numeric, losing the leading zero
-problem_data
-```
-
-```{r}
-# Fix: specify zipcode as character
-fixed_data <- read_csv(
-  "id,zipcode,amount\n1,02134,100\n2,10001,200\n3,90210,300",
-  col_types = cols(zipcode = col_character())
-)
-
-fixed_data
-```
-
-### Missing Values
-
-Different data sources use different representations for missing values. Always check what your data uses and specify the `na` argument accordingly.
+**Missing values in disguise.** Different systems use different codes for "no data." Check your file and tell R what to look for.
 
 ```{r}
 read_csv(
@@ -546,9 +313,7 @@ read_csv(
 )
 ```
 
-### Skipping Rows and Comments
-
-Files exported from other software sometimes have header information or metadata before the actual data begins.
+**Junk at the top of the file.** Reports exported from enterprise systems love to put timestamps and headers above the actual data. Use `skip` or `comment`.
 
 ```{r}
 messy_file <- read_csv(
@@ -559,60 +324,39 @@ messy_file <- read_csv(
 messy_file
 ```
 
-### Reading Data from URLs
-
-All readr functions can read directly from URLs. This is extremely convenient for working with data hosted online.
+**Reading from a URL.** All readr functions can read directly from web URLs. Very handy for publicly available datasets.
 
 ```{r eval=FALSE}
-# Read a CSV file directly from a URL
 url_data <- read_csv("https://raw.githubusercontent.com/tidyverse/readr/main/inst/extdata/mtcars.csv")
 ```
 
-### Encoding Problems
-
-Character encoding issues can cause garbled text. If your data looks wrong, try specifying the encoding.
+**Encoding problems.** If your data looks like garbled nonsense (especially with accented characters or non-English text), it's probably an encoding issue.
 
 ```{r eval=FALSE}
-# Read a file with Latin-1 encoding
+# Try specifying the encoding
 latin_data <- read_csv("data_latin1.csv", locale = locale(encoding = "Latin1"))
-```
 
-You can use `guess_encoding()` to try to determine a file's encoding.
-
-```{r eval=FALSE}
+# Or let R guess
 guess_encoding("mystery_file.csv")
 ```
 
-## Working with Multiple Files
 
-In practice, you often need to read and combine multiple data files --- for example, monthly reports or data split across several CSV files.
+## Reading Multiple Files at Once
 
-### Reading Multiple CSV Files with purrr
+In the real world, you'll often have data split across multiple files -- monthly sales reports, regional data dumps, weekly survey exports. You need to read them all and stack them together.
 
-The `purrr` package (part of the tidyverse) provides `map_dfr()`, which applies a function to each element of a list and row-binds the results into a single data frame.
+The easiest approach (readr 2.0+) is to hand `read_csv()` a vector of file paths directly.
 
 ```{r eval=FALSE}
-# Get a list of all CSV files in a directory
 csv_files <- list.files("data/", pattern = "\\.csv$", full.names = TRUE)
-
-# Read all files and combine into one tibble
-all_data <- map_dfr(csv_files, read_csv)
+all_data <- read_csv(csv_files, id = "source_file")
 ```
 
-If you want to keep track of which file each row came from, use the `.id` argument.
+The `id` argument adds a column telling you which file each row came from. Very useful for debugging.
 
-```{r eval=FALSE}
-all_data <- csv_files %>%
-  set_names() %>%
-  map_dfr(read_csv, .id = "source_file")
-```
-
-### A Self-Contained Example
-
-Here is a fully worked example using inline data to demonstrate the pattern.
+Here's a self-contained example showing the pattern:
 
 ```{r}
-# Simulate reading from multiple "files" (here, inline strings)
 file1 <- "name,score\nAlice,92\nBob,88"
 file2 <- "name,score\nCharlie,95\nDiana,79"
 file3 <- "name,score\nEve,85\nFrank,91"
@@ -623,37 +367,16 @@ combined_data <- map_dfr(files, read_csv, .id = "file_number")
 combined_data
 ```
 
-### Using base R with lapply
-
-You can achieve similar results without purrr by using `lapply()` and `do.call()`.
-
-```{r eval=FALSE}
-csv_files <- list.files("data/", pattern = "\\.csv$", full.names = TRUE)
-data_list <- lapply(csv_files, read_csv)
-all_data <- do.call(rbind, data_list)
-```
-
-### read_csv() with Multiple Files Directly
-
-Starting with readr version 2.0, `read_csv()` can accept a vector of file paths directly, reading and combining them automatically.
-
-```{r eval=FALSE}
-csv_files <- list.files("data/", pattern = "\\.csv$", full.names = TRUE)
-all_data <- read_csv(csv_files, id = "source_file")
-```
-
-The `id` argument adds a column identifying which file each row originated from.
 
 ## Summary
 
-This chapter covered the essential tools for importing data into R using tidyverse packages:
+Here's your cheat sheet for getting data into R:
 
-- **readr** provides `read_csv()`, `read_tsv()`, `read_delim()`, and `read_fwf()` for reading delimited and fixed-width text files. These functions are faster and more consistent than their base R equivalents.
-- **readxl** provides `read_excel()` for reading Excel files, with support for selecting specific sheets and cell ranges.
-- **haven** provides `read_sav()`, `read_dta()`, and `read_sas()` for reading files from SPSS, Stata, and SAS.
-- Base R's `load()` and `readRDS()` handle R's native data formats.
-- readr's `write_csv()`, `write_tsv()`, and `write_rds()` export data cleanly.
-- The `parse_*()` family of functions gives you fine control over converting character vectors to specific types.
-- For working with multiple files, `purrr::map_dfr()` or readr's built-in multi-file support provide clean solutions.
+- **CSV files**: `read_csv()` from readr. This is your bread and butter.
+- **Excel files**: `read_excel()` from readxl. Supports sheets, cell ranges, all the good stuff.
+- **SPSS/Stata/SAS**: `read_sav()`, `read_dta()`, `read_sas()` from haven. There when you need them.
+- **R native files**: `readRDS()` for `.rds`, `load()` for `.RData`.
+- **Writing data**: `write_csv()` for CSVs, `write_rds()` to preserve R types.
+- **Multiple files**: Pass a vector of paths to `read_csv()`, or use `map_dfr()`.
 
-Getting data import right is the foundation for everything that follows. Take the time to inspect your data after reading it, verify column types, and handle missing values explicitly. These small investments at the start of your analysis will save hours of debugging later.
+The most important habit: always inspect your data right after importing it. Check the column types, look for unexpected `NA` values, make sure nothing got mangled. Five minutes of checking now saves five hours of debugging later.

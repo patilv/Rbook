@@ -5,11 +5,15 @@ library(tidyverse)
 opts_chunk$set(echo=TRUE, warning=FALSE, message=FALSE)
 ```
 
-This chapter covers univariate analysis using both base R and ggplot2 visualizations. For a comprehensive treatment of ggplot2, see Chapters \@ref(ggplot2basics) and \@ref(ggplot2customize).
+Before you start looking at how variables relate to each other, it pays to understand each one on its own. What does the distribution look like? Is it symmetric or skewed? Are there outliers that could mess up your analysis? Is the average really different from some benchmark you care about?
+
+This chapter is all about one variable at a time -- the solo act before the ensemble performance. We cover both base R and ggplot2 visualizations. For the full ggplot2 deep-dive, see Chapters \@ref(ggplot2basics) and \@ref(ggplot2customize).
 
 ## Numeric Variable
 
 ### Histogram
+
+A histogram is your first look at the shape of a numeric variable. It chops the data into bins and shows you how many observations fall into each one. Think of it like this: if you surveyed 1,000 customers about their annual spending, a histogram would show you whether most people cluster around the same amount or whether spending is all over the map.
 
 **Base R:**
 
@@ -28,6 +32,8 @@ ggplot(iris, aes(x = Sepal.Length)) +
 
 ### Density plot
 
+A density plot is like a histogram's smoother, more sophisticated cousin. Instead of blocky bars, you get a continuous curve that shows where the data is concentrated. It is especially useful when you want to compare distributions across groups without the visual clutter of overlapping bars.
+
 **Base R:**
 
 ```{r}
@@ -43,7 +49,7 @@ ggplot(iris, aes(x = Sepal.Length)) +
   theme_minimal()
 ```
 
-We can also overlay density plots by group:
+We can also overlay density plots by group -- handy for comparing, say, customer spending across different segments:
 
 ```{r}
 ggplot(iris, aes(x = Sepal.Length, fill = Species)) +
@@ -53,6 +59,8 @@ ggplot(iris, aes(x = Sepal.Length, fill = Species)) +
 ```
 
 ### Box plot
+
+Box plots pack a lot of information into a small visual: the median (the line in the middle), the interquartile range (the box), and any outliers (the dots beyond the whiskers). They are the Swiss Army knife of distribution plots. If your boss asks "what does the spread look like?", a box plot answers that in one glance.
 
 **Base R:**
 
@@ -69,7 +77,7 @@ ggplot(iris, aes(y = Sepal.Length)) +
   theme_minimal()
 ```
 
-Box plots by group:
+Box plots really shine when you compare groups side by side:
 
 ```{r}
 ggplot(iris, aes(x = Species, y = Sepal.Length, fill = Species)) +
@@ -86,30 +94,34 @@ ggplot(iris, aes(x = Species, y = Sepal.Length, fill = Species)) +
 mean(iris$Sepal.Length)
 ```
 
-If we had to test whether the mean of Sepal.Length was either = or < or >  a particular value, we could use a t-test.
+OK, so we know the average. But is that average really different from some benchmark we care about? In business, this comes up all the time: "Our average customer satisfaction score is 4.2 -- is that significantly different from the industry benchmark of 4.0, or could it just be random noise?"
 
-There are three assumptions of a one-sample t-test.
+That is exactly what a one-sample t-test answers. It tests whether your sample mean is statistically different from a hypothesized value.
+
+There are three assumptions of a one-sample t-test:
 
 1. Random sampling from a defined population
-2. Interval or ratio scale of measurement 
+2. Interval or ratio scale of measurement
 3. Population is normally distributed
 
 ```{r}
-t.test(iris$Sepal.Length,mu=5) # Ho: mu=5 
+t.test(iris$Sepal.Length,mu=5) # Ho: mu=5
 ```
 
 
 ```{r}
-t.test(iris$Sepal.Length,mu=5,alternative="greater",conf.level = .99) # Ho: mu=5 
+t.test(iris$Sepal.Length,mu=5,alternative="greater",conf.level = .99) # Ho: mu=5
 ```
 
-Interpretation: Since the p-value is less than .01, we have evidence to suggest that the mean of Sepal.Length is greater than 5.
+Interpretation: Since the p-value is less than .01, we have evidence to suggest that the mean of Sepal.Length is greater than 5. In business terms, if 5 were our benchmark, we could confidently say our metric exceeds it.
 
 
 
 ## Factor variable
 
 ### Bar plot
+
+For categorical variables -- product types, customer segments, regions -- bar plots are the standard. They show you how many observations fall into each category. Simple, clean, effective.
 
 **Base R:**
 
@@ -127,9 +139,11 @@ ggplot(iris, aes(x = Species, fill = Species)) +
   theme(legend.position = "none")
 ```
 
-### Pie Chart - FYI Do not use
+### Pie Chart - Just Say No
 
-Pie charts are generally discouraged because humans are poor at judging angles and areas compared to lengths. Bar charts are almost always a better alternative. That said, here is how one is created:
+Look, we have to talk about pie charts. They exist. R can make them. But please, for the love of good data visualization, do not use them in professional settings. Humans are genuinely terrible at comparing angles and areas -- we are much better at comparing lengths (which is what bar charts use). Every data visualization expert from Edward Tufte to your friendly neighborhood data scientist will tell you the same thing: bar charts beat pie charts almost every time.
+
+That said, your boss might ask for one. Here is how to make it so you can then gently suggest a bar chart instead:
 
 **Base R:**
 
@@ -142,16 +156,18 @@ pie(counts, labels = labs)
 
 ### One factor-variable Chi-square goodness-of-fit test
 
-This is useful to determine whether a frequency distribution (of a factor variable) fits well an expected frequency distribution. To illustrate this, let us use the `survey` dataset (from an R packages named `MASS`). The data and their description have been provided in the folder for datasets. 
+This test answers a very practical question: "Do the proportions in my data match what I expected?" Maybe you expected your customer base to be 40% Gen Z, 35% Millennial, and 25% Gen X -- does your survey data actually match those proportions?
 
-** Names of variables**: 
+To illustrate this, let us use the `survey` dataset (from an R package named `MASS`).
+
+**Names of variables**:
 
 ```{r}
 load("data/survey.Rda")
 names(survey)
 ```
 
-** Structure of the dataframe**
+**Structure of the dataframe**
 
 ```{r}
 str(survey)
@@ -159,45 +175,45 @@ str(survey)
 ```
 
 
-Plotting a single factor variable, say the smoking habits of students provided in the `Smoke` variable. 
+Let us look at the smoking habits of students, stored in the `Smoke` variable:
 
 ```{r}
 plot(survey$Smoke,col="lightblue")
 ```
 
-Let us now suppose that we wanted to test whether in the observed frequency distribution can help us make the inference that in the population of students, 70% of students were non-smokers and the remaining 30% were equally split among the other three groups.
+Now suppose we wanted to test whether the observed distribution matches our expectation that 70% of students are non-smokers and the remaining 30% are equally split among the other three groups (10% each).
 
 Null: The observed frequency distribution fits well with the expected frequency distribution.
 Alternate: The observed frequency distribution does not fit well with the expected frequency distribution.
 
 Assumptions of the test are discussed in: [http://www.basic.northwestern.edu/statguidefiles/gf-dist_ass_viol.html](http://www.basic.northwestern.edu/statguidefiles/gf-dist_ass_viol.html)
 
-How many observations are present in each of the four levels of the `Smoker` variable? - Observed frequency distribution
+How many observations are present in each of the four levels of the `Smoker` variable? This is our observed frequency distribution:
 
 ```{r}
 obsfreq=table(survey$Smoke)
 obsfreq
 ```
 
-Observed frequency distribution (in proportions)
+Observed frequency distribution (in proportions):
 
 ```{r}
 prop.table(obsfreq)
 ```
 
-Expected frequency distribution (in proportions)
+Expected frequency distribution (in proportions) -- what we hypothesized:
 
 ```{r}
 expprop=c(.1,.7,.1,.1)
 ```
 
-Chi-square test of goodness of fit test
+Now let us run the chi-square goodness-of-fit test and see if reality matches our expectations:
 
 ```{r}
 chisq.test(obsfreq,p=expprop)
 ```
 
-Interpretation: Since the p-value is less than .01 (to yield a 99% confidence level), we find evidence to suggest that the two distributions are different. (The two distributions are the observed frequency distribution and the expected frequency distribution.) 
+Interpretation: Since the p-value is less than .01, we have evidence that the observed distribution is different from what we expected. In plain English, our assumption about the proportions does not hold up. Back to the drawing board on those estimates.
 
 ## One factor variable - t-test one sample proportion
 
@@ -205,20 +221,19 @@ Interpretation: Since the p-value is less than .01 (to yield a 99% confidence le
 summary(survey$M.I)
 ```
 
-Let us suppose we were testing a hypothesis that the proportion of students who would indicate their responses in the Imperial units (feet/inches, in contrast to the metric units - centimeters/meters) would be something other than 30%. We find that there are 68 of them who provide a response in that unit. Do we have evidence in favor of the hypothesis that there would be a value different from 30%?
+Let us suppose we were testing a hypothesis that the proportion of students who respond using Imperial units (feet/inches, rather than metric) would be something other than 30%. We find 68 of them used Imperial. Is that significantly different from 30%, or could it be random chance?
 
 ```{r}
 binom.test(table(survey$M.I),p=.3)
 ```
 
-Conclusion: We do not have evidence that the proportion is different from .3 (why? checkout the p-value. and the confidence interval should not contain the observed probability.)
+Conclusion: We do not have evidence that the proportion is different from .3. The p-value is not significant, and the confidence interval contains our hypothesized value. Sometimes the data just says "nope, your hunch was wrong."
 
 
-What if we were testing the hypothesis that the proportion will be greater than .3?
+What if we tested whether the proportion is greater than .3?
 
 ```{r}
 binom.test(table(survey$M.I),p=.3,alternative = "greater")
 ```
 
-Yet again, we don't have any evidence that the mean is greater than .3 (although the observed proportion is .325, it is not "statistically significant"
-)
+Yet again, no dice. Even though the observed proportion is .325, it is not "statistically significant." This is a good reminder that a number being slightly above your threshold does not mean it is meaningfully different -- you need the statistical test to back it up.

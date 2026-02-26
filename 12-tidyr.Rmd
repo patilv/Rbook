@@ -5,19 +5,19 @@ library(tidyverse)
 knitr::opts_chunk$set(echo = TRUE, warning = FALSE, message = FALSE)
 ```
 
-Data analysis, modeling, and visualization all become dramatically easier when your data is in a consistent, predictable structure. The **tidyr** package, part of the tidyverse, provides a set of functions designed to help you reshape and tidy your data. In this chapter, we will learn what "tidy data" means, explore the most common ways that datasets are messy, and practice using tidyr's functions to transform messy data into tidy data.
+Let's talk about the single most important concept that will save you hours of frustration: **tidy data**. Tidy data is just your data in the format that R, ggplot2, and basically every tidyverse function *expects*. Get your data tidy first, and everything downstream -- charts, summaries, models -- becomes dramatically easier.
+
+The **tidyr** package is your toolkit for reshaping messy data into tidy data. And trust me, you will use it constantly. Every CSV export from a CRM, every spreadsheet your boss emails you, every quarterly report pulled from a database -- they all need some tidying.
 
 ## What is Tidy Data?
 
-The concept of tidy data was formalized by Hadley Wickham. A dataset is **tidy** if it satisfies three rules:
+Three rules. That's it:
 
-1. **Each variable forms a column.** Every measured quantity or attribute gets its own column.
-2. **Each observation forms a row.** Every unit of analysis gets its own row.
-3. **Each value occupies a single cell.** Every cell in the table contains exactly one value.
+1. **Each variable gets its own column.** Revenue is a column. Region is a column. Quarter is a column.
+2. **Each observation gets its own row.** One row per thing you measured.
+3. **Each cell contains one value.** No cramming "Q1/2024" into a single cell.
 
-These rules sound simple, but a surprising number of real-world datasets violate them. When data is tidy, you can pass it directly to dplyr for wrangling, to ggplot2 for visualization, and to modeling functions without first having to reshape it. In short, tidy data makes the rest of your workflow smoother and more predictable.
-
-Let us look at a simple tidy dataset.
+Here's what tidy data looks like:
 
 ```{r}
 tidy_example <- tribble(
@@ -33,15 +33,15 @@ tidy_example <- tribble(
 tidy_example
 ```
 
-In this dataset, each variable (`country`, `year`, `cases`, `population`) is a column. Each observation (a country in a given year) is a row. Each cell contains a single value. This is tidy data.
+Each variable (`country`, `year`, `cases`, `population`) is a column. Each row is one observation (a country in a given year). Each cell has exactly one value. Clean, simple, ready to analyze.
 
-## Common Problems with Messy Data
+## Common Ways Data Gets Messy
 
-Messy datasets come in many shapes, but a few patterns appear again and again. Understanding these patterns helps you recognize what needs to be fixed and which tidyr function to use.
+Real-world data violates these rules all the time. Here are the patterns you will see over and over again.
 
-### Column Headers are Values, Not Variable Names
+### Column Headers That Are Actually Values
 
-One of the most common problems is that column names contain values of a variable rather than names of variables. Consider the following dataset where the column headers are years.
+This is the number-one offender. Picture this: your boss hands you a spreadsheet where the column headers are months, or years, or product names. The columns themselves are *values* of a variable, not variable names.
 
 ```{r}
 messy_wide <- tribble(
@@ -54,11 +54,11 @@ messy_wide <- tribble(
 messy_wide
 ```
 
-Here, `2000`, `2001`, and `2002` are not variable names --- they are values of a `year` variable. The actual variable being measured (number of cases) is spread across multiple columns. To tidy this data, we need to **pivot** it from wide to long format.
+See the problem? `2000`, `2001`, and `2002` aren't variable names -- they're values of a `year` variable. The actual measurement (cases) is smeared across three columns. We need to **pivot** this into a longer format.
 
-### Multiple Variables Stored in One Column
+### Two Variables Jammed into One Column
 
-Sometimes a single column contains values that actually represent two or more variables.
+Sometimes someone thought it was a good idea to cram two values into a single cell with a slash or a dash.
 
 ```{r}
 messy_combined <- tribble(
@@ -72,11 +72,11 @@ messy_combined <- tribble(
 messy_combined
 ```
 
-The `rate` column contains both `cases` and `population` mashed together with a `/` separator. To tidy this, we need to **separate** that column into two.
+That `rate` column is hiding both `cases` and `population`. We need to **separate** it.
 
-### Variables Stored in Both Rows and Columns
+### Values That Should Be Column Names Stuck in Rows
 
-In more complicated cases, variables can be spread across both rows and columns simultaneously.
+Sometimes what should be separate columns is listed as categories in a single column.
 
 ```{r}
 messy_both <- tribble(
@@ -92,21 +92,19 @@ messy_both <- tribble(
 messy_both
 ```
 
-Here, the `type` column contains what should be variable names (`cases` and `population`), and the `count` column contains their values. To tidy this, we need to **pivot wider** so that each type becomes its own column.
+The `type` column contains what should be variable names. We need to **pivot wider** to give `cases` and `population` their own columns.
 
-## pivot_longer() --- Making Data Longer
+## pivot_longer() -- Fixing Wide Spreadsheets
 
-The `pivot_longer()` function is your primary tool for converting wide data into long (tidy) format. It takes columns that represent values and collapses them into key-value pairs.
+This is the function you will use the most. When your boss gives you a spreadsheet with months as columns, quarters as columns, or product lines as columns -- `pivot_longer()` is your fix.
 
 ### Basic Usage
 
-Let us return to our wide dataset.
+Let's take that wide dataset and make it tidy:
 
 ```{r}
 messy_wide
 ```
-
-To tidy this, we pivot the year columns into two new columns: one for the year and one for the case count.
 
 ```{r}
 messy_wide %>%
@@ -117,13 +115,13 @@ messy_wide %>%
   )
 ```
 
-The key arguments are:
+Three arguments to remember:
 
-- **`cols`**: Which columns to pivot. Here we use the range `\`2000\`:\`2002\``. You can also use tidy-select helpers.
-- **`names_to`**: The name of the new column that will hold the old column names.
-- **`values_to`**: The name of the new column that will hold the values.
+- **`cols`**: Which columns to pivot (the ones that are really values, not variables).
+- **`names_to`**: What to call the new column that holds the old column names.
+- **`values_to`**: What to call the new column that holds the values.
 
-Notice that the `year` column is of type character. We can convert it to numeric using `names_transform`.
+Notice that `year` came in as character text. You can fix that automatically:
 
 ```{r}
 messy_wide %>%
@@ -135,9 +133,9 @@ messy_wide %>%
   )
 ```
 
-### Selecting Columns with Tidy-Select Helpers
+### Selecting Which Columns to Pivot
 
-You have several options for specifying which columns to pivot. Let us create a dataset to demonstrate.
+You have several ways to tell `pivot_longer()` which columns to grab. Here is a dataset to demonstrate:
 
 ```{r}
 student_scores <- tribble(
@@ -150,20 +148,7 @@ student_scores <- tribble(
 student_scores
 ```
 
-You can select columns by name, by position, by exclusion, or by pattern.
-
-**Using `starts_with()`:**
-
-```{r}
-student_scores %>%
-  pivot_longer(
-    cols = starts_with("math"),
-    names_to = "math_exam",
-    values_to = "math_score"
-  )
-```
-
-**Using `everything()` except certain columns (negation):**
+**Pivot everything except the ID column** (this is the most common pattern):
 
 ```{r}
 student_scores %>%
@@ -174,22 +159,20 @@ student_scores %>%
   )
 ```
 
-This is extremely common --- pivoting all columns except the identifier column.
-
-**Using `matches()` with a regular expression:**
+**Use `starts_with()` to grab columns by prefix:**
 
 ```{r}
 student_scores %>%
   pivot_longer(
-    cols = matches("_final$"),
-    names_to = "subject_final",
-    values_to = "final_score"
+    cols = starts_with("math"),
+    names_to = "math_exam",
+    values_to = "math_score"
   )
 ```
 
-### Using names_prefix to Strip Common Prefixes
+### A Business Example: Quarterly Revenue
 
-If your column names share a common prefix that you want to remove, use `names_prefix`.
+Here is a scenario you will definitely encounter. Quarterly revenue in wide format:
 
 ```{r}
 quarterly_revenue <- tribble(
@@ -203,27 +186,15 @@ quarterly_revenue %>%
     cols = -company,
     names_to = "quarter",
     values_to = "revenue",
-    names_prefix = "Q"
-  )
-```
-
-The `names_prefix = "Q"` strips the leading "Q" from the quarter values. Notice the `_revenue` suffix is still there. We can clean this further by combining `names_prefix` with `names_pattern` or by using additional string manipulation. Here is a cleaner approach using `names_pattern`.
-
-```{r}
-quarterly_revenue %>%
-  pivot_longer(
-    cols = -company,
-    names_to = "quarter",
-    values_to = "revenue",
     names_pattern = "Q(\\d)_revenue"
   )
 ```
 
-The `names_pattern` uses a regular expression with a capture group `(\\d)` to extract just the quarter number.
+The `names_pattern` uses a regular expression to extract just the quarter number. Clean and ready for plotting.
 
-### Dropping Missing Values During Pivoting
+### Dropping NAs While Pivoting
 
-The `values_drop_na` argument lets you exclude rows where the value is `NA`.
+Got sparse data with lots of blanks? Use `values_drop_na = TRUE`:
 
 ```{r}
 sparse_data <- tribble(
@@ -242,11 +213,9 @@ sparse_data %>%
   )
 ```
 
-Without `values_drop_na = TRUE`, the result would include rows where `measurement` is `NA`. With it, those rows are excluded from the output.
+### Pivoting Column Names with Multiple Pieces
 
-### Pivoting into Multiple Columns
-
-Sometimes the column names encode more than one piece of information. In our student scores example, the column names encode both the subject and the exam type. We can pivot into multiple columns using `names_sep` or `names_pattern`.
+Sometimes column names encode more than one thing. Our student scores have both subject and exam type baked in:
 
 ```{r}
 student_scores %>%
@@ -258,21 +227,19 @@ student_scores %>%
   )
 ```
 
-This splits each column name at the underscore and places the parts into two new columns: `subject` and `exam`.
+The `names_sep = "_"` splits each column name at the underscore and puts the pieces into two new columns. Pretty slick.
 
-## pivot_wider() --- Making Data Wider
+## pivot_wider() -- Going the Other Way
 
-While `pivot_longer()` is used more often (since tidy data tends to be long), sometimes you need to spread long data into a wider format. The `pivot_wider()` function is the inverse of `pivot_longer()`.
+Sometimes you need to spread data out, not collapse it. Maybe you are building a summary table for a presentation, or a function expects a matrix-like format. That is where `pivot_wider()` comes in.
 
 ### Basic Usage
 
-Recall our messy dataset where variable names were stored in a column.
+Remember our messy dataset where variable names were stuck in a column?
 
 ```{r}
 messy_both
 ```
-
-To tidy this, we spread the `type` column into separate columns.
 
 ```{r}
 messy_both %>%
@@ -282,14 +249,14 @@ messy_both %>%
   )
 ```
 
-The key arguments are:
+Two arguments:
 
-- **`names_from`**: The column whose values will become the new column names.
-- **`values_from`**: The column whose values will fill the new columns.
+- **`names_from`**: The column whose values become the new column names.
+- **`values_from`**: The column whose values fill those new columns.
 
-### Using values_fill for Missing Combinations
+### Filling in Missing Combinations
 
-When pivoting wider, some combinations of variables might not exist in the data, resulting in `NA` values. You can fill these with a specific value using `values_fill`.
+When some combinations don't exist, you will get NAs. Use `values_fill` to replace them:
 
 ```{r}
 weekly_sales <- tribble(
@@ -309,41 +276,17 @@ weekly_sales %>%
   )
 ```
 
-Without `values_fill = 0`, missing combinations (like East-Apples) would show `NA`. With it, they show `0`.
-
-### Adding a Prefix to New Column Names
-
-The `names_prefix` argument lets you add a prefix to the new column names, which is useful when the values used as names are numeric or otherwise need clarification.
-
-```{r}
-enrollment <- tribble(
-  ~department,  ~year, ~students,
-  "Biology",     2020,       150,
-  "Biology",     2021,       165,
-  "Chemistry",   2020,       120,
-  "Chemistry",   2021,       130,
-  "Physics",     2020,        90,
-  "Physics",     2021,       100
-)
-
-enrollment %>%
-  pivot_wider(
-    names_from = year,
-    values_from = students,
-    names_prefix = "year_"
-  )
-```
+Without `values_fill = 0`, the East store would show `NA` for Apples and Cherries. With it, you get zeros -- much better for a sales report.
 
 ### When to Use pivot_wider()
 
-Although tidy data is typically long, there are legitimate reasons to pivot wider:
+You will reach for this when you need to:
 
-- **Creating summary tables** for presentation or reporting.
-- **Preparing data for specific modeling functions** that require a matrix-like format.
-- **Cross-tabulation** when you want to see the intersection of two categorical variables.
-- **Matching a required input format** for a particular function or package.
+- **Build summary tables** for a slide deck or report
+- **Create cross-tabulations** (e.g., survey responses by question)
+- **Match a required input format** for a specific function
 
-Here is a practical example --- creating a crosstab from survey data.
+Here is a survey data example:
 
 ```{r}
 survey <- tribble(
@@ -363,13 +306,13 @@ survey %>%
   )
 ```
 
-## separate() and separate_wider_delim()
+Now each respondent is one row with their answers spread across columns. Way easier to work with.
 
-When a column contains multiple pieces of information combined into a single string, you need to split it apart. tidyr provides several functions for this.
+## separate() and unite() -- Quick Splitting and Combining
 
-### The Older separate() Function
+### Splitting a Column Apart
 
-The `separate()` function has been a workhorse in tidyr for a long time. It splits a column into multiple columns based on a separator.
+When a column has two things mashed together, `separate()` splits them:
 
 ```{r}
 locations <- tribble(
@@ -384,7 +327,7 @@ locations %>%
   separate(city_state, into = c("city", "state"), sep = "_")
 ```
 
-By default, `separate()` removes the original column. You can keep it with `remove = FALSE`. The `sep` argument can be a string or a regular expression. If you do not specify `sep`, it will split on any non-alphanumeric character.
+Works with dates too:
 
 ```{r}
 dates_data <- tribble(
@@ -395,76 +338,21 @@ dates_data <- tribble(
 )
 
 dates_data %>%
-  separate(date, into = c("year", "month", "day"), sep = "-")
-```
-
-Note that the resulting columns are character by default. Use `convert = TRUE` to automatically convert them to appropriate types.
-
-```{r}
-dates_data %>%
   separate(date, into = c("year", "month", "day"), sep = "-", convert = TRUE)
 ```
 
-### The Newer separate_wider_delim()
+The `convert = TRUE` automatically turns the resulting columns into numbers instead of leaving them as text.
 
-The `separate_wider_delim()` function is a more explicit and modern replacement. It is designed for splitting into a fixed number of pieces based on a delimiter.
+The newer `separate_wider_delim()` does the same thing with slightly more explicit syntax:
 
 ```{r}
 locations %>%
   separate_wider_delim(city_state, delim = "_", names = c("city", "state"))
 ```
 
-The behavior is similar to `separate()`, but the arguments are more explicit. `delim` specifies the delimiter and `names` provides the new column names.
+### Combining Columns with unite()
 
-### separate_wider_position()
-
-When data is encoded by position rather than by a delimiter, use `separate_wider_position()`. This is useful for fixed-width fields.
-
-```{r}
-product_codes <- tribble(
-  ~code,
-  "PRD001A",
-  "PRD002B",
-  "PRD003C"
-)
-
-product_codes %>%
-  separate_wider_position(
-    code,
-    widths = c(category = 3, number = 3, grade = 1)
-  )
-```
-
-Here, the first three characters represent a category code, the next three are a product number, and the last character is a grade. The `widths` argument uses a named integer vector to specify how many characters belong to each new column.
-
-### Splitting into More Pieces
-
-Sometimes a column contains a variable number of pieces. Consider a column with full names.
-
-```{r}
-people <- tribble(
-  ~id, ~full_name,
-  1,   "John-Michael-Smith",
-  2,   "Jane-Doe",
-  3,   "Alice-Beth-Carol-Davis"
-)
-```
-
-With `separate()`, you can handle extra pieces using the `extra` argument and fewer pieces using the `fill` argument.
-
-```{r}
-people %>%
-  separate(full_name, into = c("first", "middle", "last"), sep = "-",
-           extra = "merge", fill = "left")
-```
-
-The `extra = "merge"` option merges any extra pieces into the last column. The `fill = "left"` option fills missing pieces from the left with `NA`.
-
-## unite()
-
-The `unite()` function is the inverse of `separate()`. It combines multiple columns into a single column.
-
-### Basic Usage
+`unite()` does the reverse -- it glues columns together:
 
 ```{r}
 date_parts <- tribble(
@@ -478,68 +366,38 @@ date_parts %>%
   unite(col = "date", year, month, day, sep = "-")
 ```
 
-The key arguments are:
-
-- **`col`**: The name of the new combined column.
-- **`...`**: The columns to combine (unquoted).
-- **`sep`**: The separator to place between values (default is `"_"`).
-- **`remove`**: Whether to remove the input columns (default is `TRUE`).
-
-### Keeping the Original Columns
-
-```{r}
-date_parts %>%
-  unite(col = "date", year, month, day, sep = "-", remove = FALSE)
-```
-
-### Practical Example
-
-Suppose you have separate address components and want to create a full address string.
-
-```{r}
-addresses <- tribble(
-  ~street,          ~city,      ~state, ~zip,
-  "123 Main St",    "Portland", "OR",   "97201",
-  "456 Oak Ave",    "Austin",   "TX",   "78701",
-  "789 Pine Blvd",  "Denver",   "CO",   "80201"
-)
-
-addresses %>%
-  unite(col = "full_address", street, city, state, zip, sep = ", ")
-```
+Handy for building full addresses, combined keys, or file names from parts.
 
 ## Handling Missing Values
 
-Real-world data almost always contains missing values. tidyr provides several functions to handle them in different ways.
+Missing data is a fact of life in business. Customer didn't fill out a field? Sensor went offline? Store didn't report that week? Here are your tools.
 
-### drop_na()
-
-The `drop_na()` function removes rows that contain `NA` values. You can drop rows with `NA` in any column, or specify particular columns.
+### drop_na() -- Remove Rows with Missing Values
 
 ```{r}
-patient_data <- tribble(
-  ~patient, ~blood_pressure, ~heart_rate, ~temperature,
-  "P1",             120,           72,         98.6,
-  "P2",              NA,           80,         99.1,
-  "P3",             130,           NA,         98.2,
-  "P4",             118,           68,           NA,
-  "P5",             125,           75,         98.8
+customer_data <- tribble(
+  ~customer, ~revenue, ~satisfaction, ~nps_score,
+  "C1",          1200,            8,        9.0,
+  "C2",            NA,            7,        8.5,
+  "C3",          1500,           NA,        7.2,
+  "C4",           980,            9,         NA,
+  "C5",          1100,            8,        8.8
 )
 
-# Drop rows with NA in any column
-patient_data %>%
+# Drop rows missing ANY value
+customer_data %>%
   drop_na()
 ```
 
 ```{r}
-# Drop rows with NA only in blood_pressure
-patient_data %>%
-  drop_na(blood_pressure)
+# Drop only rows missing revenue
+customer_data %>%
+  drop_na(revenue)
 ```
 
-### fill()
+### fill() -- Carry Values Down (or Up)
 
-The `fill()` function fills missing values with the most recent non-missing value. This is particularly useful for data where values are only recorded when they change.
+This is a lifesaver for spreadsheets where someone only typed the year once at the top of each group:
 
 ```{r}
 quarterly_reports <- tribble(
@@ -558,25 +416,18 @@ quarterly_reports %>%
   fill(year)
 ```
 
-By default, `fill()` fills downward (`.direction = "down"`). You can also fill upward, or in both directions.
+By default it fills downward. You can also fill upward with `.direction = "up"`.
+
+### replace_na() -- Swap NAs for Specific Values
 
 ```{r}
-quarterly_reports %>%
-  fill(year, .direction = "up")
+customer_data %>%
+  replace_na(list(revenue = 0, satisfaction = 0, nps_score = 0))
 ```
 
-### replace_na()
+### complete() -- Make Hidden Missing Data Visible
 
-The `replace_na()` function replaces `NA` values with a specified value. You pass a named list mapping column names to replacement values.
-
-```{r}
-patient_data %>%
-  replace_na(list(blood_pressure = 0, heart_rate = 0, temperature = 98.6))
-```
-
-### complete()
-
-The `complete()` function makes implicit missing values explicit. Sometimes a dataset is missing entire rows rather than just having `NA` in certain cells. `complete()` generates all combinations of the specified variables and fills in `NA` for any combinations that were absent.
+Sometimes data is missing entire rows, not just individual cells. `complete()` generates all combinations and makes the gaps obvious:
 
 ```{r}
 experiment <- tribble(
@@ -588,73 +439,19 @@ experiment <- tribble(
   "S3",     "A",            5.5
 )
 
-experiment
-```
-
-Notice that subject S2 with treatment B is missing entirely. The `complete()` function makes this explicit.
-
-```{r}
-experiment %>%
-  complete(subject, treatment)
-```
-
-You can also provide a fill value.
-
-```{r}
 experiment %>%
   complete(subject, treatment, fill = list(outcome = 0))
 ```
 
+Subject S2 with treatment B was completely missing from the original data. Now you can see it.
+
 ## Nesting and Unnesting
 
-tidyr also provides functions for creating and working with **nested data frames** --- data frames that contain list-columns where each element is itself a data frame.
+Nesting lets you collapse groups of rows into sub-data-frames stored inside a single column. It is an advanced technique primarily used with the **purrr** package for fitting models or running functions group-by-group. If that sounds intense, don't worry -- you can skip this for now and come back later when you need it.
 
-### nest()
+## Putting It All Together
 
-The `nest()` function collapses a group of rows into a single row containing a nested data frame. This is useful when you want to perform operations group-by-group.
-
-```{r}
-nested_data <- iris %>%
-  as_tibble() %>%
-  nest(data = -Species)
-
-nested_data
-```
-
-Each row now represents one species, and the `data` column contains a tibble with all the measurements for that species. You can access a nested tibble with standard list indexing.
-
-```{r}
-# Look at the data for the first species
-nested_data$data[[1]] %>% head()
-```
-
-### unnest()
-
-The `unnest()` function reverses the nesting --- it expands the nested data frames back into regular rows.
-
-```{r}
-nested_data %>%
-  unnest(cols = data) %>%
-  head(10)
-```
-
-### Why Use Nesting?
-
-Nesting is particularly powerful when combined with **purrr** (covered in a later chapter). It allows you to fit models, create plots, or apply arbitrary functions to each group independently.
-
-```{r}
-nested_data %>%
-  mutate(
-    n_obs = map_int(data, nrow),
-    mean_sepal_length = map_dbl(data, ~ mean(.x$Sepal.Length))
-  )
-```
-
-This pattern --- nest, apply, unnest --- is a cornerstone of advanced tidyverse workflows.
-
-## Complete Tidying Example
-
-Let us work through a realistic example of tidying a messy dataset from start to finish. Suppose we have a dataset containing student test scores from a school district. The data arrived in a format that is common in spreadsheets but thoroughly untidy.
+Let's walk through a realistic example. You get a spreadsheet of student test scores from a school district. It looks like something a well-meaning administrator exported from Excel:
 
 ```{r}
 messy_scores <- tribble(
@@ -667,51 +464,9 @@ messy_scores <- tribble(
 messy_scores
 ```
 
-This dataset has several problems. Column headers contain three variables (subject, year, and gender), and the scores are spread across eight columns. Let us tidy it step by step.
+Eight columns of scores with subject, year, and gender all crammed into the column names. Yikes.
 
-### Step 1: Pivot Longer
-
-First, we collapse all the score columns into key-value pairs. The column names encode three pieces of information separated by underscores: subject, year, and gender.
-
-```{r}
-step1 <- messy_scores %>%
-  pivot_longer(
-    cols = -school,
-    names_to = c("subject", "year", "gender"),
-    names_sep = "_",
-    values_to = "avg_score"
-  )
-
-step1
-```
-
-With a single `pivot_longer()` call using `names_sep`, we extracted all three variables from the column names. The data now has one observation per row --- a school's average score for a given subject, year, and gender combination.
-
-### Step 2: Fix Column Types
-
-The `year` column is character. Let us convert it to integer.
-
-```{r}
-step2 <- step1 %>%
-  mutate(year = as.integer(year))
-
-step2
-```
-
-### Step 3: Arrange for Readability
-
-Let us sort the data to make it easier to scan.
-
-```{r}
-step3 <- step2 %>%
-  arrange(school, subject, year, gender)
-
-step3
-```
-
-### Putting It All Together
-
-In practice, you would chain all these steps into a single pipeline.
+One pipeline to tidy it all:
 
 ```{r}
 tidy_scores <- messy_scores %>%
@@ -727,7 +482,7 @@ tidy_scores <- messy_scores %>%
 tidy_scores
 ```
 
-Now the data is tidy, and we can easily perform analysis. For example, we can compute the average score by subject and year across all schools and genders.
+Now we can actually *do* things with this data. Average score by subject and year?
 
 ```{r}
 tidy_scores %>%
@@ -738,7 +493,7 @@ tidy_scores %>%
   )
 ```
 
-Or we can visualize trends.
+A quick visualization?
 
 ```{r}
 tidy_scores %>%
@@ -757,23 +512,21 @@ tidy_scores %>%
   theme_minimal()
 ```
 
-This example illustrates the power of tidy data. Once the data is in a consistent, long format, operations like grouping, summarizing, and plotting become straightforward and expressive. The messier the original data, the more time you will spend tidying --- but that investment pays off immediately when you move to analysis and visualization.
+That whole analysis became possible because we invested a few lines in tidying the data first. The messier the original spreadsheet, the more valuable this step becomes.
 
 ## Summary
 
-In this chapter, we covered the core functions of the tidyr package:
+Here is your tidyr cheat sheet:
 
-| Function | Purpose |
+| Function | What It Does |
 |:---------|:--------|
-| `pivot_longer()` | Reshape wide data to long format |
-| `pivot_wider()` | Reshape long data to wide format |
-| `separate()` / `separate_wider_delim()` / `separate_wider_position()` | Split one column into multiple columns |
-| `unite()` | Combine multiple columns into one |
+| `pivot_longer()` | Wide to long (the one you will use most) |
+| `pivot_wider()` | Long to wide (for summary tables and reports) |
+| `separate()` / `separate_wider_delim()` | Split one column into multiple columns |
+| `unite()` | Glue multiple columns into one |
 | `drop_na()` | Remove rows with missing values |
-| `fill()` | Fill missing values with previous/next value |
-| `replace_na()` | Replace missing values with a specified value |
-| `complete()` | Make implicit missing values explicit |
-| `nest()` | Create nested data frames |
-| `unnest()` | Flatten nested data frames |
+| `fill()` | Fill missing values with the previous (or next) value |
+| `replace_na()` | Replace NAs with a value you choose |
+| `complete()` | Make hidden missing rows visible |
 
-The key takeaway is that getting your data into tidy form --- where each variable is a column, each observation is a row, and each value is a cell --- is one of the most important steps in any data analysis workflow. The tidyr package gives you the tools to get there.
+The bottom line: getting your data into tidy form -- where each variable is a column, each observation is a row, and each value is a cell -- is the single best investment you can make before any analysis. Tidy first, analyze second. Your future self will thank you.

@@ -5,11 +5,15 @@ library(tidyverse)
 opts_chunk$set(echo=TRUE, warning=FALSE, message=FALSE)
 ```
 
+Every dataset has a story to tell, and summary statistics are the opening paragraph. Before you build models or create dashboards, you need to know the basics: What is the average? How spread out are the values? Are there any obvious outliers?
+
 This chapter covers computing summary statistics using base R functions. For computing grouped summaries using **dplyr**, see Chapter \@ref(dplyr).
 
 ## Measures of Central Tendency
 
-Mean, Median and Mode are commonly used. Don't forget that not all can be used for all types of variables. For nominal variables (e.g., Gender), only mode is appropriate. For ordered categorical variables (ordinal variables), mode and median can be used. All three can be used for numeric variables.
+Mean, median, and mode -- the holy trinity of "what is typical?" in your data. A quick business translation: the mean is your average order value, the median is the salary figure that half your employees are above and half are below, and the mode is the most popular product in your catalog.
+
+One important note: not all three work for every variable type. For nominal variables (like customer gender or product category), only the mode makes sense -- you cannot average "Male" and "Female." For ordinal variables (like satisfaction ratings from 1 to 5), mode and median work fine. All three are fair game for numeric variables like revenue or age.
 
 ```{r}
 mean(iris$Sepal.Length)
@@ -24,7 +28,7 @@ median(iris$Petal.Length)
 
 The median of Petal.Length is `r median(iris$Petal.Length)`
 
-There is no built-in function for determining the mode. However, one can write a function to do that job. Please see the function below called `mymode`. This has been taken from the solutions discussed [in response to a question on Stack Overflow.](http://stackoverflow.com/questions/2547402/is-there-a-built-in-function-for-finding-the-mode)
+R does not have a built-in function for determining the mode. Weird, right? You would think one of the three most basic statistics would come standard, but here we are. No worries -- we can write our own. The function below called `mymode` handles it nicely, and it even works when there are multiple modes. (This solution is adapted from [a question on Stack Overflow.](http://stackoverflow.com/questions/2547402/is-there-a-built-in-function-for-finding-the-mode))
 
 ```{r}
 # Function to determine the mode. Can also identify multiple modes
@@ -42,7 +46,7 @@ max(tabulate(match(x, ux)))
 ```
 
 
-Let us put those function to use to determine the mode of a numeric variable first.
+Let us put those functions to work. First, on a numeric variable:
 
 ```{r}
 
@@ -51,7 +55,7 @@ modecount(iris$Petal.Length) # Gives the frequency of occurrence of the mode
 
 ```
 
-And now, a factor variable.
+And now, a factor variable:
 
 ```{r}
 mymode(iris$Species)
@@ -59,11 +63,11 @@ modecount(iris$Species)
 
 ```
 
-Note that all three types of species are identified as modes because there are 50 observations of each type.
+Note that all three species are identified as modes because there are 50 observations of each type. In business terms, imagine three products all tied for the best-seller spot -- they are all the mode.
 
 ## Other measures of central tendency
 
-* Trimmed Mean: Means can be affected by outliers (extreme values). Trimmed means can provide a more robust measure in such cases. If there is a good explanation for the presence of the outliers, avoid using this. 
+* **Trimmed Mean:** Means can be thrown off by outliers (those extreme values that make your average look misleading). If one customer spent $50,000 and everyone else spent $50, the mean is not very helpful. A trimmed mean chops off the extremes before calculating. That said, if there is a legitimate explanation for those outliers, the regular mean might still be the right call.
 
 Regular mean:
 
@@ -71,13 +75,13 @@ Regular mean:
 mean(iris$Sepal.Length)
 ```
 
-5% trimmed mean
+5% trimmed mean -- this knocks off the top 5% and bottom 5% of values before averaging:
 
 ```{r}
 mean(iris$Sepal.Length,trim = .05) # knocks off 5% of the observations on each end.
 ```
 
-10% trimmed mean:
+10% trimmed mean -- even more aggressive trimming:
 
 ```{r}
 mean(iris$Sepal.Length, trim = .1) # knocks off 10% of the observation on each end.
@@ -86,8 +90,11 @@ mean(iris$Sepal.Length, trim = .1) # knocks off 10% of the observation on each e
 
 ## Measures of Dispersion (variation)
 
+Knowing the average is great, but it does not tell the whole story. Two products could both have an average rating of 3.5, but one might have all 3s and 4s while the other has a mix of 1s and 5s. Measures of dispersion tell you how spread out your data is -- and that matters a lot for risk, consistency, and decision-making.
 
 ### Range
+
+The simplest measure of spread: what is the smallest value and what is the biggest?
 
 ```{r}
 min(iris$Sepal.Length) # minimum
@@ -104,13 +111,13 @@ range(iris$Sepal.Length) # should give the min and max
 
 ### Interquartile range: Difference between 25th and 75th percentile (or quantile)
 
-E.g., 5th percentile or 5th quantile of a variable is the smallest number below which 5% of the observations of that variable lie.
+Percentiles tell you where a value falls relative to everyone else. The 5th percentile of a variable is the smallest number below which 5% of the observations lie. If your salary is at the 90th percentile, you are earning more than 90% of the people in the dataset. (Feel free to put that on your resume.)
 
 ```{r}
 quantile(iris$Sepal.Length,probs = .05)
 ```
 
-The median is the 50th percentile value.
+The median is just the 50th percentile -- the exact middle of the pack.
 
 ```{r}
 median(iris$Sepal.Length)
@@ -121,19 +128,19 @@ quantile(iris$Sepal.Length,probs=.5)
 ```
 
 
-25th quantile
+25th quantile (the bottom of the "middle half"):
 
 ```{r}
 quantile(iris$Sepal.Length,probs=.25)
 ```
 
-75th quantile
+75th quantile (the top of the "middle half"):
 
 ```{r}
 quantile(iris$Sepal.Length,probs=.75)
 ```
 
-Therefore, IQR is the difference between the 75th quantile and 25th quantile.
+The IQR (Interquartile Range) is the difference between the 75th and 25th percentiles. It captures where the middle 50% of your data lives and is less sensitive to outliers than the full range. Think of it as the "reasonable spread" of your data.
 
 ```{r}
 IQR(iris$Sepal.Length)
@@ -141,6 +148,10 @@ IQR(iris$Sepal.Length)
 
 
 ### Variance and Standard Deviation
+
+Variance and standard deviation are the workhorses of measuring spread. Variance tells you the average squared distance from the mean (which is hard to interpret on its own), and standard deviation is just the square root of variance (which brings it back to the original units and makes it actually useful).
+
+In practical terms: if the standard deviation of your delivery times is 2 days, most deliveries are arriving within about 2 days of the average. If it is 10 days, you have a consistency problem.
 
 ```{r}
 var(iris$Sepal.Length)
@@ -154,9 +165,11 @@ Note that the standard deviation is the square root of variance.
 
 ## Tidyverse approach: Grouped summaries with dplyr
 
-One of the most powerful features of **dplyr** is the ability to compute summary statistics by group. The `group_by()` and `summarize()` pattern makes it easy to compare statistics across categories.
+Here is where things get really useful for business analysis. One of the most powerful features of **dplyr** is the ability to compute summary statistics by group. Want to compare average order values across customer segments? Revenue by region? Satisfaction scores by product line? The `group_by()` and `summarize()` pattern makes this effortless.
 
 ### Summary by group
+
+This is the "give me the numbers broken down by category" operation that you will use constantly:
 
 ```{r}
 iris %>%
@@ -173,6 +186,8 @@ iris %>%
 
 ### Multiple variables at once with `across()`
 
+When you want the same statistics for every numeric column (instead of typing them out one by one), `across()` is a lifesaver:
+
 ```{r}
 iris %>%
   group_by(Species) %>%
@@ -181,7 +196,7 @@ iris %>%
 
 ### Quick counts
 
-The `count()` function provides a quick way to tally observations:
+The `count()` function is your fastest path to "how many are in each group?" -- a question that comes up roughly every five minutes in data analysis:
 
 ```{r}
 iris %>% count(Species)
