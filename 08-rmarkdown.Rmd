@@ -182,10 +182,10 @@ Numbered lists:
 ### Links
 
 ```
-[Visual Analytics Course](http://patilv.com/VizAnalytics4Biz/)
+[The R Project](https://www.r-project.org/)
 ```
 
-Renders as: [Visual Analytics Course](http://patilv.com/VizAnalytics4Biz/)
+Renders as: [The R Project](https://www.r-project.org/)
 
 ### Tables
 
@@ -678,4 +678,6 @@ Here's what you now know how to do:
 
 The bottom line: R Markdown turns your analysis into a self-updating, professional report. The more you use it, the more time you save---and the fewer "can you update the numbers?" emails you'll get.
 
-For more practice, check out the course materials at [http://patilv.com/VizAnalytics4Biz/](http://patilv.com/VizAnalytics4Biz/). And remember, you can always access the R Markdown cheat sheet from RStudio via **Help > Cheat Sheets > R Markdown Cheat Sheet**.
+And remember, you can always access the R Markdown cheat sheet from RStudio via **Help > Cheat Sheets > R Markdown Cheat Sheet**.
+
+One last thought. Reproducibility is not just a technical convenience --- it is a form of intellectual honesty. When your analysis is transparent and re-runnable, anyone can check your work, challenge your assumptions, and build on what you did. In a world where data-driven decisions affect jobs, budgets, and opportunities, that kind of accountability is not optional. It is what professional integrity looks like in practice.

@@ -1,393 +1,456 @@
 <!DOCTYPE html>
-<html >
-
+<html lang="en">
 <head>
-
-  <meta charset="UTF-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <title>Chapter 5 Summary Statistics | Basic Insights from Data for Marketing Researchers</title>
-  <meta name="description" content="This book should contain introductory material for analyzing data for marketing researchers.">
-  <meta name="generator" content="bookdown  and GitBook 2.6.7">
-
-  <meta property="og:title" content="Chapter 5 Summary Statistics | Basic Insights from Data for Marketing Researchers" />
-  <meta property="og:type" content="book" />
-  
-  
-  <meta property="og:description" content="This book should contain introductory material for analyzing data for marketing researchers." />
-  <meta name="github-repo" content="patilv.github.io" />
-
-  <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="Chapter 5 Summary Statistics | Basic Insights from Data for Marketing Researchers" />
-  
-  <meta name="twitter:description" content="This book should contain introductory material for analyzing data for marketing researchers." />
-  
-
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<title>Chapter 9 Summary Statistics | R and the Tidyverse: A Beginner’s Guide</title>
 <meta name="author" content="Vivek H. Patil">
-
-
-<meta name="date" content="2019-11-04">
-
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-status-bar-style" content="black">
-  
-  
-<link rel="prev" href="modifydata.html">
-<link rel="next" href="singlevar.html">
-<script src="libs/jquery-2.2.3/jquery.min.js"></script>
-<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
-<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
-<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
-<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
-<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
-<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
-
-
-
-
-
-
-
-
-
+<meta name="description" content="Every dataset has a story to tell, and summary statistics are the “previously on…” recap before the main episode. Before you build fancy models, create executive dashboards, or wow your boss with...">
+<meta name="generator" content="bookdown 0.46 with bs4_book()">
+<meta property="og:title" content="Chapter 9 Summary Statistics | R and the Tidyverse: A Beginner’s Guide">
+<meta property="og:type" content="book">
+<meta property="og:image" content="/cover.png">
+<meta property="og:description" content="Every dataset has a story to tell, and summary statistics are the “previously on…” recap before the main episode. Before you build fancy models, create executive dashboards, or wow your boss with...">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Chapter 9 Summary Statistics | R and the Tidyverse: A Beginner’s Guide">
+<meta name="twitter:description" content="Every dataset has a story to tell, and summary statistics are the “previously on…” recap before the main episode. Before you build fancy models, create executive dashboards, or wow your boss with...">
+<meta name="twitter:image" content="/cover.png">
+<!-- JS --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script><script src="https://kit.fontawesome.com/6ecbd6c532.js" crossorigin="anonymous"></script><script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<link href="libs/bootstrap-4.6.0/bootstrap.min.css" rel="stylesheet">
+<script src="libs/bootstrap-4.6.0/bootstrap.bundle.min.js"></script><script src="libs/bs3compat-0.10.0/transition.js"></script><script src="libs/bs3compat-0.10.0/tabs.js"></script><script src="libs/bs3compat-0.10.0/bs3compat.js"></script><link href="libs/bs4_book-1.0.0/bs4_book.css" rel="stylesheet">
+<script src="libs/bs4_book-1.0.0/bs4_book.js"></script><link href="libs/htmltools-fill-0.5.9/fill.css" rel="stylesheet">
+<script src="libs/htmlwidgets-1.6.4/htmlwidgets.js"></script><link href="libs/datatables-css-0.0.0/datatables-crosstalk.css" rel="stylesheet">
+<script src="libs/datatables-binding-0.34.0/datatables.js"></script><link href="libs/dt-core-1.13.6/css/jquery.dataTables.min.css" rel="stylesheet">
+<link href="libs/dt-core-1.13.6/css/jquery.dataTables.extra.css" rel="stylesheet">
+<script src="libs/dt-core-1.13.6/js/jquery.dataTables.min.js"></script><link href="libs/crosstalk-1.2.2/css/crosstalk.min.css" rel="stylesheet">
+<script src="libs/crosstalk-1.2.2/js/crosstalk.min.js"></script><script src="libs/plotly-binding-4.12.0/plotly.js"></script><script src="libs/typedarray-0.1/typedarray.min.js"></script><link href="libs/plotly-htmlwidgets-css-2.25.2/plotly-htmlwidgets.css" rel="stylesheet">
+<script src="libs/plotly-main-2.25.2/plotly-latest.min.js"></script><script src="libs/kePrint-0.0.1/kePrint.js"></script><link href="libs/lightable-0.0.1/lightable.css" rel="stylesheet">
+<link href="libs/nouislider-7.0.10/jquery.nouislider.min.css" rel="stylesheet">
+<script src="libs/nouislider-7.0.10/jquery.nouislider.min.js"></script><link href="libs/selectize-0.12.0/selectize.bootstrap3.css" rel="stylesheet">
+<script src="libs/selectize-0.12.0/selectize.min.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/autocomplete.js/0.38.0/autocomplete.jquery.min.js" integrity="sha512-GU9ayf+66Xx2TmpxqJpliWbT5PiGYxpaG8rfnBEk1LL8l1KGkRShhngwdXK1UgqhAzWpZHSiYPc09/NwDQIGyg==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/mark.min.js" integrity="sha512-5CYOlHXGh6QpOFA/TeTylKLWfB3ftPsde7AnmhuitiTX4K5SqCLBeKro6sPS8ilsz1Q4NRx3v8Ko2IBiszzdww==" crossorigin="anonymous"></script><!-- CSS --><style type="text/css">
+    
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  </style>
 <style type="text/css">
-a.sourceLine { display: inline-block; line-height: 1.25; }
-a.sourceLine { pointer-events: none; color: inherit; text-decoration: inherit; }
-a.sourceLine:empty { height: 1.2em; }
-.sourceCode { overflow: visible; }
-code.sourceCode { white-space: pre; position: relative; }
-div.sourceCode { margin: 1em 0; }
-pre.sourceCode { margin: 0; }
-@media screen {
-div.sourceCode { overflow: auto; }
-}
-@media print {
-code.sourceCode { white-space: pre-wrap; }
-a.sourceLine { text-indent: -1em; padding-left: 1em; }
-}
-pre.numberSource a.sourceLine
-  { position: relative; left: -4em; }
-pre.numberSource a.sourceLine::before
-  { content: attr(title);
-    position: relative; left: -1em; text-align: right; vertical-align: baseline;
-    border: none; pointer-events: all; display: inline-block;
-    -webkit-touch-callout: none; -webkit-user-select: none;
-    -khtml-user-select: none; -moz-user-select: none;
-    -ms-user-select: none; user-select: none;
-    padding: 0 4px; width: 4em;
-    color: #aaaaaa;
-  }
-pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
-div.sourceCode
-  {  }
-@media screen {
-a.sourceLine::before { text-decoration: underline; }
-}
-code span.al { color: #ff0000; font-weight: bold; } /* Alert */
-code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
-code span.at { color: #7d9029; } /* Attribute */
-code span.bn { color: #40a070; } /* BaseN */
-code span.bu { } /* BuiltIn */
-code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
-code span.ch { color: #4070a0; } /* Char */
-code span.cn { color: #880000; } /* Constant */
-code span.co { color: #60a0b0; font-style: italic; } /* Comment */
-code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
-code span.do { color: #ba2121; font-style: italic; } /* Documentation */
-code span.dt { color: #902000; } /* DataType */
-code span.dv { color: #40a070; } /* DecVal */
-code span.er { color: #ff0000; font-weight: bold; } /* Error */
-code span.ex { } /* Extension */
-code span.fl { color: #40a070; } /* Float */
-code span.fu { color: #06287e; } /* Function */
-code span.im { } /* Import */
-code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
-code span.kw { color: #007020; font-weight: bold; } /* Keyword */
-code span.op { color: #666666; } /* Operator */
-code span.ot { color: #007020; } /* Other */
-code span.pp { color: #bc7a00; } /* Preprocessor */
-code span.sc { color: #4070a0; } /* SpecialChar */
-code span.ss { color: #bb6688; } /* SpecialString */
-code span.st { color: #4070a0; } /* String */
-code span.va { color: #19177c; } /* Variable */
-code span.vs { color: #4070a0; } /* VerbatimString */
-code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
-</style>
-
-<link rel="stylesheet" href="style.css" type="text/css" />
+    /* Used with Pandoc 2.11+ new --citeproc when CSL is used */
+    div.csl-bib-body { }
+    div.csl-entry {
+      clear: both;
+          margin-bottom: 0em;
+        }
+    .hanging div.csl-entry {
+      margin-left:2em;
+      text-indent:-2em;
+    }
+    div.csl-left-margin {
+      min-width:2em;
+      float:left;
+    }
+    div.csl-right-inline {
+      margin-left:2em;
+      padding-left:1em;
+    }
+    div.csl-indent {
+      margin-left: 2em;
+    }
+  </style>
+<link rel="stylesheet" href="style.css">
 </head>
+<body data-spy="scroll" data-target="#toc">
 
-<body>
+<div class="container-fluid">
+<div class="row">
+  <header class="col-sm-12 col-lg-3 sidebar sidebar-book"><a class="sr-only sr-only-focusable" href="#content">Skip to main content</a>
 
-
-
-  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
-
-    <div class="book-summary">
-      <nav role="navigation">
-
-<ul class="summary">
-<li><a href="./">Basic Insights from Data for Marketing Researchers</a></li>
-
-<li class="divider"></li>
-<li class="chapter" data-level="" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i>Preface</a><ul>
-<li class="chapter" data-level="" data-path="index.html"><a href="index.html#about-me"><i class="fa fa-check"></i>About me</a></li>
-</ul></li>
-<li class="chapter" data-level="1" data-path="introR.html"><a href="introR.html"><i class="fa fa-check"></i><b>1</b> Introduction to R</a><ul>
-<li class="chapter" data-level="1.1" data-path="introR.html"><a href="introR.html#why-use-r"><i class="fa fa-check"></i><b>1.1</b> Why use R?</a></li>
-<li class="chapter" data-level="1.2" data-path="introR.html"><a href="introR.html#r---environment-and-software"><i class="fa fa-check"></i><b>1.2</b> R - Environment and Software</a></li>
-<li class="chapter" data-level="1.3" data-path="introR.html"><a href="introR.html#a-recently-released-video-on-r"><i class="fa fa-check"></i><b>1.3</b> A Recently Released Video on R</a></li>
-</ul></li>
-<li class="chapter" data-level="2" data-path="Rgettingstarted.html"><a href="Rgettingstarted.html"><i class="fa fa-check"></i><b>2</b> Getting Started with R</a><ul>
-<li class="chapter" data-level="2.1" data-path="Rgettingstarted.html"><a href="Rgettingstarted.html#r-studio-interface"><i class="fa fa-check"></i><b>2.1</b> R-Studio Interface</a></li>
-<li class="chapter" data-level="2.2" data-path="Rgettingstarted.html"><a href="Rgettingstarted.html#organizing-projects"><i class="fa fa-check"></i><b>2.2</b> Organizing projects</a></li>
-<li class="chapter" data-level="2.3" data-path="Rgettingstarted.html"><a href="Rgettingstarted.html#installing-packages-from-cran"><i class="fa fa-check"></i><b>2.3</b> Installing Packages from CRAN</a></li>
-<li class="chapter" data-level="2.4" data-path="Rgettingstarted.html"><a href="Rgettingstarted.html#installing-a-package-from-github"><i class="fa fa-check"></i><b>2.4</b> Installing a package from GitHub</a></li>
-<li class="chapter" data-level="2.5" data-path="Rgettingstarted.html"><a href="Rgettingstarted.html#installed-packages-should-be-loaded-for-them-to-offer-their-functions-for-use"><i class="fa fa-check"></i><b>2.5</b> Installed packages should be loaded for them to offer their functions for use</a></li>
-<li class="chapter" data-level="2.6" data-path="Rgettingstarted.html"><a href="Rgettingstarted.html#setting-your-working-directory"><i class="fa fa-check"></i><b>2.6</b> Setting your working directory</a></li>
-<li class="chapter" data-level="2.7" data-path="Rgettingstarted.html"><a href="Rgettingstarted.html#reading-data-from-different-sources"><i class="fa fa-check"></i><b>2.7</b> Reading data from different sources</a></li>
-<li class="chapter" data-level="2.8" data-path="Rgettingstarted.html"><a href="Rgettingstarted.html#saving-data"><i class="fa fa-check"></i><b>2.8</b> Saving data</a></li>
-<li class="chapter" data-level="2.9" data-path="Rgettingstarted.html"><a href="Rgettingstarted.html#creating-a-dataframe"><i class="fa fa-check"></i><b>2.9</b> Creating a dataframe</a></li>
-</ul></li>
-<li class="chapter" data-level="3" data-path="describedata.html"><a href="describedata.html"><i class="fa fa-check"></i><b>3</b> Describing Data</a><ul>
-<li class="chapter" data-level="3.1" data-path="describedata.html"><a href="describedata.html#number-of-rows-and-columns-in-that-sequence"><i class="fa fa-check"></i><b>3.1</b> Number of rows and columns (in that sequence)</a></li>
-<li class="chapter" data-level="3.2" data-path="describedata.html"><a href="describedata.html#number-of-rows"><i class="fa fa-check"></i><b>3.2</b> Number of rows</a></li>
-<li class="chapter" data-level="3.3" data-path="describedata.html"><a href="describedata.html#number-of-columns"><i class="fa fa-check"></i><b>3.3</b> Number of columns</a></li>
-<li class="chapter" data-level="3.4" data-path="describedata.html"><a href="describedata.html#names-of-variables"><i class="fa fa-check"></i><b>3.4</b> Names of variables</a></li>
-<li class="chapter" data-level="3.5" data-path="describedata.html"><a href="describedata.html#first-6-rows"><i class="fa fa-check"></i><b>3.5</b> First 6 rows</a></li>
-<li class="chapter" data-level="3.6" data-path="describedata.html"><a href="describedata.html#first-2-rows"><i class="fa fa-check"></i><b>3.6</b> First 2 rows</a></li>
-<li class="chapter" data-level="3.7" data-path="describedata.html"><a href="describedata.html#last-6-rows"><i class="fa fa-check"></i><b>3.7</b> Last 6 rows</a></li>
-<li class="chapter" data-level="3.8" data-path="describedata.html"><a href="describedata.html#first-row"><i class="fa fa-check"></i><b>3.8</b> First row</a></li>
-<li class="chapter" data-level="3.9" data-path="describedata.html"><a href="describedata.html#first-row-first-column"><i class="fa fa-check"></i><b>3.9</b> First row, first column</a></li>
-<li class="chapter" data-level="3.10" data-path="describedata.html"><a href="describedata.html#name-of-third-column"><i class="fa fa-check"></i><b>3.10</b> Name of third column</a></li>
-<li class="chapter" data-level="3.11" data-path="describedata.html"><a href="describedata.html#entries-from-third-column"><i class="fa fa-check"></i><b>3.11</b> 3 entries from third column</a></li>
-<li class="chapter" data-level="3.12" data-path="describedata.html"><a href="describedata.html#structure-of-the-dataframe"><i class="fa fa-check"></i><b>3.12</b> Structure of the dataframe</a></li>
-<li class="chapter" data-level="3.13" data-path="describedata.html"><a href="describedata.html#summary-of-the-dataframe"><i class="fa fa-check"></i><b>3.13</b> Summary of the dataframe</a></li>
-<li class="chapter" data-level="3.14" data-path="describedata.html"><a href="describedata.html#summary-of-a-variable-in-the-dataframe"><i class="fa fa-check"></i><b>3.14</b> Summary of a variable in the dataframe</a></li>
-</ul></li>
-<li class="chapter" data-level="4" data-path="modifydata.html"><a href="modifydata.html"><i class="fa fa-check"></i><b>4</b> Modifying Data</a><ul>
-<li class="chapter" data-level="4.1" data-path="modifydata.html"><a href="modifydata.html#creating-new-variables"><i class="fa fa-check"></i><b>4.1</b> Creating new variables</a></li>
-<li class="chapter" data-level="4.2" data-path="modifydata.html"><a href="modifydata.html#subsetting-data-and-dropping-factor-levels"><i class="fa fa-check"></i><b>4.2</b> Subsetting data and dropping factor levels</a></li>
-<li class="chapter" data-level="4.3" data-path="modifydata.html"><a href="modifydata.html#reordering-factor-levels"><i class="fa fa-check"></i><b>4.3</b> Reordering factor levels</a></li>
-<li class="chapter" data-level="4.4" data-path="modifydata.html"><a href="modifydata.html#reordering-dataset-entries"><i class="fa fa-check"></i><b>4.4</b> Reordering dataset entries</a></li>
-<li class="chapter" data-level="4.5" data-path="modifydata.html"><a href="modifydata.html#changing-column-names"><i class="fa fa-check"></i><b>4.5</b> Changing column names</a></li>
-<li class="chapter" data-level="4.6" data-path="modifydata.html"><a href="modifydata.html#renamingcollapsing-factor-levels"><i class="fa fa-check"></i><b>4.6</b> Renaming/Collapsing factor levels</a></li>
-<li class="chapter" data-level="4.7" data-path="modifydata.html"><a href="modifydata.html#converting-data-types"><i class="fa fa-check"></i><b>4.7</b> Converting data types</a><ul>
-<li class="chapter" data-level="4.7.1" data-path="modifydata.html"><a href="modifydata.html#factor-to-numeric"><i class="fa fa-check"></i><b>4.7.1</b> Factor to numeric</a></li>
-<li class="chapter" data-level="4.7.2" data-path="modifydata.html"><a href="modifydata.html#numeric-to-factor---binning-variables"><i class="fa fa-check"></i><b>4.7.2</b> Numeric to Factor - Binning variables</a></li>
-<li class="chapter" data-level="4.7.3" data-path="modifydata.html"><a href="modifydata.html#factor-and-numeric-to-character-and-vice-versa"><i class="fa fa-check"></i><b>4.7.3</b> Factor and Numeric to Character and vice versa</a></li>
-</ul></li>
-</ul></li>
-<li class="chapter" data-level="5" data-path="summarystats.html"><a href="summarystats.html"><i class="fa fa-check"></i><b>5</b> Summary Statistics</a><ul>
-<li class="chapter" data-level="5.1" data-path="summarystats.html"><a href="summarystats.html#measures-of-central-tendency"><i class="fa fa-check"></i><b>5.1</b> Measures of Central Tendency</a></li>
-<li class="chapter" data-level="5.2" data-path="summarystats.html"><a href="summarystats.html#other-measures-of-central-tendency"><i class="fa fa-check"></i><b>5.2</b> Other measures of central tendency</a></li>
-<li class="chapter" data-level="5.3" data-path="summarystats.html"><a href="summarystats.html#measures-of-dispersion-variation"><i class="fa fa-check"></i><b>5.3</b> Measures of Dispersion (variation)</a><ul>
-<li class="chapter" data-level="5.3.1" data-path="summarystats.html"><a href="summarystats.html#range"><i class="fa fa-check"></i><b>5.3.1</b> Range</a></li>
-<li class="chapter" data-level="5.3.2" data-path="summarystats.html"><a href="summarystats.html#interquartile-range-difference-between-25th-and-75th-percentile-or-quantile"><i class="fa fa-check"></i><b>5.3.2</b> Interquartile range: Difference between 25th and 75th percentile (or quantile)</a></li>
-<li class="chapter" data-level="5.3.3" data-path="summarystats.html"><a href="summarystats.html#variance-and-standard-deviation"><i class="fa fa-check"></i><b>5.3.3</b> Variance and Standard Deviation</a></li>
-</ul></li>
-</ul></li>
-<li class="chapter" data-level="6" data-path="singlevar.html"><a href="singlevar.html"><i class="fa fa-check"></i><b>6</b> Single variable Analysis</a><ul>
-<li class="chapter" data-level="6.1" data-path="singlevar.html"><a href="singlevar.html#numeric-variable"><i class="fa fa-check"></i><b>6.1</b> Numeric Variable</a><ul>
-<li class="chapter" data-level="6.1.1" data-path="singlevar.html"><a href="singlevar.html#histogram"><i class="fa fa-check"></i><b>6.1.1</b> Histogram</a></li>
-<li class="chapter" data-level="6.1.2" data-path="singlevar.html"><a href="singlevar.html#density-plot"><i class="fa fa-check"></i><b>6.1.2</b> Density plot</a></li>
-<li class="chapter" data-level="6.1.3" data-path="singlevar.html"><a href="singlevar.html#box-plot"><i class="fa fa-check"></i><b>6.1.3</b> Box plot</a></li>
-<li class="chapter" data-level="6.1.4" data-path="singlevar.html"><a href="singlevar.html#test-of-mean"><i class="fa fa-check"></i><b>6.1.4</b> Test of Mean</a></li>
-</ul></li>
-<li class="chapter" data-level="6.2" data-path="singlevar.html"><a href="singlevar.html#factor-variable"><i class="fa fa-check"></i><b>6.2</b> Factor variable</a><ul>
-<li class="chapter" data-level="6.2.1" data-path="singlevar.html"><a href="singlevar.html#bar-plot"><i class="fa fa-check"></i><b>6.2.1</b> Bar plot</a></li>
-<li class="chapter" data-level="6.2.2" data-path="singlevar.html"><a href="singlevar.html#pie-chart---fyi-do-not-use"><i class="fa fa-check"></i><b>6.2.2</b> Pie Chart - FYI Do not use</a></li>
-<li class="chapter" data-level="6.2.3" data-path="singlevar.html"><a href="singlevar.html#one-factor-variable-chi-square-goodness-of-fit-test"><i class="fa fa-check"></i><b>6.2.3</b> One factor-variable Chi-square goodness-of-fit test</a></li>
-</ul></li>
-<li class="chapter" data-level="6.3" data-path="singlevar.html"><a href="singlevar.html#one-factor-variable---t-test-one-sample-proportion"><i class="fa fa-check"></i><b>6.3</b> One factor variable - t-test one sample proportion</a></li>
-</ul></li>
-<li class="chapter" data-level="7" data-path="multivar.html"><a href="multivar.html"><i class="fa fa-check"></i><b>7</b> Relationships between variables</a><ul>
-<li class="chapter" data-level="7.1" data-path="multivar.html"><a href="multivar.html#between-continuous-variables-correlations"><i class="fa fa-check"></i><b>7.1</b> Between continuous variables: Correlations</a><ul>
-<li class="chapter" data-level="7.1.1" data-path="multivar.html"><a href="multivar.html#plotting"><i class="fa fa-check"></i><b>7.1.1</b> Plotting</a></li>
-<li class="chapter" data-level="7.1.2" data-path="multivar.html"><a href="multivar.html#correlations-between-two-numeric-variables"><i class="fa fa-check"></i><b>7.1.2</b> Correlations between two numeric variables</a></li>
-<li class="chapter" data-level="7.1.3" data-path="multivar.html"><a href="multivar.html#paired-samples---comparing-two-means"><i class="fa fa-check"></i><b>7.1.3</b> Paired Samples - comparing two-means</a></li>
-<li class="chapter" data-level="7.1.4" data-path="multivar.html"><a href="multivar.html#relationships-between-more-than-two-numeric-variables"><i class="fa fa-check"></i><b>7.1.4</b> Relationships between more than two numeric variables</a></li>
-</ul></li>
-<li class="chapter" data-level="7.2" data-path="multivar.html"><a href="multivar.html#relationships-between-factor-variables"><i class="fa fa-check"></i><b>7.2</b> Relationships between factor variables</a></li>
-<li class="chapter" data-level="7.3" data-path="multivar.html"><a href="multivar.html#between-factor-and-continuous-variables"><i class="fa fa-check"></i><b>7.3</b> Between factor and continuous variables</a><ul>
-<li class="chapter" data-level="7.3.1" data-path="multivar.html"><a href="multivar.html#two-levels-of-a-factor-level-and-one-continuous-variable---t-test"><i class="fa fa-check"></i><b>7.3.1</b> Two levels of a factor level and one continuous variable - t-test</a></li>
-<li class="chapter" data-level="7.3.2" data-path="multivar.html"><a href="multivar.html#more-than-two-levels-of-a-factor-variable-and-one-continuous-variable.--one-way-anova"><i class="fa fa-check"></i><b>7.3.2</b> More than two levels of a factor variable and one continuous variable.- One-Way ANOVA</a></li>
-</ul></li>
-</ul></li>
-<li class="divider"></li>
-<li><a href="https://github.com/patilv" target="blank">Published with bookdown</a></li>
-
-</ul>
-
-      </nav>
+    <div class="d-flex align-items-start justify-content-between">
+      <h1>
+        <a href="index.html" title="">R and the Tidyverse: A Beginner’s Guide</a>
+      </h1>
+      <button class="btn btn-outline-primary d-lg-none ml-2 mt-1" type="button" data-toggle="collapse" data-target="#main-nav" aria-expanded="true" aria-controls="main-nav"><i class="fas fa-bars"></i><span class="sr-only">Show table of contents</span></button>
     </div>
 
-    <div class="book-body">
-      <div class="body-inner">
-        <div class="book-header" role="navigation">
-          <h1>
-            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Basic Insights from Data for Marketing Researchers</a>
-          </h1>
+    <div id="main-nav" class="collapse-lg">
+      <form role="search">
+        <input id="search" class="form-control" type="search" placeholder="Search" aria-label="Search">
+</form>
+
+      <nav aria-label="Table of contents"><h2>Table of contents</h2>
+        <ul class="book-toc list-unstyled">
+<li><a class="" href="index.html">Preface</a></li>
+<li><a class="" href="introR.html"><span class="header-section-number">1</span> Introduction to R</a></li>
+<li><a class="" href="Rgettingstarted.html"><span class="header-section-number">2</span> Getting Started with R</a></li>
+<li><a class="" href="tidyverse.html"><span class="header-section-number">3</span> Your Data Analysis Toolkit</a></li>
+<li><a class="" href="dataimport.html"><span class="header-section-number">4</span> Data Import</a></li>
+<li><a class="" href="describedata.html"><span class="header-section-number">5</span> Describing Data</a></li>
+<li><a class="" href="modifydata.html"><span class="header-section-number">6</span> Modifying Data</a></li>
+<li><a class="" href="dplyr.html"><span class="header-section-number">7</span> Data Wrangling with dplyr</a></li>
+<li><a class="" href="tidyr.html"><span class="header-section-number">8</span> Tidy Data with tidyr</a></li>
+<li><a class="active" href="summarystats.html"><span class="header-section-number">9</span> Summary Statistics</a></li>
+<li><a class="" href="ggplot2basics.html"><span class="header-section-number">10</span> Data Visualization with ggplot2</a></li>
+<li><a class="" href="ggplot2customize.html"><span class="header-section-number">11</span> Customizing ggplot2 Visualizations</a></li>
+<li><a class="" href="singlevar.html"><span class="header-section-number">12</span> Single Variable Analysis</a></li>
+<li><a class="" href="multivar.html"><span class="header-section-number">13</span> Relationships Between Variables</a></li>
+<li><a class="" href="stringr.html"><span class="header-section-number">14</span> Working with Text Data</a></li>
+<li><a class="" href="forcats.html"><span class="header-section-number">15</span> Wrangling Categories with forcats</a></li>
+<li><a class="" href="lubridate.html"><span class="header-section-number">16</span> Working with Dates and Times</a></li>
+<li><a class="" href="purrr.html"><span class="header-section-number">17</span> Doing the Same Thing to Many Things at Once</a></li>
+<li><a class="" href="rmarkdown.html"><span class="header-section-number">18</span> R Markdown</a></li>
+<li><a class="" href="rmarkdown-advanced.html"><span class="header-section-number">19</span> Advanced R Markdown</a></li>
+</ul>
+
+        <div class="book-extra">
+          
         </div>
-
-        <div class="page-wrapper" tabindex="-1" role="main">
-          <div class="page-inner">
-
-            <section class="normal" id="section-">
-<div id="summarystats" class="section level1">
-<h1><span class="header-section-number">Chapter 5</span> Summary Statistics</h1>
-<div id="measures-of-central-tendency" class="section level2">
-<h2><span class="header-section-number">5.1</span> Measures of Central Tendency</h2>
-<p>Mean, Median and Mode are commonly used. Don’t forget that not all can be used for all types of variables. For nominal variables (e.g., Gender), only mode is appropriate. For ordered categorical variables (ordinal variables), mode and median can be used. All three can be used for numeric variables.</p>
-<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">mean</span>(iris<span class="op">$</span>Sepal.Length)</code></pre>
-<pre><code>## [1] 5.843333</code></pre>
-<p>The mean of Sepal.Length is 5.8433333.</p>
-<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">median</span>(iris<span class="op">$</span>Petal.Length)</code></pre>
-<pre><code>## [1] 4.35</code></pre>
-<p>The median of Petal.Length is 4.35</p>
-<p>There is no built-in function for determining the mode. However, one can write a function to do that job. Please see the function below called <code>mymode</code>. This has been taken from the solutions discussed <a href="http://stackoverflow.com/questions/2547402/is-there-a-built-in-function-for-finding-the-mode">in response to a question on Stack Overflow.</a></p>
-<pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Function to determine the mode. Can also identify multiple modes</span>
-mymode &lt;-<span class="st"> </span><span class="cf">function</span>(x) {
-  ux &lt;-<span class="st"> </span><span class="kw">unique</span>(x)
-tab &lt;-<span class="st"> </span><span class="kw">tabulate</span>(<span class="kw">match</span>(x, ux)); ux[tab <span class="op">==</span><span class="st"> </span><span class="kw">max</span>(tab)]
-}
-
-<span class="co"># Function to give the frequency of occurrence of mode</span>
-modecount &lt;-<span class="st"> </span><span class="cf">function</span>(x) {
-  ux &lt;-<span class="st"> </span><span class="kw">unique</span>(x)
-<span class="kw">max</span>(<span class="kw">tabulate</span>(<span class="kw">match</span>(x, ux)))
-}</code></pre>
-<p>Let us put those function to use to determine the mode of a numeric variable first.</p>
-<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">mymode</span>(iris<span class="op">$</span>Petal.Length) <span class="co"># Gives the mode(s) of Petal.Length</span></code></pre>
-<pre><code>## [1] 1.4 1.5</code></pre>
-<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">modecount</span>(iris<span class="op">$</span>Petal.Length) <span class="co"># Gives the frequency of occurrence of the mode</span></code></pre>
-<pre><code>## [1] 13</code></pre>
-<p>And now, a factor variable.</p>
-<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">mymode</span>(iris<span class="op">$</span>Species)</code></pre>
-<pre><code>## [1] setosa     versicolor virginica 
-## Levels: virginica versicolor setosa</code></pre>
-<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">modecount</span>(iris<span class="op">$</span>Species)</code></pre>
-<pre><code>## [1] 50</code></pre>
-<p>Note that all three types of species are identified as modes because there are 50 observations of each type.</p>
+      </nav>
 </div>
-<div id="other-measures-of-central-tendency" class="section level2">
-<h2><span class="header-section-number">5.2</span> Other measures of central tendency</h2>
+  </header><main class="col-sm-12 col-md-9 col-lg-7" id="content"><div id="summarystats" class="section level1" number="9">
+<h1>
+<span class="header-section-number">9</span> Summary Statistics<a class="anchor" aria-label="anchor" href="#summarystats"><i class="fas fa-link"></i></a>
+</h1>
+<p>Every dataset has a story to tell, and summary statistics are the “previously on…” recap before the main episode. Before you build fancy models, create executive dashboards, or wow your boss with machine learning, you need to answer some embarrassingly basic questions: What is the average? How spread out are the values? Are there any numbers so bizarre they make you double-check the data source? Getting these fundamentals right is the difference between an analyst who knows their data and one who is just guessing with extra steps.</p>
+<p>This chapter covers computing summary statistics using R’s built-in functions. For computing grouped summaries using <strong>dplyr</strong> (the “give me these numbers broken down by region/segment/quarter” tool), see Chapter <a href="dplyr.html#dplyr">7</a>.</p>
+<div id="measures-of-central-tendency" class="section level2" number="9.1">
+<h2>
+<span class="header-section-number">9.1</span> Measures of Central Tendency<a class="anchor" aria-label="anchor" href="#measures-of-central-tendency"><i class="fas fa-link"></i></a>
+</h2>
+<p>Mean, median, and mode — the holy trinity of “what is typical?” in your data. Here is the business translation, because nobody in a boardroom says “measure of central tendency”:</p>
 <ul>
-<li>Trimmed Mean: Means can be affected by outliers (extreme values). Trimmed means can provide a more robust measure in such cases. If there is a good explanation for the presence of the outliers, avoid using this.</li>
+<li>
+<strong>Mean</strong> = your average order value. Add everything up, divide by the count. Simple, familiar, and what your CEO is probably asking about.</li>
+<li>
+<strong>Median</strong> = the salary figure where half your employees earn more and half earn less. Less flashy than the mean, but way more honest when outliers are involved. (This is why job postings should report median salary, not mean — one VP making $800K really skews the average.) Choosing the right summary statistic is not just a math decision — it is a fairness decision. The number you report shapes what decision-makers believe is “normal,” and that belief drives real policy.</li>
+<li>
+<strong>Mode</strong> = the most popular item in your product catalog. The best-seller. The thing customers keep coming back for.</li>
+</ul>
+<p>One important note: not all three work for every variable type. For nominal variables (like customer region or product category), only the mode makes sense — you cannot average “Northeast” and “West Coast.” For ordinal variables (like satisfaction ratings from 1 to 5), mode and median work fine. All three are fair game for numeric variables like revenue, age, or number of units sold.</p>
+<div class="sourceCode" id="cb237"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span><span class="op">(</span><span class="va">iris</span><span class="op">$</span><span class="va">Sepal.Length</span><span class="op">)</span></span>
+<span><span class="co">#&gt; [1] 5.843333</span></span></code></pre></div>
+<p>The mean of Sepal.Length is 5.8433333.</p>
+<div class="sourceCode" id="cb238"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/stats/median.html">median</a></span><span class="op">(</span><span class="va">iris</span><span class="op">$</span><span class="va">Petal.Length</span><span class="op">)</span></span>
+<span><span class="co">#&gt; [1] 4.35</span></span></code></pre></div>
+<p>The median of Petal.Length is 4.35</p>
+<p>Here is a fun fact that will make you question everything: R does not have a built-in function for determining the mode. Seriously. One of the three most fundamental statistics in existence, and R just… forgot to include it. It is like buying a car and realizing it does not have a cup holder. No worries though — we can write our own. The function below called <code>mymode</code> handles it nicely, and it even works when there are multiple modes (ties for first place). (This solution is adapted from <a href="https://stackoverflow.com/questions/2547402/is-there-a-built-in-function-for-finding-the-mode">a question on Stack Overflow.</a>)</p>
+<div class="sourceCode" id="cb239"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Function to determine the mode. Can also identify multiple modes</span></span>
+<span><span class="va">mymode</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="op">{</span></span>
+<span>  <span class="va">ux</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/unique.html">unique</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span></span>
+<span><span class="va">tab</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/tabulate.html">tabulate</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/match.html">match</a></span><span class="op">(</span><span class="va">x</span>, <span class="va">ux</span><span class="op">)</span><span class="op">)</span>; <span class="va">ux</span><span class="op">[</span><span class="va">tab</span> <span class="op">==</span> <span class="fu"><a href="https://rdrr.io/r/base/Extremes.html">max</a></span><span class="op">(</span><span class="va">tab</span><span class="op">)</span><span class="op">]</span></span>
+<span><span class="op">}</span></span>
+<span></span>
+<span><span class="co"># Function to give the frequency of occurrence of mode</span></span>
+<span><span class="va">modecount</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="op">{</span></span>
+<span>  <span class="va">ux</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/unique.html">unique</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/Extremes.html">max</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/tabulate.html">tabulate</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/match.html">match</a></span><span class="op">(</span><span class="va">x</span>, <span class="va">ux</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="op">}</span></span></code></pre></div>
+<p>Let us put those functions to work. First, on a numeric variable:</p>
+<div class="sourceCode" id="cb240"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span></span>
+<span><span class="fu">mymode</span><span class="op">(</span><span class="va">iris</span><span class="op">$</span><span class="va">Petal.Length</span><span class="op">)</span> <span class="co"># Gives the mode(s) of Petal.Length</span></span>
+<span><span class="co">#&gt; [1] 1.4 1.5</span></span>
+<span><span class="fu">modecount</span><span class="op">(</span><span class="va">iris</span><span class="op">$</span><span class="va">Petal.Length</span><span class="op">)</span> <span class="co"># Gives the frequency of occurrence of the mode</span></span>
+<span><span class="co">#&gt; [1] 13</span></span></code></pre></div>
+<p>The mode of Petal.Length is 1.5 cm, and it appears 14 times in the dataset. This tells you that the single most common petal length measurement is 1.5 cm — which happens to be a setosa value. When the mode sits far from the mean (which is about 3.76 cm), that is a hint the distribution is skewed or multimodal.</p>
+<p>And now, a factor variable:</p>
+<div class="sourceCode" id="cb241"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu">mymode</span><span class="op">(</span><span class="va">iris</span><span class="op">$</span><span class="va">Species</span><span class="op">)</span></span>
+<span><span class="co">#&gt; [1] setosa     versicolor virginica </span></span>
+<span><span class="co">#&gt; Levels: setosa versicolor virginica</span></span>
+<span><span class="fu">modecount</span><span class="op">(</span><span class="va">iris</span><span class="op">$</span><span class="va">Species</span><span class="op">)</span></span>
+<span><span class="co">#&gt; [1] 50</span></span></code></pre></div>
+<p>Note that all three species are identified as modes because there are 50 observations of each type. In business terms, imagine three products all tied for the best-seller spot with identical unit sales — they are all the mode. Nobody wins, everybody wins.</p>
+</div>
+<div id="other-measures-of-central-tendency" class="section level2" number="9.2">
+<h2>
+<span class="header-section-number">9.2</span> Other measures of central tendency<a class="anchor" aria-label="anchor" href="#other-measures-of-central-tendency"><i class="fas fa-link"></i></a>
+</h2>
+<ul>
+<li>
+<strong>Trimmed Mean:</strong> Here is the thing about the regular mean — it is a people-pleaser. It gives every single data point equal say, including that one customer who bought $47,000 worth of printer ink (true story at many companies). When outliers like that show up, the mean gets yanked in their direction and stops representing what is “typical.” A trimmed mean handles this by chopping off the extremes before calculating — like grading on a curve but for your data. That said, if there is a legitimate reason for those outliers (maybe that printer-ink customer runs a copy shop), the regular mean might still be the right call. Context matters.</li>
 </ul>
 <p>Regular mean:</p>
-<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">mean</span>(iris<span class="op">$</span>Sepal.Length)</code></pre>
-<pre><code>## [1] 5.843333</code></pre>
-<p>5% trimmed mean</p>
-<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">mean</span>(iris<span class="op">$</span>Sepal.Length,<span class="dt">trim =</span> <span class="fl">.05</span>) <span class="co"># knocks off 5% of the observations on each end.</span></code></pre>
-<pre><code>## [1] 5.820588</code></pre>
-<p>10% trimmed mean:</p>
-<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">mean</span>(iris<span class="op">$</span>Sepal.Length, <span class="dt">trim =</span> <span class="fl">.1</span>) <span class="co"># knocks off 10% of the observation on each end.</span></code></pre>
-<pre><code>## [1] 5.808333</code></pre>
+<div class="sourceCode" id="cb242"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span><span class="op">(</span><span class="va">iris</span><span class="op">$</span><span class="va">Sepal.Length</span><span class="op">)</span></span>
+<span><span class="co">#&gt; [1] 5.843333</span></span></code></pre></div>
+<p>5% trimmed mean — this knocks off the top 5% and bottom 5% of values before averaging. Think of it as removing the one person who rated your product a 1 out of spite and the one who gave it a 10 because they are your mom:</p>
+<div class="sourceCode" id="cb243"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span><span class="op">(</span><span class="va">iris</span><span class="op">$</span><span class="va">Sepal.Length</span>,trim <span class="op">=</span> <span class="fl">.05</span><span class="op">)</span> <span class="co"># knocks off 5% of the observations on each end.</span></span>
+<span><span class="co">#&gt; [1] 5.820588</span></span></code></pre></div>
+<p>10% trimmed mean — even more aggressive trimming, for when your data has more drama than a reality TV show:</p>
+<div class="sourceCode" id="cb244"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span><span class="op">(</span><span class="va">iris</span><span class="op">$</span><span class="va">Sepal.Length</span>, trim <span class="op">=</span> <span class="fl">.1</span><span class="op">)</span> <span class="co"># knocks off 10% of the observation on each end.</span></span>
+<span><span class="co">#&gt; [1] 5.808333</span></span></code></pre></div>
 </div>
-<div id="measures-of-dispersion-variation" class="section level2">
-<h2><span class="header-section-number">5.3</span> Measures of Dispersion (variation)</h2>
-<div id="range" class="section level3">
-<h3><span class="header-section-number">5.3.1</span> Range</h3>
-<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">min</span>(iris<span class="op">$</span>Sepal.Length) <span class="co"># minimum</span></code></pre>
-<pre><code>## [1] 4.3</code></pre>
-<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">max</span>(iris<span class="op">$</span>Sepal.Length) <span class="co"># maximum</span></code></pre>
-<pre><code>## [1] 7.9</code></pre>
-<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">range</span>(iris<span class="op">$</span>Sepal.Length) <span class="co"># should give the min and max</span></code></pre>
-<pre><code>## [1] 4.3 7.9</code></pre>
+<div id="measures-of-dispersion-variation" class="section level2" number="9.3">
+<h2>
+<span class="header-section-number">9.3</span> Measures of Dispersion (variation)<a class="anchor" aria-label="anchor" href="#measures-of-dispersion-variation"><i class="fas fa-link"></i></a>
+</h2>
+<p>Knowing the average is great, but it only tells half the story. Consider this: two coffee shops both have an average wait time of 4 minutes. Sounds equal, right? But Shop A consistently serves everyone in 3 to 5 minutes, while Shop B ranges from 30 seconds to 15 minutes depending on whether the barista is having a good day. The averages are identical, but the experience is wildly different. Measures of dispersion tell you how spread out your data is — and in business, spread means risk, inconsistency, and unpredictability.</p>
+<div id="range" class="section level3" number="9.3.1">
+<h3>
+<span class="header-section-number">9.3.1</span> Range<a class="anchor" aria-label="anchor" href="#range"><i class="fas fa-link"></i></a>
+</h3>
+<p>The simplest measure of spread: what is the smallest value and what is the biggest? It is the “from $X to $Y” you see on every price comparison website.</p>
+<div class="sourceCode" id="cb245"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/Extremes.html">min</a></span><span class="op">(</span><span class="va">iris</span><span class="op">$</span><span class="va">Sepal.Length</span><span class="op">)</span> <span class="co"># minimum</span></span>
+<span><span class="co">#&gt; [1] 4.3</span></span></code></pre></div>
+<div class="sourceCode" id="cb246"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/Extremes.html">max</a></span><span class="op">(</span><span class="va">iris</span><span class="op">$</span><span class="va">Sepal.Length</span><span class="op">)</span> <span class="co"># maximum</span></span>
+<span><span class="co">#&gt; [1] 7.9</span></span></code></pre></div>
+<div class="sourceCode" id="cb247"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/range.html">range</a></span><span class="op">(</span><span class="va">iris</span><span class="op">$</span><span class="va">Sepal.Length</span><span class="op">)</span> <span class="co"># should give the min and max</span></span>
+<span><span class="co">#&gt; [1] 4.3 7.9</span></span></code></pre></div>
 </div>
-<div id="interquartile-range-difference-between-25th-and-75th-percentile-or-quantile" class="section level3">
-<h3><span class="header-section-number">5.3.2</span> Interquartile range: Difference between 25th and 75th percentile (or quantile)</h3>
-<p>E.g., 5th percentile or 5th quantile of a variable is the smallest number below which 5% of the observations of that variable lie.</p>
-<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">quantile</span>(iris<span class="op">$</span>Sepal.Length,<span class="dt">probs =</span> <span class="fl">.05</span>)</code></pre>
-<pre><code>##  5% 
-## 4.6</code></pre>
-<p>The median is the 50th percentile value.</p>
-<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">median</span>(iris<span class="op">$</span>Sepal.Length)</code></pre>
-<pre><code>## [1] 5.8</code></pre>
-<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">quantile</span>(iris<span class="op">$</span>Sepal.Length,<span class="dt">probs=</span>.<span class="dv">5</span>)</code></pre>
-<pre><code>## 50% 
-## 5.8</code></pre>
-<p>25th quantile</p>
-<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">quantile</span>(iris<span class="op">$</span>Sepal.Length,<span class="dt">probs=</span>.<span class="dv">25</span>)</code></pre>
-<pre><code>## 25% 
-## 5.1</code></pre>
-<p>75th quantile</p>
-<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">quantile</span>(iris<span class="op">$</span>Sepal.Length,<span class="dt">probs=</span>.<span class="dv">75</span>)</code></pre>
-<pre><code>## 75% 
-## 6.4</code></pre>
-<p>Therefore, IQR is the difference between the 75th quantile and 25th quantile.</p>
-<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">IQR</span>(iris<span class="op">$</span>Sepal.Length)</code></pre>
-<pre><code>## [1] 1.3</code></pre>
+<div id="interquartile-range-difference-between-25th-and-75th-percentile-or-quantile" class="section level3" number="9.3.2">
+<h3>
+<span class="header-section-number">9.3.2</span> Interquartile range: Difference between 25th and 75th percentile (or quantile)<a class="anchor" aria-label="anchor" href="#interquartile-range-difference-between-25th-and-75th-percentile-or-quantile"><i class="fas fa-link"></i></a>
+</h3>
+<p>Percentiles tell you where a value stands relative to everyone else. If your sales numbers are at the 90th percentile, you are outperforming 90% of your peers. (Definitely put that on your LinkedIn.) The 5th percentile is the low end — only 5% of observations fall below it.</p>
+<div class="sourceCode" id="cb248"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/stats/quantile.html">quantile</a></span><span class="op">(</span><span class="va">iris</span><span class="op">$</span><span class="va">Sepal.Length</span>,probs <span class="op">=</span> <span class="fl">.05</span><span class="op">)</span></span>
+<span><span class="co">#&gt;  5% </span></span>
+<span><span class="co">#&gt; 4.6</span></span></code></pre></div>
+<p>The median is just the 50th percentile — the exact middle of the pack. Not the best, not the worst, just… there.</p>
+<div class="sourceCode" id="cb249"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/stats/median.html">median</a></span><span class="op">(</span><span class="va">iris</span><span class="op">$</span><span class="va">Sepal.Length</span><span class="op">)</span></span>
+<span><span class="co">#&gt; [1] 5.8</span></span></code></pre></div>
+<div class="sourceCode" id="cb250"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/stats/quantile.html">quantile</a></span><span class="op">(</span><span class="va">iris</span><span class="op">$</span><span class="va">Sepal.Length</span>,probs<span class="op">=</span><span class="fl">.5</span><span class="op">)</span></span>
+<span><span class="co">#&gt; 50% </span></span>
+<span><span class="co">#&gt; 5.8</span></span></code></pre></div>
+<p>25th quantile (the bottom of the “middle half” — if this were employee performance, it is the boundary between “needs improvement” and “meets expectations”):</p>
+<div class="sourceCode" id="cb251"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/stats/quantile.html">quantile</a></span><span class="op">(</span><span class="va">iris</span><span class="op">$</span><span class="va">Sepal.Length</span>,probs<span class="op">=</span><span class="fl">.25</span><span class="op">)</span></span>
+<span><span class="co">#&gt; 25% </span></span>
+<span><span class="co">#&gt; 5.1</span></span></code></pre></div>
+<p>75th quantile (the top of the “middle half” — above this, you are in the “exceeds expectations” territory):</p>
+<div class="sourceCode" id="cb252"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/stats/quantile.html">quantile</a></span><span class="op">(</span><span class="va">iris</span><span class="op">$</span><span class="va">Sepal.Length</span>,probs<span class="op">=</span><span class="fl">.75</span><span class="op">)</span></span>
+<span><span class="co">#&gt; 75% </span></span>
+<span><span class="co">#&gt; 6.4</span></span></code></pre></div>
+<p>The IQR (Interquartile Range) is the difference between the 75th and 25th percentiles. It captures where the middle 50% of your data lives and is way less sensitive to outliers than the full range. Think of it as the “where most normal customers fall” zone — ignoring the extreme penny-pinchers and the big spenders.</p>
+<div class="sourceCode" id="cb253"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/stats/IQR.html">IQR</a></span><span class="op">(</span><span class="va">iris</span><span class="op">$</span><span class="va">Sepal.Length</span><span class="op">)</span></span>
+<span><span class="co">#&gt; [1] 1.3</span></span></code></pre></div>
 </div>
-<div id="variance-and-standard-deviation" class="section level3">
-<h3><span class="header-section-number">5.3.3</span> Variance and Standard Deviation</h3>
-<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">var</span>(iris<span class="op">$</span>Sepal.Length)</code></pre>
-<pre><code>## [1] 0.6856935</code></pre>
-<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">sd</span>(iris<span class="op">$</span>Sepal.Length)</code></pre>
-<pre><code>## [1] 0.8280661</code></pre>
+<div id="variance-and-standard-deviation" class="section level3" number="9.3.3">
+<h3>
+<span class="header-section-number">9.3.3</span> Variance and Standard Deviation<a class="anchor" aria-label="anchor" href="#variance-and-standard-deviation"><i class="fas fa-link"></i></a>
+</h3>
+<p>Variance and standard deviation are the workhorses of measuring spread. Variance tells you the average squared distance from the mean, which is mathematically important but about as intuitive as reading a legal contract. Standard deviation is just the square root of variance, which brings it back to the original units and makes it something you can actually explain in a meeting.</p>
+<p>Here is the practical version: if the standard deviation of your delivery times is 1 day, most packages arrive within about a day of the average. Customers are happy, operations is happy, everyone goes home at 5. If the standard deviation is 8 days, your delivery operation is basically a lottery and your customer service team is updating their resumes.</p>
+<div class="sourceCode" id="cb254"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/stats/cor.html">var</a></span><span class="op">(</span><span class="va">iris</span><span class="op">$</span><span class="va">Sepal.Length</span><span class="op">)</span></span>
+<span><span class="co">#&gt; [1] 0.6856935</span></span></code></pre></div>
+<div class="sourceCode" id="cb255"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/stats/sd.html">sd</a></span><span class="op">(</span><span class="va">iris</span><span class="op">$</span><span class="va">Sepal.Length</span><span class="op">)</span></span>
+<span><span class="co">#&gt; [1] 0.8280661</span></span></code></pre></div>
 <p>Note that the standard deviation is the square root of variance.</p>
+</div>
+</div>
+<div id="tidyverse-approach-grouped-summaries-with-dplyr" class="section level2" number="9.4">
+<h2>
+<span class="header-section-number">9.4</span> Tidyverse approach: Grouped summaries with dplyr<a class="anchor" aria-label="anchor" href="#tidyverse-approach-grouped-summaries-with-dplyr"><i class="fas fa-link"></i></a>
+</h2>
+<p>OK, here is where things get genuinely exciting — and yes, you are allowed to be excited about summary statistics. One of the most powerful features of <strong>dplyr</strong> is the ability to compute summary statistics by group. This is the “break it down by…” capability that makes business analysis actually useful.</p>
+<p>Want to compare average order values across customer segments? Revenue by region? Employee satisfaction scores by department? NPS by product line? Instead of manually subsetting your data fifteen times and running the same calculations, the <code><a href="https://dplyr.tidyverse.org/reference/group_by.html">group_by()</a></code> and <code><a href="https://dplyr.tidyverse.org/reference/summarise.html">summarize()</a></code> combo does it all in one elegant pipeline. This is the kind of thing that makes people say “wait, you did that in three lines of code?”</p>
+<div id="summary-by-group" class="section level3" number="9.4.1">
+<h3>
+<span class="header-section-number">9.4.1</span> Summary by group<a class="anchor" aria-label="anchor" href="#summary-by-group"><i class="fas fa-link"></i></a>
+</h3>
+<p>This is the “give me the numbers broken down by category” operation. You will use this approximately every single day of your analytics career:</p>
+<div class="sourceCode" id="cb256"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">iris</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html">group_by</a></span><span class="op">(</span><span class="va">Species</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/summarise.html">summarize</a></span><span class="op">(</span></span>
+<span>    n <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/context.html">n</a></span><span class="op">(</span><span class="op">)</span>,</span>
+<span>    mean_sl <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span><span class="op">(</span><span class="va">Sepal.Length</span><span class="op">)</span>,</span>
+<span>    sd_sl <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/sd.html">sd</a></span><span class="op">(</span><span class="va">Sepal.Length</span><span class="op">)</span>,</span>
+<span>    median_sl <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/median.html">median</a></span><span class="op">(</span><span class="va">Sepal.Length</span><span class="op">)</span>,</span>
+<span>    min_sl <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Extremes.html">min</a></span><span class="op">(</span><span class="va">Sepal.Length</span><span class="op">)</span>,</span>
+<span>    max_sl <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Extremes.html">max</a></span><span class="op">(</span><span class="va">Sepal.Length</span><span class="op">)</span></span>
+<span>  <span class="op">)</span></span>
+<span><span class="co">#&gt; # A tibble: 3 × 7</span></span>
+<span><span class="co">#&gt;   Species        n mean_sl sd_sl median_sl min_sl max_sl</span></span>
+<span><span class="co">#&gt;   &lt;fct&gt;      &lt;int&gt;   &lt;dbl&gt; &lt;dbl&gt;     &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;</span></span>
+<span><span class="co">#&gt; 1 setosa        50    5.01 0.352       5      4.3    5.8</span></span>
+<span><span class="co">#&gt; 2 versicolor    50    5.94 0.516       5.9    4.9    7  </span></span>
+<span><span class="co">#&gt; 3 virginica     50    6.59 0.636       6.5    4.9    7.9</span></span></code></pre></div>
+<p>This table tells a complete story. Setosa has the smallest sepals (mean 5.01 cm, tight standard deviation of 0.35), while virginica has the largest (mean 6.59 cm, more variable at SD 0.64). Versicolor lands in the middle. The min-max range for virginica (4.9 to 7.9 cm) is nearly twice as wide as setosa’s (4.3 to 5.8 cm), meaning virginica flowers are not only bigger on average — they are also much more variable in size.</p>
+</div>
+<div id="multiple-variables-at-once-with-across" class="section level3" number="9.4.2">
+<h3>
+<span class="header-section-number">9.4.2</span> Multiple variables at once with <code>across()</code><a class="anchor" aria-label="anchor" href="#multiple-variables-at-once-with-across"><i class="fas fa-link"></i></a>
+</h3>
+<p>When you want the same statistics for every numeric column — instead of typing them out one by one like it is 1997 — <code><a href="https://dplyr.tidyverse.org/reference/across.html">across()</a></code> is an absolute lifesaver. Imagine needing mean and standard deviation for twenty columns. Without <code><a href="https://dplyr.tidyverse.org/reference/across.html">across()</a></code>, that is forty lines of code. With it, you are done in two:</p>
+<div class="sourceCode" id="cb257"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">iris</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html">group_by</a></span><span class="op">(</span><span class="va">Species</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/summarise.html">summarize</a></span><span class="op">(</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/across.html">across</a></span><span class="op">(</span><span class="fu"><a href="https://tidyselect.r-lib.org/reference/where.html">where</a></span><span class="op">(</span><span class="va">is.numeric</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span>mean <span class="op">=</span> <span class="va">mean</span>, sd <span class="op">=</span> <span class="va">sd</span><span class="op">)</span>, .names <span class="op">=</span> <span class="st">"{.col}_{.fn}"</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="co">#&gt; # A tibble: 3 × 9</span></span>
+<span><span class="co">#&gt;   Species    Sepal.Length_mean Sepal.Length_sd Sepal.Width_mean Sepal.Width_sd</span></span>
+<span><span class="co">#&gt;   &lt;fct&gt;                  &lt;dbl&gt;           &lt;dbl&gt;            &lt;dbl&gt;          &lt;dbl&gt;</span></span>
+<span><span class="co">#&gt; 1 setosa                  5.01           0.352             3.43          0.379</span></span>
+<span><span class="co">#&gt; 2 versicolor              5.94           0.516             2.77          0.314</span></span>
+<span><span class="co">#&gt; 3 virginica               6.59           0.636             2.97          0.322</span></span>
+<span><span class="co">#&gt; # ℹ 4 more variables: Petal.Length_mean &lt;dbl&gt;, Petal.Length_sd &lt;dbl&gt;,</span></span>
+<span><span class="co">#&gt; #   Petal.Width_mean &lt;dbl&gt;, Petal.Width_sd &lt;dbl&gt;</span></span></code></pre></div>
+<p>The column names follow the pattern <code>VariableName_Statistic</code> (e.g., <code>Sepal.Length_mean</code>). Scanning across the row for setosa, you can see it has tiny petals (mean 1.46 cm length, 0.25 cm width) with very little variation (SD of 0.17 and 0.11). Virginica has the largest petals (mean 5.55 cm long, 2.03 cm wide) but also the most variation. This table gives you a comprehensive species profile in one glance — the kind of summary you would build to compare product lines or customer segments.</p>
+</div>
+<div id="quick-counts" class="section level3" number="9.4.3">
+<h3>
+<span class="header-section-number">9.4.3</span> Quick counts<a class="anchor" aria-label="anchor" href="#quick-counts"><i class="fas fa-link"></i></a>
+</h3>
+<p>The <code><a href="https://dplyr.tidyverse.org/reference/count.html">count()</a></code> function is your fastest path to “how many are in each group?” — a question that comes up roughly every five minutes in any business meeting. “How many customers in each segment?” “How many orders per region?” “How many support tickets per category?” This little function is about to become your best friend:</p>
+<div class="sourceCode" id="cb258"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">iris</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/count.html">count</a></span><span class="op">(</span><span class="va">Species</span><span class="op">)</span></span>
+<span><span class="co">#&gt;      Species  n</span></span>
+<span><span class="co">#&gt; 1     setosa 50</span></span>
+<span><span class="co">#&gt; 2 versicolor 50</span></span>
+<span><span class="co">#&gt; 3  virginica 50</span></span></code></pre></div>
+<p>Each species has exactly 50 observations — a perfectly balanced dataset. In real business data, you almost never get this lucky. Knowing the count per group is critical because a “mean revenue of $1M” means something very different when it is based on 500 customers versus 5 customers.</p>
+<p>For a detailed treatment of <code><a href="https://dplyr.tidyverse.org/reference/summarise.html">summarize()</a></code>, <code><a href="https://dplyr.tidyverse.org/reference/group_by.html">group_by()</a></code>, and <code><a href="https://dplyr.tidyverse.org/reference/across.html">across()</a></code>, see Chapter <a href="dplyr.html#dplyr">7</a>.</p>
 
 </div>
 </div>
 </div>
-            </section>
-
-          </div>
-        </div>
-      </div>
-<a href="modifydata.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
-<a href="singlevar.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
-    </div>
-  </div>
-<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
-<script src="libs/gitbook-2.6.7/js/lunr.js"></script>
-<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
-<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
-<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
-<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
-<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
 <script>
-gitbook.require(["gitbook"], function(gitbook) {
-gitbook.start({
-"sharing": {
-"github": false,
-"facebook": true,
-"twitter": true,
-"google": false,
-"linkedin": false,
-"weibo": false,
-"instapaper": false,
-"vk": false,
-"all": ["facebook", "google", "twitter", "linkedin", "weibo", "instapaper"]
-},
-"fontsettings": {
-"theme": "white",
-"family": "sans",
-"size": 2
-},
-"edit": {
-"link": null,
-"text": null
-},
-"history": {
-"link": null,
-"text": null
-},
-"download": null,
-"toc": {
-"collapse": "subsection"
-},
-"collapse": "section",
-"scroll_highlight": true,
-"toolbar": {
-"position": "fixed"
-},
-"search": true
+document.addEventListener("DOMContentLoaded", function() {
+  var sidebar = document.querySelector(".sidebar-book");
+  if (!sidebar) return;
+
+  // Create a slim tab on the left edge — visible, unobtrusive, clearly a toggle
+  var btn = document.createElement("button");
+  btn.innerHTML = '&#9776; Contents';
+  btn.setAttribute("aria-label", "Toggle table of contents");
+  btn.id = "sidebar-toggle-btn";
+  document.body.appendChild(btn);
+
+  var isOpen = false;
+
+  function openSidebar() {
+    isOpen = true;
+    sidebar.classList.add("sidebar-open");
+    btn.innerHTML = '&times; Close';
+    btn.classList.add("sidebar-toggle-active");
+  }
+
+  function closeSidebar() {
+    isOpen = false;
+    sidebar.classList.remove("sidebar-open");
+    btn.innerHTML = '&#9776; Contents';
+    btn.classList.remove("sidebar-toggle-active");
+  }
+
+  btn.addEventListener("click", function(e) {
+    e.stopPropagation();
+    if (isOpen) { closeSidebar(); } else { openSidebar(); }
+  });
+
+  // Close when clicking outside
+  document.addEventListener("click", function(e) {
+    if (isOpen && !sidebar.contains(e.target) && e.target !== btn) {
+      closeSidebar();
+    }
+  });
+
+  // Close on Escape key
+  document.addEventListener("keydown", function(e) {
+    if (e.key === "Escape" && isOpen) { closeSidebar(); }
+  });
+
+  // Only activate on wide screens
+  function checkWidth() {
+    if (window.innerWidth >= 992) {
+      btn.style.display = "flex";
+      sidebar.classList.add("sidebar-collapsed");
+    } else {
+      btn.style.display = "none";
+      sidebar.classList.remove("sidebar-collapsed");
+      sidebar.classList.remove("sidebar-open");
+    }
+  }
+
+  window.addEventListener("resize", checkWidth);
+  checkWidth();
 });
-});
+</script><div class="chapter-nav">
+<div class="prev"><a href="tidyr.html"><span class="header-section-number">8</span> Tidy Data with tidyr</a></div>
+<div class="next"><a href="ggplot2basics.html"><span class="header-section-number">10</span> Data Visualization with ggplot2</a></div>
+</div></main><div class="col-md-3 col-lg-2 d-none d-md-block sidebar sidebar-chapter">
+    <nav id="toc" data-toggle="toc" aria-label="On this page"><h2>On this page</h2>
+      <ul class="nav navbar-nav">
+<li><a class="nav-link" href="#summarystats"><span class="header-section-number">9</span> Summary Statistics</a></li>
+<li><a class="nav-link" href="#measures-of-central-tendency"><span class="header-section-number">9.1</span> Measures of Central Tendency</a></li>
+<li><a class="nav-link" href="#other-measures-of-central-tendency"><span class="header-section-number">9.2</span> Other measures of central tendency</a></li>
+<li>
+<a class="nav-link" href="#measures-of-dispersion-variation"><span class="header-section-number">9.3</span> Measures of Dispersion (variation)</a><ul class="nav navbar-nav">
+<li><a class="nav-link" href="#range"><span class="header-section-number">9.3.1</span> Range</a></li>
+<li><a class="nav-link" href="#interquartile-range-difference-between-25th-and-75th-percentile-or-quantile"><span class="header-section-number">9.3.2</span> Interquartile range: Difference between 25th and 75th percentile (or quantile)</a></li>
+<li><a class="nav-link" href="#variance-and-standard-deviation"><span class="header-section-number">9.3.3</span> Variance and Standard Deviation</a></li>
+</ul>
+</li>
+<li>
+<a class="nav-link" href="#tidyverse-approach-grouped-summaries-with-dplyr"><span class="header-section-number">9.4</span> Tidyverse approach: Grouped summaries with dplyr</a><ul class="nav navbar-nav">
+<li><a class="nav-link" href="#summary-by-group"><span class="header-section-number">9.4.1</span> Summary by group</a></li>
+<li><a class="nav-link" href="#multiple-variables-at-once-with-across"><span class="header-section-number">9.4.2</span> Multiple variables at once with across()</a></li>
+<li><a class="nav-link" href="#quick-counts"><span class="header-section-number">9.4.3</span> Quick counts</a></li>
+</ul>
+</li>
+</ul>
+
+      <div class="book-extra">
+        <ul class="list-unstyled">
+          
+        </ul>
+</div>
+    </nav>
+</div>
+
+</div>
+</div> <!-- .container -->
+
+<footer class="bg-primary text-light mt-5"><div class="container"><div class="row">
+
+  <div class="col-12 col-md-6 mt-3">
+    <p>"<strong>R and the Tidyverse: A Beginner’s Guide</strong>" was written by Vivek H. Patil. It was last built on 2026-02-27.</p>
+  </div>
+
+  <div class="col-12 col-md-6 mt-3">
+    <p>This book was built by the <a class="text-light" href="https://bookdown.org">bookdown</a> R package.</p>
+  </div>
+
+</div></div>
+</footer><!-- dynamically load mathjax for compatibility with self-contained --><script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "true";
+    if (src === "" || src === "true") src = "https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.9/latest.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:")
+      if (/^https?:/.test(src))
+        src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script><script type="text/x-mathjax-config">const popovers = document.querySelectorAll('a.footnote-ref[data-toggle="popover"]');
+for (let popover of popovers) {
+  const div = document.createElement('div');
+  div.setAttribute('style', 'position: absolute; top: 0, left:0; width:0, height:0, overflow: hidden; visibility: hidden;');
+  div.innerHTML = popover.getAttribute('data-content');
+
+  var has_math = div.querySelector("span.math");
+  if (has_math) {
+    document.body.appendChild(div);
+    MathJax.Hub.Queue(["Typeset", MathJax.Hub, div]);
+    MathJax.Hub.Queue(function() {
+      popover.setAttribute('data-content', div.innerHTML);
+      document.body.removeChild(div);
+    })
+  }
+}
 </script>
-
 </body>
-
 </html>

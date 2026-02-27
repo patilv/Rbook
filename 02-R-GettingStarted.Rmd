@@ -2,7 +2,7 @@
 
 
 ```{r include=FALSE}
-opts_chunk$set(echo=TRUE, warning=FALSE, message=FALSE)
+knitr::opts_chunk$set(echo=TRUE, warning=FALSE, message=FALSE)
 ```
 
 Alright, let's get R installed on your computer. Deep breath -- this is going to be easier than registering for classes.
@@ -108,32 +108,20 @@ Your working directory is where R looks for files and saves output. Think of it 
 
 This is the part you've been waiting for -- loading actual data into R. Whether your boss emailed you a CSV, your professor shared an Excel file, or you downloaded data from a survey platform, R can handle it.
 
-### Base R Approach
-
 Load a saved R data file:
 
 ```{r eval=FALSE}
 load("filename.Rda")
 ```
 
-Read a CSV file (the format you'll probably encounter most often):
-
-```{r eval=FALSE}
-dataname <- read.csv("datafilename.csv") # use ?read.csv to see options
-```
-
-That `<-` arrow means "take whatever's on the right and store it in the name on the left." So this line says: "Read this CSV file and call it `dataname` so I can work with it."
-
-### Tidyverse Approach (readr)
-
-The **readr** package (part of the tidyverse) provides faster and more user-friendly functions for reading data. See Chapter \@ref(dataimport) for the full deep dive.
+Read a CSV file (the format you'll probably encounter most often) using the **readr** package (part of the tidyverse). See Chapter \@ref(dataimport) for the full deep dive.
 
 ```{r eval=FALSE}
 library(readr)
 dataname <- read_csv("datafilename.csv") # returns a tibble
 ```
 
-Notice the subtle difference: `read_csv()` (with an underscore) is the tidyverse version, while `read.csv()` (with a dot) is the base R version. Both work. The tidyverse version is just a bit faster and gives you cleaner output.
+That `<-` arrow means "take whatever's on the right and store it in the name on the left." So this line says: "Read this CSV file and call it `dataname` so I can work with it." The `read_csv()` function is fast and gives you clean output.
 
 ### Excel Files
 
@@ -174,19 +162,11 @@ R can read almost any data format you throw at it. For a full list of options:
 
 You've done all this work -- don't forget to save it. Here's how to export your data back out of R.
 
-### Base R
-
 ```{r eval=FALSE}
-save(dataframename, file = "filename.Rda") # To R data
-write.csv(dataframename, file = "myfilename.csv") # to csv
-write.table(dataframename, file = "myfilename.tsv", sep = "\t") # to tab-separated file
-```
+save(dataframename, file = "filename.Rda") # To R data (preserves multiple objects)
 
-### Tidyverse (readr)
-
-```{r eval=FALSE}
 library(readr)
-write_csv(dataframename, file = "myfilename.csv") # faster, no row names by default
+write_csv(dataframename, file = "myfilename.csv") # to CSV, no row names by default
 write_rds(dataframename, file = "myfilename.rds") # single R object, preserves types
 ```
 
@@ -196,31 +176,19 @@ Pro tip: If you need to send the data to someone who only knows Excel, save it a
 
 A data frame is R's version of a spreadsheet -- rows and columns of data. If you can picture an Excel worksheet, you can picture a data frame. Let's create a simple one.
 
-### Base R
-
-```{r}
-Person <- c("A", "B", "C", "D", "E")
-Age <- c(15, 20, 25, 30, 35)
-Height <- c(60, 63, 75, 79, 56)
-page <- data.frame(Person, Age, Height)
-page
-```
-
-What happened here? We created three columns (Person, Age, Height), then stitched them together into a data frame called `page`. The `c()` function just means "combine these values into a list." Easy.
-
-### Tidyverse (tibble)
-
-The tidyverse version of a data frame is called a **tibble**. It works the same way but has a few quality-of-life improvements -- like nicer printing and not converting your text to weird factor categories behind your back.
+A **tibble** is the tidyverse version of a data frame -- it works the same way but has a few quality-of-life improvements, like nicer printing and not converting your text to weird factor categories behind your back.
 
 ```{r}
 library(tibble)
-page_tibble <- tibble(
+page <- tibble(
   Person = c("A", "B", "C", "D", "E"),
   Age = c(15, 20, 25, 30, 35),
   Height = c(60, 63, 75, 79, 56)
 )
-page_tibble
+page
 ```
+
+What happened here? We created three columns (Person, Age, Height), then stitched them together into a tibble called `page`. The `c()` function just means "combine these values into a list." Easy.
 
 You can also create small tibbles row-by-row using `tribble()`, which can be easier to read when you're typing in data manually:
 

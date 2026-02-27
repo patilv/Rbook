@@ -2,31 +2,13 @@
 
 Let's be honest: real-world data is a disaster. Customer databases have typos from that one intern who thought "N/A" and "NA" and "none" were interchangeable. Survey exports arrive with column names that look like someone fell asleep on the keyboard. And there is always --- always --- a text field hiding in what should be a numeric column. Welcome to data wrangling, the unglamorous but absolutely essential skill that separates the analyst who gets answers from the one who gets error messages.
 
-This chapter teaches you how to reshape, clean, and wrestle your data into submission using both base R and tidyverse approaches. Think of base R as the dependable Honda Civic your parents drove for fifteen years --- nothing fancy, but it never broke down. The tidyverse is the Tesla --- sleeker interface, better user experience, and everyone at the office wants to talk about it. Both get you to work on time; it is mostly a matter of preference and how much you enjoy reading your own code six months from now. For the full dplyr deep-dive, see Chapter \@ref(dplyr).
+This chapter teaches you how to reshape, clean, and wrestle your data into submission. For the full dplyr deep-dive, see Chapter \@ref(dplyr).
 
 ## Creating new variables
 
-### Base R approach
-
 In business, you constantly need variables that do not exist yet in your raw data. Total revenue? That is price times quantity, and no database on Earth ships with that pre-calculated (wouldn't that be nice). Customer lifetime value? A combination of purchase frequency, average order size, and tenure. The point is, you will spend a surprising chunk of your career creating new columns.
 
-In base R, you create new columns by assigning directly to the data frame using the `$` operator. It is like adding a new column to a spreadsheet, except you get to feel smarter about it.
-
-For example, if we wanted to create a variable in the `iris` dataset that was a sum of `Sepal.Length` and `Sepal.Width` and call it `Sepal.dimensions`:
-
-```{r eval=FALSE}
-iris$Sepal.dimensions <- iris$Sepal.Length + iris$Sepal.Width
-```
-
-There might be times when you want to overwrite an existing variable instead of creating a new one. Maybe you realized your revenue column forgot to include tax. In that case, just use the same variable name on the left side. Fair warning though --- there is no undo button. This is not Google Docs. Once you overwrite it, it is gone.
-
-```{r eval=FALSE}
-iris$Sepal.Length <- iris$Sepal.Length + iris$Sepal.Width
-```
-
-### Tidyverse approach (dplyr)
-
-The `mutate()` function from **dplyr** provides a cleaner way to create new variables. The big win here is readability --- you do not have to keep typing the data frame name over and over like you are being charged per keystroke.
+The `mutate()` function from **dplyr** provides a clean way to create new variables. The big win here is readability --- you do not have to keep typing the data frame name over and over like you are being charged per keystroke.
 
 ```{r eval=FALSE}
 library(dplyr)
@@ -36,59 +18,43 @@ iris <- iris %>%
 
 Note how `mutate()` does not require you to repeat the data frame name for each variable --- just use column names directly. Your future self will thank you when reviewing old code at 11 PM the night before a deliverable.
 
+There might be times when you want to overwrite an existing variable instead of creating a new one. Maybe you realized your revenue column forgot to include tax. In that case, just use the same variable name. Fair warning though --- there is no undo button. This is not Google Docs. Once you overwrite it, it is gone.
+
+```{r eval=FALSE}
+iris <- iris %>%
+  mutate(Sepal.Length = Sepal.Length + Sepal.Width)
+```
+
 
 
 ## Subsetting data and dropping factor levels
 
 Subsetting is basically filtering out the noise so you can focus on what matters. You have a database with 500,000 customer records and your boss only wants to see the ones who spent more than $100 last quarter. Or maybe you are analyzing survey responses but only from respondents in the Southeast region. Or perhaps you need last quarter's transactions and nothing else. Whatever the reason, subsetting is the data equivalent of saying "I only want to talk to these people."
 
-### Base R approach
-
-This creates a subset of `iris` such that `Sepal.Length` is greater than or equal to 5.8. Think of it as pulling only the VIP customers from your database --- the ones above a certain spending threshold.
-
 
 ```{r include=FALSE}
 library(dplyr)
-opts_chunk$set(echo=TRUE, warning=FALSE, message=FALSE)
+knitr::opts_chunk$set(echo=TRUE, warning=FALSE, message=FALSE)
 ```
 
+The `filter()` function from **dplyr** reads almost like plain English, which is a lifesaver when you come back to your code six months later. Think of it as pulling only the VIP customers from your database --- the ones above a certain spending threshold.
 
 ```{r}
-irisSubset1 <- iris[iris$Sepal.Length >= 5.8,]
+irisSubset1 <- iris %>% filter(Sepal.Length >= 5.8)
 summary(irisSubset1$Sepal.Length)
 ```
 
-You can also stack multiple conditions. Want customers who are both high-spending AND from the Northeast? Same idea --- just combine your filters with `&`:
+You can also stack multiple conditions. Want customers who are both high-spending AND from the Northeast? Same idea --- just combine your filters:
 
 ```{r}
-irisSubset2 <- iris[iris$Sepal.Length >= 5.8 & iris$Sepal.Width < 3,]
+irisSubset2 <- iris %>% filter(Sepal.Length >= 5.8, Sepal.Width < 3)
 summary(irisSubset2)
 ```
 
-Subsetting based on a factor variable works a bit differently. The following line of code creates a subset of the `iris` dataset that has only two types of Species --- like filtering your CRM to show only "Enterprise" and "Mid-Market" clients while ignoring the "Small Business" segment.
+Subsetting based on a factor variable works with `%in%`. The following creates a subset of the `iris` dataset that has only two types of Species --- like filtering your CRM to show only "Enterprise" and "Mid-Market" clients while ignoring the "Small Business" segment.
 
 ```{r}
-irisSubset3 <- subset(iris, Species %in% c("setosa", "versicolor"))
-# This can also be accomplished by the following statement
-# irisSubset3 <- iris[iris$Species != "virginica",]
-```
-
-### Tidyverse approach (dplyr)
-
-Here is the modern approach. The `filter()` function from **dplyr** reads almost like plain English, which is a lifesaver when you come back to your code six months later and cannot remember why you wrote `iris[iris$Sepal.Length >= 5.8,]`. (Past-you thought it was obvious. Present-you disagrees.)
-
-```{r}
-irisSubset1_tidy <- iris %>% filter(Sepal.Length >= 5.8)
-summary(irisSubset1_tidy$Sepal.Length)
-```
-
-```{r}
-irisSubset2_tidy <- iris %>% filter(Sepal.Length >= 5.8, Sepal.Width < 3)
-summary(irisSubset2_tidy)
-```
-
-```{r}
-irisSubset3_tidy <- iris %>% filter(Species %in% c("setosa", "versicolor"))
+irisSubset3 <- iris %>% filter(Species %in% c("setosa", "versicolor"))
 ```
 
 Let us verify that we indeed have only two levels of the `Species` variable.
@@ -113,29 +79,13 @@ summary(irisSubset3$Species)
 
 ## Reordering factor levels
 
-### Base R approach
-
 By default, R orders factor levels alphabetically. That is fine until you realize your customer satisfaction survey goes "Dissatisfied, Neutral, Satisfied, Very Dissatisfied, Very Satisfied" --- which is alphabetical nonsense. You need it to flow logically, from "Very Dissatisfied" to "Very Satisfied," because that is how human brains (and your manager) expect to read it. Here is how you take control.
 
 ```{r}
 levels(iris$Species)
 ```
 
-The default sequence is `setosa`, `versicolor`, and `virginica`. Let us reverse it --- because sometimes you want the premium tier listed first. (Think of how luxury brands always list their most expensive product at the top.)
-
-```{r}
-iris$Species <- factor(iris$Species, levels(iris$Species)[c(3, 2, 1)])
-```
-
-By specifying the sequence, the earlier third level now becomes the first, the second stays put, and the old first level moves to third. Let us verify:
-
-```{r}
-levels(iris$Species)
-```
-
-### Tidyverse approach (forcats)
-
-The **forcats** package (Chapter \@ref(forcats)) makes reordering factor levels feel less like solving a Rubik's Cube blindfolded. The function names actually tell you what they do, which is a refreshing change from base R's "guess what this bracket notation means" approach.
+The **forcats** package (Chapter \@ref(forcats)) makes reordering factor levels straightforward. The function names actually tell you what they do.
 
 ```{r}
 library(forcats)
@@ -152,9 +102,9 @@ levels(iris$Species)
 
 ## Reordering dataset entries
 
-### Base R approach
+Sorting data is one of those things you will do approximately fourteen times a day. Maybe you want your sales reps ranked from highest revenue to lowest so you can see who is crushing it (and who needs a pep talk). Maybe you want survey responses sorted by completion time.
 
-Sorting data is one of those things you will do approximately fourteen times a day. Maybe you want your sales reps ranked from highest revenue to lowest so you can see who is crushing it (and who needs a pep talk). Maybe you want survey responses sorted by completion time. The `order` function is your friend here, even if its syntax looks like it was designed by someone who wanted to keep a secret.
+The `arrange()` function is so readable that it almost feels like cheating. You can practically read it as a sentence: "take this data and arrange it by this column." Your code reviews will be a breeze.
 
 For example, the `Sepal.Length` of the first row of the `iris` dataset:
 
@@ -171,29 +121,15 @@ range(iris$Sepal.Length)
 Sorting in ascending order (smallest to largest --- think ranking your sales team from the newest hire to the top closer):
 
 ```{r}
-ascendingiris <- iris[order(iris$Sepal.Length),]
+ascendingiris <- iris %>% arrange(Sepal.Length)
 head(ascendingiris$Sepal.Length)
 ```
 
 And descending order --- the "show me the leaderboard" view:
 
 ```{r}
-descendingiris <- iris[order(-iris$Sepal.Length),]
+descendingiris <- iris %>% arrange(desc(Sepal.Length))
 head(descendingiris$Sepal.Length)
-```
-
-### Tidyverse approach (dplyr)
-
-The `arrange()` function is so much more readable that it almost feels like cheating. You can practically read it as a sentence: "take this data and arrange it by this column." Your code reviews will be a breeze.
-
-```{r}
-ascendingiris_tidy <- iris %>% arrange(Sepal.Length)
-head(ascendingiris_tidy$Sepal.Length)
-```
-
-```{r}
-descendingiris_tidy <- iris %>% arrange(desc(Sepal.Length))
-head(descendingiris_tidy$Sepal.Length)
 ```
 
 
@@ -201,30 +137,13 @@ head(descendingiris_tidy$Sepal.Length)
 
 Let us talk about one of the most underrated quality-of-life improvements in data analysis: giving your columns names that a human being can actually understand. Maybe your data arrived from a legacy database with column names like `X_VAR_007_Q3_FINAL_v2` or some brave soul used spaces and emojis. (Yes, this happens.) Renaming columns is a small investment that pays enormous dividends every time you or anyone else has to read the code.
 
-### Base R approach
-
 Current names of columns in dataset:
 
 ```{r}
 names(irisSubset3)
 ```
 
-Rename the `Species` column:
-
-```{r}
-names(irisSubset3)[5] <- "SpeciesWithoutvirginica"
-names(irisSubset3)
-```
-
-
-```{r eval=FALSE}
-names(dataname) <- c("newcol1", "newcol2", "newcol3") # for a 3 column dataset
-names(dataname)[3] <- "latestcol3name" # changing name for only the third column
-```
-
-### Tidyverse approach (dplyr)
-
-The `rename()` function from **dplyr** uses a `new_name = old_name` syntax, which reads more naturally --- like you are telling R "hey, this column used to be called this, now call it that":
+The `rename()` function from **dplyr** uses a `new_name = old_name` syntax, which reads naturally --- like you are telling R "hey, this column used to be called this, now call it that":
 
 ```{r eval=FALSE}
 dataname <- dataname %>% rename(newnamecol1 = oldnamecol1, newnamecol2 = oldnamecol2)
@@ -239,7 +158,7 @@ dataname <- dataname %>% rename_with(tolower)
 
 
 
-## Renaming/Collapsing factor levels
+## Renaming and collapsing factor levels
 
 Sometimes the categories in your data need a rebrand. Maybe the marketing team decided "Premium Tier" sounds better than "Segment C," or maybe you have seventeen product subcategories and your presentation has room for four. Renaming and collapsing factor levels is the data equivalent of reorganizing your company's org chart --- same people, different labels.
 
@@ -250,27 +169,36 @@ playiris=iris
 levels(playiris$Species)
 ```
 
-Pay attention to the order of the factor levels --- it matters for what comes next. We will change `virginica` to `factor3` and `versicolor` to `factor2` using two different approaches.
-
-First approach --- match by name. This is the safer method because you are being explicit about which label you are changing. It is like addressing a memo to a specific person rather than "whoever is sitting in the third chair":
+The `fct_recode()` function from **forcats** lets you rename specific levels explicitly. It is the safer method because you are being explicit about which label you are changing. It is like addressing a memo to a specific person rather than "whoever is sitting in the third chair":
 
 ```{r}
-levels(playiris$Species)[levels(playiris$Species)=="virginica"]="factor3"
+library(forcats)
+playiris$Species <- fct_recode(playiris$Species,
+  "factor3" = "virginica",
+  "factor2" = "versicolor"
+)
 levels(playiris$Species)
 ```
 
-Second approach --- match by position. This works but is riskier because if your factor levels ever change order (and they will, Murphy's Law guarantees it), you will rename the wrong category. It is like reorganizing your filing cabinet by number instead of name --- efficient until someone shuffles the folders.
+You can also rename all levels at once:
 
 ```{r}
-levels(playiris$Species)[2]="factor2"
+playiris$Species <- fct_recode(playiris$Species,
+  "newlevel1" = "setosa",
+  "newlevel2" = "factor2",
+  "newlevel3" = "factor3"
+)
 levels(playiris$Species)
 ```
 
-You can also rename all levels at once if you are feeling bold (or have had enough coffee):
+When you want to merge several categories into one --- say you have "Heavy," "Regul," and "Occas" smokers and you want to collapse them all into "Smoker" --- use `fct_collapse()`:
 
-```{r}
-levels(playiris$Species)=c("newlevel1","newlevel2","newlevel3")
-levels(playiris$Species)
+```{r eval=FALSE}
+# Example: collapsing multiple levels into fewer groups
+survey$Smoke <- fct_collapse(survey$Smoke,
+  Smoker = c("Heavy", "Regul", "Occas"),
+  NonSmoker = "Never"
+)
 ```
 
 ## Converting data types
@@ -279,7 +207,7 @@ OK, this section is the broccoli of the chapter --- not the most exciting, but a
 
 ### Factor to numeric
 
-This comes in handy when you have a factor variable with numbers as values and you want to treat it as a numeric variable. Imagine a customer satisfaction survey where ratings (1 through 5) got imported as categories instead of numbers. R sees "1" and "5" as labels, not quantities --- like seeing jersey numbers on a basketball team. The number 23 does not mean that player is "more" than player 7. This discussion is [based on this Stack Overflow post.](http://stackoverflow.com/questions/3418128/how-to-convert-a-factor-to-an-integer-numeric-without-a-loss-of-information)
+This comes in handy when you have a factor variable with numbers as values and you want to treat it as a numeric variable. Imagine a customer satisfaction survey where ratings (1 through 5) got imported as categories instead of numbers. R sees "1" and "5" as labels, not quantities --- like seeing jersey numbers on a basketball team. The number 23 does not mean that player is "more" than player 7. This discussion is [based on this Stack Overflow post.](https://stackoverflow.com/questions/3418128/how-to-convert-a-factor-to-an-integer-numeric-without-a-loss-of-information)
 
 Let us go back to the `playiris` dataset. Remember the factor levels?
 

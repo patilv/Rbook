@@ -1,0 +1,740 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<title>Chapter 4 Data Import | R and the Tidyverse: A Beginner’s Guide</title>
+<meta name="author" content="Vivek H. Patil">
+<meta name="description" content="Before you can analyze anything, you have to get data into R. That sounds obvious, but it trips people up more often than you’d think. Your boss emails you a CSV. A client sends over an Excel...">
+<meta name="generator" content="bookdown 0.46 with bs4_book()">
+<meta property="og:title" content="Chapter 4 Data Import | R and the Tidyverse: A Beginner’s Guide">
+<meta property="og:type" content="book">
+<meta property="og:image" content="/cover.png">
+<meta property="og:description" content="Before you can analyze anything, you have to get data into R. That sounds obvious, but it trips people up more often than you’d think. Your boss emails you a CSV. A client sends over an Excel...">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Chapter 4 Data Import | R and the Tidyverse: A Beginner’s Guide">
+<meta name="twitter:description" content="Before you can analyze anything, you have to get data into R. That sounds obvious, but it trips people up more often than you’d think. Your boss emails you a CSV. A client sends over an Excel...">
+<meta name="twitter:image" content="/cover.png">
+<!-- JS --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script><script src="https://kit.fontawesome.com/6ecbd6c532.js" crossorigin="anonymous"></script><script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<link href="libs/bootstrap-4.6.0/bootstrap.min.css" rel="stylesheet">
+<script src="libs/bootstrap-4.6.0/bootstrap.bundle.min.js"></script><script src="libs/bs3compat-0.10.0/transition.js"></script><script src="libs/bs3compat-0.10.0/tabs.js"></script><script src="libs/bs3compat-0.10.0/bs3compat.js"></script><link href="libs/bs4_book-1.0.0/bs4_book.css" rel="stylesheet">
+<script src="libs/bs4_book-1.0.0/bs4_book.js"></script><link href="libs/htmltools-fill-0.5.9/fill.css" rel="stylesheet">
+<script src="libs/htmlwidgets-1.6.4/htmlwidgets.js"></script><link href="libs/datatables-css-0.0.0/datatables-crosstalk.css" rel="stylesheet">
+<script src="libs/datatables-binding-0.34.0/datatables.js"></script><link href="libs/dt-core-1.13.6/css/jquery.dataTables.min.css" rel="stylesheet">
+<link href="libs/dt-core-1.13.6/css/jquery.dataTables.extra.css" rel="stylesheet">
+<script src="libs/dt-core-1.13.6/js/jquery.dataTables.min.js"></script><link href="libs/crosstalk-1.2.2/css/crosstalk.min.css" rel="stylesheet">
+<script src="libs/crosstalk-1.2.2/js/crosstalk.min.js"></script><script src="libs/plotly-binding-4.12.0/plotly.js"></script><script src="libs/typedarray-0.1/typedarray.min.js"></script><link href="libs/plotly-htmlwidgets-css-2.25.2/plotly-htmlwidgets.css" rel="stylesheet">
+<script src="libs/plotly-main-2.25.2/plotly-latest.min.js"></script><script src="libs/kePrint-0.0.1/kePrint.js"></script><link href="libs/lightable-0.0.1/lightable.css" rel="stylesheet">
+<link href="libs/nouislider-7.0.10/jquery.nouislider.min.css" rel="stylesheet">
+<script src="libs/nouislider-7.0.10/jquery.nouislider.min.js"></script><link href="libs/selectize-0.12.0/selectize.bootstrap3.css" rel="stylesheet">
+<script src="libs/selectize-0.12.0/selectize.min.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/autocomplete.js/0.38.0/autocomplete.jquery.min.js" integrity="sha512-GU9ayf+66Xx2TmpxqJpliWbT5PiGYxpaG8rfnBEk1LL8l1KGkRShhngwdXK1UgqhAzWpZHSiYPc09/NwDQIGyg==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/mark.min.js" integrity="sha512-5CYOlHXGh6QpOFA/TeTylKLWfB3ftPsde7AnmhuitiTX4K5SqCLBeKro6sPS8ilsz1Q4NRx3v8Ko2IBiszzdww==" crossorigin="anonymous"></script><!-- CSS --><style type="text/css">
+    
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  </style>
+<style type="text/css">
+    /* Used with Pandoc 2.11+ new --citeproc when CSL is used */
+    div.csl-bib-body { }
+    div.csl-entry {
+      clear: both;
+          margin-bottom: 0em;
+        }
+    .hanging div.csl-entry {
+      margin-left:2em;
+      text-indent:-2em;
+    }
+    div.csl-left-margin {
+      min-width:2em;
+      float:left;
+    }
+    div.csl-right-inline {
+      margin-left:2em;
+      padding-left:1em;
+    }
+    div.csl-indent {
+      margin-left: 2em;
+    }
+  </style>
+<link rel="stylesheet" href="style.css">
+</head>
+<body data-spy="scroll" data-target="#toc">
+
+<div class="container-fluid">
+<div class="row">
+  <header class="col-sm-12 col-lg-3 sidebar sidebar-book"><a class="sr-only sr-only-focusable" href="#content">Skip to main content</a>
+
+    <div class="d-flex align-items-start justify-content-between">
+      <h1>
+        <a href="index.html" title="">R and the Tidyverse: A Beginner’s Guide</a>
+      </h1>
+      <button class="btn btn-outline-primary d-lg-none ml-2 mt-1" type="button" data-toggle="collapse" data-target="#main-nav" aria-expanded="true" aria-controls="main-nav"><i class="fas fa-bars"></i><span class="sr-only">Show table of contents</span></button>
+    </div>
+
+    <div id="main-nav" class="collapse-lg">
+      <form role="search">
+        <input id="search" class="form-control" type="search" placeholder="Search" aria-label="Search">
+</form>
+
+      <nav aria-label="Table of contents"><h2>Table of contents</h2>
+        <ul class="book-toc list-unstyled">
+<li><a class="" href="index.html">Preface</a></li>
+<li><a class="" href="introR.html"><span class="header-section-number">1</span> Introduction to R</a></li>
+<li><a class="" href="Rgettingstarted.html"><span class="header-section-number">2</span> Getting Started with R</a></li>
+<li><a class="" href="tidyverse.html"><span class="header-section-number">3</span> Your Data Analysis Toolkit</a></li>
+<li><a class="active" href="dataimport.html"><span class="header-section-number">4</span> Data Import</a></li>
+<li><a class="" href="describedata.html"><span class="header-section-number">5</span> Describing Data</a></li>
+<li><a class="" href="modifydata.html"><span class="header-section-number">6</span> Modifying Data</a></li>
+<li><a class="" href="dplyr.html"><span class="header-section-number">7</span> Data Wrangling with dplyr</a></li>
+<li><a class="" href="tidyr.html"><span class="header-section-number">8</span> Tidy Data with tidyr</a></li>
+<li><a class="" href="summarystats.html"><span class="header-section-number">9</span> Summary Statistics</a></li>
+<li><a class="" href="ggplot2basics.html"><span class="header-section-number">10</span> Data Visualization with ggplot2</a></li>
+<li><a class="" href="ggplot2customize.html"><span class="header-section-number">11</span> Customizing ggplot2 Visualizations</a></li>
+<li><a class="" href="singlevar.html"><span class="header-section-number">12</span> Single Variable Analysis</a></li>
+<li><a class="" href="multivar.html"><span class="header-section-number">13</span> Relationships Between Variables</a></li>
+<li><a class="" href="stringr.html"><span class="header-section-number">14</span> Working with Text Data</a></li>
+<li><a class="" href="forcats.html"><span class="header-section-number">15</span> Wrangling Categories with forcats</a></li>
+<li><a class="" href="lubridate.html"><span class="header-section-number">16</span> Working with Dates and Times</a></li>
+<li><a class="" href="purrr.html"><span class="header-section-number">17</span> Doing the Same Thing to Many Things at Once</a></li>
+<li><a class="" href="rmarkdown.html"><span class="header-section-number">18</span> R Markdown</a></li>
+<li><a class="" href="rmarkdown-advanced.html"><span class="header-section-number">19</span> Advanced R Markdown</a></li>
+</ul>
+
+        <div class="book-extra">
+          
+        </div>
+      </nav>
+</div>
+  </header><main class="col-sm-12 col-md-9 col-lg-7" id="content"><div id="dataimport" class="section level1" number="4">
+<h1>
+<span class="header-section-number">4</span> Data Import<a class="anchor" aria-label="anchor" href="#dataimport"><i class="fas fa-link"></i></a>
+</h1>
+<p>Before you can analyze anything, you have to get data into R. That sounds obvious, but it trips people up more often than you’d think. Your boss emails you a CSV. A client sends over an Excel workbook with six tabs. Someone from the research team hands you a mysterious <code>.sav</code> file from SPSS. This chapter shows you how to handle all of it.</p>
+<p>We’ll use three packages: <strong>readr</strong> (for CSV and other text files), <strong>readxl</strong> (for Excel), and <strong>haven</strong> (for SPSS/Stata/SAS files). The first one loads automatically with the tidyverse; the other two you load separately.</p>
+<div class="sourceCode" id="cb53"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://tidyverse.tidyverse.org">tidyverse</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://readxl.tidyverse.org">readxl</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://haven.tidyverse.org">haven</a></span><span class="op">)</span></span></code></pre></div>
+<div id="csv" class="section level2" number="4.1">
+<h2>
+<span class="header-section-number">4.1</span> Reading CSV Files<a class="anchor" aria-label="anchor" href="#csv"><i class="fas fa-link"></i></a>
+</h2>
+<p>CSV files are the lingua franca of data. If someone says “I’ll send you the data,” there’s a 90% chance it’s a CSV. The function you want is <code><a href="https://readr.tidyverse.org/reference/read_delim.html">read_csv()</a></code> from the readr package.</p>
+<div id="why-read_csv-instead-of-read.csv" class="section level3" number="4.1.1">
+<h3>
+<span class="header-section-number">4.1.1</span> Why read_csv() Instead of read.csv()?<a class="anchor" aria-label="anchor" href="#why-read_csv-instead-of-read.csv"><i class="fas fa-link"></i></a>
+</h3>
+<p>Base R has <code><a href="https://rdrr.io/r/utils/read.table.html">read.csv()</a></code>. It works, but <code><a href="https://readr.tidyverse.org/reference/read_delim.html">read_csv()</a></code> is better in almost every way:</p>
+<ul>
+<li>It’s <strong>faster</strong>, especially on large files (like that 500,000-row sales export).</li>
+<li>It returns a <strong>tibble</strong> instead of a plain data frame, so it prints nicely.</li>
+<li>It <strong>doesn’t silently convert your text to factors</strong>. (If you’ve ever had “Q1 Revenue” turn into a mystery number, you know the pain.)</li>
+<li>It <strong>tells you how it parsed each column</strong>, so you can catch problems early.</li>
+</ul>
+<p>Let’s see it in action. <code><a href="https://readr.tidyverse.org/reference/read_delim.html">read_csv()</a></code> can even read data from an inline string, which is handy for quick demos.</p>
+<div class="sourceCode" id="cb54"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">sample_data</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://readr.tidyverse.org/reference/read_delim.html">read_csv</a></span><span class="op">(</span></span>
+<span>  <span class="st">"name,age,score,enrolled</span></span>
+<span><span class="st">   Alice,25,92.5,TRUE</span></span>
+<span><span class="st">   Bob,30,88.0,TRUE</span></span>
+<span><span class="st">   Charlie,22,95.3,FALSE</span></span>
+<span><span class="st">   Diana,28,79.1,TRUE</span></span>
+<span><span class="st">   Eve,35,85.6,FALSE"</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">sample_data</span></span>
+<span><span class="co">#&gt; # A tibble: 5 × 4</span></span>
+<span><span class="co">#&gt;   name      age score enrolled</span></span>
+<span><span class="co">#&gt;   &lt;chr&gt;   &lt;dbl&gt; &lt;dbl&gt; &lt;lgl&gt;   </span></span>
+<span><span class="co">#&gt; 1 Alice      25  92.5 TRUE    </span></span>
+<span><span class="co">#&gt; 2 Bob        30  88   TRUE    </span></span>
+<span><span class="co">#&gt; 3 Charlie    22  95.3 FALSE   </span></span>
+<span><span class="co">#&gt; 4 Diana      28  79.1 TRUE    </span></span>
+<span><span class="co">#&gt; 5 Eve        35  85.6 FALSE</span></span></code></pre></div>
+<p>See that message? It’s telling you it read <code>name</code> as text, <code>age</code> and <code>score</code> as numbers, and <code>enrolled</code> as TRUE/FALSE. That’s the kind of transparency you want.</p>
+</div>
+<div id="the-arguments-youll-actually-use" class="section level3" number="4.1.2">
+<h3>
+<span class="header-section-number">4.1.2</span> The Arguments You’ll Actually Use<a class="anchor" aria-label="anchor" href="#the-arguments-youll-actually-use"><i class="fas fa-link"></i></a>
+</h3>
+<p><strong>col_names</strong> – By default, the first row is treated as column headers. If your file doesn’t have headers (looking at you, legacy systems), set <code>col_names = FALSE</code> or supply your own names.</p>
+<div class="sourceCode" id="cb55"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://readr.tidyverse.org/reference/read_delim.html">read_csv</a></span><span class="op">(</span></span>
+<span>  <span class="st">"1,2,3\n4,5,6\n7,8,9"</span>,</span>
+<span>  col_names <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"x"</span>, <span class="st">"y"</span>, <span class="st">"z"</span><span class="op">)</span></span>
+<span><span class="op">)</span></span>
+<span><span class="co">#&gt; # A tibble: 3 × 3</span></span>
+<span><span class="co">#&gt;       x     y     z</span></span>
+<span><span class="co">#&gt;   &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;</span></span>
+<span><span class="co">#&gt; 1     1     2     3</span></span>
+<span><span class="co">#&gt; 2     4     5     6</span></span>
+<span><span class="co">#&gt; 3     7     8     9</span></span></code></pre></div>
+<p><strong>na</strong> – Different systems represent missing data differently. Some use blanks, some use “N/A”, some use “.” because… reasons. Tell R what to look for.</p>
+<div class="sourceCode" id="cb56"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://readr.tidyverse.org/reference/read_delim.html">read_csv</a></span><span class="op">(</span></span>
+<span>  <span class="st">"name,value\nAlice,10\nBob,N/A\nCharlie,."</span>,</span>
+<span>  na <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">""</span>, <span class="st">"NA"</span>, <span class="st">"N/A"</span>, <span class="st">"."</span><span class="op">)</span></span>
+<span><span class="op">)</span></span>
+<span><span class="co">#&gt; # A tibble: 3 × 2</span></span>
+<span><span class="co">#&gt;   name    value</span></span>
+<span><span class="co">#&gt;   &lt;chr&gt;   &lt;dbl&gt;</span></span>
+<span><span class="co">#&gt; 1 Alice      10</span></span>
+<span><span class="co">#&gt; 2 Bob        NA</span></span>
+<span><span class="co">#&gt; 3 Charlie    NA</span></span></code></pre></div>
+<p><strong>skip</strong> – If the file has junk at the top (report headers, timestamps, disclaimers), skip those lines.</p>
+<div class="sourceCode" id="cb57"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://readr.tidyverse.org/reference/read_delim.html">read_csv</a></span><span class="op">(</span></span>
+<span>  <span class="st">"This is a comment line\nAnother comment\nname,value\nAlice,10\nBob,20"</span>,</span>
+<span>  skip <span class="op">=</span> <span class="fl">2</span></span>
+<span><span class="op">)</span></span>
+<span><span class="co">#&gt; # A tibble: 2 × 2</span></span>
+<span><span class="co">#&gt;   name  value</span></span>
+<span><span class="co">#&gt;   &lt;chr&gt; &lt;dbl&gt;</span></span>
+<span><span class="co">#&gt; 1 Alice    10</span></span>
+<span><span class="co">#&gt; 2 Bob      20</span></span></code></pre></div>
+<p><strong>n_max</strong> – Got a 2-million-row file and just want to peek at it? Read only the first few rows.</p>
+<div class="sourceCode" id="cb58"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://readr.tidyverse.org/reference/read_delim.html">read_csv</a></span><span class="op">(</span></span>
+<span>  <span class="st">"name,value\nAlice,10\nBob,20\nCharlie,30\nDiana,40"</span>,</span>
+<span>  n_max <span class="op">=</span> <span class="fl">2</span></span>
+<span><span class="op">)</span></span>
+<span><span class="co">#&gt; # A tibble: 2 × 2</span></span>
+<span><span class="co">#&gt;   name  value</span></span>
+<span><span class="co">#&gt;   &lt;chr&gt; &lt;dbl&gt;</span></span>
+<span><span class="co">#&gt; 1 Alice    10</span></span>
+<span><span class="co">#&gt; 2 Bob      20</span></span></code></pre></div>
+</div>
+<div id="specifying-column-types" class="section level3" number="4.1.3">
+<h3>
+<span class="header-section-number">4.1.3</span> Specifying Column Types<a class="anchor" aria-label="anchor" href="#specifying-column-types"><i class="fas fa-link"></i></a>
+</h3>
+<p>Sometimes R guesses wrong. The classic example: zip codes. If a zip code starts with 0 (like 02134 for Boston), R will read it as the number 2134 and silently drop the leading zero. Not great.</p>
+<div class="sourceCode" id="cb59"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Problem: leading zero gets eaten</span></span>
+<span><span class="va">problem_data</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://readr.tidyverse.org/reference/read_delim.html">read_csv</a></span><span class="op">(</span></span>
+<span>  <span class="st">"id,zipcode,amount\n1,02134,100\n2,10001,200\n3,90210,300"</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">problem_data</span></span>
+<span><span class="co">#&gt; # A tibble: 3 × 3</span></span>
+<span><span class="co">#&gt;      id zipcode amount</span></span>
+<span><span class="co">#&gt;   &lt;dbl&gt; &lt;chr&gt;    &lt;dbl&gt;</span></span>
+<span><span class="co">#&gt; 1     1 02134      100</span></span>
+<span><span class="co">#&gt; 2     2 10001      200</span></span>
+<span><span class="co">#&gt; 3     3 90210      300</span></span></code></pre></div>
+<p>The fix: tell R that <code>zipcode</code> is text, not a number.</p>
+<div class="sourceCode" id="cb60"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">fixed_data</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://readr.tidyverse.org/reference/read_delim.html">read_csv</a></span><span class="op">(</span></span>
+<span>  <span class="st">"id,zipcode,amount\n1,02134,100\n2,10001,200\n3,90210,300"</span>,</span>
+<span>  col_types <span class="op">=</span> <span class="fu"><a href="https://readr.tidyverse.org/reference/cols.html">cols</a></span><span class="op">(</span>zipcode <span class="op">=</span> <span class="fu"><a href="https://readr.tidyverse.org/reference/parse_atomic.html">col_character</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">fixed_data</span></span>
+<span><span class="co">#&gt; # A tibble: 3 × 3</span></span>
+<span><span class="co">#&gt;      id zipcode amount</span></span>
+<span><span class="co">#&gt;   &lt;dbl&gt; &lt;chr&gt;    &lt;dbl&gt;</span></span>
+<span><span class="co">#&gt; 1     1 02134      100</span></span>
+<span><span class="co">#&gt; 2     2 10001      200</span></span>
+<span><span class="co">#&gt; 3     3 90210      300</span></span></code></pre></div>
+<p>You can also use a compact shorthand where each letter represents a type: <code>c</code> = character, <code>i</code> = integer, <code>d</code> = double, <code>l</code> = logical, <code>_</code> = skip the column entirely.</p>
+<div class="sourceCode" id="cb61"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://readr.tidyverse.org/reference/read_delim.html">read_csv</a></span><span class="op">(</span></span>
+<span>  <span class="st">"id,name,score,active\n1,Alice,92.5,TRUE\n2,Bob,88.0,FALSE"</span>,</span>
+<span>  col_types <span class="op">=</span> <span class="st">"icdc"</span></span>
+<span><span class="op">)</span></span>
+<span><span class="co">#&gt; # A tibble: 2 × 4</span></span>
+<span><span class="co">#&gt;      id name  score active</span></span>
+<span><span class="co">#&gt;   &lt;int&gt; &lt;chr&gt; &lt;dbl&gt; &lt;chr&gt; </span></span>
+<span><span class="co">#&gt; 1     1 Alice  92.5 TRUE  </span></span>
+<span><span class="co">#&gt; 2     2 Bob    88   FALSE</span></span></code></pre></div>
+<p>If you only need certain columns from a massive file, <code><a href="https://readr.tidyverse.org/reference/cols.html">cols_only()</a></code> lets you cherry-pick.</p>
+<div class="sourceCode" id="cb62"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://readr.tidyverse.org/reference/read_delim.html">read_csv</a></span><span class="op">(</span></span>
+<span>  <span class="st">"id,name,score,active\n1,Alice,92.5,TRUE\n2,Bob,88.0,FALSE"</span>,</span>
+<span>  col_types <span class="op">=</span> <span class="fu"><a href="https://readr.tidyverse.org/reference/cols.html">cols_only</a></span><span class="op">(</span></span>
+<span>    name <span class="op">=</span> <span class="fu"><a href="https://readr.tidyverse.org/reference/parse_atomic.html">col_character</a></span><span class="op">(</span><span class="op">)</span>,</span>
+<span>    score <span class="op">=</span> <span class="fu"><a href="https://readr.tidyverse.org/reference/parse_atomic.html">col_double</a></span><span class="op">(</span><span class="op">)</span></span>
+<span>  <span class="op">)</span></span>
+<span><span class="op">)</span></span>
+<span><span class="co">#&gt; # A tibble: 2 × 2</span></span>
+<span><span class="co">#&gt;   name  score</span></span>
+<span><span class="co">#&gt;   &lt;chr&gt; &lt;dbl&gt;</span></span>
+<span><span class="co">#&gt; 1 Alice  92.5</span></span>
+<span><span class="co">#&gt; 2 Bob    88</span></span></code></pre></div>
+</div>
+</div>
+<div id="other-delimited-files" class="section level2" number="4.2">
+<h2>
+<span class="header-section-number">4.2</span> Other Delimited Files<a class="anchor" aria-label="anchor" href="#other-delimited-files"><i class="fas fa-link"></i></a>
+</h2>
+<p>Not everything is comma-separated. Some files use tabs, pipes, or semicolons. readr has you covered.</p>
+<div class="sourceCode" id="cb63"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Tab-separated</span></span>
+<span><span class="fu"><a href="https://readr.tidyverse.org/reference/read_delim.html">read_tsv</a></span><span class="op">(</span></span>
+<span>  <span class="st">"name\tage\tscore\nAlice\t25\t92.5\nBob\t30\t88.0"</span></span>
+<span><span class="op">)</span></span>
+<span><span class="co">#&gt; # A tibble: 2 × 3</span></span>
+<span><span class="co">#&gt;   name    age score</span></span>
+<span><span class="co">#&gt;   &lt;chr&gt; &lt;dbl&gt; &lt;dbl&gt;</span></span>
+<span><span class="co">#&gt; 1 Alice    25  92.5</span></span>
+<span><span class="co">#&gt; 2 Bob      30  88</span></span></code></pre></div>
+<div class="sourceCode" id="cb64"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Pipe-delimited (sometimes you'll see this from older database exports)</span></span>
+<span><span class="fu"><a href="https://readr.tidyverse.org/reference/read_delim.html">read_delim</a></span><span class="op">(</span></span>
+<span>  <span class="st">"name|age|score\nAlice|25|92.5\nBob|30|88.0"</span>,</span>
+<span>  delim <span class="op">=</span> <span class="st">"|"</span></span>
+<span><span class="op">)</span></span>
+<span><span class="co">#&gt; # A tibble: 2 × 3</span></span>
+<span><span class="co">#&gt;   name    age score</span></span>
+<span><span class="co">#&gt;   &lt;chr&gt; &lt;dbl&gt; &lt;dbl&gt;</span></span>
+<span><span class="co">#&gt; 1 Alice    25  92.5</span></span>
+<span><span class="co">#&gt; 2 Bob      30  88</span></span></code></pre></div>
+<p>If you’re working with European-format CSVs (semicolons as delimiters, commas as decimal marks), use <code><a href="https://readr.tidyverse.org/reference/read_delim.html">read_csv2()</a></code>. This comes up more than you’d expect in international business.</p>
+<div class="sourceCode" id="cb65"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://readr.tidyverse.org/reference/read_delim.html">read_csv2</a></span><span class="op">(</span></span>
+<span>  <span class="st">"name;age;score\nAlice;25;92,5\nBob;30;88,0"</span></span>
+<span><span class="op">)</span></span>
+<span><span class="co">#&gt; # A tibble: 2 × 3</span></span>
+<span><span class="co">#&gt;   name    age score</span></span>
+<span><span class="co">#&gt;   &lt;chr&gt; &lt;dbl&gt; &lt;dbl&gt;</span></span>
+<span><span class="co">#&gt; 1 Alice    25  92.5</span></span>
+<span><span class="co">#&gt; 2 Bob      30  88</span></span></code></pre></div>
+</div>
+<div id="excel" class="section level2" number="4.3">
+<h2>
+<span class="header-section-number">4.3</span> Reading Excel Files<a class="anchor" aria-label="anchor" href="#excel"><i class="fas fa-link"></i></a>
+</h2>
+<p>Let’s be honest: in business, Excel is king. Your quarterly reports, your budget forecasts, your customer lists – they’re probably all in <code>.xlsx</code> files. The <strong>readxl</strong> package handles these beautifully.</p>
+<div id="the-basics" class="section level3" number="4.3.1">
+<h3>
+<span class="header-section-number">4.3.1</span> The Basics<a class="anchor" aria-label="anchor" href="#the-basics"><i class="fas fa-link"></i></a>
+</h3>
+<p><code><a href="https://readxl.tidyverse.org/reference/read_excel.html">read_excel()</a></code> auto-detects whether a file is <code>.xls</code> or <code>.xlsx</code> and just works.</p>
+<div class="sourceCode" id="cb66"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># readxl comes with example files for practice</span></span>
+<span><span class="va">datasets_path</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://readxl.tidyverse.org/reference/readxl_example.html">readxl_example</a></span><span class="op">(</span><span class="st">"datasets.xlsx"</span><span class="op">)</span></span>
+<span><span class="va">datasets_data</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://readxl.tidyverse.org/reference/read_excel.html">read_excel</a></span><span class="op">(</span><span class="va">datasets_path</span><span class="op">)</span></span>
+<span><span class="va">datasets_data</span></span>
+<span><span class="co">#&gt; # A tibble: 32 × 11</span></span>
+<span><span class="co">#&gt;      mpg   cyl  disp    hp  drat    wt  qsec    vs    am  gear  carb</span></span>
+<span><span class="co">#&gt;    &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;</span></span>
+<span><span class="co">#&gt;  1  21       6  160    110  3.9   2.62  16.5     0     1     4     4</span></span>
+<span><span class="co">#&gt;  2  21       6  160    110  3.9   2.88  17.0     0     1     4     4</span></span>
+<span><span class="co">#&gt;  3  22.8     4  108     93  3.85  2.32  18.6     1     1     4     1</span></span>
+<span><span class="co">#&gt;  4  21.4     6  258    110  3.08  3.22  19.4     1     0     3     1</span></span>
+<span><span class="co">#&gt;  5  18.7     8  360    175  3.15  3.44  17.0     0     0     3     2</span></span>
+<span><span class="co">#&gt;  6  18.1     6  225    105  2.76  3.46  20.2     1     0     3     1</span></span>
+<span><span class="co">#&gt;  7  14.3     8  360    245  3.21  3.57  15.8     0     0     3     4</span></span>
+<span><span class="co">#&gt;  8  24.4     4  147.    62  3.69  3.19  20       1     0     4     2</span></span>
+<span><span class="co">#&gt;  9  22.8     4  141.    95  3.92  3.15  22.9     1     0     4     2</span></span>
+<span><span class="co">#&gt; 10  19.2     6  168.   123  3.92  3.44  18.3     1     0     4     4</span></span>
+<span><span class="co">#&gt; # ℹ 22 more rows</span></span></code></pre></div>
+</div>
+<div id="working-with-sheets" class="section level3" number="4.3.2">
+<h3>
+<span class="header-section-number">4.3.2</span> Working with Sheets<a class="anchor" aria-label="anchor" href="#working-with-sheets"><i class="fas fa-link"></i></a>
+</h3>
+<p>Excel workbooks usually have multiple sheets – maybe “Q1 Sales,” “Q2 Sales,” “Summary.” You can pick which sheet to read.</p>
+<div class="sourceCode" id="cb67"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># See what sheets are available</span></span>
+<span><span class="fu"><a href="https://readxl.tidyverse.org/reference/excel_sheets.html">excel_sheets</a></span><span class="op">(</span><span class="va">datasets_path</span><span class="op">)</span></span>
+<span><span class="co">#&gt; [1] "mtcars"   "chickwts" "quakes"</span></span></code></pre></div>
+<div class="sourceCode" id="cb68"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Read a specific sheet by name</span></span>
+<span><span class="va">mtcars_data</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://readxl.tidyverse.org/reference/read_excel.html">read_excel</a></span><span class="op">(</span><span class="va">datasets_path</span>, sheet <span class="op">=</span> <span class="st">"mtcars"</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">mtcars_data</span><span class="op">)</span></span>
+<span><span class="co">#&gt; # A tibble: 6 × 11</span></span>
+<span><span class="co">#&gt;     mpg   cyl  disp    hp  drat    wt  qsec    vs    am  gear  carb</span></span>
+<span><span class="co">#&gt;   &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;</span></span>
+<span><span class="co">#&gt; 1  21       6   160   110  3.9   2.62  16.5     0     1     4     4</span></span>
+<span><span class="co">#&gt; 2  21       6   160   110  3.9   2.88  17.0     0     1     4     4</span></span>
+<span><span class="co">#&gt; 3  22.8     4   108    93  3.85  2.32  18.6     1     1     4     1</span></span>
+<span><span class="co">#&gt; 4  21.4     6   258   110  3.08  3.22  19.4     1     0     3     1</span></span>
+<span><span class="co">#&gt; 5  18.7     8   360   175  3.15  3.44  17.0     0     0     3     2</span></span>
+<span><span class="co">#&gt; 6  18.1     6   225   105  2.76  3.46  20.2     1     0     3     1</span></span></code></pre></div>
+<div class="sourceCode" id="cb69"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Or by position (the 3rd sheet)</span></span>
+<span><span class="va">quakes_data</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://readxl.tidyverse.org/reference/read_excel.html">read_excel</a></span><span class="op">(</span><span class="va">datasets_path</span>, sheet <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">quakes_data</span><span class="op">)</span></span>
+<span><span class="co">#&gt; # A tibble: 6 × 5</span></span>
+<span><span class="co">#&gt;     lat  long depth   mag stations</span></span>
+<span><span class="co">#&gt;   &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;    &lt;dbl&gt;</span></span>
+<span><span class="co">#&gt; 1 -20.4  182.   562   4.8       41</span></span>
+<span><span class="co">#&gt; 2 -20.6  181.   650   4.2       15</span></span>
+<span><span class="co">#&gt; 3 -26    184.    42   5.4       43</span></span>
+<span><span class="co">#&gt; 4 -18.0  182.   626   4.1       19</span></span>
+<span><span class="co">#&gt; 5 -20.4  182.   649   4         11</span></span>
+<span><span class="co">#&gt; 6 -19.7  184.   195   4         12</span></span></code></pre></div>
+</div>
+<div id="reading-specific-cell-ranges" class="section level3" number="4.3.3">
+<h3>
+<span class="header-section-number">4.3.3</span> Reading Specific Cell Ranges<a class="anchor" aria-label="anchor" href="#reading-specific-cell-ranges"><i class="fas fa-link"></i></a>
+</h3>
+<p>Sometimes you don’t want the whole sheet. Maybe the data you need is in cells B2:F50, and there’s a bunch of formatting garbage around it. The <code>range</code> argument uses Excel-style cell references, so it feels familiar.</p>
+<div class="sourceCode" id="cb70"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Read a specific cell range</span></span>
+<span><span class="fu"><a href="https://readxl.tidyverse.org/reference/read_excel.html">read_excel</a></span><span class="op">(</span><span class="va">datasets_path</span>, range <span class="op">=</span> <span class="st">"mtcars!B1:D5"</span><span class="op">)</span></span>
+<span><span class="co">#&gt; # A tibble: 4 × 3</span></span>
+<span><span class="co">#&gt;     cyl  disp    hp</span></span>
+<span><span class="co">#&gt;   &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;</span></span>
+<span><span class="co">#&gt; 1     6   160   110</span></span>
+<span><span class="co">#&gt; 2     6   160   110</span></span>
+<span><span class="co">#&gt; 3     4   108    93</span></span>
+<span><span class="co">#&gt; 4     6   258   110</span></span></code></pre></div>
+<div class="sourceCode" id="cb71"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Read specific rows</span></span>
+<span><span class="fu"><a href="https://readxl.tidyverse.org/reference/read_excel.html">read_excel</a></span><span class="op">(</span><span class="va">datasets_path</span>, sheet <span class="op">=</span> <span class="st">"mtcars"</span>, range <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/cellranger/man/cell_rows.html">cell_rows</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">6</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="co">#&gt; # A tibble: 5 × 11</span></span>
+<span><span class="co">#&gt;     mpg   cyl  disp    hp  drat    wt  qsec    vs    am  gear  carb</span></span>
+<span><span class="co">#&gt;   &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;</span></span>
+<span><span class="co">#&gt; 1  21       6   160   110  3.9   2.62  16.5     0     1     4     4</span></span>
+<span><span class="co">#&gt; 2  21       6   160   110  3.9   2.88  17.0     0     1     4     4</span></span>
+<span><span class="co">#&gt; 3  22.8     4   108    93  3.85  2.32  18.6     1     1     4     1</span></span>
+<span><span class="co">#&gt; 4  21.4     6   258   110  3.08  3.22  19.4     1     0     3     1</span></span>
+<span><span class="co">#&gt; 5  18.7     8   360   175  3.15  3.44  17.0     0     0     3     2</span></span></code></pre></div>
+<div class="sourceCode" id="cb72"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Read specific columns</span></span>
+<span><span class="fu"><a href="https://readxl.tidyverse.org/reference/read_excel.html">read_excel</a></span><span class="op">(</span><span class="va">datasets_path</span>, sheet <span class="op">=</span> <span class="st">"mtcars"</span>, range <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/cellranger/man/cell_cols.html">cell_cols</a></span><span class="op">(</span><span class="st">"A:C"</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="co">#&gt; # A tibble: 32 × 3</span></span>
+<span><span class="co">#&gt;      mpg   cyl  disp</span></span>
+<span><span class="co">#&gt;    &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;</span></span>
+<span><span class="co">#&gt;  1  21       6  160 </span></span>
+<span><span class="co">#&gt;  2  21       6  160 </span></span>
+<span><span class="co">#&gt;  3  22.8     4  108 </span></span>
+<span><span class="co">#&gt;  4  21.4     6  258 </span></span>
+<span><span class="co">#&gt;  5  18.7     8  360 </span></span>
+<span><span class="co">#&gt;  6  18.1     6  225 </span></span>
+<span><span class="co">#&gt;  7  14.3     8  360 </span></span>
+<span><span class="co">#&gt;  8  24.4     4  147.</span></span>
+<span><span class="co">#&gt;  9  22.8     4  141.</span></span>
+<span><span class="co">#&gt; 10  19.2     6  168.</span></span>
+<span><span class="co">#&gt; # ℹ 22 more rows</span></span></code></pre></div>
+<p>Just like <code><a href="https://readr.tidyverse.org/reference/read_delim.html">read_csv()</a></code>, you can use <code>na</code>, <code>skip</code>, <code>col_names</code>, and <code>n_max</code> to handle messy Excel files.</p>
+<div class="sourceCode" id="cb73"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://readxl.tidyverse.org/reference/read_excel.html">read_excel</a></span><span class="op">(</span></span>
+<span>  <span class="va">datasets_path</span>,</span>
+<span>  sheet <span class="op">=</span> <span class="st">"chickwts"</span>,</span>
+<span>  na <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">""</span>, <span class="st">"NA"</span><span class="op">)</span>,</span>
+<span>  skip <span class="op">=</span> <span class="fl">0</span>,</span>
+<span>  n_max <span class="op">=</span> <span class="fl">5</span></span>
+<span><span class="op">)</span></span>
+<span><span class="co">#&gt; # A tibble: 5 × 2</span></span>
+<span><span class="co">#&gt;   weight feed     </span></span>
+<span><span class="co">#&gt;    &lt;dbl&gt; &lt;chr&gt;    </span></span>
+<span><span class="co">#&gt; 1    179 horsebean</span></span>
+<span><span class="co">#&gt; 2    160 horsebean</span></span>
+<span><span class="co">#&gt; 3    136 horsebean</span></span>
+<span><span class="co">#&gt; 4    227 horsebean</span></span>
+<span><span class="co">#&gt; 5    217 horsebean</span></span></code></pre></div>
+</div>
+</div>
+<div id="spss-stata-and-sas-files" class="section level2" number="4.4">
+<h2>
+<span class="header-section-number">4.4</span> SPSS, Stata, and SAS Files<a class="anchor" aria-label="anchor" href="#spss-stata-and-sas-files"><i class="fas fa-link"></i></a>
+</h2>
+<p>If someone hands you a <code>.sav</code> file (SPSS), a <code>.dta</code> file (Stata), or a <code>.sas7bdat</code> file (SAS), don’t panic. The <strong>haven</strong> package reads all of them.</p>
+<div class="sourceCode" id="cb74"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># SPSS</span></span>
+<span><span class="va">spss_data</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://haven.tidyverse.org/reference/read_spss.html">read_sav</a></span><span class="op">(</span><span class="st">"path/to/datafile.sav"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Stata</span></span>
+<span><span class="va">stata_data</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://haven.tidyverse.org/reference/read_dta.html">read_dta</a></span><span class="op">(</span><span class="st">"path/to/datafile.dta"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># SAS</span></span>
+<span><span class="va">sas_data</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://haven.tidyverse.org/reference/read_sas.html">read_sas</a></span><span class="op">(</span><span class="st">"path/to/datafile.sas7bdat"</span><span class="op">)</span></span></code></pre></div>
+<p>These files often have special “value labels” (like 1 = “Male”, 2 = “Female”). Haven preserves those as a special <code>labelled</code> class. To convert them to regular R factors, use <code><a href="https://forcats.tidyverse.org/reference/as_factor.html">as_factor()</a></code>.</p>
+<div class="sourceCode" id="cb75"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">spss_data</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://haven.tidyverse.org/reference/read_spss.html">read_sav</a></span><span class="op">(</span><span class="st">"path/to/datafile.sav"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/across.html">across</a></span><span class="op">(</span><span class="fu"><a href="https://tidyselect.r-lib.org/reference/where.html">where</a></span><span class="op">(</span><span class="va">is.labelled</span><span class="op">)</span>, <span class="va">as_factor</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<p>You probably won’t use these every day, but it’s nice to know they exist when you need them.</p>
+</div>
+<div id="rs-own-file-formats" class="section level2" number="4.5">
+<h2>
+<span class="header-section-number">4.5</span> R’s Own File Formats<a class="anchor" aria-label="anchor" href="#rs-own-file-formats"><i class="fas fa-link"></i></a>
+</h2>
+<p>R has two native formats for saving data: <code>.RData</code> and <code>.rds</code>. Here’s the quick version:</p>
+<ul>
+<li>
+<strong><code>.RData</code></strong> files can store multiple objects. You load them with <code><a href="https://rdrr.io/r/base/load.html">load()</a></code>, and they pop back into your environment with their original names. The catch? They can overwrite things without warning.</li>
+<li>
+<strong><code>.rds</code></strong> files store a single object. You read them with <code><a href="https://rdrr.io/r/base/readRDS.html">readRDS()</a></code> and assign the result to whatever name you want. Much safer.</li>
+</ul>
+<div class="sourceCode" id="cb76"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Saving and loading .RData</span></span>
+<span><span class="va">x</span> <span class="op">&lt;-</span> <span class="fl">1</span><span class="op">:</span><span class="fl">10</span></span>
+<span><span class="va">y</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span><span class="op">(</span>a <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">3</span>, b <span class="op">=</span> <span class="va">letters</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">3</span><span class="op">]</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/save.html">save</a></span><span class="op">(</span><span class="va">x</span>, <span class="va">y</span>, file <span class="op">=</span> <span class="st">"my_objects.RData"</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/load.html">load</a></span><span class="op">(</span><span class="st">"my_objects.RData"</span><span class="op">)</span>  <span class="co"># x and y are restored</span></span>
+<span></span>
+<span><span class="co"># Saving and loading .rds (preferred)</span></span>
+<span><span class="va">my_data</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://tibble.tidyverse.org/reference/tibble.html">tibble</a></span><span class="op">(</span>name <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"Alice"</span>, <span class="st">"Bob"</span><span class="op">)</span>, score <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">92.5</span>, <span class="fl">88.0</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/readRDS.html">saveRDS</a></span><span class="op">(</span><span class="va">my_data</span>, file <span class="op">=</span> <span class="st">"my_data.rds"</span><span class="op">)</span></span>
+<span><span class="va">restored_data</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/readRDS.html">readRDS</a></span><span class="op">(</span><span class="st">"my_data.rds"</span><span class="op">)</span></span></code></pre></div>
+<p>For day-to-day work, prefer <code>.rds</code>. It’s explicit, it’s safe, and it won’t accidentally overwrite your variables.</p>
+</div>
+<div id="writing-data-out" class="section level2" number="4.6">
+<h2>
+<span class="header-section-number">4.6</span> Writing Data Out<a class="anchor" aria-label="anchor" href="#writing-data-out"><i class="fas fa-link"></i></a>
+</h2>
+<p>You can also go the other direction – save your clean data for someone else (or for future you).</p>
+<div class="sourceCode" id="cb77"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">my_data</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://tibble.tidyverse.org/reference/tibble.html">tibble</a></span><span class="op">(</span></span>
+<span>  name <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"Alice"</span>, <span class="st">"Bob"</span>, <span class="st">"Charlie"</span><span class="op">)</span>,</span>
+<span>  score <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">92.5</span>, <span class="fl">88.0</span>, <span class="fl">95.3</span><span class="op">)</span>,</span>
+<span>  date <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/as.Date.html">as.Date</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"2025-01-15"</span>, <span class="st">"2025-02-20"</span>, <span class="st">"2025-03-10"</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Write a CSV</span></span>
+<span><span class="fu"><a href="https://readr.tidyverse.org/reference/write_delim.html">write_csv</a></span><span class="op">(</span><span class="va">my_data</span>, <span class="st">"my_data.csv"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># If someone will open it in Excel, use this version</span></span>
+<span><span class="co"># (it handles special characters better)</span></span>
+<span><span class="fu"><a href="https://readr.tidyverse.org/reference/write_delim.html">write_excel_csv</a></span><span class="op">(</span><span class="va">my_data</span>, <span class="st">"my_data_excel.csv"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Save as an R object (preserves column types perfectly)</span></span>
+<span><span class="fu"><a href="https://readr.tidyverse.org/reference/read_rds.html">write_rds</a></span><span class="op">(</span><span class="va">my_data</span>, <span class="st">"my_data.rds"</span><span class="op">)</span></span></code></pre></div>
+<p>One thing to watch out for: when you save to CSV, you lose type information. Factors become plain text, dates become strings. If you need to preserve everything exactly, use <code><a href="https://readr.tidyverse.org/reference/read_rds.html">write_rds()</a></code>.</p>
+</div>
+<div id="handling-common-import-problems" class="section level2" number="4.7">
+<h2>
+<span class="header-section-number">4.7</span> Handling Common Import Problems<a class="anchor" aria-label="anchor" href="#handling-common-import-problems"><i class="fas fa-link"></i></a>
+</h2>
+<p>Real-world data is messy. Here are the problems you’ll hit most often and how to fix them.</p>
+<p><strong>Missing values in disguise.</strong> Different systems use different codes for “no data.” Check your file and tell R what to look for.</p>
+<div class="sourceCode" id="cb78"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://readr.tidyverse.org/reference/read_delim.html">read_csv</a></span><span class="op">(</span></span>
+<span>  <span class="st">"name,value\nAlice,10\nBob,\nCharlie,NA\nDiana,N/A\nEve,-99"</span>,</span>
+<span>  na <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">""</span>, <span class="st">"NA"</span>, <span class="st">"N/A"</span>, <span class="st">"-99"</span><span class="op">)</span></span>
+<span><span class="op">)</span></span>
+<span><span class="co">#&gt; # A tibble: 5 × 2</span></span>
+<span><span class="co">#&gt;   name    value</span></span>
+<span><span class="co">#&gt;   &lt;chr&gt;   &lt;dbl&gt;</span></span>
+<span><span class="co">#&gt; 1 Alice      10</span></span>
+<span><span class="co">#&gt; 2 Bob        NA</span></span>
+<span><span class="co">#&gt; 3 Charlie    NA</span></span>
+<span><span class="co">#&gt; 4 Diana      NA</span></span>
+<span><span class="co">#&gt; 5 Eve        NA</span></span></code></pre></div>
+<p><strong>Junk at the top of the file.</strong> Reports exported from enterprise systems love to put timestamps and headers above the actual data. Use <code>skip</code> or <code>comment</code>.</p>
+<div class="sourceCode" id="cb79"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">messy_file</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://readr.tidyverse.org/reference/read_delim.html">read_csv</a></span><span class="op">(</span></span>
+<span>  <span class="st">"Report generated on 2025-01-15\nSource: Internal Database\n\nname,score\nAlice,92\nBob,88\nCharlie,95"</span>,</span>
+<span>  skip <span class="op">=</span> <span class="fl">3</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">messy_file</span></span>
+<span><span class="co">#&gt; # A tibble: 3 × 2</span></span>
+<span><span class="co">#&gt;   name    score</span></span>
+<span><span class="co">#&gt;   &lt;chr&gt;   &lt;dbl&gt;</span></span>
+<span><span class="co">#&gt; 1 Alice      92</span></span>
+<span><span class="co">#&gt; 2 Bob        88</span></span>
+<span><span class="co">#&gt; 3 Charlie    95</span></span></code></pre></div>
+<p><strong>Reading from a URL.</strong> All readr functions can read directly from web URLs. Very handy for publicly available datasets.</p>
+<div class="sourceCode" id="cb80"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">url_data</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://readr.tidyverse.org/reference/read_delim.html">read_csv</a></span><span class="op">(</span><span class="st">"https://raw.githubusercontent.com/tidyverse/readr/main/inst/extdata/mtcars.csv"</span><span class="op">)</span></span></code></pre></div>
+<p><strong>Encoding problems.</strong> If your data looks like garbled nonsense (especially with accented characters or non-English text), it’s probably an encoding issue.</p>
+<div class="sourceCode" id="cb81"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Try specifying the encoding</span></span>
+<span><span class="va">latin_data</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://readr.tidyverse.org/reference/read_delim.html">read_csv</a></span><span class="op">(</span><span class="st">"data_latin1.csv"</span>, locale <span class="op">=</span> <span class="fu"><a href="https://readr.tidyverse.org/reference/locale.html">locale</a></span><span class="op">(</span>encoding <span class="op">=</span> <span class="st">"Latin1"</span><span class="op">)</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Or let R guess</span></span>
+<span><span class="fu"><a href="https://readr.tidyverse.org/reference/encoding.html">guess_encoding</a></span><span class="op">(</span><span class="st">"mystery_file.csv"</span><span class="op">)</span></span></code></pre></div>
+</div>
+<div id="reading-multiple-files-at-once" class="section level2" number="4.8">
+<h2>
+<span class="header-section-number">4.8</span> Reading Multiple Files at Once<a class="anchor" aria-label="anchor" href="#reading-multiple-files-at-once"><i class="fas fa-link"></i></a>
+</h2>
+<p>In the real world, you’ll often have data split across multiple files – monthly sales reports, regional data dumps, weekly survey exports. You need to read them all and stack them together.</p>
+<p>The easiest approach (readr 2.0+) is to hand <code><a href="https://readr.tidyverse.org/reference/read_delim.html">read_csv()</a></code> a vector of file paths directly.</p>
+<div class="sourceCode" id="cb82"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">csv_files</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.files.html">list.files</a></span><span class="op">(</span><span class="st">"data/"</span>, pattern <span class="op">=</span> <span class="st">"\\.csv$"</span>, full.names <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span><span class="va">all_data</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://readr.tidyverse.org/reference/read_delim.html">read_csv</a></span><span class="op">(</span><span class="va">csv_files</span>, id <span class="op">=</span> <span class="st">"source_file"</span><span class="op">)</span></span></code></pre></div>
+<p>The <code>id</code> argument adds a column telling you which file each row came from. Very useful for debugging.</p>
+<p>Here’s a self-contained example showing the pattern:</p>
+<div class="sourceCode" id="cb83"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">file1</span> <span class="op">&lt;-</span> <span class="st">"name,score\nAlice,92\nBob,88"</span></span>
+<span><span class="va">file2</span> <span class="op">&lt;-</span> <span class="st">"name,score\nCharlie,95\nDiana,79"</span></span>
+<span><span class="va">file3</span> <span class="op">&lt;-</span> <span class="st">"name,score\nEve,85\nFrank,91"</span></span>
+<span></span>
+<span><span class="va">files</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span><span class="va">file1</span>, <span class="va">file2</span>, <span class="va">file3</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">combined_data</span> <span class="op">&lt;-</span> <span class="va">files</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://rlang.r-lib.org/reference/set_names.html">set_names</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste0</a></span><span class="op">(</span><span class="st">"file_"</span>, <span class="fl">1</span><span class="op">:</span><span class="fl">3</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://purrr.tidyverse.org/reference/map.html">map</a></span><span class="op">(</span><span class="va">read_csv</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://purrr.tidyverse.org/reference/list_c.html">list_rbind</a></span><span class="op">(</span>names_to <span class="op">=</span> <span class="st">"file_number"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">combined_data</span></span>
+<span><span class="co">#&gt; # A tibble: 6 × 3</span></span>
+<span><span class="co">#&gt;   file_number name    score</span></span>
+<span><span class="co">#&gt;   &lt;chr&gt;       &lt;chr&gt;   &lt;dbl&gt;</span></span>
+<span><span class="co">#&gt; 1 file_1      Alice      92</span></span>
+<span><span class="co">#&gt; 2 file_1      Bob        88</span></span>
+<span><span class="co">#&gt; 3 file_2      Charlie    95</span></span>
+<span><span class="co">#&gt; 4 file_2      Diana      79</span></span>
+<span><span class="co">#&gt; 5 file_3      Eve        85</span></span>
+<span><span class="co">#&gt; 6 file_3      Frank      91</span></span></code></pre></div>
+</div>
+<div id="summary-1" class="section level2" number="4.9">
+<h2>
+<span class="header-section-number">4.9</span> Summary<a class="anchor" aria-label="anchor" href="#summary-1"><i class="fas fa-link"></i></a>
+</h2>
+<p>Here’s your cheat sheet for getting data into R:</p>
+<ul>
+<li>
+<strong>CSV files</strong>: <code><a href="https://readr.tidyverse.org/reference/read_delim.html">read_csv()</a></code> from readr. This is your bread and butter.</li>
+<li>
+<strong>Excel files</strong>: <code><a href="https://readxl.tidyverse.org/reference/read_excel.html">read_excel()</a></code> from readxl. Supports sheets, cell ranges, all the good stuff.</li>
+<li>
+<strong>SPSS/Stata/SAS</strong>: <code><a href="https://haven.tidyverse.org/reference/read_spss.html">read_sav()</a></code>, <code><a href="https://haven.tidyverse.org/reference/read_dta.html">read_dta()</a></code>, <code><a href="https://haven.tidyverse.org/reference/read_sas.html">read_sas()</a></code> from haven. There when you need them.</li>
+<li>
+<strong>R native files</strong>: <code><a href="https://rdrr.io/r/base/readRDS.html">readRDS()</a></code> for <code>.rds</code>, <code><a href="https://rdrr.io/r/base/load.html">load()</a></code> for <code>.RData</code>.</li>
+<li>
+<strong>Writing data</strong>: <code><a href="https://readr.tidyverse.org/reference/write_delim.html">write_csv()</a></code> for CSVs, <code><a href="https://readr.tidyverse.org/reference/read_rds.html">write_rds()</a></code> to preserve R types.</li>
+<li>
+<strong>Multiple files</strong>: Pass a vector of paths to <code><a href="https://readr.tidyverse.org/reference/read_delim.html">read_csv()</a></code>, or use <code><a href="https://purrr.tidyverse.org/reference/map.html">map()</a></code> with <code><a href="https://purrr.tidyverse.org/reference/list_c.html">list_rbind()</a></code>.</li>
+</ul>
+<p>The most important habit: always inspect your data right after importing it. Check the column types, look for unexpected <code>NA</code> values, make sure nothing got mangled. Five minutes of checking now saves five hours of debugging later.</p>
+
+</div>
+</div>
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+  var sidebar = document.querySelector(".sidebar-book");
+  if (!sidebar) return;
+
+  // Create a slim tab on the left edge — visible, unobtrusive, clearly a toggle
+  var btn = document.createElement("button");
+  btn.innerHTML = '&#9776; Contents';
+  btn.setAttribute("aria-label", "Toggle table of contents");
+  btn.id = "sidebar-toggle-btn";
+  document.body.appendChild(btn);
+
+  var isOpen = false;
+
+  function openSidebar() {
+    isOpen = true;
+    sidebar.classList.add("sidebar-open");
+    btn.innerHTML = '&times; Close';
+    btn.classList.add("sidebar-toggle-active");
+  }
+
+  function closeSidebar() {
+    isOpen = false;
+    sidebar.classList.remove("sidebar-open");
+    btn.innerHTML = '&#9776; Contents';
+    btn.classList.remove("sidebar-toggle-active");
+  }
+
+  btn.addEventListener("click", function(e) {
+    e.stopPropagation();
+    if (isOpen) { closeSidebar(); } else { openSidebar(); }
+  });
+
+  // Close when clicking outside
+  document.addEventListener("click", function(e) {
+    if (isOpen && !sidebar.contains(e.target) && e.target !== btn) {
+      closeSidebar();
+    }
+  });
+
+  // Close on Escape key
+  document.addEventListener("keydown", function(e) {
+    if (e.key === "Escape" && isOpen) { closeSidebar(); }
+  });
+
+  // Only activate on wide screens
+  function checkWidth() {
+    if (window.innerWidth >= 992) {
+      btn.style.display = "flex";
+      sidebar.classList.add("sidebar-collapsed");
+    } else {
+      btn.style.display = "none";
+      sidebar.classList.remove("sidebar-collapsed");
+      sidebar.classList.remove("sidebar-open");
+    }
+  }
+
+  window.addEventListener("resize", checkWidth);
+  checkWidth();
+});
+</script><div class="chapter-nav">
+<div class="prev"><a href="tidyverse.html"><span class="header-section-number">3</span> Your Data Analysis Toolkit</a></div>
+<div class="next"><a href="describedata.html"><span class="header-section-number">5</span> Describing Data</a></div>
+</div></main><div class="col-md-3 col-lg-2 d-none d-md-block sidebar sidebar-chapter">
+    <nav id="toc" data-toggle="toc" aria-label="On this page"><h2>On this page</h2>
+      <ul class="nav navbar-nav">
+<li><a class="nav-link" href="#dataimport"><span class="header-section-number">4</span> Data Import</a></li>
+<li>
+<a class="nav-link" href="#csv"><span class="header-section-number">4.1</span> Reading CSV Files</a><ul class="nav navbar-nav">
+<li><a class="nav-link" href="#why-read_csv-instead-of-read.csv"><span class="header-section-number">4.1.1</span> Why read_csv() Instead of read.csv()?</a></li>
+<li><a class="nav-link" href="#the-arguments-youll-actually-use"><span class="header-section-number">4.1.2</span> The Arguments You’ll Actually Use</a></li>
+<li><a class="nav-link" href="#specifying-column-types"><span class="header-section-number">4.1.3</span> Specifying Column Types</a></li>
+</ul>
+</li>
+<li><a class="nav-link" href="#other-delimited-files"><span class="header-section-number">4.2</span> Other Delimited Files</a></li>
+<li>
+<a class="nav-link" href="#excel"><span class="header-section-number">4.3</span> Reading Excel Files</a><ul class="nav navbar-nav">
+<li><a class="nav-link" href="#the-basics"><span class="header-section-number">4.3.1</span> The Basics</a></li>
+<li><a class="nav-link" href="#working-with-sheets"><span class="header-section-number">4.3.2</span> Working with Sheets</a></li>
+<li><a class="nav-link" href="#reading-specific-cell-ranges"><span class="header-section-number">4.3.3</span> Reading Specific Cell Ranges</a></li>
+</ul>
+</li>
+<li><a class="nav-link" href="#spss-stata-and-sas-files"><span class="header-section-number">4.4</span> SPSS, Stata, and SAS Files</a></li>
+<li><a class="nav-link" href="#rs-own-file-formats"><span class="header-section-number">4.5</span> R’s Own File Formats</a></li>
+<li><a class="nav-link" href="#writing-data-out"><span class="header-section-number">4.6</span> Writing Data Out</a></li>
+<li><a class="nav-link" href="#handling-common-import-problems"><span class="header-section-number">4.7</span> Handling Common Import Problems</a></li>
+<li><a class="nav-link" href="#reading-multiple-files-at-once"><span class="header-section-number">4.8</span> Reading Multiple Files at Once</a></li>
+<li><a class="nav-link" href="#summary-1"><span class="header-section-number">4.9</span> Summary</a></li>
+</ul>
+
+      <div class="book-extra">
+        <ul class="list-unstyled">
+          
+        </ul>
+</div>
+    </nav>
+</div>
+
+</div>
+</div> <!-- .container -->
+
+<footer class="bg-primary text-light mt-5"><div class="container"><div class="row">
+
+  <div class="col-12 col-md-6 mt-3">
+    <p>"<strong>R and the Tidyverse: A Beginner’s Guide</strong>" was written by Vivek H. Patil. It was last built on 2026-02-27.</p>
+  </div>
+
+  <div class="col-12 col-md-6 mt-3">
+    <p>This book was built by the <a class="text-light" href="https://bookdown.org">bookdown</a> R package.</p>
+  </div>
+
+</div></div>
+</footer><!-- dynamically load mathjax for compatibility with self-contained --><script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "true";
+    if (src === "" || src === "true") src = "https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.9/latest.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:")
+      if (/^https?:/.test(src))
+        src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script><script type="text/x-mathjax-config">const popovers = document.querySelectorAll('a.footnote-ref[data-toggle="popover"]');
+for (let popover of popovers) {
+  const div = document.createElement('div');
+  div.setAttribute('style', 'position: absolute; top: 0, left:0; width:0, height:0, overflow: hidden; visibility: hidden;');
+  div.innerHTML = popover.getAttribute('data-content');
+
+  var has_math = div.querySelector("span.math");
+  if (has_math) {
+    document.body.appendChild(div);
+    MathJax.Hub.Queue(["Typeset", MathJax.Hub, div]);
+    MathJax.Hub.Queue(function() {
+      popover.setAttribute('data-content', div.innerHTML);
+      document.body.removeChild(div);
+    })
+  }
+}
+</script>
+</body>
+</html>

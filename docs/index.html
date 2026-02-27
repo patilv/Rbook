@@ -1,310 +1,572 @@
 <!DOCTYPE html>
-<html >
-
+<html lang="en">
 <head>
-
-  <meta charset="UTF-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <title>Basic Insights from Data for Marketing Researchers</title>
-  <meta name="description" content="This book should contain introductory material for analyzing data for marketing researchers.">
-  <meta name="generator" content="bookdown  and GitBook 2.6.7">
-
-  <meta property="og:title" content="Basic Insights from Data for Marketing Researchers" />
-  <meta property="og:type" content="book" />
-  
-  
-  <meta property="og:description" content="This book should contain introductory material for analyzing data for marketing researchers." />
-  <meta name="github-repo" content="patilv.github.io" />
-
-  <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="Basic Insights from Data for Marketing Researchers" />
-  
-  <meta name="twitter:description" content="This book should contain introductory material for analyzing data for marketing researchers." />
-  
-
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<title>Preface | R and the Tidyverse: A Beginner’s Guide</title>
 <meta name="author" content="Vivek H. Patil">
-
-
-<meta name="date" content="2019-11-04">
-
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-status-bar-style" content="black">
-  
-  
-
-<link rel="next" href="introR.html">
-<script src="libs/jquery-2.2.3/jquery.min.js"></script>
-<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
-<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
-<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
-<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
-<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
-<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
-
-
-
-
-
-
-
-
-
+<meta name="description" content="A beginner-friendly guide to learning R and the tidyverse for data analysis.">
+<meta name="generator" content="bookdown 0.46 with bs4_book()">
+<meta property="og:title" content="Preface | R and the Tidyverse: A Beginner’s Guide">
+<meta property="og:type" content="book">
+<meta property="og:image" content="/cover.png">
+<meta property="og:description" content="A beginner-friendly guide to learning R and the tidyverse for data analysis.">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Preface | R and the Tidyverse: A Beginner’s Guide">
+<meta name="twitter:description" content="A beginner-friendly guide to learning R and the tidyverse for data analysis.">
+<meta name="twitter:image" content="/cover.png">
+<!-- JS --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script><script src="https://kit.fontawesome.com/6ecbd6c532.js" crossorigin="anonymous"></script><script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<link href="libs/bootstrap-4.6.0/bootstrap.min.css" rel="stylesheet">
+<script src="libs/bootstrap-4.6.0/bootstrap.bundle.min.js"></script><script src="libs/bs3compat-0.10.0/transition.js"></script><script src="libs/bs3compat-0.10.0/tabs.js"></script><script src="libs/bs3compat-0.10.0/bs3compat.js"></script><link href="libs/bs4_book-1.0.0/bs4_book.css" rel="stylesheet">
+<script src="libs/bs4_book-1.0.0/bs4_book.js"></script><link href="libs/htmltools-fill-0.5.9/fill.css" rel="stylesheet">
+<script src="libs/htmlwidgets-1.6.4/htmlwidgets.js"></script><link href="libs/datatables-css-0.0.0/datatables-crosstalk.css" rel="stylesheet">
+<script src="libs/datatables-binding-0.34.0/datatables.js"></script><link href="libs/dt-core-1.13.6/css/jquery.dataTables.min.css" rel="stylesheet">
+<link href="libs/dt-core-1.13.6/css/jquery.dataTables.extra.css" rel="stylesheet">
+<script src="libs/dt-core-1.13.6/js/jquery.dataTables.min.js"></script><link href="libs/crosstalk-1.2.2/css/crosstalk.min.css" rel="stylesheet">
+<script src="libs/crosstalk-1.2.2/js/crosstalk.min.js"></script><script src="libs/plotly-binding-4.12.0/plotly.js"></script><script src="libs/typedarray-0.1/typedarray.min.js"></script><link href="libs/plotly-htmlwidgets-css-2.25.2/plotly-htmlwidgets.css" rel="stylesheet">
+<script src="libs/plotly-main-2.25.2/plotly-latest.min.js"></script><script src="libs/kePrint-0.0.1/kePrint.js"></script><link href="libs/lightable-0.0.1/lightable.css" rel="stylesheet">
+<link href="libs/nouislider-7.0.10/jquery.nouislider.min.css" rel="stylesheet">
+<script src="libs/nouislider-7.0.10/jquery.nouislider.min.js"></script><link href="libs/selectize-0.12.0/selectize.bootstrap3.css" rel="stylesheet">
+<script src="libs/selectize-0.12.0/selectize.min.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/autocomplete.js/0.38.0/autocomplete.jquery.min.js" integrity="sha512-GU9ayf+66Xx2TmpxqJpliWbT5PiGYxpaG8rfnBEk1LL8l1KGkRShhngwdXK1UgqhAzWpZHSiYPc09/NwDQIGyg==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/mark.min.js" integrity="sha512-5CYOlHXGh6QpOFA/TeTylKLWfB3ftPsde7AnmhuitiTX4K5SqCLBeKro6sPS8ilsz1Q4NRx3v8Ko2IBiszzdww==" crossorigin="anonymous"></script><!-- CSS --><style type="text/css">
+    
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  </style>
 <style type="text/css">
-a.sourceLine { display: inline-block; line-height: 1.25; }
-a.sourceLine { pointer-events: none; color: inherit; text-decoration: inherit; }
-a.sourceLine:empty { height: 1.2em; }
-.sourceCode { overflow: visible; }
-code.sourceCode { white-space: pre; position: relative; }
-div.sourceCode { margin: 1em 0; }
-pre.sourceCode { margin: 0; }
-@media screen {
-div.sourceCode { overflow: auto; }
-}
-@media print {
-code.sourceCode { white-space: pre-wrap; }
-a.sourceLine { text-indent: -1em; padding-left: 1em; }
-}
-pre.numberSource a.sourceLine
-  { position: relative; left: -4em; }
-pre.numberSource a.sourceLine::before
-  { content: attr(title);
-    position: relative; left: -1em; text-align: right; vertical-align: baseline;
-    border: none; pointer-events: all; display: inline-block;
-    -webkit-touch-callout: none; -webkit-user-select: none;
-    -khtml-user-select: none; -moz-user-select: none;
-    -ms-user-select: none; user-select: none;
-    padding: 0 4px; width: 4em;
-    color: #aaaaaa;
-  }
-pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
-div.sourceCode
-  {  }
-@media screen {
-a.sourceLine::before { text-decoration: underline; }
-}
-code span.al { color: #ff0000; font-weight: bold; } /* Alert */
-code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
-code span.at { color: #7d9029; } /* Attribute */
-code span.bn { color: #40a070; } /* BaseN */
-code span.bu { } /* BuiltIn */
-code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
-code span.ch { color: #4070a0; } /* Char */
-code span.cn { color: #880000; } /* Constant */
-code span.co { color: #60a0b0; font-style: italic; } /* Comment */
-code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
-code span.do { color: #ba2121; font-style: italic; } /* Documentation */
-code span.dt { color: #902000; } /* DataType */
-code span.dv { color: #40a070; } /* DecVal */
-code span.er { color: #ff0000; font-weight: bold; } /* Error */
-code span.ex { } /* Extension */
-code span.fl { color: #40a070; } /* Float */
-code span.fu { color: #06287e; } /* Function */
-code span.im { } /* Import */
-code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
-code span.kw { color: #007020; font-weight: bold; } /* Keyword */
-code span.op { color: #666666; } /* Operator */
-code span.ot { color: #007020; } /* Other */
-code span.pp { color: #bc7a00; } /* Preprocessor */
-code span.sc { color: #4070a0; } /* SpecialChar */
-code span.ss { color: #bb6688; } /* SpecialString */
-code span.st { color: #4070a0; } /* String */
-code span.va { color: #19177c; } /* Variable */
-code span.vs { color: #4070a0; } /* VerbatimString */
-code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
-</style>
-
-<link rel="stylesheet" href="style.css" type="text/css" />
+    /* Used with Pandoc 2.11+ new --citeproc when CSL is used */
+    div.csl-bib-body { }
+    div.csl-entry {
+      clear: both;
+          margin-bottom: 0em;
+        }
+    .hanging div.csl-entry {
+      margin-left:2em;
+      text-indent:-2em;
+    }
+    div.csl-left-margin {
+      min-width:2em;
+      float:left;
+    }
+    div.csl-right-inline {
+      margin-left:2em;
+      padding-left:1em;
+    }
+    div.csl-indent {
+      margin-left: 2em;
+    }
+  </style>
+<link rel="stylesheet" href="style.css">
 </head>
+<body data-spy="scroll" data-target="#toc">
 
-<body>
+<div class="container-fluid">
+<div class="row">
+  <header class="col-sm-12 col-lg-3 sidebar sidebar-book"><a class="sr-only sr-only-focusable" href="#content">Skip to main content</a>
 
+    <div class="d-flex align-items-start justify-content-between">
+      <h1>
+        <a href="index.html" title="">R and the Tidyverse: A Beginner’s Guide</a>
+      </h1>
+      <button class="btn btn-outline-primary d-lg-none ml-2 mt-1" type="button" data-toggle="collapse" data-target="#main-nav" aria-expanded="true" aria-controls="main-nav"><i class="fas fa-bars"></i><span class="sr-only">Show table of contents</span></button>
+    </div>
 
+    <div id="main-nav" class="collapse-lg">
+      <form role="search">
+        <input id="search" class="form-control" type="search" placeholder="Search" aria-label="Search">
+</form>
 
-  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
-
-    <div class="book-summary">
-      <nav role="navigation">
-
-<ul class="summary">
-<li><a href="./">Basic Insights from Data for Marketing Researchers</a></li>
-
-<li class="divider"></li>
-<li class="chapter" data-level="" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i>Preface</a><ul>
-<li class="chapter" data-level="" data-path="index.html"><a href="index.html#about-me"><i class="fa fa-check"></i>About me</a></li>
-</ul></li>
-<li class="chapter" data-level="1" data-path="introR.html"><a href="introR.html"><i class="fa fa-check"></i><b>1</b> Introduction to R</a><ul>
-<li class="chapter" data-level="1.1" data-path="introR.html"><a href="introR.html#why-use-r"><i class="fa fa-check"></i><b>1.1</b> Why use R?</a></li>
-<li class="chapter" data-level="1.2" data-path="introR.html"><a href="introR.html#r---environment-and-software"><i class="fa fa-check"></i><b>1.2</b> R - Environment and Software</a></li>
-<li class="chapter" data-level="1.3" data-path="introR.html"><a href="introR.html#a-recently-released-video-on-r"><i class="fa fa-check"></i><b>1.3</b> A Recently Released Video on R</a></li>
-</ul></li>
-<li class="chapter" data-level="2" data-path="Rgettingstarted.html"><a href="Rgettingstarted.html"><i class="fa fa-check"></i><b>2</b> Getting Started with R</a><ul>
-<li class="chapter" data-level="2.1" data-path="Rgettingstarted.html"><a href="Rgettingstarted.html#r-studio-interface"><i class="fa fa-check"></i><b>2.1</b> R-Studio Interface</a></li>
-<li class="chapter" data-level="2.2" data-path="Rgettingstarted.html"><a href="Rgettingstarted.html#organizing-projects"><i class="fa fa-check"></i><b>2.2</b> Organizing projects</a></li>
-<li class="chapter" data-level="2.3" data-path="Rgettingstarted.html"><a href="Rgettingstarted.html#installing-packages-from-cran"><i class="fa fa-check"></i><b>2.3</b> Installing Packages from CRAN</a></li>
-<li class="chapter" data-level="2.4" data-path="Rgettingstarted.html"><a href="Rgettingstarted.html#installing-a-package-from-github"><i class="fa fa-check"></i><b>2.4</b> Installing a package from GitHub</a></li>
-<li class="chapter" data-level="2.5" data-path="Rgettingstarted.html"><a href="Rgettingstarted.html#installed-packages-should-be-loaded-for-them-to-offer-their-functions-for-use"><i class="fa fa-check"></i><b>2.5</b> Installed packages should be loaded for them to offer their functions for use</a></li>
-<li class="chapter" data-level="2.6" data-path="Rgettingstarted.html"><a href="Rgettingstarted.html#setting-your-working-directory"><i class="fa fa-check"></i><b>2.6</b> Setting your working directory</a></li>
-<li class="chapter" data-level="2.7" data-path="Rgettingstarted.html"><a href="Rgettingstarted.html#reading-data-from-different-sources"><i class="fa fa-check"></i><b>2.7</b> Reading data from different sources</a></li>
-<li class="chapter" data-level="2.8" data-path="Rgettingstarted.html"><a href="Rgettingstarted.html#saving-data"><i class="fa fa-check"></i><b>2.8</b> Saving data</a></li>
-<li class="chapter" data-level="2.9" data-path="Rgettingstarted.html"><a href="Rgettingstarted.html#creating-a-dataframe"><i class="fa fa-check"></i><b>2.9</b> Creating a dataframe</a></li>
-</ul></li>
-<li class="chapter" data-level="3" data-path="describedata.html"><a href="describedata.html"><i class="fa fa-check"></i><b>3</b> Describing Data</a><ul>
-<li class="chapter" data-level="3.1" data-path="describedata.html"><a href="describedata.html#number-of-rows-and-columns-in-that-sequence"><i class="fa fa-check"></i><b>3.1</b> Number of rows and columns (in that sequence)</a></li>
-<li class="chapter" data-level="3.2" data-path="describedata.html"><a href="describedata.html#number-of-rows"><i class="fa fa-check"></i><b>3.2</b> Number of rows</a></li>
-<li class="chapter" data-level="3.3" data-path="describedata.html"><a href="describedata.html#number-of-columns"><i class="fa fa-check"></i><b>3.3</b> Number of columns</a></li>
-<li class="chapter" data-level="3.4" data-path="describedata.html"><a href="describedata.html#names-of-variables"><i class="fa fa-check"></i><b>3.4</b> Names of variables</a></li>
-<li class="chapter" data-level="3.5" data-path="describedata.html"><a href="describedata.html#first-6-rows"><i class="fa fa-check"></i><b>3.5</b> First 6 rows</a></li>
-<li class="chapter" data-level="3.6" data-path="describedata.html"><a href="describedata.html#first-2-rows"><i class="fa fa-check"></i><b>3.6</b> First 2 rows</a></li>
-<li class="chapter" data-level="3.7" data-path="describedata.html"><a href="describedata.html#last-6-rows"><i class="fa fa-check"></i><b>3.7</b> Last 6 rows</a></li>
-<li class="chapter" data-level="3.8" data-path="describedata.html"><a href="describedata.html#first-row"><i class="fa fa-check"></i><b>3.8</b> First row</a></li>
-<li class="chapter" data-level="3.9" data-path="describedata.html"><a href="describedata.html#first-row-first-column"><i class="fa fa-check"></i><b>3.9</b> First row, first column</a></li>
-<li class="chapter" data-level="3.10" data-path="describedata.html"><a href="describedata.html#name-of-third-column"><i class="fa fa-check"></i><b>3.10</b> Name of third column</a></li>
-<li class="chapter" data-level="3.11" data-path="describedata.html"><a href="describedata.html#entries-from-third-column"><i class="fa fa-check"></i><b>3.11</b> 3 entries from third column</a></li>
-<li class="chapter" data-level="3.12" data-path="describedata.html"><a href="describedata.html#structure-of-the-dataframe"><i class="fa fa-check"></i><b>3.12</b> Structure of the dataframe</a></li>
-<li class="chapter" data-level="3.13" data-path="describedata.html"><a href="describedata.html#summary-of-the-dataframe"><i class="fa fa-check"></i><b>3.13</b> Summary of the dataframe</a></li>
-<li class="chapter" data-level="3.14" data-path="describedata.html"><a href="describedata.html#summary-of-a-variable-in-the-dataframe"><i class="fa fa-check"></i><b>3.14</b> Summary of a variable in the dataframe</a></li>
-</ul></li>
-<li class="chapter" data-level="4" data-path="modifydata.html"><a href="modifydata.html"><i class="fa fa-check"></i><b>4</b> Modifying Data</a><ul>
-<li class="chapter" data-level="4.1" data-path="modifydata.html"><a href="modifydata.html#creating-new-variables"><i class="fa fa-check"></i><b>4.1</b> Creating new variables</a></li>
-<li class="chapter" data-level="4.2" data-path="modifydata.html"><a href="modifydata.html#subsetting-data-and-dropping-factor-levels"><i class="fa fa-check"></i><b>4.2</b> Subsetting data and dropping factor levels</a></li>
-<li class="chapter" data-level="4.3" data-path="modifydata.html"><a href="modifydata.html#reordering-factor-levels"><i class="fa fa-check"></i><b>4.3</b> Reordering factor levels</a></li>
-<li class="chapter" data-level="4.4" data-path="modifydata.html"><a href="modifydata.html#reordering-dataset-entries"><i class="fa fa-check"></i><b>4.4</b> Reordering dataset entries</a></li>
-<li class="chapter" data-level="4.5" data-path="modifydata.html"><a href="modifydata.html#changing-column-names"><i class="fa fa-check"></i><b>4.5</b> Changing column names</a></li>
-<li class="chapter" data-level="4.6" data-path="modifydata.html"><a href="modifydata.html#renamingcollapsing-factor-levels"><i class="fa fa-check"></i><b>4.6</b> Renaming/Collapsing factor levels</a></li>
-<li class="chapter" data-level="4.7" data-path="modifydata.html"><a href="modifydata.html#converting-data-types"><i class="fa fa-check"></i><b>4.7</b> Converting data types</a><ul>
-<li class="chapter" data-level="4.7.1" data-path="modifydata.html"><a href="modifydata.html#factor-to-numeric"><i class="fa fa-check"></i><b>4.7.1</b> Factor to numeric</a></li>
-<li class="chapter" data-level="4.7.2" data-path="modifydata.html"><a href="modifydata.html#numeric-to-factor---binning-variables"><i class="fa fa-check"></i><b>4.7.2</b> Numeric to Factor - Binning variables</a></li>
-<li class="chapter" data-level="4.7.3" data-path="modifydata.html"><a href="modifydata.html#factor-and-numeric-to-character-and-vice-versa"><i class="fa fa-check"></i><b>4.7.3</b> Factor and Numeric to Character and vice versa</a></li>
-</ul></li>
-</ul></li>
-<li class="chapter" data-level="5" data-path="summarystats.html"><a href="summarystats.html"><i class="fa fa-check"></i><b>5</b> Summary Statistics</a><ul>
-<li class="chapter" data-level="5.1" data-path="summarystats.html"><a href="summarystats.html#measures-of-central-tendency"><i class="fa fa-check"></i><b>5.1</b> Measures of Central Tendency</a></li>
-<li class="chapter" data-level="5.2" data-path="summarystats.html"><a href="summarystats.html#other-measures-of-central-tendency"><i class="fa fa-check"></i><b>5.2</b> Other measures of central tendency</a></li>
-<li class="chapter" data-level="5.3" data-path="summarystats.html"><a href="summarystats.html#measures-of-dispersion-variation"><i class="fa fa-check"></i><b>5.3</b> Measures of Dispersion (variation)</a><ul>
-<li class="chapter" data-level="5.3.1" data-path="summarystats.html"><a href="summarystats.html#range"><i class="fa fa-check"></i><b>5.3.1</b> Range</a></li>
-<li class="chapter" data-level="5.3.2" data-path="summarystats.html"><a href="summarystats.html#interquartile-range-difference-between-25th-and-75th-percentile-or-quantile"><i class="fa fa-check"></i><b>5.3.2</b> Interquartile range: Difference between 25th and 75th percentile (or quantile)</a></li>
-<li class="chapter" data-level="5.3.3" data-path="summarystats.html"><a href="summarystats.html#variance-and-standard-deviation"><i class="fa fa-check"></i><b>5.3.3</b> Variance and Standard Deviation</a></li>
-</ul></li>
-</ul></li>
-<li class="chapter" data-level="6" data-path="singlevar.html"><a href="singlevar.html"><i class="fa fa-check"></i><b>6</b> Single variable Analysis</a><ul>
-<li class="chapter" data-level="6.1" data-path="singlevar.html"><a href="singlevar.html#numeric-variable"><i class="fa fa-check"></i><b>6.1</b> Numeric Variable</a><ul>
-<li class="chapter" data-level="6.1.1" data-path="singlevar.html"><a href="singlevar.html#histogram"><i class="fa fa-check"></i><b>6.1.1</b> Histogram</a></li>
-<li class="chapter" data-level="6.1.2" data-path="singlevar.html"><a href="singlevar.html#density-plot"><i class="fa fa-check"></i><b>6.1.2</b> Density plot</a></li>
-<li class="chapter" data-level="6.1.3" data-path="singlevar.html"><a href="singlevar.html#box-plot"><i class="fa fa-check"></i><b>6.1.3</b> Box plot</a></li>
-<li class="chapter" data-level="6.1.4" data-path="singlevar.html"><a href="singlevar.html#test-of-mean"><i class="fa fa-check"></i><b>6.1.4</b> Test of Mean</a></li>
-</ul></li>
-<li class="chapter" data-level="6.2" data-path="singlevar.html"><a href="singlevar.html#factor-variable"><i class="fa fa-check"></i><b>6.2</b> Factor variable</a><ul>
-<li class="chapter" data-level="6.2.1" data-path="singlevar.html"><a href="singlevar.html#bar-plot"><i class="fa fa-check"></i><b>6.2.1</b> Bar plot</a></li>
-<li class="chapter" data-level="6.2.2" data-path="singlevar.html"><a href="singlevar.html#pie-chart---fyi-do-not-use"><i class="fa fa-check"></i><b>6.2.2</b> Pie Chart - FYI Do not use</a></li>
-<li class="chapter" data-level="6.2.3" data-path="singlevar.html"><a href="singlevar.html#one-factor-variable-chi-square-goodness-of-fit-test"><i class="fa fa-check"></i><b>6.2.3</b> One factor-variable Chi-square goodness-of-fit test</a></li>
-</ul></li>
-<li class="chapter" data-level="6.3" data-path="singlevar.html"><a href="singlevar.html#one-factor-variable---t-test-one-sample-proportion"><i class="fa fa-check"></i><b>6.3</b> One factor variable - t-test one sample proportion</a></li>
-</ul></li>
-<li class="chapter" data-level="7" data-path="multivar.html"><a href="multivar.html"><i class="fa fa-check"></i><b>7</b> Relationships between variables</a><ul>
-<li class="chapter" data-level="7.1" data-path="multivar.html"><a href="multivar.html#between-continuous-variables-correlations"><i class="fa fa-check"></i><b>7.1</b> Between continuous variables: Correlations</a><ul>
-<li class="chapter" data-level="7.1.1" data-path="multivar.html"><a href="multivar.html#plotting"><i class="fa fa-check"></i><b>7.1.1</b> Plotting</a></li>
-<li class="chapter" data-level="7.1.2" data-path="multivar.html"><a href="multivar.html#correlations-between-two-numeric-variables"><i class="fa fa-check"></i><b>7.1.2</b> Correlations between two numeric variables</a></li>
-<li class="chapter" data-level="7.1.3" data-path="multivar.html"><a href="multivar.html#paired-samples---comparing-two-means"><i class="fa fa-check"></i><b>7.1.3</b> Paired Samples - comparing two-means</a></li>
-<li class="chapter" data-level="7.1.4" data-path="multivar.html"><a href="multivar.html#relationships-between-more-than-two-numeric-variables"><i class="fa fa-check"></i><b>7.1.4</b> Relationships between more than two numeric variables</a></li>
-</ul></li>
-<li class="chapter" data-level="7.2" data-path="multivar.html"><a href="multivar.html#relationships-between-factor-variables"><i class="fa fa-check"></i><b>7.2</b> Relationships between factor variables</a></li>
-<li class="chapter" data-level="7.3" data-path="multivar.html"><a href="multivar.html#between-factor-and-continuous-variables"><i class="fa fa-check"></i><b>7.3</b> Between factor and continuous variables</a><ul>
-<li class="chapter" data-level="7.3.1" data-path="multivar.html"><a href="multivar.html#two-levels-of-a-factor-level-and-one-continuous-variable---t-test"><i class="fa fa-check"></i><b>7.3.1</b> Two levels of a factor level and one continuous variable - t-test</a></li>
-<li class="chapter" data-level="7.3.2" data-path="multivar.html"><a href="multivar.html#more-than-two-levels-of-a-factor-variable-and-one-continuous-variable.--one-way-anova"><i class="fa fa-check"></i><b>7.3.2</b> More than two levels of a factor variable and one continuous variable.- One-Way ANOVA</a></li>
-</ul></li>
-</ul></li>
-<li class="divider"></li>
-<li><a href="https://github.com/patilv" target="blank">Published with bookdown</a></li>
-
+      <nav aria-label="Table of contents"><h2>Table of contents</h2>
+        <ul class="book-toc list-unstyled">
+<li><a class="active" href="index.html">Preface</a></li>
+<li><a class="" href="introR.html"><span class="header-section-number">1</span> Introduction to R</a></li>
+<li><a class="" href="Rgettingstarted.html"><span class="header-section-number">2</span> Getting Started with R</a></li>
+<li><a class="" href="tidyverse.html"><span class="header-section-number">3</span> Your Data Analysis Toolkit</a></li>
+<li><a class="" href="dataimport.html"><span class="header-section-number">4</span> Data Import</a></li>
+<li><a class="" href="describedata.html"><span class="header-section-number">5</span> Describing Data</a></li>
+<li><a class="" href="modifydata.html"><span class="header-section-number">6</span> Modifying Data</a></li>
+<li><a class="" href="dplyr.html"><span class="header-section-number">7</span> Data Wrangling with dplyr</a></li>
+<li><a class="" href="tidyr.html"><span class="header-section-number">8</span> Tidy Data with tidyr</a></li>
+<li><a class="" href="summarystats.html"><span class="header-section-number">9</span> Summary Statistics</a></li>
+<li><a class="" href="ggplot2basics.html"><span class="header-section-number">10</span> Data Visualization with ggplot2</a></li>
+<li><a class="" href="ggplot2customize.html"><span class="header-section-number">11</span> Customizing ggplot2 Visualizations</a></li>
+<li><a class="" href="singlevar.html"><span class="header-section-number">12</span> Single Variable Analysis</a></li>
+<li><a class="" href="multivar.html"><span class="header-section-number">13</span> Relationships Between Variables</a></li>
+<li><a class="" href="stringr.html"><span class="header-section-number">14</span> Working with Text Data</a></li>
+<li><a class="" href="forcats.html"><span class="header-section-number">15</span> Wrangling Categories with forcats</a></li>
+<li><a class="" href="lubridate.html"><span class="header-section-number">16</span> Working with Dates and Times</a></li>
+<li><a class="" href="purrr.html"><span class="header-section-number">17</span> Doing the Same Thing to Many Things at Once</a></li>
+<li><a class="" href="rmarkdown.html"><span class="header-section-number">18</span> R Markdown</a></li>
+<li><a class="" href="rmarkdown-advanced.html"><span class="header-section-number">19</span> Advanced R Markdown</a></li>
 </ul>
 
+        <div class="book-extra">
+          
+        </div>
       </nav>
-    </div>
-
-    <div class="book-body">
-      <div class="body-inner">
-        <div class="book-header" role="navigation">
-          <h1>
-            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Basic Insights from Data for Marketing Researchers</a>
-          </h1>
-        </div>
-
-        <div class="page-wrapper" tabindex="-1" role="main">
-          <div class="page-inner">
-
-            <section class="normal" id="section-">
-<div id="header">
-<h1 class="title">Basic Insights from Data for Marketing Researchers</h1>
-<p class="author"><em>Vivek H. Patil</em></p>
-<p class="date"><em>2019-11-04</em></p>
 </div>
-<div id="preface" class="section level1 unnumbered">
-<h1>Preface</h1>
-<p>This book is being written to provide it as notes for students in my undergraduate marketing research class. It will be updated as more content is created and more feedback is received. It presumes that the reader is familiar with terms used in basic statistics and does not have a phobia of numbers. Please approach the content with an open mind.</p>
-<div id="about-me" class="section level2 unnumbered">
-<h2>About me</h2>
-<p>I am a Professor of Marketing in the School of Business Administration at <a href="http://www.gonzaga.edu">Gonzaga University</a>, where I teach marketing research, data visualization and business analytics.</p>
+  </header><main class="col-sm-12 col-md-9 col-lg-7" id="content"><!--bookdown:title:end--><!--bookdown:title:start--><div id="preface" class="section level1 unnumbered">
+<h1>Preface<a class="anchor" aria-label="anchor" href="#preface"><i class="fas fa-link"></i></a>
+</h1>
+<p>Welcome! If you are reading this, chances are you have been asked (or voluntarily chose) to learn R. Either way, you are in the right place.</p>
+<p>This book has one job: <strong>teach you R from scratch.</strong> No prior programming experience needed. If you can use a spreadsheet, you can learn R. It is going to feel weird at first — typing code instead of clicking buttons — but stick with it. The payoff is worth it.</p>
+<p>By the end, you will be able to import messy data, clean it up, compute summary statistics, build publication-quality charts, and produce self-updating reports — all in R.</p>
+<div id="how-this-book-is-organized" class="section level3 unnumbered">
+<h3>How this book is organized<a class="anchor" aria-label="anchor" href="#how-this-book-is-organized"><i class="fas fa-link"></i></a>
+</h3>
+<ul>
+<li>
+<strong>Chapters 1–2</strong>: Getting started. Installing R, finding your way around RStudio, and not panicking.</li>
+<li>
+<strong>Chapters 3–4</strong>: Your data analysis toolkit and importing data. Meet the tidyverse and learn how to get data into R from CSVs, Excel files, and databases.</li>
+<li>
+<strong>Chapters 5–8</strong>: Working with data. Describing variables, modifying and reshaping data with dplyr and tidyr.</li>
+<li>
+<strong>Chapters 9–11</strong>: Summary statistics and visualization. Computing the numbers that matter and building charts with ggplot2.</li>
+<li>
+<strong>Chapters 12–13</strong>: Statistical analysis. Hypothesis testing for single variables and relationships between variables.</li>
+<li>
+<strong>Chapters 14–17</strong>: Specialized tools. Working with text (stringr), categories (forcats), dates (lubridate), and repetitive tasks (purrr).</li>
+<li>
+<strong>Chapters 18–19</strong>: R Markdown. Combining your writing and code into polished, self-updating reports, presentations, and dashboards.</li>
+</ul>
+</div>
+<div id="a-few-ground-rules" class="section level3 unnumbered">
+<h3>A few ground rules<a class="anchor" aria-label="anchor" href="#a-few-ground-rules"><i class="fas fa-link"></i></a>
+</h3>
+<ul>
+<li>
+<strong>You will make errors.</strong> Everyone does. The error messages in R look scary, but they are usually telling you something simple, like you forgot a comma. Read them. Google them. You will be fine.</li>
+<li>
+<strong>Copy-paste is your friend (at first).</strong> Run the code in this book. Then change small things and see what happens. That is how you learn.</li>
+<li>
+<strong>There is no dumb question.</strong> If you are confused, someone else is too.</li>
+</ul>
+<p>Let’s get started.</p>
+</div>
+<div id="why-this-book-exists-at-a-jesuit-university" class="section level3 unnumbered">
+<h3>Why this book exists at a Jesuit university<a class="anchor" aria-label="anchor" href="#why-this-book-exists-at-a-jesuit-university"><i class="fas fa-link"></i></a>
+</h3>
+<p>You might be wondering what a coding book has to do with Gonzaga’s mission. Fair question. Here is the short answer: everything.</p>
+<p>Gonzaga is a Jesuit university, which means we care about educating the whole person — not just the part of you that can pass an exam, but the part that will go out into the world and actually do something meaningful with what you learned. The Jesuit tradition talks about forming “men and women for others,” people who lead with competence <em>and</em> conscience. Data literacy is a big part of that now.</p>
+<p>Here is the thing about data: it is never neutral. Every dataset was collected by someone, for some reason, with some set of assumptions baked in. Every summary statistic you compute, every chart you build, every model you deploy — these shape decisions that affect real people. Which neighborhoods get investment. Which patients get treatment. Which applicants get interviews. When you know how to work with data responsibly, you have the power to make those decisions more fair, more transparent, and more grounded in evidence rather than gut feelings.</p>
+<p>That is the Jesuit idea of the “common good” in action — not as an abstract ideal you read about in a philosophy class, but as a practical skill you exercise every time you write a line of code.</p>
+<p>So yes, this is a book about R. You will learn functions and packages and how to make charts that do not look like they were made in 1997. But underneath all of that is something bigger: the ability to think critically about data, ask whose story it tells (and whose it leaves out), and use your skills in ways that make the world a little more honest and a little more just.</p>
+<p>That is why this book exists at a Jesuit university. Now let’s learn some R.</p>
+</div>
+<div id="about-the-author" class="section level2 unnumbered">
+<h2>About the Author<a class="anchor" aria-label="anchor" href="#about-the-author"><i class="fas fa-link"></i></a>
+</h2>
+<p><strong>Vivek H. Patil</strong> is a Professor of Marketing and Director of Graduate Business Programs in the School of Business Administration at <a href="https://www.gonzaga.edu">Gonzaga University</a>. He has over two decades of teaching and research experience spanning marketing, data analytics, and research methodology.</p>
+<p>His research integrates measurement theory and statistics with frameworks from economics, social psychology, and cognitive psychology to examine human behavior. He has authored or co-authored 25+ peer-reviewed articles in journals including the <em>Journal of Business Research</em>, <em>PLOS ONE</em>, <em>Journal of Marketing Analytics</em>, <em>Scientometrics</em>, and the <em>American Journal of Health Promotion</em>.</p>
+<p>He holds a Ph.D. in Business (Marketing) from the University of Kansas, an M.Eng. in Software Systems from the Birla Institute of Technology and Science (BITS Pilani), and a Master of Management Studies from BITS Pilani. This combination of business, statistics, and software engineering backgrounds informs his approach to teaching data analysis — practical, code-first, and focused on real-world applications.</p>
+<p>At Gonzaga, he teaches courses in marketing research, data visualization, and business analytics. He is also the founder of <a href="https://veloxportfolio.com">VeloxPortfolio.com</a>, an AI-powered tool that transforms resumes into portfolio websites. More at <a href="https://www.patilv.com">patilv.com</a>.</p>
+</div>
+<div id="license" class="section level2 unnumbered">
+<h2>License<a class="anchor" aria-label="anchor" href="#license"><i class="fas fa-link"></i></a>
+</h2>
+<p>All rights reserved. No part of this book may be reproduced, distributed, or transmitted in any form or by any means without the prior written permission of the author, except for brief quotations in reviews or scholarly works. For permissions or licensing inquiries, contact the author.</p>
+</div>
+<div id="attributions-and-data-sources" class="section level2 unnumbered">
+<h2>Attributions and Data Sources<a class="anchor" aria-label="anchor" href="#attributions-and-data-sources"><i class="fas fa-link"></i></a>
+</h2>
+<p>This book was built with open-source tools and relies on publicly available data, R packages, and published sources. Full attributions are listed here.</p>
+<div id="software" class="section level3 unnumbered">
+<h3>Software<a class="anchor" aria-label="anchor" href="#software"><i class="fas fa-link"></i></a>
+</h3>
+<ul>
+<li>
+<strong>R</strong> <span class="citation">(<a href="rmarkdown-advanced.html#ref-R-base">R Core Team 2025</a>)</span>: R Core Team. <em>R: A Language and Environment for Statistical Computing.</em> R Foundation for Statistical Computing, Vienna, Austria. <a href="https://www.R-project.org/">https://www.R-project.org/</a>. License: GPL-2 | GPL-3.</li>
+<li>
+<strong>RStudio / Posit</strong>: Posit Software, PBC. <a href="https://posit.co/">https://posit.co/</a>.</li>
+<li>
+<strong>bookdown</strong> <span class="citation">(<a href="rmarkdown-advanced.html#ref-R-bookdown">Xie 2025a</a>)</span>: Yihui Xie. Used to produce this book. License: GPL-3.</li>
+<li>
+<strong>knitr</strong> <span class="citation">(<a href="rmarkdown-advanced.html#ref-R-knitr">Xie 2025b</a>)</span>: Yihui Xie. License: GPL-2 | GPL-3.</li>
+<li>
+<strong>rmarkdown</strong> <span class="citation">(<a href="rmarkdown-advanced.html#ref-R-rmarkdown">Allaire et al. 2025</a>)</span>: Allaire, J.J., Xie, Y., et al. License: GPL-3.</li>
+</ul>
+</div>
+<div id="r-packages-used-in-examples" class="section level3 unnumbered">
+<h3>R Packages Used in Examples<a class="anchor" aria-label="anchor" href="#r-packages-used-in-examples"><i class="fas fa-link"></i></a>
+</h3>
+<p>All R packages listed below are open source and available on <a href="https://cran.r-project.org/">CRAN</a>. Package authors retain copyright to their respective works.</p>
+<div class="inline-table"><table style="width:100%;" class="table table-sm">
+<colgroup>
+<col width="23%">
+<col width="28%">
+<col width="23%">
+<col width="23%">
+</colgroup>
+<thead><tr class="header">
+<th align="left">Package</th>
+<th align="left">Author(s)</th>
+<th align="left">License</th>
+<th align="left">Used in</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td align="left">
+<strong>tidyverse</strong> (ggplot2, dplyr, tidyr, readr, purrr, tibble, stringr, forcats)</td>
+<td align="left">Hadley Wickham et al.</td>
+<td align="left">MIT</td>
+<td align="left">Throughout</td>
+</tr>
+<tr class="even">
+<td align="left"><strong>lubridate</strong></td>
+<td align="left">Vitalie Spinu, Garrett Grolemund, Hadley Wickham</td>
+<td align="left">GPL (&gt;=2)</td>
+<td align="left">Ch 16</td>
+</tr>
+<tr class="odd">
+<td align="left"><strong>DT</strong></td>
+<td align="left">Yihui Xie et al.</td>
+<td align="left">GPL-3</td>
+<td align="left">Ch 5, 7</td>
+</tr>
+<tr class="even">
+<td align="left"><strong>plotly</strong></td>
+<td align="left">Carson Sievert et al.</td>
+<td align="left">MIT</td>
+<td align="left">Ch 10, 13</td>
+</tr>
+<tr class="odd">
+<td align="left"><strong>Hmisc</strong></td>
+<td align="left">Frank Harrell et al.</td>
+<td align="left">GPL (&gt;=2)</td>
+<td align="left">Ch 13</td>
+</tr>
+<tr class="even">
+<td align="left"><strong>scales</strong></td>
+<td align="left">Hadley Wickham, Dana Seidel</td>
+<td align="left">MIT</td>
+<td align="left">Ch 10–11</td>
+</tr>
+<tr class="odd">
+<td align="left"><strong>readxl</strong></td>
+<td align="left">Hadley Wickham, Jennifer Bryan</td>
+<td align="left">MIT</td>
+<td align="left">Ch 4</td>
+</tr>
+<tr class="even">
+<td align="left"><strong>kableExtra</strong></td>
+<td align="left">Hao Zhu</td>
+<td align="left">MIT</td>
+<td align="left">Ch 18</td>
+</tr>
+<tr class="odd">
+<td align="left"><strong>skimr</strong></td>
+<td align="left">Elin Waring et al.</td>
+<td align="left">GPL-3</td>
+<td align="left">Ch 5</td>
+</tr>
+<tr class="even">
+<td align="left"><strong>patchwork</strong></td>
+<td align="left">Thomas Lin Pedersen</td>
+<td align="left">MIT</td>
+<td align="left">Ch 11</td>
+</tr>
+<tr class="odd">
+<td align="left"><strong>ggthemes</strong></td>
+<td align="left">Jeffrey B. Arnold</td>
+<td align="left">GPL-2</td>
+<td align="left">Ch 11</td>
+</tr>
+<tr class="even">
+<td align="left"><strong>ggrepel</strong></td>
+<td align="left">Kamil Slowikowski</td>
+<td align="left">GPL-3</td>
+<td align="left">Ch 11</td>
+</tr>
+<tr class="odd">
+<td align="left"><strong>haven</strong></td>
+<td align="left">Hadley Wickham, Evan Miller</td>
+<td align="left">MIT</td>
+<td align="left">Ch 4</td>
+</tr>
+<tr class="even">
+<td align="left"><strong>RColorBrewer</strong></td>
+<td align="left">Erich Neuwirth</td>
+<td align="left">Apache 2.0</td>
+<td align="left">Ch 11</td>
+</tr>
+<tr class="odd">
+<td align="left"><strong>MASS</strong></td>
+<td align="left">Brian Ripley et al.</td>
+<td align="left">GPL-2 / GPL-3</td>
+<td align="left">Ch 6</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<div id="datasets" class="section level3 unnumbered">
+<h3>Datasets<a class="anchor" aria-label="anchor" href="#datasets"><i class="fas fa-link"></i></a>
+</h3>
+<div class="inline-table"><table class="table table-sm">
+<colgroup>
+<col width="26%">
+<col width="23%">
+<col width="50%">
+</colgroup>
+<thead><tr class="header">
+<th align="left">Dataset</th>
+<th align="left">Source</th>
+<th align="left">License / Terms</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td align="left"><strong>iris</strong></td>
+<td align="left">Anderson, E. (1935) and Fisher, R.A. (1936). Built into R.</td>
+<td align="left">Public domain</td>
+</tr>
+<tr class="even">
+<td align="left"><strong>mtcars</strong></td>
+<td align="left">Henderson and Velleman (1981). <em>Motor Trend</em> magazine, 1974. Built into R.</td>
+<td align="left">Public domain</td>
+</tr>
+<tr class="odd">
+<td align="left"><strong>mpg</strong></td>
+<td align="left">EPA fuel economy data (1999, 2008). Included in ggplot2.</td>
+<td align="left">Public domain (US government data)</td>
+</tr>
+<tr class="even">
+<td align="left"><strong>diamonds</strong></td>
+<td align="left">Included in ggplot2. Originally from <a href="https://www.diamondse.info/">diamondse.info</a>.</td>
+<td align="left">Fair use for education</td>
+</tr>
+<tr class="odd">
+<td align="left"><strong>economics</strong></td>
+<td align="left">Federal Reserve Economic Data (FRED). Included in ggplot2.</td>
+<td align="left">Public domain (US government data)</td>
+</tr>
+<tr class="even">
+<td align="left"><strong>survey</strong></td>
+<td align="left">Venables, W.N. and Ripley, B.D. (1999). <em>Modern Applied Statistics with S-PLUS,</em> 3rd ed., Springer. From the MASS package; collected from 237 Statistics I students at the University of Adelaide.</td>
+<td align="left">GPL-2 / GPL-3 (MASS package)</td>
+</tr>
+<tr class="odd">
+<td align="left"><strong>corrdata</strong></td>
+<td align="left">Simulated correlation demonstration data created by the author.</td>
+<td align="left">Original to this book</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<div id="images" class="section level3 unnumbered">
+<h3>Images<a class="anchor" aria-label="anchor" href="#images"><i class="fas fa-link"></i></a>
+</h3>
+<div class="inline-table"><table class="table table-sm">
+<colgroup>
+<col width="31%">
+<col width="36%">
+<col width="31%">
+</colgroup>
+<thead><tr class="header">
+<th align="left">Image</th>
+<th align="left">Source</th>
+<th align="left">Terms</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td align="left">R logo (<code>Rlogo.png</code>)</td>
+<td align="left">The R Foundation. <a href="https://www.r-project.org/logo/">https://www.r-project.org/logo/</a>
+</td>
+<td align="left"><a href="https://creativecommons.org/licenses/by-sa/4.0/">CC BY-SA 4.0</a></td>
+</tr>
+<tr class="even">
+<td align="left">Type conversion diagram (<code>04files/conversion.png</code>)</td>
+<td align="left">Created by the author or adapted from public R documentation.</td>
+<td align="left">Original to this book</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<div id="chapter-1-sources" class="section level3 unnumbered">
+<h3>Chapter 1 Sources<a class="anchor" aria-label="anchor" href="#chapter-1-sources"><i class="fas fa-link"></i></a>
+</h3>
+<p>The following factual claims in Chapter 1 are drawn from publicly available sources:</p>
+<ul>
+<li>
+<strong>CRAN package count (~23,000+ in 2026):</strong> CRAN package repository, <a href="https://cran.r-project.org/web/packages/">https://cran.r-project.org/web/packages/</a>. Milestone estimates based on Muenchen, R.A., “The Popularity of Data Analysis Software,” <a href="https://r4stats.com/articles/popularity/">https://r4stats.com/articles/popularity/</a> (continuously updated).</li>
+<li>
+<strong>TIOBE Index (#8, December 2025):</strong> TIOBE Software BV, <a href="https://www.tiobe.com/tiobe-index/">https://www.tiobe.com/tiobe-index/</a>.</li>
+<li>
+<strong>PYPL Index (#5):</strong> Pierre Carbonnelle, <a href="https://pypl.github.io/PYPL.html">https://pypl.github.io/PYPL.html</a>.</li>
+<li>
+<strong>IEEE Spectrum (#5, 2024):</strong> IEEE, “Top Programming Languages,” <a href="https://spectrum.ieee.org/top-programming-languages">https://spectrum.ieee.org/top-programming-languages</a>.</li>
+<li>
+<strong>Stack Overflow Developer Survey (4.9%, 2025):</strong> Stack Overflow, <a href="https://survey.stackoverflow.co/">https://survey.stackoverflow.co/</a>.</li>
+<li>
+<strong>R Consortium user estimate (2 million+):</strong> R Consortium, <a href="https://www.r-consortium.org/">https://www.r-consortium.org/</a>.</li>
+<li>
+<strong>NYT article on R:</strong> Vance, A. (2009). “Data Analysts Captivated by R’s Power.” <em>The New York Times,</em> January 6, 2009.</li>
+<li>
+<strong>BBC bbplot package:</strong> BBC Visual and Data Journalism, <a href="https://github.com/bbc/bbplot">https://github.com/bbc/bbplot</a>. License: GPL-3.</li>
+<li>
+<strong>R’s return to TIOBE top 10 coverage:</strong>
+<ul>
+<li>Krill, P. (2025). “R language is making a comeback.” <em>InfoWorld,</em> December 13, 2025.</li>
+<li>“Is the R Programming Language Surging in Popularity?” <em>Slashdot,</em> December 14, 2025.</li>
+<li>Yau, N. (2025). “R climbs back up into the top ten programming languages.” <em>FlowingData,</em> December 19, 2025.</li>
+</ul>
+</li>
+</ul>
+</div>
+<div id="typography-and-fonts" class="section level3 unnumbered">
+<h3>Typography and Fonts<a class="anchor" aria-label="anchor" href="#typography-and-fonts"><i class="fas fa-link"></i></a>
+</h3>
+<ul>
+<li>
+<strong>Inter</strong> by Rasmus Andersson. <a href="https://rsms.me/inter/">https://rsms.me/inter/</a>. License: SIL Open Font License 1.1.</li>
+<li>
+<strong>Fira Code</strong> by Nikita Prokopov. <a href="https://github.com/tonsky/FiraCode">https://github.com/tonsky/FiraCode</a>. License: SIL Open Font License 1.1.</li>
+</ul>
+</div>
+<div id="acknowledgments" class="section level3 unnumbered">
+<h3>Acknowledgments<a class="anchor" aria-label="anchor" href="#acknowledgments"><i class="fas fa-link"></i></a>
+</h3>
+<p>This book was developed with assistance from <strong>Claude</strong> (Anthropic), an AI language model used for drafting, editing, and code generation. All content was reviewed and approved by the author.</p>
 
 </div>
 </div>
-            </section>
-
-          </div>
-        </div>
-      </div>
-
-<a href="introR.html" class="navigation navigation-next navigation-unique" aria-label="Next page"><i class="fa fa-angle-right"></i></a>
-    </div>
-  </div>
-<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
-<script src="libs/gitbook-2.6.7/js/lunr.js"></script>
-<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
-<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
-<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
-<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
-<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+</div>
 <script>
-gitbook.require(["gitbook"], function(gitbook) {
-gitbook.start({
-"sharing": {
-"github": false,
-"facebook": true,
-"twitter": true,
-"google": false,
-"linkedin": false,
-"weibo": false,
-"instapaper": false,
-"vk": false,
-"all": ["facebook", "google", "twitter", "linkedin", "weibo", "instapaper"]
-},
-"fontsettings": {
-"theme": "white",
-"family": "sans",
-"size": 2
-},
-"edit": {
-"link": null,
-"text": null
-},
-"history": {
-"link": null,
-"text": null
-},
-"download": null,
-"toc": {
-"collapse": "subsection"
-},
-"collapse": "section",
-"scroll_highlight": true,
-"toolbar": {
-"position": "fixed"
-},
-"search": true
+document.addEventListener("DOMContentLoaded", function() {
+  var sidebar = document.querySelector(".sidebar-book");
+  if (!sidebar) return;
+
+  // Create a slim tab on the left edge — visible, unobtrusive, clearly a toggle
+  var btn = document.createElement("button");
+  btn.innerHTML = '&#9776; Contents';
+  btn.setAttribute("aria-label", "Toggle table of contents");
+  btn.id = "sidebar-toggle-btn";
+  document.body.appendChild(btn);
+
+  var isOpen = false;
+
+  function openSidebar() {
+    isOpen = true;
+    sidebar.classList.add("sidebar-open");
+    btn.innerHTML = '&times; Close';
+    btn.classList.add("sidebar-toggle-active");
+  }
+
+  function closeSidebar() {
+    isOpen = false;
+    sidebar.classList.remove("sidebar-open");
+    btn.innerHTML = '&#9776; Contents';
+    btn.classList.remove("sidebar-toggle-active");
+  }
+
+  btn.addEventListener("click", function(e) {
+    e.stopPropagation();
+    if (isOpen) { closeSidebar(); } else { openSidebar(); }
+  });
+
+  // Close when clicking outside
+  document.addEventListener("click", function(e) {
+    if (isOpen && !sidebar.contains(e.target) && e.target !== btn) {
+      closeSidebar();
+    }
+  });
+
+  // Close on Escape key
+  document.addEventListener("keydown", function(e) {
+    if (e.key === "Escape" && isOpen) { closeSidebar(); }
+  });
+
+  // Only activate on wide screens
+  function checkWidth() {
+    if (window.innerWidth >= 992) {
+      btn.style.display = "flex";
+      sidebar.classList.add("sidebar-collapsed");
+    } else {
+      btn.style.display = "none";
+      sidebar.classList.remove("sidebar-collapsed");
+      sidebar.classList.remove("sidebar-open");
+    }
+  }
+
+  window.addEventListener("resize", checkWidth);
+  checkWidth();
 });
-});
+</script><div class="chapter-nav">
+<div class="empty"></div>
+<div class="next"><a href="introR.html"><span class="header-section-number">1</span> Introduction to R</a></div>
+</div></main><div class="col-md-3 col-lg-2 d-none d-md-block sidebar sidebar-chapter">
+    <nav id="toc" data-toggle="toc" aria-label="On this page"><h2>On this page</h2>
+      <ul class="nav navbar-nav">
+<li>
+<a class="nav-link" href="#preface">Preface</a><ul class="nav navbar-nav">
+<li><a class="nav-link" href="#how-this-book-is-organized">How this book is organized</a></li>
+<li><a class="nav-link" href="#a-few-ground-rules">A few ground rules</a></li>
+<li><a class="nav-link" href="#why-this-book-exists-at-a-jesuit-university">Why this book exists at a Jesuit university</a></li>
+</ul>
+</li>
+<li><a class="nav-link" href="#about-the-author">About the Author</a></li>
+<li><a class="nav-link" href="#license">License</a></li>
+<li>
+<a class="nav-link" href="#attributions-and-data-sources">Attributions and Data Sources</a><ul class="nav navbar-nav">
+<li><a class="nav-link" href="#software">Software</a></li>
+<li><a class="nav-link" href="#r-packages-used-in-examples">R Packages Used in Examples</a></li>
+<li><a class="nav-link" href="#datasets">Datasets</a></li>
+<li><a class="nav-link" href="#images">Images</a></li>
+<li><a class="nav-link" href="#chapter-1-sources">Chapter 1 Sources</a></li>
+<li><a class="nav-link" href="#typography-and-fonts">Typography and Fonts</a></li>
+<li><a class="nav-link" href="#acknowledgments">Acknowledgments</a></li>
+</ul>
+</li>
+</ul>
+
+      <div class="book-extra">
+        <ul class="list-unstyled">
+          
+        </ul>
+</div>
+    </nav>
+</div>
+
+</div>
+</div> <!-- .container -->
+
+<footer class="bg-primary text-light mt-5"><div class="container"><div class="row">
+
+  <div class="col-12 col-md-6 mt-3">
+    <p>"<strong>R and the Tidyverse: A Beginner’s Guide</strong>" was written by Vivek H. Patil. It was last built on 2026-02-27.</p>
+  </div>
+
+  <div class="col-12 col-md-6 mt-3">
+    <p>This book was built by the <a class="text-light" href="https://bookdown.org">bookdown</a> R package.</p>
+  </div>
+
+</div></div>
+</footer><!-- dynamically load mathjax for compatibility with self-contained --><script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "true";
+    if (src === "" || src === "true") src = "https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.9/latest.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:")
+      if (/^https?:/.test(src))
+        src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script><script type="text/x-mathjax-config">const popovers = document.querySelectorAll('a.footnote-ref[data-toggle="popover"]');
+for (let popover of popovers) {
+  const div = document.createElement('div');
+  div.setAttribute('style', 'position: absolute; top: 0, left:0; width:0, height:0, overflow: hidden; visibility: hidden;');
+  div.innerHTML = popover.getAttribute('data-content');
+
+  var has_math = div.querySelector("span.math");
+  if (has_math) {
+    document.body.appendChild(div);
+    MathJax.Hub.Queue(["Typeset", MathJax.Hub, div]);
+    MathJax.Hub.Queue(function() {
+      popover.setAttribute('data-content', div.innerHTML);
+      document.body.removeChild(div);
+    })
+  }
+}
 </script>
-
 </body>
-
 </html>

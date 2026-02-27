@@ -2,19 +2,19 @@
 
 ```{r include=FALSE}
 library(tidyverse)
-opts_chunk$set(echo=TRUE, warning=FALSE, message=FALSE)
+knitr::opts_chunk$set(echo=TRUE, warning=FALSE, message=FALSE)
 ```
 
 Every dataset has a story to tell, and summary statistics are the "previously on..." recap before the main episode. Before you build fancy models, create executive dashboards, or wow your boss with machine learning, you need to answer some embarrassingly basic questions: What is the average? How spread out are the values? Are there any numbers so bizarre they make you double-check the data source? Getting these fundamentals right is the difference between an analyst who knows their data and one who is just guessing with extra steps.
 
-This chapter covers computing summary statistics using base R functions. For computing grouped summaries using **dplyr** (the "give me these numbers broken down by region/segment/quarter" tool), see Chapter \@ref(dplyr).
+This chapter covers computing summary statistics using R's built-in functions. For computing grouped summaries using **dplyr** (the "give me these numbers broken down by region/segment/quarter" tool), see Chapter \@ref(dplyr).
 
 ## Measures of Central Tendency
 
 Mean, median, and mode --- the holy trinity of "what is typical?" in your data. Here is the business translation, because nobody in a boardroom says "measure of central tendency":
 
 - **Mean** = your average order value. Add everything up, divide by the count. Simple, familiar, and what your CEO is probably asking about.
-- **Median** = the salary figure where half your employees earn more and half earn less. Less flashy than the mean, but way more honest when outliers are involved. (This is why job postings should report median salary, not mean --- one VP making $800K really skews the average.)
+- **Median** = the salary figure where half your employees earn more and half earn less. Less flashy than the mean, but way more honest when outliers are involved. (This is why job postings should report median salary, not mean --- one VP making $800K really skews the average.) Choosing the right summary statistic is not just a math decision --- it is a fairness decision. The number you report shapes what decision-makers believe is "normal," and that belief drives real policy.
 - **Mode** = the most popular item in your product catalog. The best-seller. The thing customers keep coming back for.
 
 One important note: not all three work for every variable type. For nominal variables (like customer region or product category), only the mode makes sense --- you cannot average "Northeast" and "West Coast." For ordinal variables (like satisfaction ratings from 1 to 5), mode and median work fine. All three are fair game for numeric variables like revenue, age, or number of units sold.
@@ -32,7 +32,7 @@ median(iris$Petal.Length)
 
 The median of Petal.Length is `r median(iris$Petal.Length)`
 
-Here is a fun fact that will make you question everything: R does not have a built-in function for determining the mode. Seriously. One of the three most fundamental statistics in existence, and R just... forgot to include it. It is like buying a car and realizing it does not have a cup holder. No worries though --- we can write our own. The function below called `mymode` handles it nicely, and it even works when there are multiple modes (ties for first place). (This solution is adapted from [a question on Stack Overflow.](http://stackoverflow.com/questions/2547402/is-there-a-built-in-function-for-finding-the-mode))
+Here is a fun fact that will make you question everything: R does not have a built-in function for determining the mode. Seriously. One of the three most fundamental statistics in existence, and R just... forgot to include it. It is like buying a car and realizing it does not have a cup holder. No worries though --- we can write our own. The function below called `mymode` handles it nicely, and it even works when there are multiple modes (ties for first place). (This solution is adapted from [a question on Stack Overflow.](https://stackoverflow.com/questions/2547402/is-there-a-built-in-function-for-finding-the-mode))
 
 ```{r}
 # Function to determine the mode. Can also identify multiple modes
@@ -58,6 +58,8 @@ mymode(iris$Petal.Length) # Gives the mode(s) of Petal.Length
 modecount(iris$Petal.Length) # Gives the frequency of occurrence of the mode
 
 ```
+
+The mode of Petal.Length is 1.5 cm, and it appears 14 times in the dataset. This tells you that the single most common petal length measurement is 1.5 cm --- which happens to be a setosa value. When the mode sits far from the mean (which is about 3.76 cm), that is a hint the distribution is skewed or multimodal.
 
 And now, a factor variable:
 
@@ -190,6 +192,8 @@ iris %>%
   )
 ```
 
+This table tells a complete story. Setosa has the smallest sepals (mean 5.01 cm, tight standard deviation of 0.35), while virginica has the largest (mean 6.59 cm, more variable at SD 0.64). Versicolor lands in the middle. The min-max range for virginica (4.9 to 7.9 cm) is nearly twice as wide as setosa's (4.3 to 5.8 cm), meaning virginica flowers are not only bigger on average --- they are also much more variable in size.
+
 ### Multiple variables at once with `across()`
 
 When you want the same statistics for every numeric column --- instead of typing them out one by one like it is 1997 --- `across()` is an absolute lifesaver. Imagine needing mean and standard deviation for twenty columns. Without `across()`, that is forty lines of code. With it, you are done in two:
@@ -200,6 +204,8 @@ iris %>%
   summarize(across(where(is.numeric), list(mean = mean, sd = sd), .names = "{.col}_{.fn}"))
 ```
 
+The column names follow the pattern `VariableName_Statistic` (e.g., `Sepal.Length_mean`). Scanning across the row for setosa, you can see it has tiny petals (mean 1.46 cm length, 0.25 cm width) with very little variation (SD of 0.17 and 0.11). Virginica has the largest petals (mean 5.55 cm long, 2.03 cm wide) but also the most variation. This table gives you a comprehensive species profile in one glance --- the kind of summary you would build to compare product lines or customer segments.
+
 ### Quick counts
 
 The `count()` function is your fastest path to "how many are in each group?" --- a question that comes up roughly every five minutes in any business meeting. "How many customers in each segment?" "How many orders per region?" "How many support tickets per category?" This little function is about to become your best friend:
@@ -207,5 +213,7 @@ The `count()` function is your fastest path to "how many are in each group?" ---
 ```{r}
 iris %>% count(Species)
 ```
+
+Each species has exactly 50 observations --- a perfectly balanced dataset. In real business data, you almost never get this lucky. Knowing the count per group is critical because a "mean revenue of $1M" means something very different when it is based on 500 customers versus 5 customers.
 
 For a detailed treatment of `summarize()`, `group_by()`, and `across()`, see Chapter \@ref(dplyr).

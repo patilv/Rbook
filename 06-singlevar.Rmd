@@ -2,12 +2,12 @@
 
 ```{r include=FALSE}
 library(tidyverse)
-opts_chunk$set(echo=TRUE, warning=FALSE, message=FALSE)
+knitr::opts_chunk$set(echo=TRUE, warning=FALSE, message=FALSE)
 ```
 
 Before you start hunting for relationships between variables or building prediction models, you need to get to know each variable on its own. Think of it like the first week at a new job --- before you figure out how departments interact, you need to understand what each one actually does. Single variable analysis (the fancy term is "univariate analysis") is your get-to-know-you phase with the data.
 
-This chapter covers analyzing one variable at a time using both base R and ggplot2 visualizations. We will look at numeric variables (histograms, density plots, box plots) and factor variables (bar charts, and yes, the dreaded pie chart). We will also dip into hypothesis testing --- the statistical machinery that lets you say "I am 95% confident that..." in a meeting and actually mean it. For the full ggplot2 experience, see Chapters \@ref(ggplot2basics) and \@ref(ggplot2customize).
+This chapter covers analyzing one variable at a time using visualizations and statistical tests. We will look at numeric variables (histograms, density plots, box plots) and factor variables (bar charts, and yes, the dreaded pie chart). We will also dip into hypothesis testing --- the statistical machinery that lets you say "I am 95% confident that..." in a meeting and actually mean it. For the full ggplot2 experience, see Chapters \@ref(ggplot2basics) and \@ref(ggplot2customize).
 
 ## Numeric Variable
 
@@ -17,14 +17,6 @@ A histogram is the first date you should go on with any numeric variable. It cho
 
 In business terms, this is how you would visualize the distribution of customer order values. If most orders cluster around $25-$50 with a long tail of $500+ orders, that tells a very different story than a nice bell curve centered at $100.
 
-**Base R:**
-
-```{r}
-hist(iris$Sepal.Length, col = "darkred", breaks = 30, border = "white", xlab = "Sepal.Length")
-```
-
-**ggplot2:**
-
 ```{r}
 ggplot(iris, aes(x = Sepal.Length)) +
   geom_histogram(bins = 30, fill = "darkred", color = "white") +
@@ -32,17 +24,11 @@ ggplot(iris, aes(x = Sepal.Length)) +
   theme_minimal()
 ```
 
+The distribution of Sepal.Length is roughly bell-shaped, centered around 5.5--6.0 cm, with a slight right skew. Most observations cluster between 4.5 and 7.0 cm, and there are no extreme outliers. In a business context, this kind of shape suggests a "typical" value that most observations hover around --- like the average order size at a restaurant where most people spend about the same amount.
+
 ### Density plot
 
 If a histogram is a first date, a density plot is the second date --- smoother, more refined, and you start to see the real shape underneath. Instead of chunky bars, you get a sleek continuous curve. Density plots are especially handy when you want to overlay multiple groups on the same chart without it looking like a bar chart had a nervous breakdown.
-
-**Base R:**
-
-```{r}
-plot(density(iris$Sepal.Length))
-```
-
-**ggplot2:**
 
 ```{r}
 ggplot(iris, aes(x = Sepal.Length)) +
@@ -60,17 +46,11 @@ ggplot(iris, aes(x = Sepal.Length, fill = Species)) +
   theme_minimal()
 ```
 
+The grouped density plot reveals that setosa has the narrowest spread and lowest center (around 5.0 cm), while virginica has the highest center (around 6.5 cm) with a wider spread. Versicolor sits in the middle. Notice how setosa barely overlaps with virginica --- these two groups are quite distinct --- while versicolor overlaps considerably with both. In a business context, if these were customer segments, you would feel confident treating setosa and virginica as genuinely different populations, but versicolor would require more nuance.
+
 ### Box plot
 
 The box plot is the executive summary of a distribution. In one compact visual, you get the median (the line in the middle of the box), the interquartile range (the box itself --- where the middle 50% of your data lives), the whiskers (the range of "normal" values), and any outliers (the lonely dots hanging out by themselves like the person who shows up to the meeting 30 minutes early). It is the data visualization equivalent of a one-page brief: everything important, nothing extra.
-
-**Base R:**
-
-```{r}
-boxplot(iris$Sepal.Length)
-```
-
-**ggplot2:**
 
 ```{r}
 ggplot(iris, aes(y = Sepal.Length)) +
@@ -89,14 +69,22 @@ ggplot(iris, aes(x = Species, y = Sepal.Length, fill = Species)) +
   theme(legend.position = "none")
 ```
 
+Comparing species, virginica has the highest median Sepal.Length (around 6.6 cm) and the widest IQR, meaning more variability. Setosa has the lowest median (around 5.0 cm) and a tight IQR, meaning these flowers are more consistent in size. Versicolor sits in between. There is one outlier in virginica on the low end. If these were sales territories, virginica would be your "high average but volatile" region, while setosa would be "steady and predictable."
+
 
 ### Test of Mean
 
 Now we are moving from "looking at the data" to "making claims about the data" --- and that is where hypothesis testing enters the chat. Visualizations are great for exploration, but when your VP asks "are you sure about that number?", you need something more rigorous than "well, the histogram looked pretty good."
 
+**A quick primer on hypothesis testing.** The logic goes like this: you start with a **null hypothesis** (usually "nothing interesting is happening" --- the mean equals some value, the two groups are the same, there is no relationship). Then you look at your data and ask: "If the null hypothesis were true, how likely is it that I would see data this extreme?" That likelihood is the **p-value**. A small p-value (typically below .05) means your data is very unlikely under the null hypothesis, so you **reject** the null and conclude something interesting *is* going on. A large p-value means your data is perfectly consistent with the null --- you cannot rule it out.
+
+Think of it like a courtroom. The null hypothesis is "innocent until proven guilty." The p-value is the strength of the evidence against innocence. If the evidence is overwhelming (p < .05), you convict. If it is weak, the defendant walks.
+
 ```{r}
 mean(iris$Sepal.Length)
 ```
+
+The mean Sepal.Length is about 5.84 cm. But is that meaningfully different from, say, 5.0? Or did we just happen to get a slightly high average in this particular sample? A one-sample t-test answers that question formally.
 
 If we had to test whether the mean of Sepal.Length was either = or < or > a particular value, we could use a one-sample t-test. In the real world, this is how you would answer questions like "Is our average customer satisfaction score really above 4.0, or did we just get lucky with this particular sample?" It is the difference between a gut feeling and a defensible business claim.
 
@@ -112,11 +100,23 @@ Here we test whether the mean is different from 5. The null hypothesis says "the
 t.test(iris$Sepal.Length,mu=5) # Ho: mu=5
 ```
 
+**How to read this output.** The key pieces are:
+
+- **t = 13.627**: This is the test statistic --- it measures how far our sample mean (5.84) is from the hypothesized value (5.0), in units of standard error. The bigger the absolute value, the stronger the evidence against the null. A t-value of 13.6 is enormous.
+- **df = 149**: Degrees of freedom, which is just the sample size minus 1 (150 - 1 = 149). This determines the shape of the distribution R uses to calculate the p-value.
+- **p-value < 2.2e-16**: This is essentially zero. It means: if the true mean really were 5.0, the probability of getting a sample mean as extreme as 5.84 (or more extreme) is astronomically small. We reject the null hypothesis.
+- **95 percent confidence interval: 5.71 to 5.98**: We are 95% confident the true population mean falls somewhere in this range. Notice that 5.0 is nowhere near this interval --- more evidence that the mean is not 5.
+- **sample estimate (mean of x = 5.843)**: This is simply the sample mean we computed earlier.
+
+Bottom line: the mean Sepal.Length is statistically significantly different from 5.0. This is not a fluke.
+
 Now let us get more specific. What if we want to test whether the mean is *greater* than 5, and we want to be 99% confident about it? That is a tougher bar to clear, but sometimes the stakes demand it:
 
 ```{r}
 t.test(iris$Sepal.Length,mu=5,alternative="greater",conf.level = .99) # Ho: mu=5
 ```
+
+**Reading this output:** The t-statistic and p-value are even more decisive here. With `alternative = "greater"`, R tests a one-sided hypothesis (is the mean *above* 5?), which gives a smaller p-value than the two-sided test. The 99% confidence interval starts at 5.68 and goes to infinity --- meaning we are 99% confident the true mean is at least 5.68, which is well above 5.
 
 Interpretation: Since the p-value is less than .01, we have evidence to suggest that the mean of Sepal.Length is greater than 5. In business terms, if this were your average customer spend and 5 was your break-even target, you could confidently walk into the CFO's office and say "we are clearing the bar." That is the power of a hypothesis test --- it turns "I think so" into "the data confirms it."
 
@@ -128,14 +128,6 @@ Interpretation: Since the p-value is less than .01, we have evidence to suggest 
 
 For categorical variables --- things like product categories, customer segments, regions, or department names --- bar charts are your go-to visualization. They answer the beautifully simple question: "How many of each do we have?" Not fancy, but enormously useful. You would be amazed how many business decisions start with just counting things.
 
-**Base R:**
-
-```{r}
-plot(iris$Species)
-```
-
-**ggplot2:**
-
 ```{r}
 ggplot(iris, aes(x = Species, fill = Species)) +
   geom_bar() +
@@ -144,11 +136,11 @@ ggplot(iris, aes(x = Species, fill = Species)) +
   theme(legend.position = "none")
 ```
 
+The bar chart shows all three species have exactly 50 observations each --- a perfectly balanced dataset. In real-world business data, you almost never get this lucky. Usually one category dominates (like "Standard" customers vastly outnumbering "Premium" ones), and spotting that imbalance early is critical.
+
 ### Pie Chart - FYI Do not use
 
 We are legally obligated to show you how to make a pie chart, but we are also morally obligated to tell you not to use one. Pie charts are the cargo shorts of data visualization --- technically functional, but everyone in the analytics world judges you for wearing them. The core problem is that human brains are terrible at comparing angles and areas. Quick: is a 23% slice meaningfully different from a 27% slice? In a pie chart, good luck. In a bar chart, it is obvious. That said, your boss *will* ask for a pie chart at some point (it is an immutable law of corporate life), so here is how to make one. Then gently suggest a bar chart instead.
-
-**Base R:**
 
 ```{r}
 counts <- table(iris$Species)
@@ -156,6 +148,7 @@ labs <- paste(iris$Species, counts)
 pie(counts, labels = labs)
 ```
 
+The pie chart shows three equal slices (50 each). Looks fine here because all three slices are identical --- but imagine one slice was 23% and another 27%. Could you tell the difference? Probably not. A bar chart would make that gap obvious instantly. That is why pie charts are problematic for anything beyond two or three very different-sized categories.
 
 ### One factor-variable Chi-square goodness-of-fit test
 
@@ -163,14 +156,14 @@ Do not let the scary name fool you --- this test answers a very practical questi
 
 To illustrate this, let us use the `survey` dataset (from an R package named `MASS`). The data and their description have been provided in the folder for datasets.
 
-** Names of variables**:
+**Names of variables**:
 
 ```{r}
 load("data/survey.Rda")
 names(survey)
 ```
 
-** Structure of the dataframe**
+**Structure of the dataframe**
 
 ```{r}
 str(survey)
@@ -181,20 +174,26 @@ str(survey)
 Let us look at the smoking habits of students, stored in the `Smoke` variable. Think of this as a customer behavior survey --- "how frequently do customers use our premium features?" with categories like "Never," "Occasionally," "Regularly," and "Heavy."
 
 ```{r}
-plot(survey$Smoke,col="lightblue")
+ggplot(survey %>% filter(!is.na(Smoke)), aes(x = Smoke, fill = Smoke)) +
+  geom_bar() +
+  labs(x = "Smoking Habit", y = "Count", title = "Smoking Habits of Students") +
+  theme_minimal() +
+  theme(legend.position = "none")
 ```
+
+The bar chart immediately reveals that the vast majority of students are non-smokers ("Never"), with relatively few in the other categories. This kind of heavily skewed distribution is extremely common in behavioral data --- most customers never use a feature, a small group uses it occasionally, and an even smaller group uses it heavily.
 
 Now suppose we wanted to test whether the observed distribution matches our expectation that 70% of students were non-smokers and the remaining 30% were equally split among the other three groups (10% each). In a business setting, this is like testing whether your actual customer demographics match the target profile your marketing campaign was designed around.
 
 Null: The observed frequency distribution fits well with the expected frequency distribution. (In plain English: "Reality matches our assumptions.")
 Alternate: The observed frequency distribution does not fit well with the expected frequency distribution. (In plain English: "Our assumptions were wrong and we need to rethink things.")
 
-Assumptions of the test are discussed in: [http://www.basic.northwestern.edu/statguidefiles/gf-dist_ass_viol.html](http://www.basic.northwestern.edu/statguidefiles/gf-dist_ass_viol.html)
+The standard assumptions are: (1) each observation is independent, (2) the sample is drawn from the population of interest, and (3) expected frequencies are not too small (a common rule of thumb is that each expected cell count should be at least 5).
 
-How many observations are present in each of the four levels of the `Smoker` variable? This is our observed frequency distribution --- what actually happened out in the real world:
+How many observations are present in each of the four levels of the `Smoke` variable? This is our observed frequency distribution --- what actually happened out in the real world:
 
 ```{r}
-obsfreq=table(survey$Smoke)
+obsfreq <- survey %>% filter(!is.na(Smoke)) %>% pull(Smoke) %>% table()
 obsfreq
 ```
 
@@ -216,7 +215,13 @@ Chi-square test of goodness of fit test --- the moment of truth:
 chisq.test(obsfreq,p=expprop)
 ```
 
-Interpretation: Since the p-value is less than .01 (giving us a 99% confidence level), we find evidence to suggest that the two distributions are different. Our assumption about the proportions does not hold up to scrutiny. The actual breakdown of smoking habits is significantly different from the 70/10/10/10 split we hypothesized. If this were a business scenario, it would mean your assumed customer segments do not match reality --- which is valuable information, even if it is not what you wanted to hear.
+**How to read this output:**
+
+- **X-squared = 20.48**: This is the chi-square test statistic. It measures how far the observed counts are from the expected counts, summed across all categories. The bigger this number, the worse the fit between observed and expected. A value of 20.48 is quite large.
+- **df = 3**: Degrees of freedom, which equals the number of categories minus 1 (4 - 1 = 3). This tells R which chi-square distribution to use for the p-value.
+- **p-value = 0.000136**: The probability of seeing a chi-square value this large (or larger) if the expected distribution were actually correct. This is very small --- way below .01.
+
+Interpretation: Since the p-value is less than .01, we find evidence to suggest that the two distributions are different. Our assumption about the proportions does not hold up to scrutiny. The actual breakdown of smoking habits is significantly different from the 70/10/10/10 split we hypothesized. If this were a business scenario, it would mean your assumed customer segments do not match reality --- which is valuable information, even if it is not what you wanted to hear.
 
 ## One factor variable - t-test one sample proportion
 
@@ -226,13 +231,23 @@ Sometimes instead of testing a whole distribution, you just want to test a singl
 summary(survey$M.I)
 ```
 
+The `summary()` output shows us how many students chose Imperial vs. Metric, plus how many have missing values (NA's). This gives us the raw material for the proportion test.
+
 Let us suppose we were testing a hypothesis that the proportion of students who would indicate their responses in the Imperial units (feet/inches, in contrast to the metric units - centimeters/meters) would be something other than 30%. We find that there are 68 of them who provide a response in that unit. Do we have evidence in favor of the hypothesis that there would be a value different from 30%?
 
 ```{r}
 binom.test(table(survey$M.I),p=.3)
 ```
 
-Conclusion: We do not have evidence that the proportion is different from .3 (why? check out the p-value --- it is too large to reject the null, and the confidence interval contains .30). In business terms, if you claimed "more than 30% of our customers prefer in-store pickup," this result would tap you on the shoulder and say "not so fast --- your data does not back that up."
+**How to read this output:**
+
+- **number of successes = 68**: The count of students who chose Imperial.
+- **number of trials = 209**: The total number of students who answered (excluding NAs).
+- **p-value = 0.3729**: The probability of observing 68 out of 209 (or something even more extreme) if the true proportion really were 30%. A p-value of 0.37 is large --- we cannot reject the null.
+- **95 percent confidence interval: 0.264 to 0.391**: We are 95% confident the true proportion falls in this range. Notice that 0.30 is inside this interval, which is consistent with the large p-value. If 0.30 were outside the interval, we would reject the null.
+- **sample estimate (probability of success = 0.325)**: The observed proportion --- 68/209 = 32.5%.
+
+Conclusion: We do not have evidence that the proportion is different from .3. The p-value is too large to reject the null, and the confidence interval contains .30. In business terms, if you claimed "more than 30% of our customers prefer in-store pickup," this result would tap you on the shoulder and say "not so fast --- your data does not back that up."
 
 
 What if we were testing the hypothesis that the proportion will be greater than .3?

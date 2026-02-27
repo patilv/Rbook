@@ -1,343 +1,364 @@
 <!DOCTYPE html>
-<html >
-
+<html lang="en">
 <head>
-
-  <meta charset="UTF-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <title>Chapter 1 Introduction to R | Basic Insights from Data for Marketing Researchers</title>
-  <meta name="description" content="This book should contain introductory material for analyzing data for marketing researchers.">
-  <meta name="generator" content="bookdown  and GitBook 2.6.7">
-
-  <meta property="og:title" content="Chapter 1 Introduction to R | Basic Insights from Data for Marketing Researchers" />
-  <meta property="og:type" content="book" />
-  
-  
-  <meta property="og:description" content="This book should contain introductory material for analyzing data for marketing researchers." />
-  <meta name="github-repo" content="patilv.github.io" />
-
-  <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="Chapter 1 Introduction to R | Basic Insights from Data for Marketing Researchers" />
-  
-  <meta name="twitter:description" content="This book should contain introductory material for analyzing data for marketing researchers." />
-  
-
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<title>Chapter 1 Introduction to R | R and the Tidyverse: A Beginner’s Guide</title>
 <meta name="author" content="Vivek H. Patil">
-
-
-<meta name="date" content="2019-11-04">
-
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-status-bar-style" content="black">
-  
-  
-<link rel="prev" href="index.html">
-<link rel="next" href="Rgettingstarted.html">
-<script src="libs/jquery-2.2.3/jquery.min.js"></script>
-<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
-<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
-<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
-<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
-<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
-<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
-
-
-
-
-
-
-
-
-
+<meta name="description" content="Alright, let’s get the big question out of the way first: What is R? R is a programming language built specifically for working with data – crunching numbers, running analyses, and making charts...">
+<meta name="generator" content="bookdown 0.46 with bs4_book()">
+<meta property="og:title" content="Chapter 1 Introduction to R | R and the Tidyverse: A Beginner’s Guide">
+<meta property="og:type" content="book">
+<meta property="og:image" content="/cover.png">
+<meta property="og:description" content="Alright, let’s get the big question out of the way first: What is R? R is a programming language built specifically for working with data – crunching numbers, running analyses, and making charts...">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Chapter 1 Introduction to R | R and the Tidyverse: A Beginner’s Guide">
+<meta name="twitter:description" content="Alright, let’s get the big question out of the way first: What is R? R is a programming language built specifically for working with data – crunching numbers, running analyses, and making charts...">
+<meta name="twitter:image" content="/cover.png">
+<!-- JS --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script><script src="https://kit.fontawesome.com/6ecbd6c532.js" crossorigin="anonymous"></script><script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<link href="libs/bootstrap-4.6.0/bootstrap.min.css" rel="stylesheet">
+<script src="libs/bootstrap-4.6.0/bootstrap.bundle.min.js"></script><script src="libs/bs3compat-0.10.0/transition.js"></script><script src="libs/bs3compat-0.10.0/tabs.js"></script><script src="libs/bs3compat-0.10.0/bs3compat.js"></script><link href="libs/bs4_book-1.0.0/bs4_book.css" rel="stylesheet">
+<script src="libs/bs4_book-1.0.0/bs4_book.js"></script><link href="libs/htmltools-fill-0.5.9/fill.css" rel="stylesheet">
+<script src="libs/htmlwidgets-1.6.4/htmlwidgets.js"></script><link href="libs/datatables-css-0.0.0/datatables-crosstalk.css" rel="stylesheet">
+<script src="libs/datatables-binding-0.34.0/datatables.js"></script><link href="libs/dt-core-1.13.6/css/jquery.dataTables.min.css" rel="stylesheet">
+<link href="libs/dt-core-1.13.6/css/jquery.dataTables.extra.css" rel="stylesheet">
+<script src="libs/dt-core-1.13.6/js/jquery.dataTables.min.js"></script><link href="libs/crosstalk-1.2.2/css/crosstalk.min.css" rel="stylesheet">
+<script src="libs/crosstalk-1.2.2/js/crosstalk.min.js"></script><script src="libs/plotly-binding-4.12.0/plotly.js"></script><script src="libs/typedarray-0.1/typedarray.min.js"></script><link href="libs/plotly-htmlwidgets-css-2.25.2/plotly-htmlwidgets.css" rel="stylesheet">
+<script src="libs/plotly-main-2.25.2/plotly-latest.min.js"></script><script src="libs/kePrint-0.0.1/kePrint.js"></script><link href="libs/lightable-0.0.1/lightable.css" rel="stylesheet">
+<link href="libs/nouislider-7.0.10/jquery.nouislider.min.css" rel="stylesheet">
+<script src="libs/nouislider-7.0.10/jquery.nouislider.min.js"></script><link href="libs/selectize-0.12.0/selectize.bootstrap3.css" rel="stylesheet">
+<script src="libs/selectize-0.12.0/selectize.min.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/autocomplete.js/0.38.0/autocomplete.jquery.min.js" integrity="sha512-GU9ayf+66Xx2TmpxqJpliWbT5PiGYxpaG8rfnBEk1LL8l1KGkRShhngwdXK1UgqhAzWpZHSiYPc09/NwDQIGyg==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/mark.min.js" integrity="sha512-5CYOlHXGh6QpOFA/TeTylKLWfB3ftPsde7AnmhuitiTX4K5SqCLBeKro6sPS8ilsz1Q4NRx3v8Ko2IBiszzdww==" crossorigin="anonymous"></script><!-- CSS --><style type="text/css">
+    
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  </style>
 <style type="text/css">
-a.sourceLine { display: inline-block; line-height: 1.25; }
-a.sourceLine { pointer-events: none; color: inherit; text-decoration: inherit; }
-a.sourceLine:empty { height: 1.2em; }
-.sourceCode { overflow: visible; }
-code.sourceCode { white-space: pre; position: relative; }
-div.sourceCode { margin: 1em 0; }
-pre.sourceCode { margin: 0; }
-@media screen {
-div.sourceCode { overflow: auto; }
-}
-@media print {
-code.sourceCode { white-space: pre-wrap; }
-a.sourceLine { text-indent: -1em; padding-left: 1em; }
-}
-pre.numberSource a.sourceLine
-  { position: relative; left: -4em; }
-pre.numberSource a.sourceLine::before
-  { content: attr(title);
-    position: relative; left: -1em; text-align: right; vertical-align: baseline;
-    border: none; pointer-events: all; display: inline-block;
-    -webkit-touch-callout: none; -webkit-user-select: none;
-    -khtml-user-select: none; -moz-user-select: none;
-    -ms-user-select: none; user-select: none;
-    padding: 0 4px; width: 4em;
-    color: #aaaaaa;
-  }
-pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
-div.sourceCode
-  {  }
-@media screen {
-a.sourceLine::before { text-decoration: underline; }
-}
-code span.al { color: #ff0000; font-weight: bold; } /* Alert */
-code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
-code span.at { color: #7d9029; } /* Attribute */
-code span.bn { color: #40a070; } /* BaseN */
-code span.bu { } /* BuiltIn */
-code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
-code span.ch { color: #4070a0; } /* Char */
-code span.cn { color: #880000; } /* Constant */
-code span.co { color: #60a0b0; font-style: italic; } /* Comment */
-code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
-code span.do { color: #ba2121; font-style: italic; } /* Documentation */
-code span.dt { color: #902000; } /* DataType */
-code span.dv { color: #40a070; } /* DecVal */
-code span.er { color: #ff0000; font-weight: bold; } /* Error */
-code span.ex { } /* Extension */
-code span.fl { color: #40a070; } /* Float */
-code span.fu { color: #06287e; } /* Function */
-code span.im { } /* Import */
-code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
-code span.kw { color: #007020; font-weight: bold; } /* Keyword */
-code span.op { color: #666666; } /* Operator */
-code span.ot { color: #007020; } /* Other */
-code span.pp { color: #bc7a00; } /* Preprocessor */
-code span.sc { color: #4070a0; } /* SpecialChar */
-code span.ss { color: #bb6688; } /* SpecialString */
-code span.st { color: #4070a0; } /* String */
-code span.va { color: #19177c; } /* Variable */
-code span.vs { color: #4070a0; } /* VerbatimString */
-code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
-</style>
-
-<link rel="stylesheet" href="style.css" type="text/css" />
+    /* Used with Pandoc 2.11+ new --citeproc when CSL is used */
+    div.csl-bib-body { }
+    div.csl-entry {
+      clear: both;
+          margin-bottom: 0em;
+        }
+    .hanging div.csl-entry {
+      margin-left:2em;
+      text-indent:-2em;
+    }
+    div.csl-left-margin {
+      min-width:2em;
+      float:left;
+    }
+    div.csl-right-inline {
+      margin-left:2em;
+      padding-left:1em;
+    }
+    div.csl-indent {
+      margin-left: 2em;
+    }
+  </style>
+<link rel="stylesheet" href="style.css">
 </head>
+<body data-spy="scroll" data-target="#toc">
 
-<body>
+<div class="container-fluid">
+<div class="row">
+  <header class="col-sm-12 col-lg-3 sidebar sidebar-book"><a class="sr-only sr-only-focusable" href="#content">Skip to main content</a>
 
+    <div class="d-flex align-items-start justify-content-between">
+      <h1>
+        <a href="index.html" title="">R and the Tidyverse: A Beginner’s Guide</a>
+      </h1>
+      <button class="btn btn-outline-primary d-lg-none ml-2 mt-1" type="button" data-toggle="collapse" data-target="#main-nav" aria-expanded="true" aria-controls="main-nav"><i class="fas fa-bars"></i><span class="sr-only">Show table of contents</span></button>
+    </div>
 
+    <div id="main-nav" class="collapse-lg">
+      <form role="search">
+        <input id="search" class="form-control" type="search" placeholder="Search" aria-label="Search">
+</form>
 
-  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
-
-    <div class="book-summary">
-      <nav role="navigation">
-
-<ul class="summary">
-<li><a href="./">Basic Insights from Data for Marketing Researchers</a></li>
-
-<li class="divider"></li>
-<li class="chapter" data-level="" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i>Preface</a><ul>
-<li class="chapter" data-level="" data-path="index.html"><a href="index.html#about-me"><i class="fa fa-check"></i>About me</a></li>
-</ul></li>
-<li class="chapter" data-level="1" data-path="introR.html"><a href="introR.html"><i class="fa fa-check"></i><b>1</b> Introduction to R</a><ul>
-<li class="chapter" data-level="1.1" data-path="introR.html"><a href="introR.html#why-use-r"><i class="fa fa-check"></i><b>1.1</b> Why use R?</a></li>
-<li class="chapter" data-level="1.2" data-path="introR.html"><a href="introR.html#r---environment-and-software"><i class="fa fa-check"></i><b>1.2</b> R - Environment and Software</a></li>
-<li class="chapter" data-level="1.3" data-path="introR.html"><a href="introR.html#a-recently-released-video-on-r"><i class="fa fa-check"></i><b>1.3</b> A Recently Released Video on R</a></li>
-</ul></li>
-<li class="chapter" data-level="2" data-path="Rgettingstarted.html"><a href="Rgettingstarted.html"><i class="fa fa-check"></i><b>2</b> Getting Started with R</a><ul>
-<li class="chapter" data-level="2.1" data-path="Rgettingstarted.html"><a href="Rgettingstarted.html#r-studio-interface"><i class="fa fa-check"></i><b>2.1</b> R-Studio Interface</a></li>
-<li class="chapter" data-level="2.2" data-path="Rgettingstarted.html"><a href="Rgettingstarted.html#organizing-projects"><i class="fa fa-check"></i><b>2.2</b> Organizing projects</a></li>
-<li class="chapter" data-level="2.3" data-path="Rgettingstarted.html"><a href="Rgettingstarted.html#installing-packages-from-cran"><i class="fa fa-check"></i><b>2.3</b> Installing Packages from CRAN</a></li>
-<li class="chapter" data-level="2.4" data-path="Rgettingstarted.html"><a href="Rgettingstarted.html#installing-a-package-from-github"><i class="fa fa-check"></i><b>2.4</b> Installing a package from GitHub</a></li>
-<li class="chapter" data-level="2.5" data-path="Rgettingstarted.html"><a href="Rgettingstarted.html#installed-packages-should-be-loaded-for-them-to-offer-their-functions-for-use"><i class="fa fa-check"></i><b>2.5</b> Installed packages should be loaded for them to offer their functions for use</a></li>
-<li class="chapter" data-level="2.6" data-path="Rgettingstarted.html"><a href="Rgettingstarted.html#setting-your-working-directory"><i class="fa fa-check"></i><b>2.6</b> Setting your working directory</a></li>
-<li class="chapter" data-level="2.7" data-path="Rgettingstarted.html"><a href="Rgettingstarted.html#reading-data-from-different-sources"><i class="fa fa-check"></i><b>2.7</b> Reading data from different sources</a></li>
-<li class="chapter" data-level="2.8" data-path="Rgettingstarted.html"><a href="Rgettingstarted.html#saving-data"><i class="fa fa-check"></i><b>2.8</b> Saving data</a></li>
-<li class="chapter" data-level="2.9" data-path="Rgettingstarted.html"><a href="Rgettingstarted.html#creating-a-dataframe"><i class="fa fa-check"></i><b>2.9</b> Creating a dataframe</a></li>
-</ul></li>
-<li class="chapter" data-level="3" data-path="describedata.html"><a href="describedata.html"><i class="fa fa-check"></i><b>3</b> Describing Data</a><ul>
-<li class="chapter" data-level="3.1" data-path="describedata.html"><a href="describedata.html#number-of-rows-and-columns-in-that-sequence"><i class="fa fa-check"></i><b>3.1</b> Number of rows and columns (in that sequence)</a></li>
-<li class="chapter" data-level="3.2" data-path="describedata.html"><a href="describedata.html#number-of-rows"><i class="fa fa-check"></i><b>3.2</b> Number of rows</a></li>
-<li class="chapter" data-level="3.3" data-path="describedata.html"><a href="describedata.html#number-of-columns"><i class="fa fa-check"></i><b>3.3</b> Number of columns</a></li>
-<li class="chapter" data-level="3.4" data-path="describedata.html"><a href="describedata.html#names-of-variables"><i class="fa fa-check"></i><b>3.4</b> Names of variables</a></li>
-<li class="chapter" data-level="3.5" data-path="describedata.html"><a href="describedata.html#first-6-rows"><i class="fa fa-check"></i><b>3.5</b> First 6 rows</a></li>
-<li class="chapter" data-level="3.6" data-path="describedata.html"><a href="describedata.html#first-2-rows"><i class="fa fa-check"></i><b>3.6</b> First 2 rows</a></li>
-<li class="chapter" data-level="3.7" data-path="describedata.html"><a href="describedata.html#last-6-rows"><i class="fa fa-check"></i><b>3.7</b> Last 6 rows</a></li>
-<li class="chapter" data-level="3.8" data-path="describedata.html"><a href="describedata.html#first-row"><i class="fa fa-check"></i><b>3.8</b> First row</a></li>
-<li class="chapter" data-level="3.9" data-path="describedata.html"><a href="describedata.html#first-row-first-column"><i class="fa fa-check"></i><b>3.9</b> First row, first column</a></li>
-<li class="chapter" data-level="3.10" data-path="describedata.html"><a href="describedata.html#name-of-third-column"><i class="fa fa-check"></i><b>3.10</b> Name of third column</a></li>
-<li class="chapter" data-level="3.11" data-path="describedata.html"><a href="describedata.html#entries-from-third-column"><i class="fa fa-check"></i><b>3.11</b> 3 entries from third column</a></li>
-<li class="chapter" data-level="3.12" data-path="describedata.html"><a href="describedata.html#structure-of-the-dataframe"><i class="fa fa-check"></i><b>3.12</b> Structure of the dataframe</a></li>
-<li class="chapter" data-level="3.13" data-path="describedata.html"><a href="describedata.html#summary-of-the-dataframe"><i class="fa fa-check"></i><b>3.13</b> Summary of the dataframe</a></li>
-<li class="chapter" data-level="3.14" data-path="describedata.html"><a href="describedata.html#summary-of-a-variable-in-the-dataframe"><i class="fa fa-check"></i><b>3.14</b> Summary of a variable in the dataframe</a></li>
-</ul></li>
-<li class="chapter" data-level="4" data-path="modifydata.html"><a href="modifydata.html"><i class="fa fa-check"></i><b>4</b> Modifying Data</a><ul>
-<li class="chapter" data-level="4.1" data-path="modifydata.html"><a href="modifydata.html#creating-new-variables"><i class="fa fa-check"></i><b>4.1</b> Creating new variables</a></li>
-<li class="chapter" data-level="4.2" data-path="modifydata.html"><a href="modifydata.html#subsetting-data-and-dropping-factor-levels"><i class="fa fa-check"></i><b>4.2</b> Subsetting data and dropping factor levels</a></li>
-<li class="chapter" data-level="4.3" data-path="modifydata.html"><a href="modifydata.html#reordering-factor-levels"><i class="fa fa-check"></i><b>4.3</b> Reordering factor levels</a></li>
-<li class="chapter" data-level="4.4" data-path="modifydata.html"><a href="modifydata.html#reordering-dataset-entries"><i class="fa fa-check"></i><b>4.4</b> Reordering dataset entries</a></li>
-<li class="chapter" data-level="4.5" data-path="modifydata.html"><a href="modifydata.html#changing-column-names"><i class="fa fa-check"></i><b>4.5</b> Changing column names</a></li>
-<li class="chapter" data-level="4.6" data-path="modifydata.html"><a href="modifydata.html#renamingcollapsing-factor-levels"><i class="fa fa-check"></i><b>4.6</b> Renaming/Collapsing factor levels</a></li>
-<li class="chapter" data-level="4.7" data-path="modifydata.html"><a href="modifydata.html#converting-data-types"><i class="fa fa-check"></i><b>4.7</b> Converting data types</a><ul>
-<li class="chapter" data-level="4.7.1" data-path="modifydata.html"><a href="modifydata.html#factor-to-numeric"><i class="fa fa-check"></i><b>4.7.1</b> Factor to numeric</a></li>
-<li class="chapter" data-level="4.7.2" data-path="modifydata.html"><a href="modifydata.html#numeric-to-factor---binning-variables"><i class="fa fa-check"></i><b>4.7.2</b> Numeric to Factor - Binning variables</a></li>
-<li class="chapter" data-level="4.7.3" data-path="modifydata.html"><a href="modifydata.html#factor-and-numeric-to-character-and-vice-versa"><i class="fa fa-check"></i><b>4.7.3</b> Factor and Numeric to Character and vice versa</a></li>
-</ul></li>
-</ul></li>
-<li class="chapter" data-level="5" data-path="summarystats.html"><a href="summarystats.html"><i class="fa fa-check"></i><b>5</b> Summary Statistics</a><ul>
-<li class="chapter" data-level="5.1" data-path="summarystats.html"><a href="summarystats.html#measures-of-central-tendency"><i class="fa fa-check"></i><b>5.1</b> Measures of Central Tendency</a></li>
-<li class="chapter" data-level="5.2" data-path="summarystats.html"><a href="summarystats.html#other-measures-of-central-tendency"><i class="fa fa-check"></i><b>5.2</b> Other measures of central tendency</a></li>
-<li class="chapter" data-level="5.3" data-path="summarystats.html"><a href="summarystats.html#measures-of-dispersion-variation"><i class="fa fa-check"></i><b>5.3</b> Measures of Dispersion (variation)</a><ul>
-<li class="chapter" data-level="5.3.1" data-path="summarystats.html"><a href="summarystats.html#range"><i class="fa fa-check"></i><b>5.3.1</b> Range</a></li>
-<li class="chapter" data-level="5.3.2" data-path="summarystats.html"><a href="summarystats.html#interquartile-range-difference-between-25th-and-75th-percentile-or-quantile"><i class="fa fa-check"></i><b>5.3.2</b> Interquartile range: Difference between 25th and 75th percentile (or quantile)</a></li>
-<li class="chapter" data-level="5.3.3" data-path="summarystats.html"><a href="summarystats.html#variance-and-standard-deviation"><i class="fa fa-check"></i><b>5.3.3</b> Variance and Standard Deviation</a></li>
-</ul></li>
-</ul></li>
-<li class="chapter" data-level="6" data-path="singlevar.html"><a href="singlevar.html"><i class="fa fa-check"></i><b>6</b> Single variable Analysis</a><ul>
-<li class="chapter" data-level="6.1" data-path="singlevar.html"><a href="singlevar.html#numeric-variable"><i class="fa fa-check"></i><b>6.1</b> Numeric Variable</a><ul>
-<li class="chapter" data-level="6.1.1" data-path="singlevar.html"><a href="singlevar.html#histogram"><i class="fa fa-check"></i><b>6.1.1</b> Histogram</a></li>
-<li class="chapter" data-level="6.1.2" data-path="singlevar.html"><a href="singlevar.html#density-plot"><i class="fa fa-check"></i><b>6.1.2</b> Density plot</a></li>
-<li class="chapter" data-level="6.1.3" data-path="singlevar.html"><a href="singlevar.html#box-plot"><i class="fa fa-check"></i><b>6.1.3</b> Box plot</a></li>
-<li class="chapter" data-level="6.1.4" data-path="singlevar.html"><a href="singlevar.html#test-of-mean"><i class="fa fa-check"></i><b>6.1.4</b> Test of Mean</a></li>
-</ul></li>
-<li class="chapter" data-level="6.2" data-path="singlevar.html"><a href="singlevar.html#factor-variable"><i class="fa fa-check"></i><b>6.2</b> Factor variable</a><ul>
-<li class="chapter" data-level="6.2.1" data-path="singlevar.html"><a href="singlevar.html#bar-plot"><i class="fa fa-check"></i><b>6.2.1</b> Bar plot</a></li>
-<li class="chapter" data-level="6.2.2" data-path="singlevar.html"><a href="singlevar.html#pie-chart---fyi-do-not-use"><i class="fa fa-check"></i><b>6.2.2</b> Pie Chart - FYI Do not use</a></li>
-<li class="chapter" data-level="6.2.3" data-path="singlevar.html"><a href="singlevar.html#one-factor-variable-chi-square-goodness-of-fit-test"><i class="fa fa-check"></i><b>6.2.3</b> One factor-variable Chi-square goodness-of-fit test</a></li>
-</ul></li>
-<li class="chapter" data-level="6.3" data-path="singlevar.html"><a href="singlevar.html#one-factor-variable---t-test-one-sample-proportion"><i class="fa fa-check"></i><b>6.3</b> One factor variable - t-test one sample proportion</a></li>
-</ul></li>
-<li class="chapter" data-level="7" data-path="multivar.html"><a href="multivar.html"><i class="fa fa-check"></i><b>7</b> Relationships between variables</a><ul>
-<li class="chapter" data-level="7.1" data-path="multivar.html"><a href="multivar.html#between-continuous-variables-correlations"><i class="fa fa-check"></i><b>7.1</b> Between continuous variables: Correlations</a><ul>
-<li class="chapter" data-level="7.1.1" data-path="multivar.html"><a href="multivar.html#plotting"><i class="fa fa-check"></i><b>7.1.1</b> Plotting</a></li>
-<li class="chapter" data-level="7.1.2" data-path="multivar.html"><a href="multivar.html#correlations-between-two-numeric-variables"><i class="fa fa-check"></i><b>7.1.2</b> Correlations between two numeric variables</a></li>
-<li class="chapter" data-level="7.1.3" data-path="multivar.html"><a href="multivar.html#paired-samples---comparing-two-means"><i class="fa fa-check"></i><b>7.1.3</b> Paired Samples - comparing two-means</a></li>
-<li class="chapter" data-level="7.1.4" data-path="multivar.html"><a href="multivar.html#relationships-between-more-than-two-numeric-variables"><i class="fa fa-check"></i><b>7.1.4</b> Relationships between more than two numeric variables</a></li>
-</ul></li>
-<li class="chapter" data-level="7.2" data-path="multivar.html"><a href="multivar.html#relationships-between-factor-variables"><i class="fa fa-check"></i><b>7.2</b> Relationships between factor variables</a></li>
-<li class="chapter" data-level="7.3" data-path="multivar.html"><a href="multivar.html#between-factor-and-continuous-variables"><i class="fa fa-check"></i><b>7.3</b> Between factor and continuous variables</a><ul>
-<li class="chapter" data-level="7.3.1" data-path="multivar.html"><a href="multivar.html#two-levels-of-a-factor-level-and-one-continuous-variable---t-test"><i class="fa fa-check"></i><b>7.3.1</b> Two levels of a factor level and one continuous variable - t-test</a></li>
-<li class="chapter" data-level="7.3.2" data-path="multivar.html"><a href="multivar.html#more-than-two-levels-of-a-factor-variable-and-one-continuous-variable.--one-way-anova"><i class="fa fa-check"></i><b>7.3.2</b> More than two levels of a factor variable and one continuous variable.- One-Way ANOVA</a></li>
-</ul></li>
-</ul></li>
-<li class="divider"></li>
-<li><a href="https://github.com/patilv" target="blank">Published with bookdown</a></li>
-
+      <nav aria-label="Table of contents"><h2>Table of contents</h2>
+        <ul class="book-toc list-unstyled">
+<li><a class="" href="index.html">Preface</a></li>
+<li><a class="active" href="introR.html"><span class="header-section-number">1</span> Introduction to R</a></li>
+<li><a class="" href="Rgettingstarted.html"><span class="header-section-number">2</span> Getting Started with R</a></li>
+<li><a class="" href="tidyverse.html"><span class="header-section-number">3</span> Your Data Analysis Toolkit</a></li>
+<li><a class="" href="dataimport.html"><span class="header-section-number">4</span> Data Import</a></li>
+<li><a class="" href="describedata.html"><span class="header-section-number">5</span> Describing Data</a></li>
+<li><a class="" href="modifydata.html"><span class="header-section-number">6</span> Modifying Data</a></li>
+<li><a class="" href="dplyr.html"><span class="header-section-number">7</span> Data Wrangling with dplyr</a></li>
+<li><a class="" href="tidyr.html"><span class="header-section-number">8</span> Tidy Data with tidyr</a></li>
+<li><a class="" href="summarystats.html"><span class="header-section-number">9</span> Summary Statistics</a></li>
+<li><a class="" href="ggplot2basics.html"><span class="header-section-number">10</span> Data Visualization with ggplot2</a></li>
+<li><a class="" href="ggplot2customize.html"><span class="header-section-number">11</span> Customizing ggplot2 Visualizations</a></li>
+<li><a class="" href="singlevar.html"><span class="header-section-number">12</span> Single Variable Analysis</a></li>
+<li><a class="" href="multivar.html"><span class="header-section-number">13</span> Relationships Between Variables</a></li>
+<li><a class="" href="stringr.html"><span class="header-section-number">14</span> Working with Text Data</a></li>
+<li><a class="" href="forcats.html"><span class="header-section-number">15</span> Wrangling Categories with forcats</a></li>
+<li><a class="" href="lubridate.html"><span class="header-section-number">16</span> Working with Dates and Times</a></li>
+<li><a class="" href="purrr.html"><span class="header-section-number">17</span> Doing the Same Thing to Many Things at Once</a></li>
+<li><a class="" href="rmarkdown.html"><span class="header-section-number">18</span> R Markdown</a></li>
+<li><a class="" href="rmarkdown-advanced.html"><span class="header-section-number">19</span> Advanced R Markdown</a></li>
 </ul>
 
+        <div class="book-extra">
+          
+        </div>
       </nav>
-    </div>
-
-    <div class="book-body">
-      <div class="body-inner">
-        <div class="book-header" role="navigation">
-          <h1>
-            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Basic Insights from Data for Marketing Researchers</a>
-          </h1>
-        </div>
-
-        <div class="page-wrapper" tabindex="-1" role="main">
-          <div class="page-inner">
-
-            <section class="normal" id="section-">
-<div id="introR" class="section level1">
-<h1><span class="header-section-number">Chapter 1</span> Introduction to R</h1>
-<p><img src="01files/jchambers.jpg" width="193" /><img src="01files/small-ihaka.gif" /><!-- --><img src="01files/small-robert.gif" /><!-- --></p>
-<p>R is a progamming language and an environment for statistical computing and graphics. It was created by Ross Ihaka and Robert Gentleman at the University of Auckland in New Zealand. The project was conceived in 1992. It is based on the <strong>S</strong> language, that was created by John Chambers while he was at Bell Labs. S is now owned by TIBCO. R and S are often called “elegant” for they were created by statisticians for statisticians.</p>
-<p>The website of the R-Project is: <a href="http://www.r-project.org">http://www.r-project.org</a></p>
-<p><img src="01files/Rlogo.png" width="100" /></p>
-<div id="why-use-r" class="section level2">
-<h2><span class="header-section-number">1.1</span> Why use R?</h2>
-<p>There are many benefits to R. Since these have been covered by many other books on R, I will not dwell on it here in detail. Here are 9 reasons why I use R.</p>
+</div>
+  </header><main class="col-sm-12 col-md-9 col-lg-7" id="content"><div id="introR" class="section level1" number="1">
+<h1>
+<span class="header-section-number">1</span> Introduction to R<a class="anchor" aria-label="anchor" href="#introR"><i class="fas fa-link"></i></a>
+</h1>
+<p>Alright, let’s get the big question out of the way first: <strong>What is R?</strong></p>
+<p>R is a programming language built specifically for working with data – crunching numbers, running analyses, and making charts so beautiful your manager will think you hired a graphic designer. If Excel is the reliable sedan you drove in college, R is the Tesla you’re about to upgrade to. Same basic job (getting you from point A to point B), but a <em>wildly</em> different experience once you’re behind the wheel.</p>
+<p>R was created by two professors – <strong>Ross Ihaka</strong> and <strong>Robert Gentleman</strong> – at the University of Auckland in New Zealand. (Yes, the same country where they filmed <em>Lord of the Rings</em>. Clearly a land of epic creations.) They started the project in 1992, and it’s based on an older language called <strong>S</strong>, which was built by <strong>John Chambers</strong> at Bell Labs. S is now owned by TIBCO. Both R and S were originally built by statisticians, for statisticians – but don’t let that scare you. These days, R is used by marketing analysts tracking campaign performance, finance teams modeling risk, consultants building client dashboards, and basically anyone whose job involves making sense of messy data. Sound familiar?</p>
+<p>The official R website is here: <a href="https://www.r-project.org">https://www.r-project.org</a></p>
+<div class="inline-figure">
+<img src="01files/Rlogo.png"><!-- -->
+</div>
+<div id="why-use-r-or-why-cant-i-just-stick-with-excel" class="section level2" number="1.1">
+<h2>
+<span class="header-section-number">1.1</span> Why Use R? (Or: Why Can’t I Just Stick with Excel?)<a class="anchor" aria-label="anchor" href="#why-use-r-or-why-cant-i-just-stick-with-excel"><i class="fas fa-link"></i></a>
+</h2>
+<p>Look, we need to talk. Excel is great. We all love Excel. You’ve been using it since high school, and it has served you well. But at some point, you’re going to hit a wall – maybe you have 500,000 rows of customer transaction data, or you need to run the same weekly sales report every Monday, or your director wants a visualization that doesn’t look like it was made two decades ago. That’s where R comes in.</p>
+<p>Here are 9 reasons why R is worth adding to your toolkit:</p>
 <ol style="list-style-type: decimal">
-<li>R is available as a free and open source software. As such, there is no need to reinvent the wheel by writing code for tasks for which functions have already been written. The availability of open source code also means that one can tinker with the software without any limitations presented by proprietory software.</li>
-<li>The reproducibility of analysis is greatly enhanced in <strong>R</strong> because it is script-based. In software that use a point-and-click mechanisms in their graphical-user-interfaces to perform operations (without any corresponding code generation), the ability to reproduce an analysis requires one to either memorize or record the analysis process.<br />
-</li>
-<li>New routines generally appear in <strong>R</strong> before any other statistical system introduces them.</li>
+<li><p><strong>It’s free.</strong> Like, <em>actually</em> free. No license fees, no subscriptions, no “your 14-day trial has expired, please enter a credit card” pop-ups. As a student already paying for textbooks, meal plans, and an unreasonable amount of coffee, you’re welcome. Because R is open source, thousands of people around the world contribute code and tools that you can use instantly – no purchasing department approval required.</p></li>
+<li><p><strong>Your work is reproducible.</strong> Ever spend an hour clicking through menus in some software, get your results, and then your professor says “can you run that again with last quarter’s data?” In R, your entire analysis is saved as a script – basically a set of instructions. Change one line, hit run, done. It’s like having a recipe instead of trying to remember what you threw in the pot last Tuesday.</p></li>
+<li><p><strong>R is always on the cutting edge.</strong> New statistical methods and data science techniques show up in R before they appear in almost any other software. If something is new and exciting in the analytics world, R probably already has it. Your future employer will notice.</p></li>
 </ol>
-<p><img src="01files/fig_10_cran1.png" width="325" /></p>
-<p>Source: [Muenchen, Robert A, The Popularity of Data Analysis Software.] (<a href="http://r4stats.com/articles/popularity/" class="uri">http://r4stats.com/articles/popularity/</a>), Retrieved 8/15/2013</p>
+<div class="figure">
+<span style="display:block;" id="fig:cran-growth-timeline"></span>
+<img src="Rbook_files/figure-html/cran-growth-timeline-1.png" alt="Key milestones in CRAN package growth" width="768"><p class="caption">
+Figure 1.1: Key milestones in CRAN package growth
+</p>
+</div>
+<p>Source: <a href="https://r4stats.com/articles/popularity/">Muenchen, Robert A, The Popularity of Data Analysis Software.</a></p>
 <ol start="4" style="list-style-type: decimal">
-<li>Graphics that are produced by <strong>R</strong> can be mindblowing. It is not a surprise that many reputable news outlets that rely on data graphics to communicate stories use R.<br />
-</li>
-<li>The <strong>R</strong> environment uses the Internet for distributing packages and any updates to R can be downloaded from the web. Thus, there is no need for software media.</li>
-<li>The software is compatible with many operating systems - Unix, Mac OSX, and Windows.</li>
-<li>It supports connectivity with many database systems and allows for import of data from different formats.</li>
-<li>You wouldn’t want to not use the software that was featured in a cool <a href="http://www.nytimes.com/2009/01/07/technology/business-computing/07program.html">New York Times story by Ashlee Vance.</a></li>
-<li>Although I have listed this point at the very end of this list, it is probably the number one reason for my using the software. The community support for <strong>R</strong> users is simply outstanding. The global user-base for the software is 250,000-2 million people and many of these users selflessly devote their time to support and assist other users. The pay-it-forward mechanism holds so true for many in the user-base.</li>
+<li><p><strong>The graphics are stunning.</strong> Seriously, the charts and visualizations you can create in R will make your PowerPoint presentations look like they belong in a Fortune 500 boardroom, not a middle school science fair. The <strong>ggplot2</strong> package in particular is the gold standard – organizations like the BBC, The New York Times, and FiveThirtyEight use R for their data graphics. Imagine casually dropping <em>that</em> into a job interview. “Oh, I use the same visualization tools as the New York Times. No big deal.”</p></li>
+<li><p><strong>Updates are a breeze.</strong> Everything is distributed over the internet. No CDs, no USB drives, no submitting a help desk ticket and waiting three weeks for IT to install something. You download what you need, when you need it.</p></li>
+<li><p><strong>It works on everything.</strong> Mac, Windows, Linux – R doesn’t care what computer you have. Your group project members can all use different machines and still run the same code. (If only the rest of group projects were that easy.)</p></li>
+<li><p><strong>It plays well with others.</strong> R can connect to databases, read Excel files, pull in CSV data, handle SPSS files – basically whatever format your data lives in, R can probably import it. That random <code>.xlsx</code> file your internship supervisor emailed you at 5pm on a Friday? R’s got you.</p></li>
+<li><p><strong>It has been featured in The New York Times – and keeps making headlines.</strong> Ashlee Vance’s <a href="https://www.nytimes.com/2009/01/07/technology/business-computing/07program.html">2009 NYT article</a> first brought R to mainstream attention. Since then, the BBC built a custom R package (<a href="https://github.com/bbc/bbplot"><code>bbplot</code></a>) for all their data journalism graphics, The Economist uses R for its charts, and in December 2025, multiple outlets – <a href="https://www.infoworld.com/article/4102696/r-language-is-making-a-comeback-tiobe.html">InfoWorld</a>, <a href="https://developers.slashdot.org/story/25/12/14/0340217/is-the-r-programming-language-surging-in-popularity">Slashdot</a>, <a href="https://flowingdata.com/2025/12/19/r-climbs-back-up-into-the-top-ten-programming-languages/">FlowingData</a> – covered R’s return to the TIOBE top 10.</p></li>
+<li><p><strong>The community is incredible.</strong> This might honestly be the best reason. R has more than 2 million users worldwide (per the R Consortium), and a huge number of them genuinely enjoy helping beginners. Got stuck at midnight before a deadline? Post a question online and someone – probably in a different time zone where it’s a perfectly reasonable hour – will likely answer within hours. It’s like having a giant study group that never sleeps. That spirit of people helping strangers for free — sharing code, answering questions, building tools for the common good — maps pretty well onto Gonzaga’s mission of building professional communities rooted in solidarity and service.</p></li>
 </ol>
-<p>Although R provides a command line interface for programming, which can be a limitation for people who are starting out in it, there are integrated development environments from companies like R Studio and Revolution Analytics (now with Microsoft) that make an R-user more productive. Graphical user interfaces provided by softwares like Deducer and the R Commander package for R can make entry into the R eco-system relatively easier.</p>
-<p>Robert Muenchen has been tracking the popularity of data analysis software for a few years and he has an excellent article that is regularly updated with the latest statistics that compare the growth of R versus other softwares like SPSS and SAS. His article can be accessed from <a href="http://r4stats.com/articles/popularity/">http://r4stats.com/articles/popularity/</a>.</p>
-<p>R packages that help users accomplish different tasks can be found for many fields of study. The following listing from the R-project site provides a broad listing of the different fields that have been supported. Please note that many developmental versions of packages are not listed. These are typically hosted at other websites, such as <a href="www.github.com">GitHub</a>.</p>
-<iframe src="http://cran.r-project.org/web/views/" width="100%" height="600px">
-</iframe>
+<p>Now, here’s the one thing that makes people nervous: R uses a command line. You type code instead of clicking buttons. I know, I know – that might sound intimidating if you’ve never programmed before. But here’s the good news: you don’t have to stare at a scary blank terminal. There’s a fantastic program called <strong>RStudio</strong> (made by a company now called Posit) that gives you a friendly, modern workspace with helpful features like auto-complete, built-in help files, and a window to see your plots right next to your code. It’s the difference between building furniture with just a hammer and building it with a fully equipped workshop. We’ll get you set up with RStudio in the next chapter – it’s painless, I promise.</p>
+<div id="where-r-stands-in-2026" class="section level3" number="1.1.1">
+<h3>
+<span class="header-section-number">1.1.1</span> Where R Stands in 2026<a class="anchor" aria-label="anchor" href="#where-r-stands-in-2026"><i class="fas fa-link"></i></a>
+</h3>
+<p>As of early 2026, R ranks <strong>#8 on the TIOBE Index</strong> (its highest position since 2020), <strong>#5 on the PYPL Index</strong>, and <strong>#5 on IEEE Spectrum (2024)</strong>. It is used by 4.9% of developers in the 2025 Stack Overflow survey. R ranks lower in general-purpose developer surveys because it is a domain-specific language – but in statistics, data science, and business analytics, it is one of the top two tools alongside Python.</p>
+<p>Robert Muenchen has been tracking the popularity of data analysis software for years, and his regularly updated article is a great read if you’re curious about how R stacks up against SPSS, SAS, Stata, and others. Check it out at <a href="https://r4stats.com/articles/popularity/">https://r4stats.com/articles/popularity/</a>.</p>
+<p>If you want to explore what R can do in specific business fields – marketing analytics, finance, econometrics, supply chain, you name it – the <a href="https://cran.r-project.org/web/views/">CRAN Task Views</a> page has a massive listing of packages organized by topic. And for the really bleeding-edge stuff, developers often host their latest work on <a href="https://www.github.com">GitHub</a>.</p>
 </div>
-<div id="r---environment-and-software" class="section level2">
-<h2><span class="header-section-number">1.2</span> R - Environment and Software</h2>
-<p>I like to understand this using the metaphor of a physical library. Imagine walking into a such a library. (Okay, I know that these are becoming extinct, thanks to ebooks like this one.) When we walk into this library, you are able to accomplish some tasks by talking to the librarian, who refers to the books s/he has access to in the desk. For tasks that the librarian is unable to help with, you check-out a book that helps you with the tasks that you were trying to accomplish. If you are unable to find a book that helps with your task, you decide to sit down and write your own book to perform those tasks.</p>
-<p>Base <strong>R</strong> is akin to the library and the librarian. A task in the earlier example, can be similar to an analysis that needs to be conducted on some data. The <strong>R</strong> software comes with a certain set of books, which are called <em>packages</em>. These packages are capable of conducting a certain set of analyses. However, when the need to perform additional analyses that cannot be conducted by base <strong>R</strong> arises, one can download additional <strong>R</strong> packages that may be available for that purpose. These downloaded packages are like the books that are checked out from the library. Please note that many a times, the packages may have dependencies, that are either installed along with the package installation commands, or may have to be installed separately. In the event no one in the world has thought of your problem and written a package to perform the analysis, you can always write your own package that does that and contribute it for the greater good.</p>
 </div>
-<div id="a-recently-released-video-on-r" class="section level2">
-<h2><span class="header-section-number">1.3</span> A Recently Released Video on R</h2>
-From the <a href="https://www.r-consortium.org/">R Consortium</a> <br><br />
+<div id="r-the-environment-and-software" class="section level2" number="1.2">
+<h2>
+<span class="header-section-number">1.2</span> R – The Environment and Software<a class="anchor" aria-label="anchor" href="#r-the-environment-and-software"><i class="fas fa-link"></i></a>
+</h2>
+<p>Let me give you an analogy that’ll make this click.</p>
+<p>Imagine it’s your first day at a new job. Someone hands you a company laptop. Out of the box, it comes with the basics – a web browser, a calculator, maybe Microsoft Notepad. Functional, but not exactly exciting. That’s what R includes built in. It can do a lot right out of the gate: math, basic statistics, simple charts. It’s solid.</p>
+<p>But then your manager asks you to build a customer segmentation model, or create an interactive dashboard for the quarterly business review. You need specialized tools. So you go to the app store and download exactly what you need. In R, these specialized tools are called <strong>packages</strong> – and there are over 23,000 of them (and growing every month). They cover everything from sentiment analysis of Amazon reviews to stock portfolio optimization to mapping sales territories.</p>
+<p>Sometimes a package needs other packages to work properly. (Kind of like how some apps require you to update your operating system first.) These are called <strong>dependencies</strong>, and R handles them automatically – it’ll download whatever supporting software it needs without you having to lift a finger.</p>
+<p>And here’s the really cool part: if nobody on the entire planet has written a package for the specific, niche thing you need to do (unlikely, but possible), you can build your own and share it with the world. That’s the beauty of open source – everyone contributes, everyone benefits.</p>
+<div id="key-milestones" class="section level3" number="1.2.1">
+<h3>
+<span class="header-section-number">1.2.1</span> Key Milestones<a class="anchor" aria-label="anchor" href="#key-milestones"><i class="fas fa-link"></i></a>
+</h3>
+<p>R has evolved significantly over the years:</p>
+<ul>
+<li>
+<strong>R 4.0 (2020):</strong> Introduced modern defaults (e.g., <code>stringsAsFactors = FALSE</code>), making data import less error-prone.</li>
+<li>
+<strong>R 4.1 (2021):</strong> Added the native pipe operator <code>|&gt;</code>, giving base R a feature that tidyverse users had loved for years via <code>%&gt;%</code>.</li>
+<li>
+<strong>RStudio renamed to Posit (2022):</strong> Reflecting the company’s growing support for Python alongside R.</li>
+<li>
+<strong>tidyverse 2.0 (2023):</strong> Added <strong>lubridate</strong> to the core tidyverse, making date-time handling a first-class citizen.</li>
+<li>
+<strong>R 4.5 (2025):</strong> The current release, which includes the Palmer Penguins dataset built in – a modern, inclusive replacement for the classic <code>iris</code> data.</li>
+</ul>
+</div>
+</div>
+<div id="the-tidyverse" class="section level2" number="1.3">
+<h2>
+<span class="header-section-number">1.3</span> The Tidyverse<a class="anchor" aria-label="anchor" href="#the-tidyverse"><i class="fas fa-link"></i></a>
+</h2>
+<p>Okay, buckle up, because I’m about to introduce you to something that’s going to make your data life <em>significantly</em> better.</p>
+<p>The <strong>tidyverse</strong> is a collection of R packages that were designed to work together seamlessly. Think of it like this: base R is a kitchen where all the utensils are scattered across random drawers. The tidyverse is that same kitchen after someone from The Container Store organized the whole thing. Everything has a place, everything works together, and you can actually find what you need.</p>
+<p>The tidyverse was created primarily by Hadley Wickham – kind of a celebrity in the data world (he has fans, conference talks, the whole deal) – and is maintained by the team at Posit.</p>
+<p>Here’s what’s in the toolkit:</p>
+<ul>
+<li>
+<strong>ggplot2</strong>: Makes beautiful charts and graphs. This is the package that’ll make your classmates’ and coworkers’ jaws drop during presentations.</li>
+<li>
+<strong>dplyr</strong>: Lets you filter, sort, group, and summarize data. It’s basically what you <em>wish</em> Excel pivot tables were. Seriously – once you use <code>dplyr</code>, you’ll feel betrayed by pivot tables.</li>
+<li>
+<strong>tidyr</strong>: Helps you reshape messy data into clean, “tidy” formats. Because real-world data from CRM systems, surveys, and databases is almost always a disaster.</li>
+<li>
+<strong>readr</strong>: Reads CSV files and other data formats quickly and cleanly. Perfect for loading that sales report your boss just emailed you.</li>
+<li>
+<strong>purrr</strong>: Automates repetitive tasks so you don’t have to copy-paste the same analysis fifty times. (Also, the name is a cat pun. Data scientists are fun at parties, apparently.)</li>
+<li>
+<strong>tibble</strong>: A smarter, more user-friendly version of R’s data frame – basically a spreadsheet that lives inside R and behaves itself.</li>
+<li>
+<strong>stringr</strong>: Tools for working with text data. Great for cleaning up messy customer survey responses where someone typed “Strongly agrEE” instead of “Strongly Agree.”</li>
+<li>
+<strong>forcats</strong>: Helps you work with categorical data – things like “Freshman/Sophomore/Junior/Senior,” product categories, or customer segments.</li>
+</ul>
+<p>Installing the whole collection takes one line of code:</p>
+<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html">install.packages</a></span><span class="op">(</span><span class="st">"tidyverse"</span><span class="op">)</span></span></code></pre></div>
+<p>And loading it into your session is just as easy:</p>
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://tidyverse.tidyverse.org">tidyverse</a></span><span class="op">)</span></span></code></pre></div>
+<p>Throughout this book, we’ll use a mix of built-in functions and these add-on packages. The tidyverse gets its own deep dive in Chapters <a href="tidyverse.html#tidyverse">3</a> through <a href="purrr.html#purrr">17</a>.</p>
+<p>Trust me – once you start using the tidyverse, you’ll wonder how you ever lived without it. It’s like switching from a flip phone to a smartphone. Same basic concept, completely different quality of life.</p>
+</div>
+<div id="why-learn-r-ai" class="section level2" number="1.4">
+<h2>
+<span class="header-section-number">1.4</span> “But Can’t AI Just Write the Code for Me?”<a class="anchor" aria-label="anchor" href="#why-learn-r-ai"><i class="fas fa-link"></i></a>
+</h2>
+<p>Fair question. Tools like ChatGPT, Claude, GitHub Copilot, and others can absolutely generate R code. You can type “make me a bar chart of average sales by region” and get working ggplot2 code in seconds. So why bother learning R yourself?</p>
+<p>Here’s the honest answer: <strong>AI makes R more valuable, not less.</strong></p>
+<p>Think about it this way. A calculator can do arithmetic faster than any human alive, but we still teach math – because you need to know whether the answer makes sense. The same logic applies here, except the stakes are higher. An AI can generate a linear regression in two seconds. But if you don’t understand what a regression <em>is</em>, you won’t catch it when the model is wildly overfit, when the residuals scream “this relationship isn’t linear,” or when a lurking confound makes the whole result meaningless. You’ll present garbage to your manager with complete confidence, and that’s worse than presenting nothing at all.</p>
+<p>Here’s what actually happens in the workplace:</p>
+<ol style="list-style-type: decimal">
+<li><p><strong>AI generates code. You decide if the code is right.</strong> That requires understanding what <code>group_by() |&gt; summarize()</code> does, what a p-value means, and why a boxplot might be more informative than a bar chart. You’re the quality-control layer. If you don’t know R, you’re just a middleman forwarding AI output to your boss – and middlemen get automated away.</p></li>
+<li><p><strong>AI is fast but not thoughtful.</strong> It doesn’t know your business context. It doesn’t know that “Region” in your company’s data actually has a fourth hidden category because someone merged two territories last quarter. It doesn’t know your CEO hates pie charts. Domain knowledge and human judgment are the things that turn raw output into useful insight, and those come from <em>you</em>.</p></li>
+<li><p><strong>The best AI users are the ones who know the craft.</strong> This is the paradox: people who already understand data analysis get <em>dramatically</em> more out of AI tools than beginners do. They write better prompts, catch errors faster, and use AI to accelerate work they already understand. Learning R doesn’t compete with AI – it makes you better at using it.</p></li>
+<li><p><strong>Interviews and credibility still require understanding.</strong> No hiring manager is going to be impressed when you say “I had AI do it.” They’ll ask follow-up questions. “Why did you choose a log transformation?” “What does this coefficient mean?” “Walk me through your methodology.” If you can’t answer, the conversation is over.</p></li>
+</ol>
+<p>The bottom line: <strong>learn R <em>and</em> use AI tools.</strong> Use AI to speed up boilerplate code, to learn new packages, and to debug annoying errors at midnight. But build your own understanding so that you can steer, verify, and explain. The analysts who thrive in the AI era won’t be the ones who blindly copy-paste generated code – they’ll be the ones who know enough to ask the right questions and catch the wrong answers.</p>
 
-<center>
-<iframe width="560" height="315" src="https://www.youtube.com/embed/XcBLEVknqvY" frameborder="0" allowfullscreen>
-</iframe>
-
 </div>
 </div>
-            </section>
-
-          </div>
-        </div>
-      </div>
-<a href="index.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
-<a href="Rgettingstarted.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
-    </div>
-  </div>
-<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
-<script src="libs/gitbook-2.6.7/js/lunr.js"></script>
-<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
-<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
-<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
-<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
-<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
 <script>
-gitbook.require(["gitbook"], function(gitbook) {
-gitbook.start({
-"sharing": {
-"github": false,
-"facebook": true,
-"twitter": true,
-"google": false,
-"linkedin": false,
-"weibo": false,
-"instapaper": false,
-"vk": false,
-"all": ["facebook", "google", "twitter", "linkedin", "weibo", "instapaper"]
-},
-"fontsettings": {
-"theme": "white",
-"family": "sans",
-"size": 2
-},
-"edit": {
-"link": null,
-"text": null
-},
-"history": {
-"link": null,
-"text": null
-},
-"download": null,
-"toc": {
-"collapse": "subsection"
-},
-"collapse": "section",
-"scroll_highlight": true,
-"toolbar": {
-"position": "fixed"
-},
-"search": true
+document.addEventListener("DOMContentLoaded", function() {
+  var sidebar = document.querySelector(".sidebar-book");
+  if (!sidebar) return;
+
+  // Create a slim tab on the left edge — visible, unobtrusive, clearly a toggle
+  var btn = document.createElement("button");
+  btn.innerHTML = '&#9776; Contents';
+  btn.setAttribute("aria-label", "Toggle table of contents");
+  btn.id = "sidebar-toggle-btn";
+  document.body.appendChild(btn);
+
+  var isOpen = false;
+
+  function openSidebar() {
+    isOpen = true;
+    sidebar.classList.add("sidebar-open");
+    btn.innerHTML = '&times; Close';
+    btn.classList.add("sidebar-toggle-active");
+  }
+
+  function closeSidebar() {
+    isOpen = false;
+    sidebar.classList.remove("sidebar-open");
+    btn.innerHTML = '&#9776; Contents';
+    btn.classList.remove("sidebar-toggle-active");
+  }
+
+  btn.addEventListener("click", function(e) {
+    e.stopPropagation();
+    if (isOpen) { closeSidebar(); } else { openSidebar(); }
+  });
+
+  // Close when clicking outside
+  document.addEventListener("click", function(e) {
+    if (isOpen && !sidebar.contains(e.target) && e.target !== btn) {
+      closeSidebar();
+    }
+  });
+
+  // Close on Escape key
+  document.addEventListener("keydown", function(e) {
+    if (e.key === "Escape" && isOpen) { closeSidebar(); }
+  });
+
+  // Only activate on wide screens
+  function checkWidth() {
+    if (window.innerWidth >= 992) {
+      btn.style.display = "flex";
+      sidebar.classList.add("sidebar-collapsed");
+    } else {
+      btn.style.display = "none";
+      sidebar.classList.remove("sidebar-collapsed");
+      sidebar.classList.remove("sidebar-open");
+    }
+  }
+
+  window.addEventListener("resize", checkWidth);
+  checkWidth();
 });
-});
+</script><div class="chapter-nav">
+<div class="prev"><a href="index.html">Preface</a></div>
+<div class="next"><a href="Rgettingstarted.html"><span class="header-section-number">2</span> Getting Started with R</a></div>
+</div></main><div class="col-md-3 col-lg-2 d-none d-md-block sidebar sidebar-chapter">
+    <nav id="toc" data-toggle="toc" aria-label="On this page"><h2>On this page</h2>
+      <ul class="nav navbar-nav">
+<li><a class="nav-link" href="#introR"><span class="header-section-number">1</span> Introduction to R</a></li>
+<li>
+<a class="nav-link" href="#why-use-r-or-why-cant-i-just-stick-with-excel"><span class="header-section-number">1.1</span> Why Use R? (Or: Why Can’t I Just Stick with Excel?)</a><ul class="nav navbar-nav"><li><a class="nav-link" href="#where-r-stands-in-2026"><span class="header-section-number">1.1.1</span> Where R Stands in 2026</a></li></ul>
+</li>
+<li>
+<a class="nav-link" href="#r-the-environment-and-software"><span class="header-section-number">1.2</span> R – The Environment and Software</a><ul class="nav navbar-nav"><li><a class="nav-link" href="#key-milestones"><span class="header-section-number">1.2.1</span> Key Milestones</a></li></ul>
+</li>
+<li><a class="nav-link" href="#the-tidyverse"><span class="header-section-number">1.3</span> The Tidyverse</a></li>
+<li><a class="nav-link" href="#why-learn-r-ai"><span class="header-section-number">1.4</span> “But Can’t AI Just Write the Code for Me?”</a></li>
+</ul>
+
+      <div class="book-extra">
+        <ul class="list-unstyled">
+          
+        </ul>
+</div>
+    </nav>
+</div>
+
+</div>
+</div> <!-- .container -->
+
+<footer class="bg-primary text-light mt-5"><div class="container"><div class="row">
+
+  <div class="col-12 col-md-6 mt-3">
+    <p>"<strong>R and the Tidyverse: A Beginner’s Guide</strong>" was written by Vivek H. Patil. It was last built on 2026-02-27.</p>
+  </div>
+
+  <div class="col-12 col-md-6 mt-3">
+    <p>This book was built by the <a class="text-light" href="https://bookdown.org">bookdown</a> R package.</p>
+  </div>
+
+</div></div>
+</footer><!-- dynamically load mathjax for compatibility with self-contained --><script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "true";
+    if (src === "" || src === "true") src = "https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.9/latest.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:")
+      if (/^https?:/.test(src))
+        src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script><script type="text/x-mathjax-config">const popovers = document.querySelectorAll('a.footnote-ref[data-toggle="popover"]');
+for (let popover of popovers) {
+  const div = document.createElement('div');
+  div.setAttribute('style', 'position: absolute; top: 0, left:0; width:0, height:0, overflow: hidden; visibility: hidden;');
+  div.innerHTML = popover.getAttribute('data-content');
+
+  var has_math = div.querySelector("span.math");
+  if (has_math) {
+    document.body.appendChild(div);
+    MathJax.Hub.Queue(["Typeset", MathJax.Hub, div]);
+    MathJax.Hub.Queue(function() {
+      popover.setAttribute('data-content', div.innerHTML);
+      document.body.removeChild(div);
+    })
+  }
+}
 </script>
-
 </body>
-
 </html>

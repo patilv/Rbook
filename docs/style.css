@@ -1,54 +1,413 @@
-p.caption {
-  color: #777;
-  margin-top: 10px;
-}
-p code {
-  white-space: inherit;
-}
-pre {
-  word-break: normal;
-  word-wrap: normal;
-}
-pre code {
-  white-space: inherit;
-}
-p.flushright {
-  text-align: right;
-}
-blockquote > p:last-child {
-  text-align: right;
-}
-blockquote > p:first-child {
-  text-align: inherit;
-}
-.header-section-number {
-  padding-right: .2em;
-  font-weight: 500;
-}
-.level1 .header-section-number {
-  display: inline-block;
-  border-bottom: 3px solid;
-}
-.level1 h1 {
-  border-bottom: 1px solid;
-}
-h1, h2, h3, h4, h5, h6 {
-  font-weight: normal;
-  
-  
+/* ============================================================
+   R and the Tidyverse: A Companion Guide — Custom Styles
+   Gonzaga red (#a80107) as primary accent
+   ============================================================ */
+
+/* --- Typography ------------------------------------------ */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Fira+Code:wght@400;500&display=swap');
+
+body {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  line-height: 1.75;
+  color: #2d2d2d;
 }
 
-h1,h2 {
-	color: #a80107;
+/* --- Headers --------------------------------------------- */
+h1, h2, h3, h4 {
+  color: #a80107;
+  font-weight: 700;
+  margin-top: 2.0em;
+}
+
+h1 {
+  font-size: 2.0em;
+  padding-bottom: 0.35em;
+  border-bottom: 3px solid;
+  border-image: linear-gradient(to right, #a80107, #6b0004) 1;
+}
+
+h2 {
+  font-size: 1.55em;
+  padding-bottom: 0.25em;
+  border-bottom: 2px solid;
+  border-image: linear-gradient(to right, #a80107 40%, transparent) 1;
+}
+
+h3 {
+  font-size: 1.25em;
 }
 
 h1.title {
-  font-weight: 700;
+  font-weight: 800;
+  font-size: 2.4em;
   color: #a80107;
+  border-bottom: none;
 }
-.book .book-body .page-wrapper .page-inner section.normal strong {
+
+/* --- Bold text accent ------------------------------------ */
+strong {
+  color: #2a5db0;
+}
+
+/* --- Links ----------------------------------------------- */
+a {
+  color: #a80107;
+  text-decoration: none;
+  border-bottom: 1px solid transparent;
+  transition: border-bottom-color 0.25s ease, color 0.25s ease;
+}
+
+a:hover {
+  color: #6b0004;
+  border-bottom-color: #a80107;
+}
+
+/* --- Code blocks ----------------------------------------- */
+pre {
+  word-break: normal;
+  word-wrap: normal;
+  background-color: #f8f5f0;
+  border-left: 4px solid #a80107;
+  border-radius: 6px;
+  padding: 1em 1.2em;
+  margin: 1.2em 0;
+  overflow-x: auto;
+  font-size: 0.92em;
+}
+
+pre code {
+  font-family: 'Fira Code', 'Consolas', 'Monaco', monospace;
+  white-space: inherit;
+  background: transparent;
+  padding: 0;
+}
+
+code {
+  font-family: 'Fira Code', 'Consolas', 'Monaco', monospace;
+  font-size: 0.88em;
+  background-color: #f8f5f0;
+  padding: 0.15em 0.4em;
+  border-radius: 4px;
+}
+
+/* R output blocks — lighter style to distinguish from input */
+pre.sourceCode + pre:not(.sourceCode),
+pre.r + pre:not(.r) {
+  border-left-color: #ccc;
+  background-color: #fafafa;
+}
+
+/* --- Blockquotes ----------------------------------------- */
+blockquote {
+  border-left: 4px solid #a80107;
+  padding: 0.8em 1.2em;
+  margin: 1.5em 0;
+  background-color: #fdf6f6;
+  border-radius: 0 6px 6px 0;
+  color: #444;
+  font-style: italic;
+}
+
+blockquote p:last-child {
+  margin-bottom: 0;
+}
+
+/* --- Callout / tip / warning boxes ----------------------- */
+.rmdnote, .rmdtip, .rmdwarning, .rmdimportant, .rmdcaution {
+  padding: 1em 1.2em;
+  margin: 1.5em 0;
+  border-radius: 6px;
+  border-left: 5px solid;
+}
+
+.rmdnote {
+  background-color: #e8f0fe;
+  border-left-color: #2a5db0;
+}
+
+.rmdtip {
+  background-color: #e6f7f0;
+  border-left-color: #1a9a6b;
+}
+
+.rmdwarning, .rmdcaution {
+  background-color: #fff8e6;
+  border-left-color: #d4a017;
+}
+
+.rmdimportant {
+  background-color: #fce8e8;
+  border-left-color: #a80107;
+}
+
+/* --- Tables ---------------------------------------------- */
+table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  margin: 1.5em 0;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.08);
+}
+
+thead th {
+  background-color: #a80107;
+  color: #fff;
+  font-weight: 600;
+  padding: 0.75em 1em;
+  text-align: left;
+}
+
+tbody td {
+  padding: 0.65em 1em;
+  border-bottom: 1px solid #eee;
+}
+
+/* Zebra striping */
+tbody tr:nth-child(even) {
+  background-color: #faf8f6;
+}
+
+/* Hover highlight */
+tbody tr:hover {
+  background-color: #fdeeed;
+  transition: background-color 0.2s ease;
+}
+
+/* --- Figures / images ------------------------------------ */
+p.caption {
+  color: #777;
+  margin-top: 10px;
+  font-size: 0.9em;
+  text-align: center;
+}
+
+img {
+  max-width: 100%;
+  height: auto;
+}
+
+.book-body img,
+main img {
+  border-radius: 6px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  display: block;
+  margin: 1em auto;
+}
+
+/* --- Cover image in sidebar ------------------------------ */
+.sidebar-book .book-cover,
+.sidebar-book img[src$="cover.png"] {
+  display: block;
+  max-width: 200px;
+  margin: 1rem auto 1.5rem;
+  border-radius: 6px;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.18);
+}
+
+/* --- Responsive video / iframe wrapper ------------------- */
+.video-wrapper {
+  position: relative;
+  padding-bottom: 56.25%; /* 16:9 */
+  height: 0;
+  overflow: hidden;
+  max-width: 720px;
+  margin: 1.5em auto;
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.12);
+}
+
+.video-wrapper iframe {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border: 0;
+}
+
+/* --- Layout: collapsible left sidebar, wider content ----- */
+@media (min-width: 992px) {
+  /* Slide the left sidebar off-screen by default on desktop */
+  .sidebar-book.sidebar-collapsed {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 300px;
+    height: 100vh;
+    overflow-y: auto;
+    z-index: 1040;
+    background: #fff;
+    box-shadow: 2px 0 12px rgba(0,0,0,0.1);
+    transform: translateX(-100%);
+    transition: transform 0.3s ease;
+  }
+
+  /* Slide in when toggled open */
+  .sidebar-book.sidebar-collapsed.sidebar-open {
+    transform: translateX(0);
+  }
+
+  /* With sidebar collapsed, let content use more width */
+  .sidebar-book.sidebar-collapsed ~ main {
+    flex: 0 0 75%;
+    max-width: 75%;
+    margin-left: auto;
+    margin-right: auto;
+    transition: flex 0.3s ease;
+  }
+
+  .sidebar-book.sidebar-collapsed ~ main ~ .sidebar-chapter {
+    flex: 0 0 22%;
+    max-width: 22%;
+  }
+}
+
+/* --- "Contents" toggle button ----------------------------- */
+#sidebar-toggle-btn {
+  position: fixed;
+  top: 14px;
+  left: 14px;
+  z-index: 1050;
+  display: none;          /* JS shows it on wide screens */
+  align-items: center;
+  gap: 6px;
+  background: #a80107;
+  color: #fff;
+  border: none;
+  border-radius: 20px;
+  padding: 8px 16px;
+  font-family: 'Inter', sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.18);
+  transition: background 0.2s, transform 0.15s;
+  white-space: nowrap;
+}
+
+#sidebar-toggle-btn:hover {
+  background: #6b0004;
+  transform: scale(1.03);
+}
+
+#sidebar-toggle-btn.sidebar-toggle-active {
+  background: #444;
+}
+
+/* --- Sidebar / TOC styling ------------------------------- */
+.book-summary li a.active,
+.bs4-book .active > a {
+  border-left: 3px solid #a80107 !important;
+  font-weight: 600;
+  color: #a80107 !important;
+  transition: all 0.2s ease;
+}
+
+.book-summary li a:hover {
+  color: #a80107 !important;
+  transition: color 0.2s ease;
+}
+
+/* Right sidebar ("On this page") active state */
+.sidebar-chapter .nav-link.active {
+  border-left: 2px solid #a80107;
+  color: #a80107 !important;
   font-weight: 500;
-  color: #4286f4;
 }
 
+/* --- Search bar fixes ------------------------------------ */
+/* Ensure search input is visible and functional */
+.sidebar-book #search,
+.sidebar-book .form-control[type="search"] {
+  display: block !important;
+  width: 100%;
+  padding: 8px 12px;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  font-size: 14px;
+  margin-bottom: 12px;
+}
 
+/* Search results dropdown */
+.search-results,
+.aa-dropdown-menu {
+  background: #fff;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.12);
+  max-height: 400px;
+  overflow-y: auto;
+  z-index: 1060;
+}
+
+/* --- Custom scrollbar (WebKit) --------------------------- */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f5f3f0;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: #c4a0a0;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background-color: #a80107;
+}
+
+/* --- DT & plotly widget adjustments ---------------------- */
+.datatables {
+  margin: 1.5em 0;
+}
+
+.plotly {
+  margin: 1.5em 0;
+}
+
+/* --- Print-friendly -------------------------------------- */
+@media print {
+  body {
+    font-size: 11pt;
+    color: #000;
+    line-height: 1.5;
+  }
+
+  h1, h2, h3, h4 {
+    color: #000;
+    border-image: none;
+    border-bottom-color: #999;
+  }
+
+  a {
+    color: #000;
+    text-decoration: underline;
+  }
+
+  pre {
+    border-left-color: #999;
+    background-color: #f5f5f5;
+    page-break-inside: avoid;
+  }
+
+  table thead th {
+    background-color: #666;
+  }
+
+  .video-wrapper, .plotly, .datatables {
+    display: none;
+  }
+
+  img {
+    box-shadow: none;
+  }
+
+  #sidebar-toggle-btn {
+    display: none !important;
+  }
+}

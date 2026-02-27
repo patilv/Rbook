@@ -1,0 +1,673 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<title>Chapter 15 Wrangling Categories with forcats | R and the Tidyverse: A Beginner’s Guide</title>
+<meta name="author" content="Vivek H. Patil">
+<meta name="description" content="15.1 Factors = Categories. That’s It. If you have ever made a bar chart in R and wondered why the bars are in alphabetical order instead of something useful — congratulations, you have discovered...">
+<meta name="generator" content="bookdown 0.46 with bs4_book()">
+<meta property="og:title" content="Chapter 15 Wrangling Categories with forcats | R and the Tidyverse: A Beginner’s Guide">
+<meta property="og:type" content="book">
+<meta property="og:image" content="/cover.png">
+<meta property="og:description" content="15.1 Factors = Categories. That’s It. If you have ever made a bar chart in R and wondered why the bars are in alphabetical order instead of something useful — congratulations, you have discovered...">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Chapter 15 Wrangling Categories with forcats | R and the Tidyverse: A Beginner’s Guide">
+<meta name="twitter:description" content="15.1 Factors = Categories. That’s It. If you have ever made a bar chart in R and wondered why the bars are in alphabetical order instead of something useful — congratulations, you have discovered...">
+<meta name="twitter:image" content="/cover.png">
+<!-- JS --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script><script src="https://kit.fontawesome.com/6ecbd6c532.js" crossorigin="anonymous"></script><script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<link href="libs/bootstrap-4.6.0/bootstrap.min.css" rel="stylesheet">
+<script src="libs/bootstrap-4.6.0/bootstrap.bundle.min.js"></script><script src="libs/bs3compat-0.10.0/transition.js"></script><script src="libs/bs3compat-0.10.0/tabs.js"></script><script src="libs/bs3compat-0.10.0/bs3compat.js"></script><link href="libs/bs4_book-1.0.0/bs4_book.css" rel="stylesheet">
+<script src="libs/bs4_book-1.0.0/bs4_book.js"></script><link href="libs/htmltools-fill-0.5.9/fill.css" rel="stylesheet">
+<script src="libs/htmlwidgets-1.6.4/htmlwidgets.js"></script><link href="libs/datatables-css-0.0.0/datatables-crosstalk.css" rel="stylesheet">
+<script src="libs/datatables-binding-0.34.0/datatables.js"></script><link href="libs/dt-core-1.13.6/css/jquery.dataTables.min.css" rel="stylesheet">
+<link href="libs/dt-core-1.13.6/css/jquery.dataTables.extra.css" rel="stylesheet">
+<script src="libs/dt-core-1.13.6/js/jquery.dataTables.min.js"></script><link href="libs/crosstalk-1.2.2/css/crosstalk.min.css" rel="stylesheet">
+<script src="libs/crosstalk-1.2.2/js/crosstalk.min.js"></script><script src="libs/plotly-binding-4.12.0/plotly.js"></script><script src="libs/typedarray-0.1/typedarray.min.js"></script><link href="libs/plotly-htmlwidgets-css-2.25.2/plotly-htmlwidgets.css" rel="stylesheet">
+<script src="libs/plotly-main-2.25.2/plotly-latest.min.js"></script><script src="libs/kePrint-0.0.1/kePrint.js"></script><link href="libs/lightable-0.0.1/lightable.css" rel="stylesheet">
+<link href="libs/nouislider-7.0.10/jquery.nouislider.min.css" rel="stylesheet">
+<script src="libs/nouislider-7.0.10/jquery.nouislider.min.js"></script><link href="libs/selectize-0.12.0/selectize.bootstrap3.css" rel="stylesheet">
+<script src="libs/selectize-0.12.0/selectize.min.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/autocomplete.js/0.38.0/autocomplete.jquery.min.js" integrity="sha512-GU9ayf+66Xx2TmpxqJpliWbT5PiGYxpaG8rfnBEk1LL8l1KGkRShhngwdXK1UgqhAzWpZHSiYPc09/NwDQIGyg==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/mark.min.js" integrity="sha512-5CYOlHXGh6QpOFA/TeTylKLWfB3ftPsde7AnmhuitiTX4K5SqCLBeKro6sPS8ilsz1Q4NRx3v8Ko2IBiszzdww==" crossorigin="anonymous"></script><!-- CSS --><style type="text/css">
+    
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  </style>
+<style type="text/css">
+    /* Used with Pandoc 2.11+ new --citeproc when CSL is used */
+    div.csl-bib-body { }
+    div.csl-entry {
+      clear: both;
+          margin-bottom: 0em;
+        }
+    .hanging div.csl-entry {
+      margin-left:2em;
+      text-indent:-2em;
+    }
+    div.csl-left-margin {
+      min-width:2em;
+      float:left;
+    }
+    div.csl-right-inline {
+      margin-left:2em;
+      padding-left:1em;
+    }
+    div.csl-indent {
+      margin-left: 2em;
+    }
+  </style>
+<link rel="stylesheet" href="style.css">
+</head>
+<body data-spy="scroll" data-target="#toc">
+
+<div class="container-fluid">
+<div class="row">
+  <header class="col-sm-12 col-lg-3 sidebar sidebar-book"><a class="sr-only sr-only-focusable" href="#content">Skip to main content</a>
+
+    <div class="d-flex align-items-start justify-content-between">
+      <h1>
+        <a href="index.html" title="">R and the Tidyverse: A Beginner’s Guide</a>
+      </h1>
+      <button class="btn btn-outline-primary d-lg-none ml-2 mt-1" type="button" data-toggle="collapse" data-target="#main-nav" aria-expanded="true" aria-controls="main-nav"><i class="fas fa-bars"></i><span class="sr-only">Show table of contents</span></button>
+    </div>
+
+    <div id="main-nav" class="collapse-lg">
+      <form role="search">
+        <input id="search" class="form-control" type="search" placeholder="Search" aria-label="Search">
+</form>
+
+      <nav aria-label="Table of contents"><h2>Table of contents</h2>
+        <ul class="book-toc list-unstyled">
+<li><a class="" href="index.html">Preface</a></li>
+<li><a class="" href="introR.html"><span class="header-section-number">1</span> Introduction to R</a></li>
+<li><a class="" href="Rgettingstarted.html"><span class="header-section-number">2</span> Getting Started with R</a></li>
+<li><a class="" href="tidyverse.html"><span class="header-section-number">3</span> Your Data Analysis Toolkit</a></li>
+<li><a class="" href="dataimport.html"><span class="header-section-number">4</span> Data Import</a></li>
+<li><a class="" href="describedata.html"><span class="header-section-number">5</span> Describing Data</a></li>
+<li><a class="" href="modifydata.html"><span class="header-section-number">6</span> Modifying Data</a></li>
+<li><a class="" href="dplyr.html"><span class="header-section-number">7</span> Data Wrangling with dplyr</a></li>
+<li><a class="" href="tidyr.html"><span class="header-section-number">8</span> Tidy Data with tidyr</a></li>
+<li><a class="" href="summarystats.html"><span class="header-section-number">9</span> Summary Statistics</a></li>
+<li><a class="" href="ggplot2basics.html"><span class="header-section-number">10</span> Data Visualization with ggplot2</a></li>
+<li><a class="" href="ggplot2customize.html"><span class="header-section-number">11</span> Customizing ggplot2 Visualizations</a></li>
+<li><a class="" href="singlevar.html"><span class="header-section-number">12</span> Single Variable Analysis</a></li>
+<li><a class="" href="multivar.html"><span class="header-section-number">13</span> Relationships Between Variables</a></li>
+<li><a class="" href="stringr.html"><span class="header-section-number">14</span> Working with Text Data</a></li>
+<li><a class="active" href="forcats.html"><span class="header-section-number">15</span> Wrangling Categories with forcats</a></li>
+<li><a class="" href="lubridate.html"><span class="header-section-number">16</span> Working with Dates and Times</a></li>
+<li><a class="" href="purrr.html"><span class="header-section-number">17</span> Doing the Same Thing to Many Things at Once</a></li>
+<li><a class="" href="rmarkdown.html"><span class="header-section-number">18</span> R Markdown</a></li>
+<li><a class="" href="rmarkdown-advanced.html"><span class="header-section-number">19</span> Advanced R Markdown</a></li>
+</ul>
+
+        <div class="book-extra">
+          
+        </div>
+      </nav>
+</div>
+  </header><main class="col-sm-12 col-md-9 col-lg-7" id="content"><div id="forcats" class="section level1" number="15">
+<h1>
+<span class="header-section-number">15</span> Wrangling Categories with forcats<a class="anchor" aria-label="anchor" href="#forcats"><i class="fas fa-link"></i></a>
+</h1>
+<div id="factors-categories.-thats-it." class="section level2" number="15.1">
+<h2>
+<span class="header-section-number">15.1</span> Factors = Categories. That’s It.<a class="anchor" aria-label="anchor" href="#factors-categories.-thats-it."><i class="fas fa-link"></i></a>
+</h2>
+<p>If you have ever made a bar chart in R and wondered why the bars are in alphabetical order instead of something useful — congratulations, you have discovered why factors exist.</p>
+<p>A <strong>factor</strong> is just R’s fancy word for a categorical variable: things like survey responses (“Agree”, “Neutral”, “Disagree”), product categories, regions, departments, or customer segments. Under the hood, it is a text variable with a defined set of allowed values (called <strong>levels</strong>) in a specific order.</p>
+<p>Why should you care about the order? One reason: <strong>ggplot2 uses factor order to arrange your charts</strong>. Alphabetical bars are the data visualization equivalent of an unsorted resume — technically complete, but nobody wants to read it.</p>
+<p>The <strong>forcats</strong> package (part of the tidyverse, loaded automatically) gives you simple tools to fix that. Let’s see the problem first.</p>
+</div>
+<div id="the-problem-alphabetical-everything" class="section level2" number="15.2">
+<h2>
+<span class="header-section-number">15.2</span> The Problem: Alphabetical Everything<a class="anchor" aria-label="anchor" href="#the-problem-alphabetical-everything"><i class="fas fa-link"></i></a>
+</h2>
+<div class="sourceCode" id="cb389"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># A character vector</span></span>
+<span><span class="va">satisfaction</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"Low"</span>, <span class="st">"Medium"</span>, <span class="st">"High"</span>, <span class="st">"Low"</span>, <span class="st">"High"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># When you make it a factor, R defaults to alphabetical order</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/factor.html">factor</a></span><span class="op">(</span><span class="va">satisfaction</span><span class="op">)</span></span>
+<span><span class="co">#&gt; [1] Low    Medium High   Low    High  </span></span>
+<span><span class="co">#&gt; Levels: High Low Medium</span></span></code></pre></div>
+<p>The levels are “High”, “Low”, “Medium” — alphabetical, not logical. You want “Low”, “Medium”, “High.” That is the entire reason this chapter exists.</p>
+<div class="sourceCode" id="cb390"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Fix it by specifying levels</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/factor.html">factor</a></span><span class="op">(</span><span class="va">satisfaction</span>, levels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"Low"</span>, <span class="st">"Medium"</span>, <span class="st">"High"</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="co">#&gt; [1] Low    Medium High   Low    High  </span></span>
+<span><span class="co">#&gt; Levels: Low Medium High</span></span></code></pre></div>
+<p>This manual approach works for three levels. When you have real data with dozens of categories, forcats makes it painless.</p>
+</div>
+<div id="the-dataset-general-social-survey" class="section level2" number="15.3">
+<h2>
+<span class="header-section-number">15.3</span> The Dataset: General Social Survey<a class="anchor" aria-label="anchor" href="#the-dataset-general-social-survey"><i class="fas fa-link"></i></a>
+</h2>
+<p>We will use <code>gss_cat</code>, a dataset built into forcats with survey data from the General Social Survey. It has several factor columns — perfect guinea pig.</p>
+<div class="sourceCode" id="cb391"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://pillar.r-lib.org/reference/glimpse.html">glimpse</a></span><span class="op">(</span><span class="va">gss_cat</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Rows: 21,483</span></span>
+<span><span class="co">#&gt; Columns: 9</span></span>
+<span><span class="co">#&gt; $ year    &lt;int&gt; 2000, 2000, 2000, 2000, 2000, 2000, 2000, 2000, 2000, 2000, 20…</span></span>
+<span><span class="co">#&gt; $ marital &lt;fct&gt; Never married, Divorced, Widowed, Never married, Divorced, Mar…</span></span>
+<span><span class="co">#&gt; $ age     &lt;int&gt; 26, 48, 67, 39, 25, 25, 36, 44, 44, 47, 53, 52, 52, 51, 52, 40…</span></span>
+<span><span class="co">#&gt; $ race    &lt;fct&gt; White, White, White, White, White, White, White, White, White,…</span></span>
+<span><span class="co">#&gt; $ rincome &lt;fct&gt; $8000 to 9999, $8000 to 9999, Not applicable, Not applicable, …</span></span>
+<span><span class="co">#&gt; $ partyid &lt;fct&gt; "Ind,near rep", "Not str republican", "Independent", "Ind,near…</span></span>
+<span><span class="co">#&gt; $ relig   &lt;fct&gt; Protestant, Protestant, Protestant, Orthodox-christian, None, …</span></span>
+<span><span class="co">#&gt; $ denom   &lt;fct&gt; "Southern baptist", "Baptist-dk which", "No denomination", "No…</span></span>
+<span><span class="co">#&gt; $ tvhours &lt;int&gt; 12, NA, 2, 4, 1, NA, 3, NA, 0, 3, 2, NA, 1, NA, 1, 7, NA, 3, 3…</span></span></code></pre></div>
+</div>
+<div id="fct_reorder-the-most-important-function" class="section level2" number="15.4">
+<h2>
+<span class="header-section-number">15.4</span> <code>fct_reorder()</code> — THE Most Important Function<a class="anchor" aria-label="anchor" href="#fct_reorder-the-most-important-function"><i class="fas fa-link"></i></a>
+</h2>
+<p>If you learn one thing from this chapter, make it this one. <code><a href="https://forcats.tidyverse.org/reference/fct_reorder.html">fct_reorder()</a></code> reorders a factor by the values of another variable. In plain English: <strong>it sorts your bar chart bars so they actually make sense.</strong></p>
+<p>Think of it this way: if your bar chart were a PowerPoint slide, <code><a href="https://forcats.tidyverse.org/reference/fct_reorder.html">fct_reorder()</a></code> is the difference between your manager saying “what am I looking at?” and “great insight.” Here is the before-and-after.</p>
+<p>Without reordering:</p>
+<div class="sourceCode" id="cb392"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">relig_summary</span> <span class="op">&lt;-</span> <span class="va">gss_cat</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html">group_by</a></span><span class="op">(</span><span class="va">relig</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/pkg/Hmisc/man/summarize.html">summarize</a></span><span class="op">(</span></span>
+<span>    avg_tv <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span><span class="op">(</span><span class="va">tvhours</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>,</span>
+<span>    n <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/context.html">n</a></span><span class="op">(</span><span class="op">)</span></span>
+<span>  <span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span><span class="va">relig_summary</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">avg_tv</span>, y <span class="op">=</span> <span class="va">relig</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html">geom_point</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">labs</a></span><span class="op">(</span>title <span class="op">=</span> <span class="st">"TV Hours by Religion (unsorted chaos)"</span>,</span>
+<span>       x <span class="op">=</span> <span class="st">"Mean TV hours per day"</span>, y <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html">theme_minimal</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
+<div class="figure">
+<span style="display:block;" id="fig:unnamed-chunk-401"></span>
+<img src="Rbook_files/figure-html/unnamed-chunk-401-1.png" alt="Religion by TV hours, unsorted. Good luck finding patterns here." width="672"><p class="caption">
+Figure 15.1: Religion by TV hours, unsorted. Good luck finding patterns here.
+</p>
+</div>
+<p>Now with <code><a href="https://forcats.tidyverse.org/reference/fct_reorder.html">fct_reorder()</a></code>:</p>
+<div class="sourceCode" id="cb393"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span><span class="va">relig_summary</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">avg_tv</span>, y <span class="op">=</span> <span class="fu"><a href="https://forcats.tidyverse.org/reference/fct_reorder.html">fct_reorder</a></span><span class="op">(</span><span class="va">relig</span>, <span class="va">avg_tv</span><span class="op">)</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html">geom_point</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">labs</a></span><span class="op">(</span>title <span class="op">=</span> <span class="st">"TV Hours by Religion (sorted --- much better)"</span>,</span>
+<span>       x <span class="op">=</span> <span class="st">"Mean TV hours per day"</span>, y <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html">theme_minimal</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
+<div class="figure">
+<span style="display:block;" id="fig:unnamed-chunk-402"></span>
+<img src="Rbook_files/figure-html/unnamed-chunk-402-1.png" alt="Same data, but now sorted by value. The story jumps right out." width="672"><p class="caption">
+Figure 15.2: Same data, but now sorted by value. The story jumps right out.
+</p>
+</div>
+<p>Same data. Sorted version tells a story instantly. This is the difference between a chart that gets glanced at and one that gets discussed.</p>
+<div class="sourceCode" id="cb394"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">iris</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html">group_by</a></span><span class="op">(</span><span class="va">Species</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/pkg/Hmisc/man/summarize.html">summarize</a></span><span class="op">(</span>mean_petal <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span><span class="op">(</span><span class="va">Petal.Length</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">mean_petal</span>, y <span class="op">=</span> <span class="fu"><a href="https://forcats.tidyverse.org/reference/fct_reorder.html">fct_reorder</a></span><span class="op">(</span><span class="va">Species</span>, <span class="va">mean_petal</span><span class="op">)</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_bar.html">geom_col</a></span><span class="op">(</span>fill <span class="op">=</span> <span class="st">"steelblue"</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">labs</a></span><span class="op">(</span>title <span class="op">=</span> <span class="st">"Mean Petal Length by Species"</span>, x <span class="op">=</span> <span class="st">"Mean Petal Length"</span>, y <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html">theme_minimal</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
+<div class="figure">
+<span style="display:block;" id="fig:unnamed-chunk-403"></span>
+<img src="Rbook_files/figure-html/unnamed-chunk-403-1.png" alt="Mean petal length by iris species, sorted by value." width="672"><p class="caption">
+Figure 15.3: Mean petal length by iris species, sorted by value.
+</p>
+</div>
+<p><strong>Rule of thumb:</strong> Making a bar chart or dot plot with categories? Use <code><a href="https://forcats.tidyverse.org/reference/fct_reorder.html">fct_reorder()</a></code>. Always. No exceptions. Your audience will thank you by not falling asleep.</p>
+</div>
+<div id="fct_infreq-sort-by-count" class="section level2" number="15.5">
+<h2>
+<span class="header-section-number">15.5</span> <code>fct_infreq()</code> — Sort by Count<a class="anchor" aria-label="anchor" href="#fct_infreq-sort-by-count"><i class="fas fa-link"></i></a>
+</h2>
+<p>Sometimes you just want bars sorted by how many observations are in each category — most popular first, like a bestseller list. That is <code><a href="https://forcats.tidyverse.org/reference/fct_inorder.html">fct_infreq()</a></code>.</p>
+<div class="sourceCode" id="cb395"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">gss_cat</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span>marital <span class="op">=</span> <span class="fu"><a href="https://forcats.tidyverse.org/reference/fct_inorder.html">fct_infreq</a></span><span class="op">(</span><span class="va">marital</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">marital</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_bar.html">geom_bar</a></span><span class="op">(</span>fill <span class="op">=</span> <span class="st">"steelblue"</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">labs</a></span><span class="op">(</span>title <span class="op">=</span> <span class="st">"Marital Status (sorted by frequency)"</span>, x <span class="op">=</span> <span class="cn">NULL</span>, y <span class="op">=</span> <span class="st">"Count"</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html">theme_minimal</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
+<div class="figure">
+<span style="display:block;" id="fig:unnamed-chunk-404"></span>
+<img src="Rbook_files/figure-html/unnamed-chunk-404-1.png" alt="Marital status bars sorted by frequency. Most common categories jump out immediately." width="672"><p class="caption">
+Figure 15.4: Marital status bars sorted by frequency. Most common categories jump out immediately.
+</p>
+</div>
+<p>Combine it with <code><a href="https://forcats.tidyverse.org/reference/fct_rev.html">fct_rev()</a></code> for a horizontal bar chart that reads top-to-bottom (the way humans naturally read):</p>
+<div class="sourceCode" id="cb396"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">gss_cat</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span>marital <span class="op">=</span> <span class="fu"><a href="https://forcats.tidyverse.org/reference/fct_rev.html">fct_rev</a></span><span class="op">(</span><span class="fu"><a href="https://forcats.tidyverse.org/reference/fct_inorder.html">fct_infreq</a></span><span class="op">(</span><span class="va">marital</span><span class="op">)</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>y <span class="op">=</span> <span class="va">marital</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_bar.html">geom_bar</a></span><span class="op">(</span>fill <span class="op">=</span> <span class="st">"darkorange"</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">labs</a></span><span class="op">(</span>title <span class="op">=</span> <span class="st">"Marital Status (highest count at top)"</span>, x <span class="op">=</span> <span class="st">"Count"</span>, y <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html">theme_minimal</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
+<div class="figure">
+<span style="display:block;" id="fig:unnamed-chunk-405"></span>
+<img src="Rbook_files/figure-html/unnamed-chunk-405-1.png" alt="Horizontal bars with the most common status at the top." width="672"><p class="caption">
+Figure 15.5: Horizontal bars with the most common status at the top.
+</p>
+</div>
+</div>
+<div id="fct_relevel-manual-ordering" class="section level2" number="15.6">
+<h2>
+<span class="header-section-number">15.6</span> <code>fct_relevel()</code> — Manual Ordering<a class="anchor" aria-label="anchor" href="#fct_relevel-manual-ordering"><i class="fas fa-link"></i></a>
+</h2>
+<p>Sometimes you need a specific order that is not alphabetical or by frequency. Maybe “Never married” is your reference group in a regression, or you need income brackets from low to high. <code><a href="https://forcats.tidyverse.org/reference/fct_relevel.html">fct_relevel()</a></code> lets you move specific levels wherever you want — like rearranging slides in a deck.</p>
+<div class="sourceCode" id="cb397"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Default level order</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/levels.html">levels</a></span><span class="op">(</span><span class="va">gss_cat</span><span class="op">$</span><span class="va">marital</span><span class="op">)</span></span>
+<span><span class="co">#&gt; [1] "No answer"     "Never married" "Separated"     "Divorced"     </span></span>
+<span><span class="co">#&gt; [5] "Widowed"       "Married"</span></span></code></pre></div>
+<div class="sourceCode" id="cb398"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Move "Never married" to the front</span></span>
+<span><span class="va">gss_cat</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span>marital <span class="op">=</span> <span class="fu"><a href="https://forcats.tidyverse.org/reference/fct_relevel.html">fct_relevel</a></span><span class="op">(</span><span class="va">marital</span>, <span class="st">"Never married"</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/pull.html">pull</a></span><span class="op">(</span><span class="va">marital</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/base/levels.html">levels</a></span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="co">#&gt; [1] "Never married" "No answer"     "Separated"     "Divorced"     </span></span>
+<span><span class="co">#&gt; [5] "Widowed"       "Married"</span></span></code></pre></div>
+<div class="sourceCode" id="cb399"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Move "Widowed" to the end</span></span>
+<span><span class="va">gss_cat</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span>marital <span class="op">=</span> <span class="fu"><a href="https://forcats.tidyverse.org/reference/fct_relevel.html">fct_relevel</a></span><span class="op">(</span><span class="va">marital</span>, <span class="st">"Widowed"</span>, after <span class="op">=</span> <span class="cn">Inf</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/pull.html">pull</a></span><span class="op">(</span><span class="va">marital</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/base/levels.html">levels</a></span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="co">#&gt; [1] "No answer"     "Never married" "Separated"     "Divorced"     </span></span>
+<span><span class="co">#&gt; [5] "Married"       "Widowed"</span></span></code></pre></div>
+<p>And the chart payoff:</p>
+<div class="sourceCode" id="cb400"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">gss_cat</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span>marital <span class="op">=</span> <span class="fu"><a href="https://forcats.tidyverse.org/reference/fct_relevel.html">fct_relevel</a></span><span class="op">(</span><span class="va">marital</span>,</span>
+<span>    <span class="st">"Never married"</span>, <span class="st">"Married"</span>, <span class="st">"Separated"</span>,</span>
+<span>    <span class="st">"Divorced"</span>, <span class="st">"Widowed"</span>, <span class="st">"No answer"</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">marital</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_bar.html">geom_bar</a></span><span class="op">(</span>fill <span class="op">=</span> <span class="st">"steelblue"</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">labs</a></span><span class="op">(</span>title <span class="op">=</span> <span class="st">"Marital Status (life-stage order)"</span>, x <span class="op">=</span> <span class="cn">NULL</span>, y <span class="op">=</span> <span class="st">"Count"</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html">theme_minimal</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
+<div class="figure">
+<span style="display:block;" id="fig:unnamed-chunk-409"></span>
+<img src="Rbook_files/figure-html/unnamed-chunk-409-1.png" alt="Marital status in a custom order that tells a life-stage story." width="672"><p class="caption">
+Figure 15.6: Marital status in a custom order that tells a life-stage story.
+</p>
+</div>
+<p>Now the bars tell a life-stage story: never married, married, separated, divorced, widowed. Much more intuitive than whatever “alphabetical” was trying to communicate.</p>
+</div>
+<div id="fct_recode-rename-your-categories" class="section level2" number="15.7">
+<h2>
+<span class="header-section-number">15.7</span> <code>fct_recode()</code> — Rename Your Categories<a class="anchor" aria-label="anchor" href="#fct_recode-rename-your-categories"><i class="fas fa-link"></i></a>
+</h2>
+<p>Survey data often arrives with labels that look like someone’s internal database codes. <code><a href="https://forcats.tidyverse.org/reference/fct_recode.html">fct_recode()</a></code> lets you rename levels with a simple <code>"new name" = "old name"</code> syntax. Think of it as “Find and Replace” for category labels.</p>
+<div class="sourceCode" id="cb401"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">gss_cat</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span>partyid <span class="op">=</span> <span class="fu"><a href="https://forcats.tidyverse.org/reference/fct_recode.html">fct_recode</a></span><span class="op">(</span><span class="va">partyid</span>,</span>
+<span>    <span class="st">"Republican (strong)"</span>    <span class="op">=</span> <span class="st">"Strong republican"</span>,</span>
+<span>    <span class="st">"Republican (weak)"</span>      <span class="op">=</span> <span class="st">"Not str republican"</span>,</span>
+<span>    <span class="st">"Independent (near rep)"</span> <span class="op">=</span> <span class="st">"Ind,near rep"</span>,</span>
+<span>    <span class="st">"Independent (near dem)"</span> <span class="op">=</span> <span class="st">"Ind,near dem"</span>,</span>
+<span>    <span class="st">"Democrat (weak)"</span>        <span class="op">=</span> <span class="st">"Not str democrat"</span>,</span>
+<span>    <span class="st">"Democrat (strong)"</span>      <span class="op">=</span> <span class="st">"Strong democrat"</span></span>
+<span>  <span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/count.html">count</a></span><span class="op">(</span><span class="va">partyid</span><span class="op">)</span></span>
+<span><span class="co">#&gt; # A tibble: 10 × 2</span></span>
+<span><span class="co">#&gt;    partyid                    n</span></span>
+<span><span class="co">#&gt;    &lt;fct&gt;                  &lt;int&gt;</span></span>
+<span><span class="co">#&gt;  1 No answer                154</span></span>
+<span><span class="co">#&gt;  2 Don't know                 1</span></span>
+<span><span class="co">#&gt;  3 Other party              393</span></span>
+<span><span class="co">#&gt;  4 Republican (strong)     2314</span></span>
+<span><span class="co">#&gt;  5 Republican (weak)       3032</span></span>
+<span><span class="co">#&gt;  6 Independent (near rep)  1791</span></span>
+<span><span class="co">#&gt;  7 Independent             4119</span></span>
+<span><span class="co">#&gt;  8 Independent (near dem)  2499</span></span>
+<span><span class="co">#&gt;  9 Democrat (weak)         3690</span></span>
+<span><span class="co">#&gt; 10 Democrat (strong)       3490</span></span></code></pre></div>
+<p>Also great when your data has labels like “1”, “2”, “3” that should really say “Strongly Disagree”, “Neutral”, “Strongly Agree.” Your stakeholders should never have to decode numbers on a chart.</p>
+</div>
+<div id="fct_collapse-merge-categories-together" class="section level2" number="15.8">
+<h2>
+<span class="header-section-number">15.8</span> <code>fct_collapse()</code> — Merge Categories Together<a class="anchor" aria-label="anchor" href="#fct_collapse-merge-categories-together"><i class="fas fa-link"></i></a>
+</h2>
+<p>Sometimes you have too many categories and need to consolidate. <code><a href="https://forcats.tidyverse.org/reference/fct_collapse.html">fct_collapse()</a></code> merges multiple levels into new groups. Think of it as the “department reorganization” of your data — fewer groups, cleaner org chart.</p>
+<div class="sourceCode" id="cb402"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">gss_cat</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span>partyid <span class="op">=</span> <span class="fu"><a href="https://forcats.tidyverse.org/reference/fct_collapse.html">fct_collapse</a></span><span class="op">(</span><span class="va">partyid</span>,</span>
+<span>    <span class="st">"Republican"</span>  <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"Strong republican"</span>, <span class="st">"Not str republican"</span><span class="op">)</span>,</span>
+<span>    <span class="st">"Independent"</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"Ind,near rep"</span>, <span class="st">"Independent"</span>, <span class="st">"Ind,near dem"</span><span class="op">)</span>,</span>
+<span>    <span class="st">"Democrat"</span>    <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"Not str democrat"</span>, <span class="st">"Strong democrat"</span><span class="op">)</span>,</span>
+<span>    <span class="st">"Other"</span>       <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"No answer"</span>, <span class="st">"Don't know"</span>, <span class="st">"Other party"</span><span class="op">)</span></span>
+<span>  <span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/count.html">count</a></span><span class="op">(</span><span class="va">partyid</span><span class="op">)</span></span>
+<span><span class="co">#&gt; # A tibble: 4 × 2</span></span>
+<span><span class="co">#&gt;   partyid         n</span></span>
+<span><span class="co">#&gt;   &lt;fct&gt;       &lt;int&gt;</span></span>
+<span><span class="co">#&gt; 1 Other         548</span></span>
+<span><span class="co">#&gt; 2 Republican   5346</span></span>
+<span><span class="co">#&gt; 3 Independent  8409</span></span>
+<span><span class="co">#&gt; 4 Democrat     7180</span></span></code></pre></div>
+<p>And the chart payoff — a clean, executive-summary-ready political affiliation plot:</p>
+<div class="sourceCode" id="cb403"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">gss_cat</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span>party <span class="op">=</span> <span class="fu"><a href="https://forcats.tidyverse.org/reference/fct_collapse.html">fct_collapse</a></span><span class="op">(</span><span class="va">partyid</span>,</span>
+<span>    <span class="st">"Republican"</span>  <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"Strong republican"</span>, <span class="st">"Not str republican"</span><span class="op">)</span>,</span>
+<span>    <span class="st">"Independent"</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"Ind,near rep"</span>, <span class="st">"Independent"</span>, <span class="st">"Ind,near dem"</span><span class="op">)</span>,</span>
+<span>    <span class="st">"Democrat"</span>    <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"Not str democrat"</span>, <span class="st">"Strong democrat"</span><span class="op">)</span>,</span>
+<span>    <span class="st">"Other"</span>       <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"No answer"</span>, <span class="st">"Don't know"</span>, <span class="st">"Other party"</span><span class="op">)</span></span>
+<span>  <span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span>party <span class="op">=</span> <span class="fu"><a href="https://forcats.tidyverse.org/reference/fct_inorder.html">fct_infreq</a></span><span class="op">(</span><span class="va">party</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">party</span>, fill <span class="op">=</span> <span class="va">party</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_bar.html">geom_bar</a></span><span class="op">(</span>show.legend <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_manual.html">scale_fill_manual</a></span><span class="op">(</span>values <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span></span>
+<span>    <span class="st">"Democrat"</span> <span class="op">=</span> <span class="st">"blue"</span>, <span class="st">"Independent"</span> <span class="op">=</span> <span class="st">"gray50"</span>,</span>
+<span>    <span class="st">"Republican"</span> <span class="op">=</span> <span class="st">"red"</span>, <span class="st">"Other"</span> <span class="op">=</span> <span class="st">"gray80"</span></span>
+<span>  <span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">labs</a></span><span class="op">(</span>title <span class="op">=</span> <span class="st">"Political Affiliation (simplified)"</span>, x <span class="op">=</span> <span class="cn">NULL</span>, y <span class="op">=</span> <span class="st">"Count"</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html">theme_minimal</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
+<div class="figure">
+<span style="display:block;" id="fig:unnamed-chunk-412"></span>
+<img src="Rbook_files/figure-html/unnamed-chunk-412-1.png" alt="Political affiliation after collapsing into four clean groups." width="672"><p class="caption">
+Figure 15.7: Political affiliation after collapsing into four clean groups.
+</p>
+</div>
+<p>Went from 10 confusing categories to 4 clean ones. That is a chart your VP can actually read from across the conference table.</p>
+</div>
+<div id="fct_lump-show-me-the-top-n-lump-the-rest" class="section level2" number="15.9">
+<h2>
+<span class="header-section-number">15.9</span> <code>fct_lump()</code> — “Show Me the Top N, Lump the Rest”<a class="anchor" aria-label="anchor" href="#fct_lump-show-me-the-top-n-lump-the-rest"><i class="fas fa-link"></i></a>
+</h2>
+<p>This is the function you reach for when you have a variable with 30+ categories. Nobody wants a bar chart with 30 bars — that is not a chart, that is a picket fence. <code><a href="https://forcats.tidyverse.org/reference/fct_lump.html">fct_lump_n()</a></code> keeps the top N categories and lumps everything else into “Other.”</p>
+<div class="sourceCode" id="cb404"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Keep the 4 most common religions, lump the rest</span></span>
+<span><span class="va">gss_cat</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span>relig <span class="op">=</span> <span class="fu"><a href="https://forcats.tidyverse.org/reference/fct_lump.html">fct_lump_n</a></span><span class="op">(</span><span class="va">relig</span>, n <span class="op">=</span> <span class="fl">4</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/count.html">count</a></span><span class="op">(</span><span class="va">relig</span>, sort <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span><span class="co">#&gt; # A tibble: 5 × 2</span></span>
+<span><span class="co">#&gt;   relig          n</span></span>
+<span><span class="co">#&gt;   &lt;fct&gt;      &lt;int&gt;</span></span>
+<span><span class="co">#&gt; 1 Protestant 10846</span></span>
+<span><span class="co">#&gt; 2 Catholic    5124</span></span>
+<span><span class="co">#&gt; 3 None        3523</span></span>
+<span><span class="co">#&gt; 4 Other       1301</span></span>
+<span><span class="co">#&gt; 5 Christian    689</span></span></code></pre></div>
+<p>The chart version — before and after lumping:</p>
+<div class="sourceCode" id="cb405"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">gss_cat</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/count.html">count</a></span><span class="op">(</span><span class="va">denom</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">n</span>, y <span class="op">=</span> <span class="va">denom</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html">geom_point</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">labs</a></span><span class="op">(</span>title <span class="op">=</span> <span class="st">"All Denominations (information overload)"</span>, x <span class="op">=</span> <span class="st">"Count"</span>, y <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html">theme_minimal</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
+<div class="figure">
+<span style="display:block;" id="fig:unnamed-chunk-414"></span>
+<img src="Rbook_files/figure-html/unnamed-chunk-414-1.png" alt="All denominations shown. Way too many categories to be useful." width="672"><p class="caption">
+Figure 15.8: All denominations shown. Way too many categories to be useful.
+</p>
+</div>
+<div class="sourceCode" id="cb406"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">gss_cat</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span>denom <span class="op">=</span> <span class="fu"><a href="https://forcats.tidyverse.org/reference/fct_lump.html">fct_lump_n</a></span><span class="op">(</span><span class="va">denom</span>, n <span class="op">=</span> <span class="fl">8</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/count.html">count</a></span><span class="op">(</span><span class="va">denom</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span>denom <span class="op">=</span> <span class="fu"><a href="https://forcats.tidyverse.org/reference/fct_reorder.html">fct_reorder</a></span><span class="op">(</span><span class="va">denom</span>, <span class="va">n</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">n</span>, y <span class="op">=</span> <span class="va">denom</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html">geom_point</a></span><span class="op">(</span>size <span class="op">=</span> <span class="fl">3</span>, color <span class="op">=</span> <span class="st">"steelblue"</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">labs</a></span><span class="op">(</span>title <span class="op">=</span> <span class="st">"Top 8 Denominations (rest lumped into Other)"</span>,</span>
+<span>       x <span class="op">=</span> <span class="st">"Count"</span>, y <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html">theme_minimal</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
+<div class="figure">
+<span style="display:block;" id="fig:unnamed-chunk-415"></span>
+<img src="Rbook_files/figure-html/unnamed-chunk-415-1.png" alt="Top 8 denominations with the rest lumped into Other. Now this is readable." width="672"><p class="caption">
+Figure 15.9: Top 8 denominations with the rest lumped into Other. Now this is readable.
+</p>
+</div>
+<p>There are a few variants depending on how you want to decide what gets lumped:</p>
+<ul>
+<li>
+<code>fct_lump_n(x, n = 5)</code> — keep top 5</li>
+<li>
+<code>fct_lump_prop(x, prop = 0.10)</code> — keep categories with at least 10% of the data</li>
+<li>
+<code>fct_lump_min(x, min = 100)</code> — keep categories with at least 100 observations</li>
+</ul>
+<p>Pick whichever matches your question.</p>
+</div>
+<div id="bonus-making-mtcars-charts-better-with-factors" class="section level2" number="15.10">
+<h2>
+<span class="header-section-number">15.10</span> Bonus: Making mtcars Charts Better with Factors<a class="anchor" aria-label="anchor" href="#bonus-making-mtcars-charts-better-with-factors"><i class="fas fa-link"></i></a>
+</h2>
+<p>The <code>mtcars</code> dataset has variables like <code>cyl</code> (cylinders) and <code>am</code> (transmission) coded as numbers. They are really categories wearing a numerical disguise. Converting them to factors with meaningful labels instantly makes your charts presentation-ready.</p>
+<div class="sourceCode" id="cb407"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">mtcars</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span></span>
+<span>    cyl <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html">factor</a></span><span class="op">(</span><span class="va">cyl</span><span class="op">)</span>,</span>
+<span>    transmission <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html">factor</a></span><span class="op">(</span><span class="va">am</span>, levels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">1</span><span class="op">)</span>, labels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"Automatic"</span>, <span class="st">"Manual"</span><span class="op">)</span><span class="op">)</span></span>
+<span>  <span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html">group_by</a></span><span class="op">(</span><span class="va">cyl</span>, <span class="va">transmission</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/pkg/Hmisc/man/summarize.html">summarize</a></span><span class="op">(</span>mean_mpg <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span><span class="op">(</span><span class="va">mpg</span><span class="op">)</span>, .groups <span class="op">=</span> <span class="st">"drop"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">cyl</span>, y <span class="op">=</span> <span class="va">mean_mpg</span>, fill <span class="op">=</span> <span class="va">transmission</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_bar.html">geom_col</a></span><span class="op">(</span>position <span class="op">=</span> <span class="st">"dodge"</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_brewer.html">scale_fill_brewer</a></span><span class="op">(</span>palette <span class="op">=</span> <span class="st">"Set2"</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">labs</a></span><span class="op">(</span>title <span class="op">=</span> <span class="st">"Mean MPG by Cylinders and Transmission"</span>,</span>
+<span>       x <span class="op">=</span> <span class="st">"Number of Cylinders"</span>, y <span class="op">=</span> <span class="st">"Mean MPG"</span>, fill <span class="op">=</span> <span class="st">"Transmission"</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html">theme_minimal</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
+<div class="figure">
+<span style="display:block;" id="fig:unnamed-chunk-416"></span>
+<img src="Rbook_files/figure-html/unnamed-chunk-416-1.png" alt="Mean MPG by cylinders and transmission. Labeled factors make this chart presentation-ready." width="672"><p class="caption">
+Figure 15.10: Mean MPG by cylinders and transmission. Labeled factors make this chart presentation-ready.
+</p>
+</div>
+<p>Without factors, those bars would just say “0” and “1” for transmission. With factors, they say “Automatic” and “Manual.” Small change, enormous difference in whether your audience has any idea what they are looking at.</p>
+</div>
+<div id="fct_reorder2-aligning-legends-with-lines" class="section level2" number="15.11">
+<h2>
+<span class="header-section-number">15.11</span> <code>fct_reorder2()</code> — Aligning Legends with Lines<a class="anchor" aria-label="anchor" href="#fct_reorder2-aligning-legends-with-lines"><i class="fas fa-link"></i></a>
+</h2>
+<p>Quick bonus for line charts. When you have multiple lines, the legend should match the visual order of the lines at the right edge of the plot. <code><a href="https://forcats.tidyverse.org/reference/fct_reorder.html">fct_reorder2()</a></code> handles this automatically — a small detail that makes your charts look polished.</p>
+<div class="sourceCode" id="cb408"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">gss_cat</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span><span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/NA.html">is.na</a></span><span class="op">(</span><span class="va">age</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span>marital <span class="op">=</span> <span class="fu"><a href="https://forcats.tidyverse.org/reference/fct_lump.html">fct_lump_n</a></span><span class="op">(</span><span class="va">marital</span>, n <span class="op">=</span> <span class="fl">4</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/count.html">count</a></span><span class="op">(</span><span class="va">age</span>, <span class="va">marital</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html">group_by</a></span><span class="op">(</span><span class="va">age</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span>prop <span class="op">=</span> <span class="va">n</span> <span class="op">/</span> <span class="fu"><a href="https://rdrr.io/r/base/sum.html">sum</a></span><span class="op">(</span><span class="va">n</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html">ungroup</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">age</span>, y <span class="op">=</span> <span class="va">prop</span>, color <span class="op">=</span> <span class="fu"><a href="https://forcats.tidyverse.org/reference/fct_reorder.html">fct_reorder2</a></span><span class="op">(</span><span class="va">marital</span>, <span class="va">age</span>, <span class="va">prop</span><span class="op">)</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_path.html">geom_line</a></span><span class="op">(</span>linewidth <span class="op">=</span> <span class="fl">1</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_brewer.html">scale_color_brewer</a></span><span class="op">(</span>palette <span class="op">=</span> <span class="st">"Set1"</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">labs</a></span><span class="op">(</span>title <span class="op">=</span> <span class="st">"Marital Status by Age"</span>,</span>
+<span>       x <span class="op">=</span> <span class="st">"Age"</span>, y <span class="op">=</span> <span class="st">"Proportion"</span>, color <span class="op">=</span> <span class="st">"Status"</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html">theme_minimal</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
+<div class="figure">
+<span style="display:block;" id="fig:unnamed-chunk-417"></span>
+<img src="Rbook_files/figure-html/unnamed-chunk-417-1.png" alt="Line chart where the legend order matches the line positions at the right edge." width="672"><p class="caption">
+Figure 15.11: Line chart where the legend order matches the line positions at the right edge.
+</p>
+</div>
+</div>
+<div id="quick-reference-1" class="section level2" number="15.12">
+<h2>
+<span class="header-section-number">15.12</span> Quick Reference<a class="anchor" aria-label="anchor" href="#quick-reference-1"><i class="fas fa-link"></i></a>
+</h2>
+<p>Your factor toolkit at a glance:</p>
+<div class="inline-table"><table class="table table-sm">
+<colgroup>
+<col width="45%">
+<col width="20%">
+<col width="33%">
+</colgroup>
+<thead><tr class="header">
+<th align="left">What you want to do</th>
+<th align="left">Function</th>
+<th align="left">When to use it</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td align="left">Sort bars by a value</td>
+<td align="left"><code><a href="https://forcats.tidyverse.org/reference/fct_reorder.html">fct_reorder()</a></code></td>
+<td align="left">Almost every bar/dot chart</td>
+</tr>
+<tr class="even">
+<td align="left">Sort bars by count</td>
+<td align="left"><code><a href="https://forcats.tidyverse.org/reference/fct_inorder.html">fct_infreq()</a></code></td>
+<td align="left">“Show me what’s most common”</td>
+</tr>
+<tr class="odd">
+<td align="left">Reverse the order</td>
+<td align="left"><code><a href="https://forcats.tidyverse.org/reference/fct_rev.html">fct_rev()</a></code></td>
+<td align="left">Horizontal bar charts (top to bottom)</td>
+</tr>
+<tr class="even">
+<td align="left">Set a custom order</td>
+<td align="left"><code><a href="https://forcats.tidyverse.org/reference/fct_relevel.html">fct_relevel()</a></code></td>
+<td align="left">Life stages, survey scales, custom sorts</td>
+</tr>
+<tr class="odd">
+<td align="left">Rename categories</td>
+<td align="left"><code><a href="https://forcats.tidyverse.org/reference/fct_recode.html">fct_recode()</a></code></td>
+<td align="left">Cryptic labels need human-readable names</td>
+</tr>
+<tr class="even">
+<td align="left">Merge categories</td>
+<td align="left"><code><a href="https://forcats.tidyverse.org/reference/fct_collapse.html">fct_collapse()</a></code></td>
+<td align="left">Too many groups, need to simplify</td>
+</tr>
+<tr class="odd">
+<td align="left">Keep top N, lump rest</td>
+<td align="left"><code><a href="https://forcats.tidyverse.org/reference/fct_lump.html">fct_lump_n()</a></code></td>
+<td align="left">30 categories? Nobody wants that chart</td>
+</tr>
+</tbody>
+</table></div>
+<p>The single most impactful habit from this chapter: <strong>always use <code><a href="https://forcats.tidyverse.org/reference/fct_reorder.html">fct_reorder()</a></code> or <code><a href="https://forcats.tidyverse.org/reference/fct_inorder.html">fct_infreq()</a></code> in your ggplot2 charts.</strong> Alphabetical ordering is almost never the most informative ordering. A well-ordered factor is the difference between a confusing chart and one that gets you promoted. Well, maybe not promoted — but at least not asked to redo it.</p>
+
+</div>
+</div>
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+  var sidebar = document.querySelector(".sidebar-book");
+  if (!sidebar) return;
+
+  // Create a slim tab on the left edge — visible, unobtrusive, clearly a toggle
+  var btn = document.createElement("button");
+  btn.innerHTML = '&#9776; Contents';
+  btn.setAttribute("aria-label", "Toggle table of contents");
+  btn.id = "sidebar-toggle-btn";
+  document.body.appendChild(btn);
+
+  var isOpen = false;
+
+  function openSidebar() {
+    isOpen = true;
+    sidebar.classList.add("sidebar-open");
+    btn.innerHTML = '&times; Close';
+    btn.classList.add("sidebar-toggle-active");
+  }
+
+  function closeSidebar() {
+    isOpen = false;
+    sidebar.classList.remove("sidebar-open");
+    btn.innerHTML = '&#9776; Contents';
+    btn.classList.remove("sidebar-toggle-active");
+  }
+
+  btn.addEventListener("click", function(e) {
+    e.stopPropagation();
+    if (isOpen) { closeSidebar(); } else { openSidebar(); }
+  });
+
+  // Close when clicking outside
+  document.addEventListener("click", function(e) {
+    if (isOpen && !sidebar.contains(e.target) && e.target !== btn) {
+      closeSidebar();
+    }
+  });
+
+  // Close on Escape key
+  document.addEventListener("keydown", function(e) {
+    if (e.key === "Escape" && isOpen) { closeSidebar(); }
+  });
+
+  // Only activate on wide screens
+  function checkWidth() {
+    if (window.innerWidth >= 992) {
+      btn.style.display = "flex";
+      sidebar.classList.add("sidebar-collapsed");
+    } else {
+      btn.style.display = "none";
+      sidebar.classList.remove("sidebar-collapsed");
+      sidebar.classList.remove("sidebar-open");
+    }
+  }
+
+  window.addEventListener("resize", checkWidth);
+  checkWidth();
+});
+</script><div class="chapter-nav">
+<div class="prev"><a href="stringr.html"><span class="header-section-number">14</span> Working with Text Data</a></div>
+<div class="next"><a href="lubridate.html"><span class="header-section-number">16</span> Working with Dates and Times</a></div>
+</div></main><div class="col-md-3 col-lg-2 d-none d-md-block sidebar sidebar-chapter">
+    <nav id="toc" data-toggle="toc" aria-label="On this page"><h2>On this page</h2>
+      <ul class="nav navbar-nav">
+<li><a class="nav-link" href="#forcats"><span class="header-section-number">15</span> Wrangling Categories with forcats</a></li>
+<li><a class="nav-link" href="#factors-categories.-thats-it."><span class="header-section-number">15.1</span> Factors = Categories. That’s It.</a></li>
+<li><a class="nav-link" href="#the-problem-alphabetical-everything"><span class="header-section-number">15.2</span> The Problem: Alphabetical Everything</a></li>
+<li><a class="nav-link" href="#the-dataset-general-social-survey"><span class="header-section-number">15.3</span> The Dataset: General Social Survey</a></li>
+<li><a class="nav-link" href="#fct_reorder-the-most-important-function"><span class="header-section-number">15.4</span> fct_reorder() — THE Most Important Function</a></li>
+<li><a class="nav-link" href="#fct_infreq-sort-by-count"><span class="header-section-number">15.5</span> fct_infreq() — Sort by Count</a></li>
+<li><a class="nav-link" href="#fct_relevel-manual-ordering"><span class="header-section-number">15.6</span> fct_relevel() — Manual Ordering</a></li>
+<li><a class="nav-link" href="#fct_recode-rename-your-categories"><span class="header-section-number">15.7</span> fct_recode() — Rename Your Categories</a></li>
+<li><a class="nav-link" href="#fct_collapse-merge-categories-together"><span class="header-section-number">15.8</span> fct_collapse() — Merge Categories Together</a></li>
+<li><a class="nav-link" href="#fct_lump-show-me-the-top-n-lump-the-rest"><span class="header-section-number">15.9</span> fct_lump() — “Show Me the Top N, Lump the Rest”</a></li>
+<li><a class="nav-link" href="#bonus-making-mtcars-charts-better-with-factors"><span class="header-section-number">15.10</span> Bonus: Making mtcars Charts Better with Factors</a></li>
+<li><a class="nav-link" href="#fct_reorder2-aligning-legends-with-lines"><span class="header-section-number">15.11</span> fct_reorder2() — Aligning Legends with Lines</a></li>
+<li><a class="nav-link" href="#quick-reference-1"><span class="header-section-number">15.12</span> Quick Reference</a></li>
+</ul>
+
+      <div class="book-extra">
+        <ul class="list-unstyled">
+          
+        </ul>
+</div>
+    </nav>
+</div>
+
+</div>
+</div> <!-- .container -->
+
+<footer class="bg-primary text-light mt-5"><div class="container"><div class="row">
+
+  <div class="col-12 col-md-6 mt-3">
+    <p>"<strong>R and the Tidyverse: A Beginner’s Guide</strong>" was written by Vivek H. Patil. It was last built on 2026-02-27.</p>
+  </div>
+
+  <div class="col-12 col-md-6 mt-3">
+    <p>This book was built by the <a class="text-light" href="https://bookdown.org">bookdown</a> R package.</p>
+  </div>
+
+</div></div>
+</footer><!-- dynamically load mathjax for compatibility with self-contained --><script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "true";
+    if (src === "" || src === "true") src = "https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.9/latest.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:")
+      if (/^https?:/.test(src))
+        src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script><script type="text/x-mathjax-config">const popovers = document.querySelectorAll('a.footnote-ref[data-toggle="popover"]');
+for (let popover of popovers) {
+  const div = document.createElement('div');
+  div.setAttribute('style', 'position: absolute; top: 0, left:0; width:0, height:0, overflow: hidden; visibility: hidden;');
+  div.innerHTML = popover.getAttribute('data-content');
+
+  var has_math = div.querySelector("span.math");
+  if (has_math) {
+    document.body.appendChild(div);
+    MathJax.Hub.Queue(["Typeset", MathJax.Hub, div]);
+    MathJax.Hub.Queue(function() {
+      popover.setAttribute('data-content', div.innerHTML);
+      document.body.removeChild(div);
+    })
+  }
+}
+</script>
+</body>
+</html>

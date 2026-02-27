@@ -1,7 +1,6 @@
 bookdown::bs4_book:
   css: style.css
+  includes:
+    after_body: sidebar-toggle.html
   theme:
     primary: "#a80107"
-  repo:
-    base: https://github.com/patilv/Rbook
-    branch: main

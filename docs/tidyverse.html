@@ -1,0 +1,860 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<title>Chapter 3 Your Data Analysis Toolkit | R and the Tidyverse: A Beginner’s Guide</title>
+<meta name="author" content="Vivek H. Patil">
+<meta name="description" content="This chapter introduces the core set of tools you will use throughout this book. Think of it as the orientation session before your first day at the office — a 30,000-foot overview before we dive...">
+<meta name="generator" content="bookdown 0.46 with bs4_book()">
+<meta property="og:title" content="Chapter 3 Your Data Analysis Toolkit | R and the Tidyverse: A Beginner’s Guide">
+<meta property="og:type" content="book">
+<meta property="og:image" content="/cover.png">
+<meta property="og:description" content="This chapter introduces the core set of tools you will use throughout this book. Think of it as the orientation session before your first day at the office — a 30,000-foot overview before we dive...">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Chapter 3 Your Data Analysis Toolkit | R and the Tidyverse: A Beginner’s Guide">
+<meta name="twitter:description" content="This chapter introduces the core set of tools you will use throughout this book. Think of it as the orientation session before your first day at the office — a 30,000-foot overview before we dive...">
+<meta name="twitter:image" content="/cover.png">
+<!-- JS --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script><script src="https://kit.fontawesome.com/6ecbd6c532.js" crossorigin="anonymous"></script><script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<link href="libs/bootstrap-4.6.0/bootstrap.min.css" rel="stylesheet">
+<script src="libs/bootstrap-4.6.0/bootstrap.bundle.min.js"></script><script src="libs/bs3compat-0.10.0/transition.js"></script><script src="libs/bs3compat-0.10.0/tabs.js"></script><script src="libs/bs3compat-0.10.0/bs3compat.js"></script><link href="libs/bs4_book-1.0.0/bs4_book.css" rel="stylesheet">
+<script src="libs/bs4_book-1.0.0/bs4_book.js"></script><link href="libs/htmltools-fill-0.5.9/fill.css" rel="stylesheet">
+<script src="libs/htmlwidgets-1.6.4/htmlwidgets.js"></script><link href="libs/datatables-css-0.0.0/datatables-crosstalk.css" rel="stylesheet">
+<script src="libs/datatables-binding-0.34.0/datatables.js"></script><link href="libs/dt-core-1.13.6/css/jquery.dataTables.min.css" rel="stylesheet">
+<link href="libs/dt-core-1.13.6/css/jquery.dataTables.extra.css" rel="stylesheet">
+<script src="libs/dt-core-1.13.6/js/jquery.dataTables.min.js"></script><link href="libs/crosstalk-1.2.2/css/crosstalk.min.css" rel="stylesheet">
+<script src="libs/crosstalk-1.2.2/js/crosstalk.min.js"></script><script src="libs/plotly-binding-4.12.0/plotly.js"></script><script src="libs/typedarray-0.1/typedarray.min.js"></script><link href="libs/plotly-htmlwidgets-css-2.25.2/plotly-htmlwidgets.css" rel="stylesheet">
+<script src="libs/plotly-main-2.25.2/plotly-latest.min.js"></script><script src="libs/kePrint-0.0.1/kePrint.js"></script><link href="libs/lightable-0.0.1/lightable.css" rel="stylesheet">
+<link href="libs/nouislider-7.0.10/jquery.nouislider.min.css" rel="stylesheet">
+<script src="libs/nouislider-7.0.10/jquery.nouislider.min.js"></script><link href="libs/selectize-0.12.0/selectize.bootstrap3.css" rel="stylesheet">
+<script src="libs/selectize-0.12.0/selectize.min.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/autocomplete.js/0.38.0/autocomplete.jquery.min.js" integrity="sha512-GU9ayf+66Xx2TmpxqJpliWbT5PiGYxpaG8rfnBEk1LL8l1KGkRShhngwdXK1UgqhAzWpZHSiYPc09/NwDQIGyg==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/mark.min.js" integrity="sha512-5CYOlHXGh6QpOFA/TeTylKLWfB3ftPsde7AnmhuitiTX4K5SqCLBeKro6sPS8ilsz1Q4NRx3v8Ko2IBiszzdww==" crossorigin="anonymous"></script><!-- CSS --><style type="text/css">
+    
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  </style>
+<style type="text/css">
+    /* Used with Pandoc 2.11+ new --citeproc when CSL is used */
+    div.csl-bib-body { }
+    div.csl-entry {
+      clear: both;
+          margin-bottom: 0em;
+        }
+    .hanging div.csl-entry {
+      margin-left:2em;
+      text-indent:-2em;
+    }
+    div.csl-left-margin {
+      min-width:2em;
+      float:left;
+    }
+    div.csl-right-inline {
+      margin-left:2em;
+      padding-left:1em;
+    }
+    div.csl-indent {
+      margin-left: 2em;
+    }
+  </style>
+<link rel="stylesheet" href="style.css">
+</head>
+<body data-spy="scroll" data-target="#toc">
+
+<div class="container-fluid">
+<div class="row">
+  <header class="col-sm-12 col-lg-3 sidebar sidebar-book"><a class="sr-only sr-only-focusable" href="#content">Skip to main content</a>
+
+    <div class="d-flex align-items-start justify-content-between">
+      <h1>
+        <a href="index.html" title="">R and the Tidyverse: A Beginner’s Guide</a>
+      </h1>
+      <button class="btn btn-outline-primary d-lg-none ml-2 mt-1" type="button" data-toggle="collapse" data-target="#main-nav" aria-expanded="true" aria-controls="main-nav"><i class="fas fa-bars"></i><span class="sr-only">Show table of contents</span></button>
+    </div>
+
+    <div id="main-nav" class="collapse-lg">
+      <form role="search">
+        <input id="search" class="form-control" type="search" placeholder="Search" aria-label="Search">
+</form>
+
+      <nav aria-label="Table of contents"><h2>Table of contents</h2>
+        <ul class="book-toc list-unstyled">
+<li><a class="" href="index.html">Preface</a></li>
+<li><a class="" href="introR.html"><span class="header-section-number">1</span> Introduction to R</a></li>
+<li><a class="" href="Rgettingstarted.html"><span class="header-section-number">2</span> Getting Started with R</a></li>
+<li><a class="active" href="tidyverse.html"><span class="header-section-number">3</span> Your Data Analysis Toolkit</a></li>
+<li><a class="" href="dataimport.html"><span class="header-section-number">4</span> Data Import</a></li>
+<li><a class="" href="describedata.html"><span class="header-section-number">5</span> Describing Data</a></li>
+<li><a class="" href="modifydata.html"><span class="header-section-number">6</span> Modifying Data</a></li>
+<li><a class="" href="dplyr.html"><span class="header-section-number">7</span> Data Wrangling with dplyr</a></li>
+<li><a class="" href="tidyr.html"><span class="header-section-number">8</span> Tidy Data with tidyr</a></li>
+<li><a class="" href="summarystats.html"><span class="header-section-number">9</span> Summary Statistics</a></li>
+<li><a class="" href="ggplot2basics.html"><span class="header-section-number">10</span> Data Visualization with ggplot2</a></li>
+<li><a class="" href="ggplot2customize.html"><span class="header-section-number">11</span> Customizing ggplot2 Visualizations</a></li>
+<li><a class="" href="singlevar.html"><span class="header-section-number">12</span> Single Variable Analysis</a></li>
+<li><a class="" href="multivar.html"><span class="header-section-number">13</span> Relationships Between Variables</a></li>
+<li><a class="" href="stringr.html"><span class="header-section-number">14</span> Working with Text Data</a></li>
+<li><a class="" href="forcats.html"><span class="header-section-number">15</span> Wrangling Categories with forcats</a></li>
+<li><a class="" href="lubridate.html"><span class="header-section-number">16</span> Working with Dates and Times</a></li>
+<li><a class="" href="purrr.html"><span class="header-section-number">17</span> Doing the Same Thing to Many Things at Once</a></li>
+<li><a class="" href="rmarkdown.html"><span class="header-section-number">18</span> R Markdown</a></li>
+<li><a class="" href="rmarkdown-advanced.html"><span class="header-section-number">19</span> Advanced R Markdown</a></li>
+</ul>
+
+        <div class="book-extra">
+          
+        </div>
+      </nav>
+</div>
+  </header><main class="col-sm-12 col-md-9 col-lg-7" id="content"><div id="tidyverse" class="section level1" number="3">
+<h1>
+<span class="header-section-number">3</span> Your Data Analysis Toolkit<a class="anchor" aria-label="anchor" href="#tidyverse"><i class="fas fa-link"></i></a>
+</h1>
+<p>This chapter introduces the core set of tools you will use throughout this book. Think of it as the orientation session before your first day at the office — a 30,000-foot overview before we dive into individual packages later.</p>
+<div id="what-is-the-tidyverse" class="section level2" number="3.1">
+<h2>
+<span class="header-section-number">3.1</span> What is the Tidyverse?<a class="anchor" aria-label="anchor" href="#what-is-the-tidyverse"><i class="fas fa-link"></i></a>
+</h2>
+<p>The <strong>tidyverse</strong> is a collection of R packages built for data science. They were created primarily by Hadley Wickham and the team at <a href="https://posit.co/">Posit</a> (formerly RStudio), and they all follow the same design philosophy. That means once you learn one package, the others feel familiar — like walking into a new franchise location and already knowing the menu.</p>
+<p>The “tidy” in tidyverse boils down to two big ideas:</p>
+<ol style="list-style-type: decimal">
+<li><p><strong>Tidy data.</strong> Your data should be organized so that each variable is a column, each observation is a row, and each cell has one value. (More on this soon — it matters more than you think.)</p></li>
+<li><p><strong>Tidy code.</strong> Your code should read like a sentence, not an encrypted ransom note. Tidyverse functions have verb-based names — <code><a href="https://dplyr.tidyverse.org/reference/filter.html">filter()</a></code>, <code><a href="https://dplyr.tidyverse.org/reference/select.html">select()</a></code>, <code><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate()</a></code>, <code><a href="https://dplyr.tidyverse.org/reference/summarise.html">summarize()</a></code> — so a pipeline of code practically narrates what you are doing.</p></li>
+</ol>
+</div>
+<div id="installing-and-loading-the-tidyverse" class="section level2" number="3.2">
+<h2>
+<span class="header-section-number">3.2</span> Installing and Loading the Tidyverse<a class="anchor" aria-label="anchor" href="#installing-and-loading-the-tidyverse"><i class="fas fa-link"></i></a>
+</h2>
+<p>One install, many packages:</p>
+<div class="sourceCode" id="cb29"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html">install.packages</a></span><span class="op">(</span><span class="st">"tidyverse"</span><span class="op">)</span></span></code></pre></div>
+<p>One library call to load the core set:</p>
+<div class="sourceCode" id="cb30"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://tidyverse.tidyverse.org">tidyverse</a></span><span class="op">)</span></span></code></pre></div>
+<p>When you run <code><a href="https://tidyverse.tidyverse.org">library(tidyverse)</a></code>, R prints two things. First, the <strong>core packages</strong> it just loaded. Second, any <strong>conflicts</strong> — cases where a tidyverse function has the same name as one already loaded. You will usually see:</p>
+<ul>
+<li>
+<code><a href="https://dplyr.tidyverse.org/reference/filter.html">dplyr::filter()</a></code> masks <code><a href="https://rdrr.io/r/stats/filter.html">stats::filter()</a></code>
+</li>
+<li>
+<code><a href="https://dplyr.tidyverse.org/reference/lead-lag.html">dplyr::lag()</a></code> masks <code><a href="https://rdrr.io/r/stats/lag.html">stats::lag()</a></code>
+</li>
+</ul>
+<p>Do not panic. This just means that typing <code><a href="https://dplyr.tidyverse.org/reference/filter.html">filter()</a></code> now calls the dplyr version (which is what you want 99% of the time). If you ever need R’s different built-in function with the same name, use <code><a href="https://rdrr.io/r/stats/filter.html">stats::filter()</a></code>.</p>
+<p>You can also load packages individually if you prefer a lighter footprint:</p>
+<div class="sourceCode" id="cb31"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org">dplyr</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org">ggplot2</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://tidyr.tidyverse.org">tidyr</a></span><span class="op">)</span></span></code></pre></div>
+</div>
+<div id="core-tidyverse-packages" class="section level2" number="3.3">
+<h2>
+<span class="header-section-number">3.3</span> Core Tidyverse Packages<a class="anchor" aria-label="anchor" href="#core-tidyverse-packages"><i class="fas fa-link"></i></a>
+</h2>
+<p>Each core package handles a specific job in your data analysis workflow. Here is the lineup — think of them as departments in a well-run company.</p>
+<div id="ggplot2-data-visualization" class="section level3" number="3.3.1">
+<h3>
+<span class="header-section-number">3.3.1</span> ggplot2 — Data Visualization<a class="anchor" aria-label="anchor" href="#ggplot2-data-visualization"><i class="fas fa-link"></i></a>
+</h3>
+<p><strong>ggplot2</strong> lets you build plots layer by layer instead of picking from a fixed menu of chart types. It is the tidyverse’s crown jewel, and you will spend a lot of quality time with it. Chapters <a href="ggplot2basics.html#ggplot2basics">10</a> and <a href="ggplot2customize.html#ggplot2customize">11</a> go deep.</p>
+<div class="sourceCode" id="cb32"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span><span class="va">iris</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">Sepal.Length</span>, y <span class="op">=</span> <span class="va">Sepal.Width</span>, color <span class="op">=</span> <span class="va">Species</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html">geom_point</a></span><span class="op">(</span>size <span class="op">=</span> <span class="fl">2</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">labs</a></span><span class="op">(</span>title <span class="op">=</span> <span class="st">"Sepal Dimensions by Species"</span>,</span>
+<span>       x <span class="op">=</span> <span class="st">"Sepal Length (cm)"</span>, y <span class="op">=</span> <span class="st">"Sepal Width (cm)"</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html">theme_minimal</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
+<div class="figure">
+<span style="display:block;" id="fig:unnamed-chunk-28"></span>
+<img src="Rbook_files/figure-html/unnamed-chunk-28-1.png" alt="A ggplot2 scatterplot of the iris dataset." width="672"><p class="caption">
+Figure 3.1: A ggplot2 scatterplot of the iris dataset.
+</p>
+</div>
+</div>
+<div id="dplyr-data-manipulation" class="section level3" number="3.3.2">
+<h3>
+<span class="header-section-number">3.3.2</span> dplyr — Data Manipulation<a class="anchor" aria-label="anchor" href="#dplyr-data-manipulation"><i class="fas fa-link"></i></a>
+</h3>
+<p><strong>dplyr</strong> is your data wrangling workhorse. It gives you a handful of verbs that handle most of what you need: <code><a href="https://dplyr.tidyverse.org/reference/filter.html">filter()</a></code> rows, <code><a href="https://dplyr.tidyverse.org/reference/select.html">select()</a></code> columns, <code><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate()</a></code> to create new variables, <code><a href="https://dplyr.tidyverse.org/reference/arrange.html">arrange()</a></code> to sort, <code><a href="https://dplyr.tidyverse.org/reference/summarise.html">summarize()</a></code> to aggregate, and <code><a href="https://dplyr.tidyverse.org/reference/group_by.html">group_by()</a></code> to do all of the above within groups. Chapter <a href="dplyr.html#dplyr">7</a> covers it in detail.</p>
+<div class="sourceCode" id="cb33"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">mtcars</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html">group_by</a></span><span class="op">(</span><span class="va">cyl</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/summarise.html">summarize</a></span><span class="op">(</span></span>
+<span>    n <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/context.html">n</a></span><span class="op">(</span><span class="op">)</span>,</span>
+<span>    avg_mpg <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span><span class="op">(</span><span class="va">mpg</span><span class="op">)</span>,</span>
+<span>    avg_hp <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span><span class="op">(</span><span class="va">hp</span><span class="op">)</span></span>
+<span>  <span class="op">)</span></span>
+<span><span class="co">#&gt; # A tibble: 3 × 4</span></span>
+<span><span class="co">#&gt;     cyl     n avg_mpg avg_hp</span></span>
+<span><span class="co">#&gt;   &lt;dbl&gt; &lt;int&gt;   &lt;dbl&gt;  &lt;dbl&gt;</span></span>
+<span><span class="co">#&gt; 1     4    11    26.7   82.6</span></span>
+<span><span class="co">#&gt; 2     6     7    19.7  122. </span></span>
+<span><span class="co">#&gt; 3     8    14    15.1  209.</span></span></code></pre></div>
+<p>Three rows, one per cylinder group. The pattern is clear: more cylinders means more horsepower (from 83 to 209) but worse fuel economy (from 27 to 15 mpg). That is a classic trade-off, summarized in three lines of code.</p>
+</div>
+<div id="tidyr-data-tidying" class="section level3" number="3.3.3">
+<h3>
+<span class="header-section-number">3.3.3</span> tidyr — Data Tidying<a class="anchor" aria-label="anchor" href="#tidyr-data-tidying"><i class="fas fa-link"></i></a>
+</h3>
+<p><strong>tidyr</strong> reshapes your data between “wide” and “long” formats with <code><a href="https://tidyr.tidyverse.org/reference/pivot_longer.html">pivot_longer()</a></code> and <code><a href="https://tidyr.tidyverse.org/reference/pivot_wider.html">pivot_wider()</a></code>. If you have ever wrestled with a spreadsheet where the column headers are actually data values, tidyr is your new best friend. Chapter <a href="tidyr.html#tidyr">8</a> has the details.</p>
+</div>
+<div id="readr-data-import" class="section level3" number="3.3.4">
+<h3>
+<span class="header-section-number">3.3.4</span> readr — Data Import<a class="anchor" aria-label="anchor" href="#readr-data-import"><i class="fas fa-link"></i></a>
+</h3>
+<p><strong>readr</strong> reads rectangular data from CSV, TSV, and other delimited files. Its <code><a href="https://readr.tidyverse.org/reference/read_delim.html">read_csv()</a></code> is fast, produces tibbles, and has sensible defaults (no surprise factor conversions). Chapter <a href="dataimport.html#dataimport">4</a> covers data import.</p>
+</div>
+<div id="purrr-functional-programming" class="section level3" number="3.3.5">
+<h3>
+<span class="header-section-number">3.3.5</span> purrr — Functional Programming<a class="anchor" aria-label="anchor" href="#purrr-functional-programming"><i class="fas fa-link"></i></a>
+</h3>
+<p><strong>purrr</strong> gives you <code><a href="https://purrr.tidyverse.org/reference/map.html">map()</a></code> functions that apply an operation to every element of a list or vector. It is like VLOOKUP’s cooler, more powerful cousin. Chapter <a href="purrr.html#purrr">17</a> goes deeper.</p>
+<div class="sourceCode" id="cb34"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://purrr.tidyverse.org/reference/map.html">map_dbl</a></span><span class="op">(</span><span class="va">iris</span><span class="op">[</span>, <span class="fl">1</span><span class="op">:</span><span class="fl">4</span><span class="op">]</span>, <span class="va">mean</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Sepal.Length  Sepal.Width Petal.Length  Petal.Width </span></span>
+<span><span class="co">#&gt;     5.843333     3.057333     3.758000     1.199333</span></span></code></pre></div>
+<p>One line computed the mean of all four numeric columns: Sepal.Length averages 5.84 cm, Sepal.Width 3.06 cm, Petal.Length 3.76 cm, and Petal.Width 1.20 cm. Petal measurements are smaller on average than sepal measurements.</p>
+</div>
+<div id="tibble-modern-data-frames" class="section level3" number="3.3.6">
+<h3>
+<span class="header-section-number">3.3.6</span> tibble — Modern Data Frames<a class="anchor" aria-label="anchor" href="#tibble-modern-data-frames"><i class="fas fa-link"></i></a>
+</h3>
+<p><strong>Tibbles</strong> are data frames that learned manners. They print neatly, never silently convert your strings to factors, and have stricter rules that prevent subtle bugs. We will talk more about them later in this chapter.</p>
+</div>
+<div id="stringr-string-manipulation" class="section level3" number="3.3.7">
+<h3>
+<span class="header-section-number">3.3.7</span> stringr — String Manipulation<a class="anchor" aria-label="anchor" href="#stringr-string-manipulation"><i class="fas fa-link"></i></a>
+</h3>
+<p><strong>stringr</strong> handles text data. Every function starts with <code>str_</code> and takes a character vector first, so it plays nicely with pipes. Chapter <a href="stringr.html#stringr">14</a> covers it.</p>
+<div class="sourceCode" id="cb35"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">fruits</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"apple"</span>, <span class="st">"banana"</span>, <span class="st">"cherry"</span>, <span class="st">"date"</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://stringr.tidyverse.org/reference/str_detect.html">str_detect</a></span><span class="op">(</span><span class="va">fruits</span>, <span class="st">"an"</span><span class="op">)</span></span>
+<span><span class="co">#&gt; [1] FALSE  TRUE FALSE FALSE</span></span>
+<span><span class="fu"><a href="https://stringr.tidyverse.org/reference/case.html">str_to_upper</a></span><span class="op">(</span><span class="va">fruits</span><span class="op">)</span></span>
+<span><span class="co">#&gt; [1] "APPLE"  "BANANA" "CHERRY" "DATE"</span></span></code></pre></div>
+</div>
+<div id="forcats-working-with-factors" class="section level3" number="3.3.8">
+<h3>
+<span class="header-section-number">3.3.8</span> forcats — Working with Factors<a class="anchor" aria-label="anchor" href="#forcats-working-with-factors"><i class="fas fa-link"></i></a>
+</h3>
+<p><strong>forcats</strong> makes categorical variables less painful. Reorder levels, collapse categories, recode labels — all the things you wish Excel could do cleanly. (The name is an anagram of “factors.” Nerdy, but fun.) Chapter <a href="forcats.html#forcats">15</a> has more.</p>
+</div>
+<div id="lubridate-dates-and-times" class="section level3" number="3.3.9">
+<h3>
+<span class="header-section-number">3.3.9</span> lubridate — Dates and Times<a class="anchor" aria-label="anchor" href="#lubridate-dates-and-times"><i class="fas fa-link"></i></a>
+</h3>
+<p><strong>lubridate</strong> makes dates and times behave. Parse them, extract components, do arithmetic — without the headaches that dates usually cause. Chapter <a href="lubridate.html#lubridate">16</a> covers it.</p>
+<div class="sourceCode" id="cb36"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">today_date</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://lubridate.tidyverse.org/reference/ymd.html">ymd</a></span><span class="op">(</span><span class="st">"2024-09-15"</span><span class="op">)</span></span>
+<span><span class="va">today_date</span></span>
+<span><span class="co">#&gt; [1] "2024-09-15"</span></span>
+<span><span class="fu"><a href="https://lubridate.tidyverse.org/reference/year.html">year</a></span><span class="op">(</span><span class="va">today_date</span><span class="op">)</span></span>
+<span><span class="co">#&gt; [1] 2024</span></span>
+<span><span class="fu"><a href="https://lubridate.tidyverse.org/reference/month.html">month</a></span><span class="op">(</span><span class="va">today_date</span>, label <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span><span class="co">#&gt; [1] Sep</span></span>
+<span><span class="co">#&gt; 12 Levels: Jan &lt; Feb &lt; Mar &lt; Apr &lt; May &lt; Jun &lt; Jul &lt; Aug &lt; Sep &lt; ... &lt; Dec</span></span>
+<span><span class="va">today_date</span> <span class="op">+</span> <span class="fu"><a href="https://lubridate.tidyverse.org/reference/period.html">days</a></span><span class="op">(</span><span class="fl">30</span><span class="op">)</span></span>
+<span><span class="co">#&gt; [1] "2024-10-15"</span></span></code></pre></div>
+</div>
+<div id="beyond-the-core" class="section level3" number="3.3.10">
+<h3>
+<span class="header-section-number">3.3.10</span> Beyond the Core<a class="anchor" aria-label="anchor" href="#beyond-the-core"><i class="fas fa-link"></i></a>
+</h3>
+<p>The broader tidyverse ecosystem includes packages like <strong>readxl</strong> (Excel files), <strong>haven</strong> (SPSS/Stata/SAS), <strong>httr2</strong> (web APIs), <strong>rvest</strong> (web scraping), and <strong>glue</strong> (string interpolation). These are not loaded by <code><a href="https://tidyverse.tidyverse.org">library(tidyverse)</a></code> but can be installed individually when you need them.</p>
+</div>
+</div>
+<div id="pipe" class="section level2" number="3.4">
+<h2>
+<span class="header-section-number">3.4</span> The Pipe Operator<a class="anchor" aria-label="anchor" href="#pipe"><i class="fas fa-link"></i></a>
+</h2>
+<p>If there is one thing you take away from this chapter, let it be the pipe. It is the single most important concept in the tidyverse, and once it clicks, you will never want to go back.</p>
+<div id="what-does-the-pipe-do" class="section level3" number="3.4.1">
+<h3>
+<span class="header-section-number">3.4.1</span> What Does the Pipe Do?<a class="anchor" aria-label="anchor" href="#what-does-the-pipe-do"><i class="fas fa-link"></i></a>
+</h3>
+<p>The pipe takes the thing on its left and feeds it as the <strong>first argument</strong> to the function on its right. That is it. That is the whole idea.</p>
+<p>The magrittr pipe <code>%&gt;%</code> (loaded with the tidyverse):</p>
+<blockquote>
+<p><code>x %&gt;% f(y)</code> is the same as <code>f(x, y)</code></p>
+</blockquote>
+<p>The native pipe <code>|&gt;</code> (available since R 4.1):</p>
+<blockquote>
+<p><code>x |&gt; f(y)</code> is the same as <code>f(x, y)</code></p>
+</blockquote>
+<p>For everyday work, they are interchangeable. This book uses <code>%&gt;%</code> because it is the established tidyverse convention, but <code>|&gt;</code> works fine too.</p>
+</div>
+<div id="why-the-pipe-changes-everything" class="section level3" number="3.4.2">
+<h3>
+<span class="header-section-number">3.4.2</span> Why the Pipe Changes Everything<a class="anchor" aria-label="anchor" href="#why-the-pipe-changes-everything"><i class="fas fa-link"></i></a>
+</h3>
+<p>Think of the pipe as an assembly line. Raw materials go in on one end, each station does one job, and the finished product comes out the other end. Without the pipe, your code looks like either a Russian nesting doll or a cluttered warehouse of temporary variables. Neither is fun.</p>
+<p>Let us say you want to take the <code>mtcars</code> dataset, keep only 6-cylinder cars, pick three columns, and sort by fuel economy.</p>
+<p><strong>Without pipes — nested calls (read inside-out, good luck):</strong></p>
+<div class="sourceCode" id="cb37"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/arrange.html">arrange</a></span><span class="op">(</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span><span class="op">(</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span><span class="va">mtcars</span>, <span class="va">cyl</span> <span class="op">==</span> <span class="fl">6</span><span class="op">)</span>, <span class="va">mpg</span>, <span class="va">hp</span>, <span class="va">wt</span><span class="op">)</span>, <span class="va">mpg</span><span class="op">)</span></span>
+<span><span class="co">#&gt;                 mpg  hp    wt</span></span>
+<span><span class="co">#&gt; Merc 280C      17.8 123 3.440</span></span>
+<span><span class="co">#&gt; Valiant        18.1 105 3.460</span></span>
+<span><span class="co">#&gt; Merc 280       19.2 123 3.440</span></span>
+<span><span class="co">#&gt; Ferrari Dino   19.7 175 2.770</span></span>
+<span><span class="co">#&gt; Mazda RX4      21.0 110 2.620</span></span>
+<span><span class="co">#&gt; Mazda RX4 Wag  21.0 110 2.875</span></span>
+<span><span class="co">#&gt; Hornet 4 Drive 21.4 110 3.215</span></span></code></pre></div>
+<p>Reading this is like trying to understand a sentence that was written backwards. The first thing that happens (<code>filter</code>) is buried in the middle.</p>
+<p><strong>Without pipes — intermediate variables (clutters your workspace):</strong></p>
+<div class="sourceCode" id="cb38"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">step1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span><span class="va">mtcars</span>, <span class="va">cyl</span> <span class="op">==</span> <span class="fl">6</span><span class="op">)</span></span>
+<span><span class="va">step2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span><span class="op">(</span><span class="va">step1</span>, <span class="va">mpg</span>, <span class="va">hp</span>, <span class="va">wt</span><span class="op">)</span></span>
+<span><span class="va">step3</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/arrange.html">arrange</a></span><span class="op">(</span><span class="va">step2</span>, <span class="va">mpg</span><span class="op">)</span></span>
+<span><span class="va">step3</span></span>
+<span><span class="co">#&gt;                 mpg  hp    wt</span></span>
+<span><span class="co">#&gt; Merc 280C      17.8 123 3.440</span></span>
+<span><span class="co">#&gt; Valiant        18.1 105 3.460</span></span>
+<span><span class="co">#&gt; Merc 280       19.2 123 3.440</span></span>
+<span><span class="co">#&gt; Ferrari Dino   19.7 175 2.770</span></span>
+<span><span class="co">#&gt; Mazda RX4      21.0 110 2.620</span></span>
+<span><span class="co">#&gt; Mazda RX4 Wag  21.0 110 2.875</span></span>
+<span><span class="co">#&gt; Hornet 4 Drive 21.4 110 3.215</span></span></code></pre></div>
+<p>Readable, but now you have three temporary variables floating around like Post-it notes you forgot to throw away.</p>
+<p><strong>With the pipe (read top-to-bottom, like a recipe):</strong></p>
+<div class="sourceCode" id="cb39"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">mtcars</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span><span class="va">cyl</span> <span class="op">==</span> <span class="fl">6</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span><span class="op">(</span><span class="va">mpg</span>, <span class="va">hp</span>, <span class="va">wt</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/arrange.html">arrange</a></span><span class="op">(</span><span class="va">mpg</span><span class="op">)</span></span>
+<span><span class="co">#&gt;                 mpg  hp    wt</span></span>
+<span><span class="co">#&gt; Merc 280C      17.8 123 3.440</span></span>
+<span><span class="co">#&gt; Valiant        18.1 105 3.460</span></span>
+<span><span class="co">#&gt; Merc 280       19.2 123 3.440</span></span>
+<span><span class="co">#&gt; Ferrari Dino   19.7 175 2.770</span></span>
+<span><span class="co">#&gt; Mazda RX4      21.0 110 2.620</span></span>
+<span><span class="co">#&gt; Mazda RX4 Wag  21.0 110 2.875</span></span>
+<span><span class="co">#&gt; Hornet 4 Drive 21.4 110 3.215</span></span></code></pre></div>
+<p>Now it reads like plain English: “Take <code>mtcars</code>, <strong>then</strong> filter for 6 cylinders, <strong>then</strong> select three columns, <strong>then</strong> arrange by mpg.” Clean. Clear. No junk variables. This is why people love the pipe.</p>
+</div>
+<div id="more-pipe-examples" class="section level3" number="3.4.3">
+<h3>
+<span class="header-section-number">3.4.3</span> More Pipe Examples<a class="anchor" aria-label="anchor" href="#more-pipe-examples"><i class="fas fa-link"></i></a>
+</h3>
+<p><strong>Summarizing data by group:</strong></p>
+<div class="sourceCode" id="cb40"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">iris</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html">group_by</a></span><span class="op">(</span><span class="va">Species</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/summarise.html">summarize</a></span><span class="op">(</span></span>
+<span>    mean_petal_length <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span><span class="op">(</span><span class="va">Petal.Length</span><span class="op">)</span>,</span>
+<span>    sd_petal_length <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/sd.html">sd</a></span><span class="op">(</span><span class="va">Petal.Length</span><span class="op">)</span>,</span>
+<span>    count <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/context.html">n</a></span><span class="op">(</span><span class="op">)</span></span>
+<span>  <span class="op">)</span></span>
+<span><span class="co">#&gt; # A tibble: 3 × 4</span></span>
+<span><span class="co">#&gt;   Species    mean_petal_length sd_petal_length count</span></span>
+<span><span class="co">#&gt;   &lt;fct&gt;                  &lt;dbl&gt;           &lt;dbl&gt; &lt;int&gt;</span></span>
+<span><span class="co">#&gt; 1 setosa                  1.46           0.174    50</span></span>
+<span><span class="co">#&gt; 2 versicolor              4.26           0.470    50</span></span>
+<span><span class="co">#&gt; 3 virginica               5.55           0.552    50</span></span></code></pre></div>
+<p><strong>Piping straight into a chart:</strong></p>
+<div class="sourceCode" id="cb41"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">mtcars</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html">group_by</a></span><span class="op">(</span><span class="va">cyl</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/summarise.html">summarize</a></span><span class="op">(</span>avg_hp <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span><span class="op">(</span><span class="va">hp</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html">factor</a></span><span class="op">(</span><span class="va">cyl</span><span class="op">)</span>, y <span class="op">=</span> <span class="va">avg_hp</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_bar.html">geom_col</a></span><span class="op">(</span>fill <span class="op">=</span> <span class="st">"steelblue"</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">labs</a></span><span class="op">(</span>x <span class="op">=</span> <span class="st">"Cylinders"</span>, y <span class="op">=</span> <span class="st">"Average Horsepower"</span>,</span>
+<span>       title <span class="op">=</span> <span class="st">"Average Horsepower by Cylinder Count"</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html">theme_minimal</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
+<div class="figure">
+<span style="display:block;" id="fig:unnamed-chunk-37"></span>
+<img src="Rbook_files/figure-html/unnamed-chunk-37-1.png" alt="Average horsepower by number of cylinders." width="672"><p class="caption">
+Figure 3.2: Average horsepower by number of cylinders.
+</p>
+</div>
+<p>One thing to watch: when piping into ggplot2, you switch from <code>%&gt;%</code> to <code>+</code> after the <code><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot()</a></code> call. The <code>+</code> is how ggplot2 layers work — it is not a pipe.</p>
+</div>
+<div id="the-dot-placeholder" class="section level3" number="3.4.4">
+<h3>
+<span class="header-section-number">3.4.4</span> The Dot Placeholder<a class="anchor" aria-label="anchor" href="#the-dot-placeholder"><i class="fas fa-link"></i></a>
+</h3>
+<p>Sometimes you need the piped value somewhere other than the first argument. The magrittr pipe lets you use <code>.</code> as a placeholder:</p>
+<div class="sourceCode" id="cb42"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Pipe into a non-first argument position using the dot</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">3</span>, <span class="fl">7</span>, <span class="fl">1</span>, <span class="fl">9</span>, <span class="fl">2</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste</a></span><span class="op">(</span><span class="st">"The number is"</span>, <span class="va">.</span><span class="op">)</span></span>
+<span><span class="co">#&gt; [1] "The number is 3" "The number is 7" "The number is 1" "The number is 9"</span></span>
+<span><span class="co">#&gt; [5] "The number is 2"</span></span></code></pre></div>
+<div class="sourceCode" id="cb43"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Using the dot in a model formula context</span></span>
+<span><span class="va">mtcars</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/stats/lm.html">lm</a></span><span class="op">(</span><span class="va">mpg</span> <span class="op">~</span> <span class="va">wt</span> <span class="op">+</span> <span class="va">hp</span>, data <span class="op">=</span> <span class="va">.</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/base/summary.html">summary</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="va">.</span><span class="op">$</span><span class="va">r.squared</span></span>
+<span><span class="co">#&gt; [1] 0.8267855</span></span></code></pre></div>
+<p>Here, <code>mtcars</code> goes into the <code>data</code> argument of <code><a href="https://rdrr.io/r/stats/lm.html">lm()</a></code> (not the first argument), because we told it exactly where with the dot.</p>
+</div>
+</div>
+<div id="tidydata" class="section level2" number="3.5">
+<h2>
+<span class="header-section-number">3.5</span> Tidy Data Principles<a class="anchor" aria-label="anchor" href="#tidydata"><i class="fas fa-link"></i></a>
+</h2>
+<p>“Tidy data” is a specific way of organizing data that makes everything downstream — analysis, visualization, modeling — dramatically easier. The three rules:</p>
+<ol style="list-style-type: decimal">
+<li><strong>Each variable forms a column.</strong></li>
+<li><strong>Each observation forms a row.</strong></li>
+<li><strong>Each value occupies a single cell.</strong></li>
+</ol>
+<p>Sounds obvious, right? And yet, a shocking amount of real-world business data violates these rules. Let us look at a classic example.</p>
+<div id="the-messy-sales-spreadsheet" class="section level3" number="3.5.1">
+<h3>
+<span class="header-section-number">3.5.1</span> The Messy Sales Spreadsheet<a class="anchor" aria-label="anchor" href="#the-messy-sales-spreadsheet"><i class="fas fa-link"></i></a>
+</h3>
+<p>Imagine your regional sales manager emails you this quarter’s numbers. It looks like a perfectly normal spreadsheet:</p>
+<div class="sourceCode" id="cb44"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">untidy_sales</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://tibble.tidyverse.org/reference/tibble.html">tibble</a></span><span class="op">(</span></span>
+<span>  product <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"Widget A"</span>, <span class="st">"Widget B"</span>, <span class="st">"Widget C"</span><span class="op">)</span>,</span>
+<span>  Q1 <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">150</span>, <span class="fl">200</span>, <span class="fl">180</span><span class="op">)</span>,</span>
+<span>  Q2 <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">170</span>, <span class="fl">210</span>, <span class="fl">160</span><span class="op">)</span>,</span>
+<span>  Q3 <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">190</span>, <span class="fl">195</span>, <span class="fl">200</span><span class="op">)</span>,</span>
+<span>  Q4 <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">210</span>, <span class="fl">230</span>, <span class="fl">220</span><span class="op">)</span></span>
+<span><span class="op">)</span></span>
+<span><span class="va">untidy_sales</span></span>
+<span><span class="co">#&gt; # A tibble: 3 × 5</span></span>
+<span><span class="co">#&gt;   product     Q1    Q2    Q3    Q4</span></span>
+<span><span class="co">#&gt;   &lt;chr&gt;    &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;</span></span>
+<span><span class="co">#&gt; 1 Widget A   150   170   190   210</span></span>
+<span><span class="co">#&gt; 2 Widget B   200   210   195   230</span></span>
+<span><span class="co">#&gt; 3 Widget C   180   160   200   220</span></span></code></pre></div>
+<p>Looks fine, right? Wrong. This is <strong>untidy</strong> because Q1, Q2, Q3, and Q4 are not variable names — they are <strong>values</strong> of a variable called “quarter.” The actual data has been smeared across multiple columns.</p>
+<p>Here is the tidy version, created with <code><a href="https://tidyr.tidyverse.org/reference/pivot_longer.html">pivot_longer()</a></code>:</p>
+<div class="sourceCode" id="cb45"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">tidy_sales</span> <span class="op">&lt;-</span> <span class="va">untidy_sales</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://tidyr.tidyverse.org/reference/pivot_longer.html">pivot_longer</a></span><span class="op">(</span>cols <span class="op">=</span> <span class="va">Q1</span><span class="op">:</span><span class="va">Q4</span>, names_to <span class="op">=</span> <span class="st">"quarter"</span>, values_to <span class="op">=</span> <span class="st">"sales"</span><span class="op">)</span></span>
+<span><span class="va">tidy_sales</span></span>
+<span><span class="co">#&gt; # A tibble: 12 × 3</span></span>
+<span><span class="co">#&gt;    product  quarter sales</span></span>
+<span><span class="co">#&gt;    &lt;chr&gt;    &lt;chr&gt;   &lt;dbl&gt;</span></span>
+<span><span class="co">#&gt;  1 Widget A Q1        150</span></span>
+<span><span class="co">#&gt;  2 Widget A Q2        170</span></span>
+<span><span class="co">#&gt;  3 Widget A Q3        190</span></span>
+<span><span class="co">#&gt;  4 Widget A Q4        210</span></span>
+<span><span class="co">#&gt;  5 Widget B Q1        200</span></span>
+<span><span class="co">#&gt;  6 Widget B Q2        210</span></span>
+<span><span class="co">#&gt;  7 Widget B Q3        195</span></span>
+<span><span class="co">#&gt;  8 Widget B Q4        230</span></span>
+<span><span class="co">#&gt;  9 Widget C Q1        180</span></span>
+<span><span class="co">#&gt; 10 Widget C Q2        160</span></span>
+<span><span class="co">#&gt; 11 Widget C Q3        200</span></span>
+<span><span class="co">#&gt; 12 Widget C Q4        220</span></span></code></pre></div>
+<p>Now every row is one product in one quarter. Every column is a variable. Every cell holds one value. <em>That</em> is tidy.</p>
+</div>
+<div id="why-should-you-care" class="section level3" number="3.5.2">
+<h3>
+<span class="header-section-number">3.5.2</span> Why Should You Care?<a class="anchor" aria-label="anchor" href="#why-should-you-care"><i class="fas fa-link"></i></a>
+</h3>
+<p>Because tidy data plays beautifully with the tidyverse. Want a grouped bar chart comparing products by quarter? With tidy data, it is one pipeline:</p>
+<div class="sourceCode" id="cb46"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">tidy_sales</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">quarter</span>, y <span class="op">=</span> <span class="va">sales</span>, fill <span class="op">=</span> <span class="va">product</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_bar.html">geom_col</a></span><span class="op">(</span>position <span class="op">=</span> <span class="st">"dodge"</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">labs</a></span><span class="op">(</span>title <span class="op">=</span> <span class="st">"Quarterly Sales by Product"</span>,</span>
+<span>       x <span class="op">=</span> <span class="st">"Quarter"</span>, y <span class="op">=</span> <span class="st">"Sales (units)"</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html">theme_minimal</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
+<div class="figure">
+<span style="display:block;" id="fig:unnamed-chunk-42"></span>
+<img src="Rbook_files/figure-html/unnamed-chunk-42-1.png" alt="Quarterly sales by product, created easily from tidy data." width="672"><p class="caption">
+Figure 3.3: Quarterly sales by product, created easily from tidy data.
+</p>
+</div>
+<p>With the messy version, you would need a lot more manual reshaping. Tidy data saves you time and headaches. Get your data tidy first, and everything else falls into place.</p>
+</div>
+</div>
+<div id="tibbles" class="section level2" number="3.6">
+<h2>
+<span class="header-section-number">3.6</span> Tibbles vs Data Frames<a class="anchor" aria-label="anchor" href="#tibbles"><i class="fas fa-link"></i></a>
+</h2>
+<p>Short version: <strong>tibbles are data frames that learned manners.</strong> They are technically still data frames under the hood, but they behave more predictably. Here is what you need to know.</p>
+<p><strong>They print nicely.</strong> Tibbles show just the first 10 rows and fit columns to your screen, instead of dumping 10,000 rows into your console.</p>
+<div class="sourceCode" id="cb47"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># A tibble prints neatly</span></span>
+<span><span class="fu"><a href="https://tibble.tidyverse.org/reference/as_tibble.html">as_tibble</a></span><span class="op">(</span><span class="va">mtcars</span><span class="op">)</span></span>
+<span><span class="co">#&gt; # A tibble: 32 × 11</span></span>
+<span><span class="co">#&gt;      mpg   cyl  disp    hp  drat    wt  qsec    vs    am  gear  carb</span></span>
+<span><span class="co">#&gt;    &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;</span></span>
+<span><span class="co">#&gt;  1  21       6  160    110  3.9   2.62  16.5     0     1     4     4</span></span>
+<span><span class="co">#&gt;  2  21       6  160    110  3.9   2.88  17.0     0     1     4     4</span></span>
+<span><span class="co">#&gt;  3  22.8     4  108     93  3.85  2.32  18.6     1     1     4     1</span></span>
+<span><span class="co">#&gt;  4  21.4     6  258    110  3.08  3.22  19.4     1     0     3     1</span></span>
+<span><span class="co">#&gt;  5  18.7     8  360    175  3.15  3.44  17.0     0     0     3     2</span></span>
+<span><span class="co">#&gt;  6  18.1     6  225    105  2.76  3.46  20.2     1     0     3     1</span></span>
+<span><span class="co">#&gt;  7  14.3     8  360    245  3.21  3.57  15.8     0     0     3     4</span></span>
+<span><span class="co">#&gt;  8  24.4     4  147.    62  3.69  3.19  20       1     0     4     2</span></span>
+<span><span class="co">#&gt;  9  22.8     4  141.    95  3.92  3.15  22.9     1     0     4     2</span></span>
+<span><span class="co">#&gt; 10  19.2     6  168.   123  3.92  3.44  18.3     1     0     4     4</span></span>
+<span><span class="co">#&gt; # ℹ 22 more rows</span></span></code></pre></div>
+<p><strong>No sneaky partial matching.</strong> Tibbles require exact column names. Fewer bugs, fewer “wait, what just happened?” moments.</p>
+<p><strong>No surprise factor conversions.</strong> Tibbles keep your text as text. No silent conversions.</p>
+<p><strong>Consistent subsetting.</strong> Pulling one column from a tibble with <code>[</code> always gives you a tibble back, so behavior is predictable.</p>
+<p>In practice, you rarely need to think about this distinction. Tidyverse functions return tibbles automatically. If older code needs a standard data frame, just use <code><a href="https://rdrr.io/r/base/as.data.frame.html">as.data.frame()</a></code>.</p>
+</div>
+<div id="workflow" class="section level2" number="3.7">
+<h2>
+<span class="header-section-number">3.7</span> The Tidyverse Workflow<a class="anchor" aria-label="anchor" href="#workflow"><i class="fas fa-link"></i></a>
+</h2>
+<p>The tidyverse packages are not random — they map to stages of a data analysis pipeline:</p>
+<ol style="list-style-type: decimal">
+<li>
+<strong>Import</strong> your data (readr, readxl, haven)</li>
+<li>
+<strong>Tidy</strong> it into a clean structure (tidyr)</li>
+<li>
+<strong>Transform</strong> — filter, create variables, summarize (dplyr)</li>
+<li>
+<strong>Visualize</strong> patterns (ggplot2)</li>
+<li>
+<strong>Model</strong> relationships (tidymodels ecosystem)</li>
+<li>
+<strong>Communicate</strong> findings (R Markdown, Quarto)</li>
+</ol>
+<p>Let us walk through a quick example with the <code>mpg</code> dataset (fuel economy for 38 car models, 1999–2008). Think of this as a mini consulting engagement.</p>
+<div id="import-and-explore" class="section level3" number="3.7.1">
+<h3>
+<span class="header-section-number">3.7.1</span> Import and Explore<a class="anchor" aria-label="anchor" href="#import-and-explore"><i class="fas fa-link"></i></a>
+</h3>
+<p>Since <code>mpg</code> is built in, we skip the file import. In real life, you would use <code><a href="https://readr.tidyverse.org/reference/read_delim.html">read_csv()</a></code>. Let us see what we are working with:</p>
+<div class="sourceCode" id="cb48"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://pillar.r-lib.org/reference/glimpse.html">glimpse</a></span><span class="op">(</span><span class="va">mpg</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Rows: 234</span></span>
+<span><span class="co">#&gt; Columns: 11</span></span>
+<span><span class="co">#&gt; $ manufacturer &lt;chr&gt; "audi", "audi", "audi", "audi", "audi", "audi", "audi", "…</span></span>
+<span><span class="co">#&gt; $ model        &lt;chr&gt; "a4", "a4", "a4", "a4", "a4", "a4", "a4", "a4 quattro", "…</span></span>
+<span><span class="co">#&gt; $ displ        &lt;dbl&gt; 1.8, 1.8, 2.0, 2.0, 2.8, 2.8, 3.1, 1.8, 1.8, 2.0, 2.0, 2.…</span></span>
+<span><span class="co">#&gt; $ year         &lt;int&gt; 1999, 1999, 2008, 2008, 1999, 1999, 2008, 1999, 1999, 200…</span></span>
+<span><span class="co">#&gt; $ cyl          &lt;int&gt; 4, 4, 4, 4, 6, 6, 6, 4, 4, 4, 4, 6, 6, 6, 6, 6, 6, 8, 8, …</span></span>
+<span><span class="co">#&gt; $ trans        &lt;chr&gt; "auto(l5)", "manual(m5)", "manual(m6)", "auto(av)", "auto…</span></span>
+<span><span class="co">#&gt; $ drv          &lt;chr&gt; "f", "f", "f", "f", "f", "f", "f", "4", "4", "4", "4", "4…</span></span>
+<span><span class="co">#&gt; $ cty          &lt;int&gt; 18, 21, 20, 21, 16, 18, 18, 18, 16, 20, 19, 15, 17, 17, 1…</span></span>
+<span><span class="co">#&gt; $ hwy          &lt;int&gt; 29, 29, 31, 30, 26, 26, 27, 26, 25, 28, 27, 25, 25, 25, 2…</span></span>
+<span><span class="co">#&gt; $ fl           &lt;chr&gt; "p", "p", "p", "p", "p", "p", "p", "p", "p", "p", "p", "p…</span></span>
+<span><span class="co">#&gt; $ class        &lt;chr&gt; "compact", "compact", "compact", "compact", "compact", "c…</span></span></code></pre></div>
+</div>
+<div id="transform" class="section level3" number="3.7.2">
+<h3>
+<span class="header-section-number">3.7.2</span> Transform<a class="anchor" aria-label="anchor" href="#transform"><i class="fas fa-link"></i></a>
+</h3>
+<p>Which manufacturers have the best highway fuel economy? Let us find the top 10:</p>
+<div class="sourceCode" id="cb49"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">top_manufacturers</span> <span class="op">&lt;-</span> <span class="va">mpg</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html">group_by</a></span><span class="op">(</span><span class="va">manufacturer</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/summarise.html">summarize</a></span><span class="op">(</span></span>
+<span>    avg_hwy <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span><span class="op">(</span><span class="va">hwy</span><span class="op">)</span>,</span>
+<span>    n_models <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/context.html">n</a></span><span class="op">(</span><span class="op">)</span>,</span>
+<span>    .groups <span class="op">=</span> <span class="st">"drop"</span></span>
+<span>  <span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/arrange.html">arrange</a></span><span class="op">(</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/desc.html">desc</a></span><span class="op">(</span><span class="va">avg_hwy</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/slice.html">slice_head</a></span><span class="op">(</span>n <span class="op">=</span> <span class="fl">10</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">top_manufacturers</span></span>
+<span><span class="co">#&gt; # A tibble: 10 × 3</span></span>
+<span><span class="co">#&gt;    manufacturer avg_hwy n_models</span></span>
+<span><span class="co">#&gt;    &lt;chr&gt;          &lt;dbl&gt;    &lt;int&gt;</span></span>
+<span><span class="co">#&gt;  1 honda           32.6        9</span></span>
+<span><span class="co">#&gt;  2 volkswagen      29.2       27</span></span>
+<span><span class="co">#&gt;  3 hyundai         26.9       14</span></span>
+<span><span class="co">#&gt;  4 audi            26.4       18</span></span>
+<span><span class="co">#&gt;  5 pontiac         26.4        5</span></span>
+<span><span class="co">#&gt;  6 subaru          25.6       14</span></span>
+<span><span class="co">#&gt;  7 toyota          24.9       34</span></span>
+<span><span class="co">#&gt;  8 nissan          24.6       13</span></span>
+<span><span class="co">#&gt;  9 chevrolet       21.9       19</span></span>
+<span><span class="co">#&gt; 10 ford            19.4       25</span></span></code></pre></div>
+<p>Honda leads the pack at 32.6 average highway mpg, followed by Volkswagen and Hyundai. The <code>n_models</code> column is important context — Honda’s impressive average is based on 9 models, while some manufacturers with high averages might only have 2–3 models in the dataset. Sample size matters when comparing group averages.</p>
+</div>
+<div id="visualize" class="section level3" number="3.7.3">
+<h3>
+<span class="header-section-number">3.7.3</span> Visualize<a class="anchor" aria-label="anchor" href="#visualize"><i class="fas fa-link"></i></a>
+</h3>
+<p>Now let us turn those numbers into a chart your boss would actually want to see:</p>
+<div class="sourceCode" id="cb50"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">top_manufacturers</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span>manufacturer <span class="op">=</span> <span class="fu"><a href="https://forcats.tidyverse.org/reference/fct_reorder.html">fct_reorder</a></span><span class="op">(</span><span class="va">manufacturer</span>, <span class="va">avg_hwy</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">avg_hwy</span>, y <span class="op">=</span> <span class="va">manufacturer</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_bar.html">geom_col</a></span><span class="op">(</span>fill <span class="op">=</span> <span class="st">"steelblue"</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_text.html">geom_text</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>label <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Round.html">round</a></span><span class="op">(</span><span class="va">avg_hwy</span>, <span class="fl">1</span><span class="op">)</span><span class="op">)</span>, hjust <span class="op">=</span> <span class="op">-</span><span class="fl">0.1</span>, size <span class="op">=</span> <span class="fl">3</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">labs</a></span><span class="op">(</span></span>
+<span>    title <span class="op">=</span> <span class="st">"Top 10 Manufacturers by Highway Fuel Economy"</span>,</span>
+<span>    x <span class="op">=</span> <span class="st">"Average Highway MPG"</span>,</span>
+<span>    y <span class="op">=</span> <span class="cn">NULL</span></span>
+<span>  <span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html">theme_minimal</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/lims.html">xlim</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">40</span><span class="op">)</span></span></code></pre></div>
+<div class="figure">
+<span style="display:block;" id="fig:unnamed-chunk-46"></span>
+<img src="Rbook_files/figure-html/unnamed-chunk-46-1.png" alt="Top 10 manufacturers by average highway fuel economy." width="672"><p class="caption">
+Figure 3.4: Top 10 manufacturers by average highway fuel economy.
+</p>
+</div>
+<p>And here is a complete pipeline — raw data to finished chart in one unbroken chain:</p>
+<div class="sourceCode" id="cb51"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">mpg</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span>class <span class="op">=</span> <span class="fu"><a href="https://stringr.tidyverse.org/reference/case.html">str_to_title</a></span><span class="op">(</span><span class="va">class</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span>class <span class="op">=</span> <span class="fu"><a href="https://forcats.tidyverse.org/reference/fct_reorder.html">fct_reorder</a></span><span class="op">(</span><span class="va">class</span>, <span class="va">hwy</span>, .fun <span class="op">=</span> <span class="va">median</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">class</span>, y <span class="op">=</span> <span class="va">hwy</span>, fill <span class="op">=</span> <span class="va">class</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_boxplot.html">geom_boxplot</a></span><span class="op">(</span>show.legend <span class="op">=</span> <span class="cn">FALSE</span>, alpha <span class="op">=</span> <span class="fl">0.7</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/coord_flip.html">coord_flip</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">labs</a></span><span class="op">(</span></span>
+<span>    title <span class="op">=</span> <span class="st">"Highway Fuel Economy by Vehicle Class"</span>,</span>
+<span>    subtitle <span class="op">=</span> <span class="st">"Ordered by median MPG"</span>,</span>
+<span>    x <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>    y <span class="op">=</span> <span class="st">"Highway MPG"</span></span>
+<span>  <span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html">theme_minimal</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html">theme</a></span><span class="op">(</span>plot.title <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html">element_text</a></span><span class="op">(</span>face <span class="op">=</span> <span class="st">"bold"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<div class="figure">
+<span style="display:block;" id="fig:unnamed-chunk-47"></span>
+<img src="Rbook_files/figure-html/unnamed-chunk-47-1.png" alt="Distribution of highway fuel economy by vehicle class, ordered by median." width="672"><p class="caption">
+Figure 3.5: Distribution of highway fuel economy by vehicle class, ordered by median.
+</p>
+</div>
+<p>This pipeline uses stringr, forcats, dplyr, and ggplot2 all in one chain. That is the tidyverse at its best: small, focused functions that snap together like LEGO bricks.</p>
+</div>
+</div>
+<div id="tidyverse-help" class="section level2" number="3.8">
+<h2>
+<span class="header-section-number">3.8</span> Getting Help<a class="anchor" aria-label="anchor" href="#tidyverse-help"><i class="fas fa-link"></i></a>
+</h2>
+<p>You <em>will</em> get stuck. Everyone does. Here is how to get unstuck fast.</p>
+<div id="cheat-sheets-your-new-best-friends" class="section level3" number="3.8.1">
+<h3>
+<span class="header-section-number">3.8.1</span> Cheat Sheets (Your New Best Friends)<a class="anchor" aria-label="anchor" href="#cheat-sheets-your-new-best-friends"><i class="fas fa-link"></i></a>
+</h3>
+<p>Posit publishes free, two-page PDF cheat sheets for most tidyverse packages. Print them out. Tape them to your wall. Seriously. Find them at <a href="https://posit.co/resources/cheatsheets/">https://posit.co/resources/cheatsheets/</a> or in RStudio under <strong>Help &gt; Cheat Sheets</strong>. The dplyr, ggplot2, and tidyr cheat sheets alone will save you hours.</p>
+</div>
+<div id="googling-errors-like-a-pro" class="section level3" number="3.8.2">
+<h3>
+<span class="header-section-number">3.8.2</span> Googling Errors Like a Pro<a class="anchor" aria-label="anchor" href="#googling-errors-like-a-pro"><i class="fas fa-link"></i></a>
+</h3>
+<p>When you get an error, copy the error message into Google (minus your specific variable names) and add “R” or “tidyverse.” Nine times out of ten, someone on Stack Overflow has already asked and answered your exact question. Tag your own questions with <code>[r]</code> and the package name (e.g., <code>[dplyr]</code>, <code>[ggplot2]</code>).</p>
+</div>
+<div id="built-in-help" class="section level3" number="3.8.3">
+<h3>
+<span class="header-section-number">3.8.3</span> Built-In Help<a class="anchor" aria-label="anchor" href="#built-in-help"><i class="fas fa-link"></i></a>
+</h3>
+<div class="sourceCode" id="cb52"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Help on a specific function</span></span>
+<span><span class="op">?</span><span class="va">filter</span></span>
+<span></span>
+<span><span class="co"># Browse all functions in a package</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/utils/help.html">help</a></span><span class="op">(</span>package <span class="op">=</span> <span class="st">"dplyr"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Long-form tutorials (vignettes)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/utils/browseVignettes.html">browseVignettes</a></span><span class="op">(</span><span class="st">"dplyr"</span><span class="op">)</span></span></code></pre></div>
+</div>
+<div id="books-free-online" class="section level3" number="3.8.4">
+<h3>
+<span class="header-section-number">3.8.4</span> Books (Free Online)<a class="anchor" aria-label="anchor" href="#books-free-online"><i class="fas fa-link"></i></a>
+</h3>
+<ul>
+<li>
+<strong>R for Data Science</strong> (2nd ed.) — <a href="https://r4ds.hadley.nz/">https://r4ds.hadley.nz/</a>. The definitive tidyverse guide. If you read one book, make it this one.</li>
+<li>
+<strong>ggplot2: Elegant Graphics for Data Analysis</strong> (3rd ed.) — <a href="https://ggplot2-book.org/">https://ggplot2-book.org/</a>.</li>
+</ul>
+</div>
+<div id="rstudio-tips" class="section level3" number="3.8.5">
+<h3>
+<span class="header-section-number">3.8.5</span> RStudio Tips<a class="anchor" aria-label="anchor" href="#rstudio-tips"><i class="fas fa-link"></i></a>
+</h3>
+<ul>
+<li>
+<strong>Tab completion</strong>: Start typing a function name and hit Tab. RStudio will show you matches and arguments.</li>
+<li>
+<strong>F1 key</strong>: Put your cursor on any function name and press F1 to open its help page instantly.</li>
+<li>
+<strong>The Help pane</strong>: Search and browse documentation without leaving RStudio.</li>
+</ul>
+</div>
+</div>
+<div id="summary" class="section level2" number="3.9">
+<h2>
+<span class="header-section-number">3.9</span> Summary<a class="anchor" aria-label="anchor" href="#summary"><i class="fas fa-link"></i></a>
+</h2>
+<p>Here is the executive summary (see what we did there?):</p>
+<ul>
+<li>The <strong>tidyverse</strong> is a collection of R packages that share a common design philosophy. Learn one, and the others feel familiar.</li>
+<li>The <strong>pipe operator</strong> (<code>%&gt;%</code> or <code>|&gt;</code>) chains operations into readable, left-to-right pipelines. It is the single most important concept in this chapter.</li>
+<li>
+<strong>Tidy data</strong> — each variable a column, each observation a row, each value a cell — is the organizing principle that makes everything work smoothly.</li>
+<li>
+<strong>Tibbles</strong> are friendlier data frames with safer defaults.</li>
+<li>The <strong>tidyverse workflow</strong> (Import, Tidy, Transform, Visualize, Model, Communicate) gives you a structured approach to any data analysis project.</li>
+<li>
+<strong>When you get stuck</strong>, use cheat sheets, Google your error messages, and check Stack Overflow. You are not the first person to hit that error, and you will not be the last.</li>
+</ul>
+<p>In the chapters ahead, we will roll up our sleeves and explore each of these packages in depth. Onward.</p>
+
+</div>
+</div>
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+  var sidebar = document.querySelector(".sidebar-book");
+  if (!sidebar) return;
+
+  // Create a slim tab on the left edge — visible, unobtrusive, clearly a toggle
+  var btn = document.createElement("button");
+  btn.innerHTML = '&#9776; Contents';
+  btn.setAttribute("aria-label", "Toggle table of contents");
+  btn.id = "sidebar-toggle-btn";
+  document.body.appendChild(btn);
+
+  var isOpen = false;
+
+  function openSidebar() {
+    isOpen = true;
+    sidebar.classList.add("sidebar-open");
+    btn.innerHTML = '&times; Close';
+    btn.classList.add("sidebar-toggle-active");
+  }
+
+  function closeSidebar() {
+    isOpen = false;
+    sidebar.classList.remove("sidebar-open");
+    btn.innerHTML = '&#9776; Contents';
+    btn.classList.remove("sidebar-toggle-active");
+  }
+
+  btn.addEventListener("click", function(e) {
+    e.stopPropagation();
+    if (isOpen) { closeSidebar(); } else { openSidebar(); }
+  });
+
+  // Close when clicking outside
+  document.addEventListener("click", function(e) {
+    if (isOpen && !sidebar.contains(e.target) && e.target !== btn) {
+      closeSidebar();
+    }
+  });
+
+  // Close on Escape key
+  document.addEventListener("keydown", function(e) {
+    if (e.key === "Escape" && isOpen) { closeSidebar(); }
+  });
+
+  // Only activate on wide screens
+  function checkWidth() {
+    if (window.innerWidth >= 992) {
+      btn.style.display = "flex";
+      sidebar.classList.add("sidebar-collapsed");
+    } else {
+      btn.style.display = "none";
+      sidebar.classList.remove("sidebar-collapsed");
+      sidebar.classList.remove("sidebar-open");
+    }
+  }
+
+  window.addEventListener("resize", checkWidth);
+  checkWidth();
+});
+</script><div class="chapter-nav">
+<div class="prev"><a href="Rgettingstarted.html"><span class="header-section-number">2</span> Getting Started with R</a></div>
+<div class="next"><a href="dataimport.html"><span class="header-section-number">4</span> Data Import</a></div>
+</div></main><div class="col-md-3 col-lg-2 d-none d-md-block sidebar sidebar-chapter">
+    <nav id="toc" data-toggle="toc" aria-label="On this page"><h2>On this page</h2>
+      <ul class="nav navbar-nav">
+<li><a class="nav-link" href="#tidyverse"><span class="header-section-number">3</span> Your Data Analysis Toolkit</a></li>
+<li><a class="nav-link" href="#what-is-the-tidyverse"><span class="header-section-number">3.1</span> What is the Tidyverse?</a></li>
+<li><a class="nav-link" href="#installing-and-loading-the-tidyverse"><span class="header-section-number">3.2</span> Installing and Loading the Tidyverse</a></li>
+<li>
+<a class="nav-link" href="#core-tidyverse-packages"><span class="header-section-number">3.3</span> Core Tidyverse Packages</a><ul class="nav navbar-nav">
+<li><a class="nav-link" href="#ggplot2-data-visualization"><span class="header-section-number">3.3.1</span> ggplot2 — Data Visualization</a></li>
+<li><a class="nav-link" href="#dplyr-data-manipulation"><span class="header-section-number">3.3.2</span> dplyr — Data Manipulation</a></li>
+<li><a class="nav-link" href="#tidyr-data-tidying"><span class="header-section-number">3.3.3</span> tidyr — Data Tidying</a></li>
+<li><a class="nav-link" href="#readr-data-import"><span class="header-section-number">3.3.4</span> readr — Data Import</a></li>
+<li><a class="nav-link" href="#purrr-functional-programming"><span class="header-section-number">3.3.5</span> purrr — Functional Programming</a></li>
+<li><a class="nav-link" href="#tibble-modern-data-frames"><span class="header-section-number">3.3.6</span> tibble — Modern Data Frames</a></li>
+<li><a class="nav-link" href="#stringr-string-manipulation"><span class="header-section-number">3.3.7</span> stringr — String Manipulation</a></li>
+<li><a class="nav-link" href="#forcats-working-with-factors"><span class="header-section-number">3.3.8</span> forcats — Working with Factors</a></li>
+<li><a class="nav-link" href="#lubridate-dates-and-times"><span class="header-section-number">3.3.9</span> lubridate — Dates and Times</a></li>
+<li><a class="nav-link" href="#beyond-the-core"><span class="header-section-number">3.3.10</span> Beyond the Core</a></li>
+</ul>
+</li>
+<li>
+<a class="nav-link" href="#pipe"><span class="header-section-number">3.4</span> The Pipe Operator</a><ul class="nav navbar-nav">
+<li><a class="nav-link" href="#what-does-the-pipe-do"><span class="header-section-number">3.4.1</span> What Does the Pipe Do?</a></li>
+<li><a class="nav-link" href="#why-the-pipe-changes-everything"><span class="header-section-number">3.4.2</span> Why the Pipe Changes Everything</a></li>
+<li><a class="nav-link" href="#more-pipe-examples"><span class="header-section-number">3.4.3</span> More Pipe Examples</a></li>
+<li><a class="nav-link" href="#the-dot-placeholder"><span class="header-section-number">3.4.4</span> The Dot Placeholder</a></li>
+</ul>
+</li>
+<li>
+<a class="nav-link" href="#tidydata"><span class="header-section-number">3.5</span> Tidy Data Principles</a><ul class="nav navbar-nav">
+<li><a class="nav-link" href="#the-messy-sales-spreadsheet"><span class="header-section-number">3.5.1</span> The Messy Sales Spreadsheet</a></li>
+<li><a class="nav-link" href="#why-should-you-care"><span class="header-section-number">3.5.2</span> Why Should You Care?</a></li>
+</ul>
+</li>
+<li><a class="nav-link" href="#tibbles"><span class="header-section-number">3.6</span> Tibbles vs Data Frames</a></li>
+<li>
+<a class="nav-link" href="#workflow"><span class="header-section-number">3.7</span> The Tidyverse Workflow</a><ul class="nav navbar-nav">
+<li><a class="nav-link" href="#import-and-explore"><span class="header-section-number">3.7.1</span> Import and Explore</a></li>
+<li><a class="nav-link" href="#transform"><span class="header-section-number">3.7.2</span> Transform</a></li>
+<li><a class="nav-link" href="#visualize"><span class="header-section-number">3.7.3</span> Visualize</a></li>
+</ul>
+</li>
+<li>
+<a class="nav-link" href="#tidyverse-help"><span class="header-section-number">3.8</span> Getting Help</a><ul class="nav navbar-nav">
+<li><a class="nav-link" href="#cheat-sheets-your-new-best-friends"><span class="header-section-number">3.8.1</span> Cheat Sheets (Your New Best Friends)</a></li>
+<li><a class="nav-link" href="#googling-errors-like-a-pro"><span class="header-section-number">3.8.2</span> Googling Errors Like a Pro</a></li>
+<li><a class="nav-link" href="#built-in-help"><span class="header-section-number">3.8.3</span> Built-In Help</a></li>
+<li><a class="nav-link" href="#books-free-online"><span class="header-section-number">3.8.4</span> Books (Free Online)</a></li>
+<li><a class="nav-link" href="#rstudio-tips"><span class="header-section-number">3.8.5</span> RStudio Tips</a></li>
+</ul>
+</li>
+<li><a class="nav-link" href="#summary"><span class="header-section-number">3.9</span> Summary</a></li>
+</ul>
+
+      <div class="book-extra">
+        <ul class="list-unstyled">
+          
+        </ul>
+</div>
+    </nav>
+</div>
+
+</div>
+</div> <!-- .container -->
+
+<footer class="bg-primary text-light mt-5"><div class="container"><div class="row">
+
+  <div class="col-12 col-md-6 mt-3">
+    <p>"<strong>R and the Tidyverse: A Beginner’s Guide</strong>" was written by Vivek H. Patil. It was last built on 2026-02-27.</p>
+  </div>
+
+  <div class="col-12 col-md-6 mt-3">
+    <p>This book was built by the <a class="text-light" href="https://bookdown.org">bookdown</a> R package.</p>
+  </div>
+
+</div></div>
+</footer><!-- dynamically load mathjax for compatibility with self-contained --><script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "true";
+    if (src === "" || src === "true") src = "https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.9/latest.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:")
+      if (/^https?:/.test(src))
+        src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script><script type="text/x-mathjax-config">const popovers = document.querySelectorAll('a.footnote-ref[data-toggle="popover"]');
+for (let popover of popovers) {
+  const div = document.createElement('div');
+  div.setAttribute('style', 'position: absolute; top: 0, left:0; width:0, height:0, overflow: hidden; visibility: hidden;');
+  div.innerHTML = popover.getAttribute('data-content');
+
+  var has_math = div.querySelector("span.math");
+  if (has_math) {
+    document.body.appendChild(div);
+    MathJax.Hub.Queue(["Typeset", MathJax.Hub, div]);
+    MathJax.Hub.Queue(function() {
+      popover.setAttribute('data-content', div.innerHTML);
+      document.body.removeChild(div);
+    })
+  }
+}
+</script>
+</body>
+</html>

@@ -1,496 +1,508 @@
 <!DOCTYPE html>
-<html >
-
+<html lang="en">
 <head>
-
-  <meta charset="UTF-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <title>Chapter 4 Modifying Data | Basic Insights from Data for Marketing Researchers</title>
-  <meta name="description" content="This book should contain introductory material for analyzing data for marketing researchers.">
-  <meta name="generator" content="bookdown  and GitBook 2.6.7">
-
-  <meta property="og:title" content="Chapter 4 Modifying Data | Basic Insights from Data for Marketing Researchers" />
-  <meta property="og:type" content="book" />
-  
-  
-  <meta property="og:description" content="This book should contain introductory material for analyzing data for marketing researchers." />
-  <meta name="github-repo" content="patilv.github.io" />
-
-  <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="Chapter 4 Modifying Data | Basic Insights from Data for Marketing Researchers" />
-  
-  <meta name="twitter:description" content="This book should contain introductory material for analyzing data for marketing researchers." />
-  
-
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<title>Chapter 6 Modifying Data | R and the Tidyverse: A Beginner’s Guide</title>
 <meta name="author" content="Vivek H. Patil">
-
-
-<meta name="date" content="2019-11-04">
-
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-status-bar-style" content="black">
-  
-  
-<link rel="prev" href="describedata.html">
-<link rel="next" href="summarystats.html">
-<script src="libs/jquery-2.2.3/jquery.min.js"></script>
-<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
-<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
-<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
-<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
-<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
-<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
-
-
-
-
-
-
-
-
-
+<meta name="description" content="Let’s be honest: real-world data is a disaster. Customer databases have typos from that one intern who thought “N/A” and “NA” and “none” were interchangeable. Survey exports arrive with column...">
+<meta name="generator" content="bookdown 0.46 with bs4_book()">
+<meta property="og:title" content="Chapter 6 Modifying Data | R and the Tidyverse: A Beginner’s Guide">
+<meta property="og:type" content="book">
+<meta property="og:image" content="/cover.png">
+<meta property="og:description" content="Let’s be honest: real-world data is a disaster. Customer databases have typos from that one intern who thought “N/A” and “NA” and “none” were interchangeable. Survey exports arrive with column...">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Chapter 6 Modifying Data | R and the Tidyverse: A Beginner’s Guide">
+<meta name="twitter:description" content="Let’s be honest: real-world data is a disaster. Customer databases have typos from that one intern who thought “N/A” and “NA” and “none” were interchangeable. Survey exports arrive with column...">
+<meta name="twitter:image" content="/cover.png">
+<!-- JS --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script><script src="https://kit.fontawesome.com/6ecbd6c532.js" crossorigin="anonymous"></script><script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<link href="libs/bootstrap-4.6.0/bootstrap.min.css" rel="stylesheet">
+<script src="libs/bootstrap-4.6.0/bootstrap.bundle.min.js"></script><script src="libs/bs3compat-0.10.0/transition.js"></script><script src="libs/bs3compat-0.10.0/tabs.js"></script><script src="libs/bs3compat-0.10.0/bs3compat.js"></script><link href="libs/bs4_book-1.0.0/bs4_book.css" rel="stylesheet">
+<script src="libs/bs4_book-1.0.0/bs4_book.js"></script><link href="libs/htmltools-fill-0.5.9/fill.css" rel="stylesheet">
+<script src="libs/htmlwidgets-1.6.4/htmlwidgets.js"></script><link href="libs/datatables-css-0.0.0/datatables-crosstalk.css" rel="stylesheet">
+<script src="libs/datatables-binding-0.34.0/datatables.js"></script><link href="libs/dt-core-1.13.6/css/jquery.dataTables.min.css" rel="stylesheet">
+<link href="libs/dt-core-1.13.6/css/jquery.dataTables.extra.css" rel="stylesheet">
+<script src="libs/dt-core-1.13.6/js/jquery.dataTables.min.js"></script><link href="libs/crosstalk-1.2.2/css/crosstalk.min.css" rel="stylesheet">
+<script src="libs/crosstalk-1.2.2/js/crosstalk.min.js"></script><script src="libs/plotly-binding-4.12.0/plotly.js"></script><script src="libs/typedarray-0.1/typedarray.min.js"></script><link href="libs/plotly-htmlwidgets-css-2.25.2/plotly-htmlwidgets.css" rel="stylesheet">
+<script src="libs/plotly-main-2.25.2/plotly-latest.min.js"></script><script src="libs/kePrint-0.0.1/kePrint.js"></script><link href="libs/lightable-0.0.1/lightable.css" rel="stylesheet">
+<link href="libs/nouislider-7.0.10/jquery.nouislider.min.css" rel="stylesheet">
+<script src="libs/nouislider-7.0.10/jquery.nouislider.min.js"></script><link href="libs/selectize-0.12.0/selectize.bootstrap3.css" rel="stylesheet">
+<script src="libs/selectize-0.12.0/selectize.min.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/autocomplete.js/0.38.0/autocomplete.jquery.min.js" integrity="sha512-GU9ayf+66Xx2TmpxqJpliWbT5PiGYxpaG8rfnBEk1LL8l1KGkRShhngwdXK1UgqhAzWpZHSiYPc09/NwDQIGyg==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/mark.min.js" integrity="sha512-5CYOlHXGh6QpOFA/TeTylKLWfB3ftPsde7AnmhuitiTX4K5SqCLBeKro6sPS8ilsz1Q4NRx3v8Ko2IBiszzdww==" crossorigin="anonymous"></script><!-- CSS --><style type="text/css">
+    
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  </style>
 <style type="text/css">
-a.sourceLine { display: inline-block; line-height: 1.25; }
-a.sourceLine { pointer-events: none; color: inherit; text-decoration: inherit; }
-a.sourceLine:empty { height: 1.2em; }
-.sourceCode { overflow: visible; }
-code.sourceCode { white-space: pre; position: relative; }
-div.sourceCode { margin: 1em 0; }
-pre.sourceCode { margin: 0; }
-@media screen {
-div.sourceCode { overflow: auto; }
-}
-@media print {
-code.sourceCode { white-space: pre-wrap; }
-a.sourceLine { text-indent: -1em; padding-left: 1em; }
-}
-pre.numberSource a.sourceLine
-  { position: relative; left: -4em; }
-pre.numberSource a.sourceLine::before
-  { content: attr(title);
-    position: relative; left: -1em; text-align: right; vertical-align: baseline;
-    border: none; pointer-events: all; display: inline-block;
-    -webkit-touch-callout: none; -webkit-user-select: none;
-    -khtml-user-select: none; -moz-user-select: none;
-    -ms-user-select: none; user-select: none;
-    padding: 0 4px; width: 4em;
-    color: #aaaaaa;
-  }
-pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
-div.sourceCode
-  {  }
-@media screen {
-a.sourceLine::before { text-decoration: underline; }
-}
-code span.al { color: #ff0000; font-weight: bold; } /* Alert */
-code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
-code span.at { color: #7d9029; } /* Attribute */
-code span.bn { color: #40a070; } /* BaseN */
-code span.bu { } /* BuiltIn */
-code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
-code span.ch { color: #4070a0; } /* Char */
-code span.cn { color: #880000; } /* Constant */
-code span.co { color: #60a0b0; font-style: italic; } /* Comment */
-code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
-code span.do { color: #ba2121; font-style: italic; } /* Documentation */
-code span.dt { color: #902000; } /* DataType */
-code span.dv { color: #40a070; } /* DecVal */
-code span.er { color: #ff0000; font-weight: bold; } /* Error */
-code span.ex { } /* Extension */
-code span.fl { color: #40a070; } /* Float */
-code span.fu { color: #06287e; } /* Function */
-code span.im { } /* Import */
-code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
-code span.kw { color: #007020; font-weight: bold; } /* Keyword */
-code span.op { color: #666666; } /* Operator */
-code span.ot { color: #007020; } /* Other */
-code span.pp { color: #bc7a00; } /* Preprocessor */
-code span.sc { color: #4070a0; } /* SpecialChar */
-code span.ss { color: #bb6688; } /* SpecialString */
-code span.st { color: #4070a0; } /* String */
-code span.va { color: #19177c; } /* Variable */
-code span.vs { color: #4070a0; } /* VerbatimString */
-code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
-</style>
-
-<link rel="stylesheet" href="style.css" type="text/css" />
+    /* Used with Pandoc 2.11+ new --citeproc when CSL is used */
+    div.csl-bib-body { }
+    div.csl-entry {
+      clear: both;
+          margin-bottom: 0em;
+        }
+    .hanging div.csl-entry {
+      margin-left:2em;
+      text-indent:-2em;
+    }
+    div.csl-left-margin {
+      min-width:2em;
+      float:left;
+    }
+    div.csl-right-inline {
+      margin-left:2em;
+      padding-left:1em;
+    }
+    div.csl-indent {
+      margin-left: 2em;
+    }
+  </style>
+<link rel="stylesheet" href="style.css">
 </head>
+<body data-spy="scroll" data-target="#toc">
 
-<body>
+<div class="container-fluid">
+<div class="row">
+  <header class="col-sm-12 col-lg-3 sidebar sidebar-book"><a class="sr-only sr-only-focusable" href="#content">Skip to main content</a>
 
+    <div class="d-flex align-items-start justify-content-between">
+      <h1>
+        <a href="index.html" title="">R and the Tidyverse: A Beginner’s Guide</a>
+      </h1>
+      <button class="btn btn-outline-primary d-lg-none ml-2 mt-1" type="button" data-toggle="collapse" data-target="#main-nav" aria-expanded="true" aria-controls="main-nav"><i class="fas fa-bars"></i><span class="sr-only">Show table of contents</span></button>
+    </div>
 
+    <div id="main-nav" class="collapse-lg">
+      <form role="search">
+        <input id="search" class="form-control" type="search" placeholder="Search" aria-label="Search">
+</form>
 
-  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
-
-    <div class="book-summary">
-      <nav role="navigation">
-
-<ul class="summary">
-<li><a href="./">Basic Insights from Data for Marketing Researchers</a></li>
-
-<li class="divider"></li>
-<li class="chapter" data-level="" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i>Preface</a><ul>
-<li class="chapter" data-level="" data-path="index.html"><a href="index.html#about-me"><i class="fa fa-check"></i>About me</a></li>
-</ul></li>
-<li class="chapter" data-level="1" data-path="introR.html"><a href="introR.html"><i class="fa fa-check"></i><b>1</b> Introduction to R</a><ul>
-<li class="chapter" data-level="1.1" data-path="introR.html"><a href="introR.html#why-use-r"><i class="fa fa-check"></i><b>1.1</b> Why use R?</a></li>
-<li class="chapter" data-level="1.2" data-path="introR.html"><a href="introR.html#r---environment-and-software"><i class="fa fa-check"></i><b>1.2</b> R - Environment and Software</a></li>
-<li class="chapter" data-level="1.3" data-path="introR.html"><a href="introR.html#a-recently-released-video-on-r"><i class="fa fa-check"></i><b>1.3</b> A Recently Released Video on R</a></li>
-</ul></li>
-<li class="chapter" data-level="2" data-path="Rgettingstarted.html"><a href="Rgettingstarted.html"><i class="fa fa-check"></i><b>2</b> Getting Started with R</a><ul>
-<li class="chapter" data-level="2.1" data-path="Rgettingstarted.html"><a href="Rgettingstarted.html#r-studio-interface"><i class="fa fa-check"></i><b>2.1</b> R-Studio Interface</a></li>
-<li class="chapter" data-level="2.2" data-path="Rgettingstarted.html"><a href="Rgettingstarted.html#organizing-projects"><i class="fa fa-check"></i><b>2.2</b> Organizing projects</a></li>
-<li class="chapter" data-level="2.3" data-path="Rgettingstarted.html"><a href="Rgettingstarted.html#installing-packages-from-cran"><i class="fa fa-check"></i><b>2.3</b> Installing Packages from CRAN</a></li>
-<li class="chapter" data-level="2.4" data-path="Rgettingstarted.html"><a href="Rgettingstarted.html#installing-a-package-from-github"><i class="fa fa-check"></i><b>2.4</b> Installing a package from GitHub</a></li>
-<li class="chapter" data-level="2.5" data-path="Rgettingstarted.html"><a href="Rgettingstarted.html#installed-packages-should-be-loaded-for-them-to-offer-their-functions-for-use"><i class="fa fa-check"></i><b>2.5</b> Installed packages should be loaded for them to offer their functions for use</a></li>
-<li class="chapter" data-level="2.6" data-path="Rgettingstarted.html"><a href="Rgettingstarted.html#setting-your-working-directory"><i class="fa fa-check"></i><b>2.6</b> Setting your working directory</a></li>
-<li class="chapter" data-level="2.7" data-path="Rgettingstarted.html"><a href="Rgettingstarted.html#reading-data-from-different-sources"><i class="fa fa-check"></i><b>2.7</b> Reading data from different sources</a></li>
-<li class="chapter" data-level="2.8" data-path="Rgettingstarted.html"><a href="Rgettingstarted.html#saving-data"><i class="fa fa-check"></i><b>2.8</b> Saving data</a></li>
-<li class="chapter" data-level="2.9" data-path="Rgettingstarted.html"><a href="Rgettingstarted.html#creating-a-dataframe"><i class="fa fa-check"></i><b>2.9</b> Creating a dataframe</a></li>
-</ul></li>
-<li class="chapter" data-level="3" data-path="describedata.html"><a href="describedata.html"><i class="fa fa-check"></i><b>3</b> Describing Data</a><ul>
-<li class="chapter" data-level="3.1" data-path="describedata.html"><a href="describedata.html#number-of-rows-and-columns-in-that-sequence"><i class="fa fa-check"></i><b>3.1</b> Number of rows and columns (in that sequence)</a></li>
-<li class="chapter" data-level="3.2" data-path="describedata.html"><a href="describedata.html#number-of-rows"><i class="fa fa-check"></i><b>3.2</b> Number of rows</a></li>
-<li class="chapter" data-level="3.3" data-path="describedata.html"><a href="describedata.html#number-of-columns"><i class="fa fa-check"></i><b>3.3</b> Number of columns</a></li>
-<li class="chapter" data-level="3.4" data-path="describedata.html"><a href="describedata.html#names-of-variables"><i class="fa fa-check"></i><b>3.4</b> Names of variables</a></li>
-<li class="chapter" data-level="3.5" data-path="describedata.html"><a href="describedata.html#first-6-rows"><i class="fa fa-check"></i><b>3.5</b> First 6 rows</a></li>
-<li class="chapter" data-level="3.6" data-path="describedata.html"><a href="describedata.html#first-2-rows"><i class="fa fa-check"></i><b>3.6</b> First 2 rows</a></li>
-<li class="chapter" data-level="3.7" data-path="describedata.html"><a href="describedata.html#last-6-rows"><i class="fa fa-check"></i><b>3.7</b> Last 6 rows</a></li>
-<li class="chapter" data-level="3.8" data-path="describedata.html"><a href="describedata.html#first-row"><i class="fa fa-check"></i><b>3.8</b> First row</a></li>
-<li class="chapter" data-level="3.9" data-path="describedata.html"><a href="describedata.html#first-row-first-column"><i class="fa fa-check"></i><b>3.9</b> First row, first column</a></li>
-<li class="chapter" data-level="3.10" data-path="describedata.html"><a href="describedata.html#name-of-third-column"><i class="fa fa-check"></i><b>3.10</b> Name of third column</a></li>
-<li class="chapter" data-level="3.11" data-path="describedata.html"><a href="describedata.html#entries-from-third-column"><i class="fa fa-check"></i><b>3.11</b> 3 entries from third column</a></li>
-<li class="chapter" data-level="3.12" data-path="describedata.html"><a href="describedata.html#structure-of-the-dataframe"><i class="fa fa-check"></i><b>3.12</b> Structure of the dataframe</a></li>
-<li class="chapter" data-level="3.13" data-path="describedata.html"><a href="describedata.html#summary-of-the-dataframe"><i class="fa fa-check"></i><b>3.13</b> Summary of the dataframe</a></li>
-<li class="chapter" data-level="3.14" data-path="describedata.html"><a href="describedata.html#summary-of-a-variable-in-the-dataframe"><i class="fa fa-check"></i><b>3.14</b> Summary of a variable in the dataframe</a></li>
-</ul></li>
-<li class="chapter" data-level="4" data-path="modifydata.html"><a href="modifydata.html"><i class="fa fa-check"></i><b>4</b> Modifying Data</a><ul>
-<li class="chapter" data-level="4.1" data-path="modifydata.html"><a href="modifydata.html#creating-new-variables"><i class="fa fa-check"></i><b>4.1</b> Creating new variables</a></li>
-<li class="chapter" data-level="4.2" data-path="modifydata.html"><a href="modifydata.html#subsetting-data-and-dropping-factor-levels"><i class="fa fa-check"></i><b>4.2</b> Subsetting data and dropping factor levels</a></li>
-<li class="chapter" data-level="4.3" data-path="modifydata.html"><a href="modifydata.html#reordering-factor-levels"><i class="fa fa-check"></i><b>4.3</b> Reordering factor levels</a></li>
-<li class="chapter" data-level="4.4" data-path="modifydata.html"><a href="modifydata.html#reordering-dataset-entries"><i class="fa fa-check"></i><b>4.4</b> Reordering dataset entries</a></li>
-<li class="chapter" data-level="4.5" data-path="modifydata.html"><a href="modifydata.html#changing-column-names"><i class="fa fa-check"></i><b>4.5</b> Changing column names</a></li>
-<li class="chapter" data-level="4.6" data-path="modifydata.html"><a href="modifydata.html#renamingcollapsing-factor-levels"><i class="fa fa-check"></i><b>4.6</b> Renaming/Collapsing factor levels</a></li>
-<li class="chapter" data-level="4.7" data-path="modifydata.html"><a href="modifydata.html#converting-data-types"><i class="fa fa-check"></i><b>4.7</b> Converting data types</a><ul>
-<li class="chapter" data-level="4.7.1" data-path="modifydata.html"><a href="modifydata.html#factor-to-numeric"><i class="fa fa-check"></i><b>4.7.1</b> Factor to numeric</a></li>
-<li class="chapter" data-level="4.7.2" data-path="modifydata.html"><a href="modifydata.html#numeric-to-factor---binning-variables"><i class="fa fa-check"></i><b>4.7.2</b> Numeric to Factor - Binning variables</a></li>
-<li class="chapter" data-level="4.7.3" data-path="modifydata.html"><a href="modifydata.html#factor-and-numeric-to-character-and-vice-versa"><i class="fa fa-check"></i><b>4.7.3</b> Factor and Numeric to Character and vice versa</a></li>
-</ul></li>
-</ul></li>
-<li class="chapter" data-level="5" data-path="summarystats.html"><a href="summarystats.html"><i class="fa fa-check"></i><b>5</b> Summary Statistics</a><ul>
-<li class="chapter" data-level="5.1" data-path="summarystats.html"><a href="summarystats.html#measures-of-central-tendency"><i class="fa fa-check"></i><b>5.1</b> Measures of Central Tendency</a></li>
-<li class="chapter" data-level="5.2" data-path="summarystats.html"><a href="summarystats.html#other-measures-of-central-tendency"><i class="fa fa-check"></i><b>5.2</b> Other measures of central tendency</a></li>
-<li class="chapter" data-level="5.3" data-path="summarystats.html"><a href="summarystats.html#measures-of-dispersion-variation"><i class="fa fa-check"></i><b>5.3</b> Measures of Dispersion (variation)</a><ul>
-<li class="chapter" data-level="5.3.1" data-path="summarystats.html"><a href="summarystats.html#range"><i class="fa fa-check"></i><b>5.3.1</b> Range</a></li>
-<li class="chapter" data-level="5.3.2" data-path="summarystats.html"><a href="summarystats.html#interquartile-range-difference-between-25th-and-75th-percentile-or-quantile"><i class="fa fa-check"></i><b>5.3.2</b> Interquartile range: Difference between 25th and 75th percentile (or quantile)</a></li>
-<li class="chapter" data-level="5.3.3" data-path="summarystats.html"><a href="summarystats.html#variance-and-standard-deviation"><i class="fa fa-check"></i><b>5.3.3</b> Variance and Standard Deviation</a></li>
-</ul></li>
-</ul></li>
-<li class="chapter" data-level="6" data-path="singlevar.html"><a href="singlevar.html"><i class="fa fa-check"></i><b>6</b> Single variable Analysis</a><ul>
-<li class="chapter" data-level="6.1" data-path="singlevar.html"><a href="singlevar.html#numeric-variable"><i class="fa fa-check"></i><b>6.1</b> Numeric Variable</a><ul>
-<li class="chapter" data-level="6.1.1" data-path="singlevar.html"><a href="singlevar.html#histogram"><i class="fa fa-check"></i><b>6.1.1</b> Histogram</a></li>
-<li class="chapter" data-level="6.1.2" data-path="singlevar.html"><a href="singlevar.html#density-plot"><i class="fa fa-check"></i><b>6.1.2</b> Density plot</a></li>
-<li class="chapter" data-level="6.1.3" data-path="singlevar.html"><a href="singlevar.html#box-plot"><i class="fa fa-check"></i><b>6.1.3</b> Box plot</a></li>
-<li class="chapter" data-level="6.1.4" data-path="singlevar.html"><a href="singlevar.html#test-of-mean"><i class="fa fa-check"></i><b>6.1.4</b> Test of Mean</a></li>
-</ul></li>
-<li class="chapter" data-level="6.2" data-path="singlevar.html"><a href="singlevar.html#factor-variable"><i class="fa fa-check"></i><b>6.2</b> Factor variable</a><ul>
-<li class="chapter" data-level="6.2.1" data-path="singlevar.html"><a href="singlevar.html#bar-plot"><i class="fa fa-check"></i><b>6.2.1</b> Bar plot</a></li>
-<li class="chapter" data-level="6.2.2" data-path="singlevar.html"><a href="singlevar.html#pie-chart---fyi-do-not-use"><i class="fa fa-check"></i><b>6.2.2</b> Pie Chart - FYI Do not use</a></li>
-<li class="chapter" data-level="6.2.3" data-path="singlevar.html"><a href="singlevar.html#one-factor-variable-chi-square-goodness-of-fit-test"><i class="fa fa-check"></i><b>6.2.3</b> One factor-variable Chi-square goodness-of-fit test</a></li>
-</ul></li>
-<li class="chapter" data-level="6.3" data-path="singlevar.html"><a href="singlevar.html#one-factor-variable---t-test-one-sample-proportion"><i class="fa fa-check"></i><b>6.3</b> One factor variable - t-test one sample proportion</a></li>
-</ul></li>
-<li class="chapter" data-level="7" data-path="multivar.html"><a href="multivar.html"><i class="fa fa-check"></i><b>7</b> Relationships between variables</a><ul>
-<li class="chapter" data-level="7.1" data-path="multivar.html"><a href="multivar.html#between-continuous-variables-correlations"><i class="fa fa-check"></i><b>7.1</b> Between continuous variables: Correlations</a><ul>
-<li class="chapter" data-level="7.1.1" data-path="multivar.html"><a href="multivar.html#plotting"><i class="fa fa-check"></i><b>7.1.1</b> Plotting</a></li>
-<li class="chapter" data-level="7.1.2" data-path="multivar.html"><a href="multivar.html#correlations-between-two-numeric-variables"><i class="fa fa-check"></i><b>7.1.2</b> Correlations between two numeric variables</a></li>
-<li class="chapter" data-level="7.1.3" data-path="multivar.html"><a href="multivar.html#paired-samples---comparing-two-means"><i class="fa fa-check"></i><b>7.1.3</b> Paired Samples - comparing two-means</a></li>
-<li class="chapter" data-level="7.1.4" data-path="multivar.html"><a href="multivar.html#relationships-between-more-than-two-numeric-variables"><i class="fa fa-check"></i><b>7.1.4</b> Relationships between more than two numeric variables</a></li>
-</ul></li>
-<li class="chapter" data-level="7.2" data-path="multivar.html"><a href="multivar.html#relationships-between-factor-variables"><i class="fa fa-check"></i><b>7.2</b> Relationships between factor variables</a></li>
-<li class="chapter" data-level="7.3" data-path="multivar.html"><a href="multivar.html#between-factor-and-continuous-variables"><i class="fa fa-check"></i><b>7.3</b> Between factor and continuous variables</a><ul>
-<li class="chapter" data-level="7.3.1" data-path="multivar.html"><a href="multivar.html#two-levels-of-a-factor-level-and-one-continuous-variable---t-test"><i class="fa fa-check"></i><b>7.3.1</b> Two levels of a factor level and one continuous variable - t-test</a></li>
-<li class="chapter" data-level="7.3.2" data-path="multivar.html"><a href="multivar.html#more-than-two-levels-of-a-factor-variable-and-one-continuous-variable.--one-way-anova"><i class="fa fa-check"></i><b>7.3.2</b> More than two levels of a factor variable and one continuous variable.- One-Way ANOVA</a></li>
-</ul></li>
-</ul></li>
-<li class="divider"></li>
-<li><a href="https://github.com/patilv" target="blank">Published with bookdown</a></li>
-
+      <nav aria-label="Table of contents"><h2>Table of contents</h2>
+        <ul class="book-toc list-unstyled">
+<li><a class="" href="index.html">Preface</a></li>
+<li><a class="" href="introR.html"><span class="header-section-number">1</span> Introduction to R</a></li>
+<li><a class="" href="Rgettingstarted.html"><span class="header-section-number">2</span> Getting Started with R</a></li>
+<li><a class="" href="tidyverse.html"><span class="header-section-number">3</span> Your Data Analysis Toolkit</a></li>
+<li><a class="" href="dataimport.html"><span class="header-section-number">4</span> Data Import</a></li>
+<li><a class="" href="describedata.html"><span class="header-section-number">5</span> Describing Data</a></li>
+<li><a class="active" href="modifydata.html"><span class="header-section-number">6</span> Modifying Data</a></li>
+<li><a class="" href="dplyr.html"><span class="header-section-number">7</span> Data Wrangling with dplyr</a></li>
+<li><a class="" href="tidyr.html"><span class="header-section-number">8</span> Tidy Data with tidyr</a></li>
+<li><a class="" href="summarystats.html"><span class="header-section-number">9</span> Summary Statistics</a></li>
+<li><a class="" href="ggplot2basics.html"><span class="header-section-number">10</span> Data Visualization with ggplot2</a></li>
+<li><a class="" href="ggplot2customize.html"><span class="header-section-number">11</span> Customizing ggplot2 Visualizations</a></li>
+<li><a class="" href="singlevar.html"><span class="header-section-number">12</span> Single Variable Analysis</a></li>
+<li><a class="" href="multivar.html"><span class="header-section-number">13</span> Relationships Between Variables</a></li>
+<li><a class="" href="stringr.html"><span class="header-section-number">14</span> Working with Text Data</a></li>
+<li><a class="" href="forcats.html"><span class="header-section-number">15</span> Wrangling Categories with forcats</a></li>
+<li><a class="" href="lubridate.html"><span class="header-section-number">16</span> Working with Dates and Times</a></li>
+<li><a class="" href="purrr.html"><span class="header-section-number">17</span> Doing the Same Thing to Many Things at Once</a></li>
+<li><a class="" href="rmarkdown.html"><span class="header-section-number">18</span> R Markdown</a></li>
+<li><a class="" href="rmarkdown-advanced.html"><span class="header-section-number">19</span> Advanced R Markdown</a></li>
 </ul>
 
+        <div class="book-extra">
+          
+        </div>
       </nav>
-    </div>
+</div>
+  </header><main class="col-sm-12 col-md-9 col-lg-7" id="content"><div id="modifydata" class="section level1" number="6">
+<h1>
+<span class="header-section-number">6</span> Modifying Data<a class="anchor" aria-label="anchor" href="#modifydata"><i class="fas fa-link"></i></a>
+</h1>
+<p>Let’s be honest: real-world data is a disaster. Customer databases have typos from that one intern who thought “N/A” and “NA” and “none” were interchangeable. Survey exports arrive with column names that look like someone fell asleep on the keyboard. And there is always — always — a text field hiding in what should be a numeric column. Welcome to data wrangling, the unglamorous but absolutely essential skill that separates the analyst who gets answers from the one who gets error messages.</p>
+<p>This chapter teaches you how to reshape, clean, and wrestle your data into submission. For the full dplyr deep-dive, see Chapter <a href="dplyr.html#dplyr">7</a>.</p>
+<div id="creating-new-variables" class="section level2" number="6.1">
+<h2>
+<span class="header-section-number">6.1</span> Creating new variables<a class="anchor" aria-label="anchor" href="#creating-new-variables"><i class="fas fa-link"></i></a>
+</h2>
+<p>In business, you constantly need variables that do not exist yet in your raw data. Total revenue? That is price times quantity, and no database on Earth ships with that pre-calculated (wouldn’t that be nice). Customer lifetime value? A combination of purchase frequency, average order size, and tenure. The point is, you will spend a surprising chunk of your career creating new columns.</p>
+<p>The <code><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate()</a></code> function from <strong>dplyr</strong> provides a clean way to create new variables. The big win here is readability — you do not have to keep typing the data frame name over and over like you are being charged per keystroke.</p>
+<div class="sourceCode" id="cb106"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org">dplyr</a></span><span class="op">)</span></span>
+<span><span class="va">iris</span> <span class="op">&lt;-</span> <span class="va">iris</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span>Sepal.dimensions <span class="op">=</span> <span class="va">Sepal.Length</span> <span class="op">+</span> <span class="va">Sepal.Width</span><span class="op">)</span></span></code></pre></div>
+<p>Note how <code><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate()</a></code> does not require you to repeat the data frame name for each variable — just use column names directly. Your future self will thank you when reviewing old code at 11 PM the night before a deliverable.</p>
+<p>There might be times when you want to overwrite an existing variable instead of creating a new one. Maybe you realized your revenue column forgot to include tax. In that case, just use the same variable name. Fair warning though — there is no undo button. This is not Google Docs. Once you overwrite it, it is gone.</p>
+<div class="sourceCode" id="cb107"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">iris</span> <span class="op">&lt;-</span> <span class="va">iris</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span>Sepal.Length <span class="op">=</span> <span class="va">Sepal.Length</span> <span class="op">+</span> <span class="va">Sepal.Width</span><span class="op">)</span></span></code></pre></div>
+</div>
+<div id="subsetting-data-and-dropping-factor-levels" class="section level2" number="6.2">
+<h2>
+<span class="header-section-number">6.2</span> Subsetting data and dropping factor levels<a class="anchor" aria-label="anchor" href="#subsetting-data-and-dropping-factor-levels"><i class="fas fa-link"></i></a>
+</h2>
+<p>Subsetting is basically filtering out the noise so you can focus on what matters. You have a database with 500,000 customer records and your boss only wants to see the ones who spent more than $100 last quarter. Or maybe you are analyzing survey responses but only from respondents in the Southeast region. Or perhaps you need last quarter’s transactions and nothing else. Whatever the reason, subsetting is the data equivalent of saying “I only want to talk to these people.”</p>
+<p>The <code><a href="https://dplyr.tidyverse.org/reference/filter.html">filter()</a></code> function from <strong>dplyr</strong> reads almost like plain English, which is a lifesaver when you come back to your code six months later. Think of it as pulling only the VIP customers from your database — the ones above a certain spending threshold.</p>
+<div class="sourceCode" id="cb108"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">irisSubset1</span> <span class="op">&lt;-</span> <span class="va">iris</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span><span class="va">Sepal.Length</span> <span class="op">&gt;=</span> <span class="fl">5.8</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/summary.html">summary</a></span><span class="op">(</span><span class="va">irisSubset1</span><span class="op">$</span><span class="va">Sepal.Length</span><span class="op">)</span></span>
+<span><span class="co">#&gt;    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. </span></span>
+<span><span class="co">#&gt;   5.800   6.100   6.400   6.509   6.800   7.900</span></span></code></pre></div>
+<p>You can also stack multiple conditions. Want customers who are both high-spending AND from the Northeast? Same idea — just combine your filters:</p>
+<div class="sourceCode" id="cb109"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">irisSubset2</span> <span class="op">&lt;-</span> <span class="va">iris</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span><span class="va">Sepal.Length</span> <span class="op">&gt;=</span> <span class="fl">5.8</span>, <span class="va">Sepal.Width</span> <span class="op">&lt;</span> <span class="fl">3</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/summary.html">summary</a></span><span class="op">(</span><span class="va">irisSubset2</span><span class="op">)</span></span>
+<span><span class="co">#&gt;   Sepal.Length   Sepal.Width     Petal.Length   Petal.Width          Species  </span></span>
+<span><span class="co">#&gt;  Min.   :5.80   Min.   :2.200   Min.   :3.90   Min.   :1.000   setosa    : 0  </span></span>
+<span><span class="co">#&gt;  1st Qu.:6.00   1st Qu.:2.600   1st Qu.:4.50   1st Qu.:1.300   versicolor:17  </span></span>
+<span><span class="co">#&gt;  Median :6.30   Median :2.800   Median :4.90   Median :1.500   virginica :18  </span></span>
+<span><span class="co">#&gt;  Mean   :6.34   Mean   :2.691   Mean   :5.00   Mean   :1.611                  </span></span>
+<span><span class="co">#&gt;  3rd Qu.:6.40   3rd Qu.:2.800   3rd Qu.:5.45   3rd Qu.:1.900                  </span></span>
+<span><span class="co">#&gt;  Max.   :7.70   Max.   :2.900   Max.   :6.90   Max.   :2.400</span></span></code></pre></div>
+<p>Subsetting based on a factor variable works with <code>%in%</code>. The following creates a subset of the <code>iris</code> dataset that has only two types of Species — like filtering your CRM to show only “Enterprise” and “Mid-Market” clients while ignoring the “Small Business” segment.</p>
+<div class="sourceCode" id="cb110"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">irisSubset3</span> <span class="op">&lt;-</span> <span class="va">iris</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span><span class="va">Species</span> <span class="op"><a href="https://rdrr.io/r/base/match.html">%in%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"setosa"</span>, <span class="st">"versicolor"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<p>Let us verify that we indeed have only two levels of the <code>Species</code> variable.</p>
+<div class="sourceCode" id="cb111"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/summary.html">summary</a></span><span class="op">(</span><span class="va">irisSubset3</span><span class="op">$</span><span class="va">Species</span><span class="op">)</span></span>
+<span><span class="co">#&gt;     setosa versicolor  virginica </span></span>
+<span><span class="co">#&gt;         50         50          0</span></span></code></pre></div>
+<p>Here is a fun little gotcha that will trip you up at least once (consider it a rite of passage): even though we excluded <code>virginica</code>, R still remembers it existed as a factor level — it just shows 0 observations. It is like removing a department from your company but the name still shows up in the HR dropdown menu. Nobody works there anymore, but the system insists it is still an option. To clean that up, we re-factor:</p>
+<div class="sourceCode" id="cb112"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">irisSubset3</span><span class="op">$</span><span class="va">Species</span><span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/factor.html">factor</a></span><span class="op">(</span><span class="va">irisSubset3</span><span class="op">$</span><span class="va">Species</span><span class="op">)</span></span></code></pre></div>
+<p>Let us verify that did the trick.</p>
+<div class="sourceCode" id="cb113"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/summary.html">summary</a></span><span class="op">(</span><span class="va">irisSubset3</span><span class="op">$</span><span class="va">Species</span><span class="op">)</span></span>
+<span><span class="co">#&gt;     setosa versicolor </span></span>
+<span><span class="co">#&gt;         50         50</span></span></code></pre></div>
+</div>
+<div id="reordering-factor-levels" class="section level2" number="6.3">
+<h2>
+<span class="header-section-number">6.3</span> Reordering factor levels<a class="anchor" aria-label="anchor" href="#reordering-factor-levels"><i class="fas fa-link"></i></a>
+</h2>
+<p>By default, R orders factor levels alphabetically. That is fine until you realize your customer satisfaction survey goes “Dissatisfied, Neutral, Satisfied, Very Dissatisfied, Very Satisfied” — which is alphabetical nonsense. You need it to flow logically, from “Very Dissatisfied” to “Very Satisfied,” because that is how human brains (and your manager) expect to read it. Here is how you take control.</p>
+<div class="sourceCode" id="cb114"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/levels.html">levels</a></span><span class="op">(</span><span class="va">iris</span><span class="op">$</span><span class="va">Species</span><span class="op">)</span></span>
+<span><span class="co">#&gt; [1] "setosa"     "versicolor" "virginica"</span></span></code></pre></div>
+<p>The <strong>forcats</strong> package (Chapter <a href="forcats.html#forcats">15</a>) makes reordering factor levels straightforward. The function names actually tell you what they do.</p>
+<div class="sourceCode" id="cb115"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://forcats.tidyverse.org/">forcats</a></span><span class="op">)</span></span>
+<span><span class="co"># Reverse the levels</span></span>
+<span><span class="va">iris</span><span class="op">$</span><span class="va">Species</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://forcats.tidyverse.org/reference/fct_rev.html">fct_rev</a></span><span class="op">(</span><span class="va">iris</span><span class="op">$</span><span class="va">Species</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/levels.html">levels</a></span><span class="op">(</span><span class="va">iris</span><span class="op">$</span><span class="va">Species</span><span class="op">)</span></span>
+<span><span class="co">#&gt; [1] "virginica"  "versicolor" "setosa"</span></span></code></pre></div>
+<div class="sourceCode" id="cb116"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Set specific order</span></span>
+<span><span class="va">iris</span><span class="op">$</span><span class="va">Species</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://forcats.tidyverse.org/reference/fct_relevel.html">fct_relevel</a></span><span class="op">(</span><span class="va">iris</span><span class="op">$</span><span class="va">Species</span>, <span class="st">"setosa"</span>, <span class="st">"versicolor"</span>, <span class="st">"virginica"</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/levels.html">levels</a></span><span class="op">(</span><span class="va">iris</span><span class="op">$</span><span class="va">Species</span><span class="op">)</span></span>
+<span><span class="co">#&gt; [1] "setosa"     "versicolor" "virginica"</span></span></code></pre></div>
+</div>
+<div id="reordering-dataset-entries" class="section level2" number="6.4">
+<h2>
+<span class="header-section-number">6.4</span> Reordering dataset entries<a class="anchor" aria-label="anchor" href="#reordering-dataset-entries"><i class="fas fa-link"></i></a>
+</h2>
+<p>Sorting data is one of those things you will do approximately fourteen times a day. Maybe you want your sales reps ranked from highest revenue to lowest so you can see who is crushing it (and who needs a pep talk). Maybe you want survey responses sorted by completion time.</p>
+<p>The <code><a href="https://dplyr.tidyverse.org/reference/arrange.html">arrange()</a></code> function is so readable that it almost feels like cheating. You can practically read it as a sentence: “take this data and arrange it by this column.” Your code reviews will be a breeze.</p>
+<p>For example, the <code>Sepal.Length</code> of the first row of the <code>iris</code> dataset:</p>
+<div class="sourceCode" id="cb117"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">iris</span><span class="op">$</span><span class="va">Sepal.Length</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span></span>
+<span><span class="co">#&gt; [1] 5.1</span></span></code></pre></div>
+<p>And the range of the variable:</p>
+<div class="sourceCode" id="cb118"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/range.html">range</a></span><span class="op">(</span><span class="va">iris</span><span class="op">$</span><span class="va">Sepal.Length</span><span class="op">)</span></span>
+<span><span class="co">#&gt; [1] 4.3 7.9</span></span></code></pre></div>
+<p>Sorting in ascending order (smallest to largest — think ranking your sales team from the newest hire to the top closer):</p>
+<div class="sourceCode" id="cb119"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">ascendingiris</span> <span class="op">&lt;-</span> <span class="va">iris</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/arrange.html">arrange</a></span><span class="op">(</span><span class="va">Sepal.Length</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">ascendingiris</span><span class="op">$</span><span class="va">Sepal.Length</span><span class="op">)</span></span>
+<span><span class="co">#&gt; [1] 4.3 4.4 4.4 4.4 4.5 4.6</span></span></code></pre></div>
+<p>And descending order — the “show me the leaderboard” view:</p>
+<div class="sourceCode" id="cb120"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">descendingiris</span> <span class="op">&lt;-</span> <span class="va">iris</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/arrange.html">arrange</a></span><span class="op">(</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/desc.html">desc</a></span><span class="op">(</span><span class="va">Sepal.Length</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">descendingiris</span><span class="op">$</span><span class="va">Sepal.Length</span><span class="op">)</span></span>
+<span><span class="co">#&gt; [1] 7.9 7.7 7.7 7.7 7.7 7.6</span></span></code></pre></div>
+</div>
+<div id="changing-column-names" class="section level2" number="6.5">
+<h2>
+<span class="header-section-number">6.5</span> Changing column names<a class="anchor" aria-label="anchor" href="#changing-column-names"><i class="fas fa-link"></i></a>
+</h2>
+<p>Let us talk about one of the most underrated quality-of-life improvements in data analysis: giving your columns names that a human being can actually understand. Maybe your data arrived from a legacy database with column names like <code>X_VAR_007_Q3_FINAL_v2</code> or some brave soul used spaces and emojis. (Yes, this happens.) Renaming columns is a small investment that pays enormous dividends every time you or anyone else has to read the code.</p>
+<p>Current names of columns in dataset:</p>
+<div class="sourceCode" id="cb121"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/names.html">names</a></span><span class="op">(</span><span class="va">irisSubset3</span><span class="op">)</span></span>
+<span><span class="co">#&gt; [1] "Sepal.Length" "Sepal.Width"  "Petal.Length" "Petal.Width"  "Species"</span></span></code></pre></div>
+<p>The <code><a href="https://dplyr.tidyverse.org/reference/rename.html">rename()</a></code> function from <strong>dplyr</strong> uses a <code>new_name = old_name</code> syntax, which reads naturally — like you are telling R “hey, this column used to be called this, now call it that”:</p>
+<div class="sourceCode" id="cb122"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">dataname</span> <span class="op">&lt;-</span> <span class="va">dataname</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/rename.html">rename</a></span><span class="op">(</span>newnamecol1 <span class="op">=</span> <span class="va">oldnamecol1</span>, newnamecol2 <span class="op">=</span> <span class="va">oldnamecol2</span><span class="op">)</span></span></code></pre></div>
+<p>Use <code><a href="https://dplyr.tidyverse.org/reference/rename.html">rename_with()</a></code> to apply a function to column names — great for bulk cleanup when every column name is SCREAMING AT YOU IN ALL CAPS:</p>
+<div class="sourceCode" id="cb123"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Make all column names lowercase</span></span>
+<span><span class="va">dataname</span> <span class="op">&lt;-</span> <span class="va">dataname</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/rename.html">rename_with</a></span><span class="op">(</span><span class="va">tolower</span><span class="op">)</span></span></code></pre></div>
+</div>
+<div id="renaming-and-collapsing-factor-levels" class="section level2" number="6.6">
+<h2>
+<span class="header-section-number">6.6</span> Renaming and collapsing factor levels<a class="anchor" aria-label="anchor" href="#renaming-and-collapsing-factor-levels"><i class="fas fa-link"></i></a>
+</h2>
+<p>Sometimes the categories in your data need a rebrand. Maybe the marketing team decided “Premium Tier” sounds better than “Segment C,” or maybe you have seventeen product subcategories and your presentation has room for four. Renaming and collapsing factor levels is the data equivalent of reorganizing your company’s org chart — same people, different labels.</p>
+<p>Let us make a copy of the iris dataset to experiment with (always a good idea — never experiment on production data, kids):</p>
+<div class="sourceCode" id="cb124"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">playiris</span><span class="op">=</span><span class="va">iris</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/levels.html">levels</a></span><span class="op">(</span><span class="va">playiris</span><span class="op">$</span><span class="va">Species</span><span class="op">)</span></span>
+<span><span class="co">#&gt; [1] "setosa"     "versicolor" "virginica"</span></span></code></pre></div>
+<p>The <code><a href="https://forcats.tidyverse.org/reference/fct_recode.html">fct_recode()</a></code> function from <strong>forcats</strong> lets you rename specific levels explicitly. It is the safer method because you are being explicit about which label you are changing. It is like addressing a memo to a specific person rather than “whoever is sitting in the third chair”:</p>
+<div class="sourceCode" id="cb125"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://forcats.tidyverse.org/">forcats</a></span><span class="op">)</span></span>
+<span><span class="va">playiris</span><span class="op">$</span><span class="va">Species</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://forcats.tidyverse.org/reference/fct_recode.html">fct_recode</a></span><span class="op">(</span><span class="va">playiris</span><span class="op">$</span><span class="va">Species</span>,</span>
+<span>  <span class="st">"factor3"</span> <span class="op">=</span> <span class="st">"virginica"</span>,</span>
+<span>  <span class="st">"factor2"</span> <span class="op">=</span> <span class="st">"versicolor"</span></span>
+<span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/levels.html">levels</a></span><span class="op">(</span><span class="va">playiris</span><span class="op">$</span><span class="va">Species</span><span class="op">)</span></span>
+<span><span class="co">#&gt; [1] "setosa"  "factor2" "factor3"</span></span></code></pre></div>
+<p>You can also rename all levels at once:</p>
+<div class="sourceCode" id="cb126"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">playiris</span><span class="op">$</span><span class="va">Species</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://forcats.tidyverse.org/reference/fct_recode.html">fct_recode</a></span><span class="op">(</span><span class="va">playiris</span><span class="op">$</span><span class="va">Species</span>,</span>
+<span>  <span class="st">"newlevel1"</span> <span class="op">=</span> <span class="st">"setosa"</span>,</span>
+<span>  <span class="st">"newlevel2"</span> <span class="op">=</span> <span class="st">"factor2"</span>,</span>
+<span>  <span class="st">"newlevel3"</span> <span class="op">=</span> <span class="st">"factor3"</span></span>
+<span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/levels.html">levels</a></span><span class="op">(</span><span class="va">playiris</span><span class="op">$</span><span class="va">Species</span><span class="op">)</span></span>
+<span><span class="co">#&gt; [1] "newlevel1" "newlevel2" "newlevel3"</span></span></code></pre></div>
+<p>When you want to merge several categories into one — say you have “Heavy,” “Regul,” and “Occas” smokers and you want to collapse them all into “Smoker” — use <code><a href="https://forcats.tidyverse.org/reference/fct_collapse.html">fct_collapse()</a></code>:</p>
+<div class="sourceCode" id="cb127"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Example: collapsing multiple levels into fewer groups</span></span>
+<span><span class="va">survey</span><span class="op">$</span><span class="va">Smoke</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://forcats.tidyverse.org/reference/fct_collapse.html">fct_collapse</a></span><span class="op">(</span><span class="va">survey</span><span class="op">$</span><span class="va">Smoke</span>,</span>
+<span>  Smoker <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"Heavy"</span>, <span class="st">"Regul"</span>, <span class="st">"Occas"</span><span class="op">)</span>,</span>
+<span>  NonSmoker <span class="op">=</span> <span class="st">"Never"</span></span>
+<span><span class="op">)</span></span></code></pre></div>
+</div>
+<div id="converting-data-types" class="section level2" number="6.7">
+<h2>
+<span class="header-section-number">6.7</span> Converting data types<a class="anchor" aria-label="anchor" href="#converting-data-types"><i class="fas fa-link"></i></a>
+</h2>
+<p>OK, this section is the broccoli of the chapter — not the most exciting, but absolutely essential for your health as a data analyst. Getting your data types right is non-negotiable because roughly half the errors you will encounter in R boil down to R thinking a variable is one type when you expected another. Spending five minutes here will save you hours of staring at cryptic error messages and questioning your career choices.</p>
+<div id="factor-to-numeric" class="section level3" number="6.7.1">
+<h3>
+<span class="header-section-number">6.7.1</span> Factor to numeric<a class="anchor" aria-label="anchor" href="#factor-to-numeric"><i class="fas fa-link"></i></a>
+</h3>
+<p>This comes in handy when you have a factor variable with numbers as values and you want to treat it as a numeric variable. Imagine a customer satisfaction survey where ratings (1 through 5) got imported as categories instead of numbers. R sees “1” and “5” as labels, not quantities — like seeing jersey numbers on a basketball team. The number 23 does not mean that player is “more” than player 7. This discussion is <a href="https://stackoverflow.com/questions/3418128/how-to-convert-a-factor-to-an-integer-numeric-without-a-loss-of-information">based on this Stack Overflow post.</a></p>
+<p>Let us go back to the <code>playiris</code> dataset. Remember the factor levels?</p>
+<div class="sourceCode" id="cb128"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/levels.html">levels</a></span><span class="op">(</span><span class="va">playiris</span><span class="op">$</span><span class="va">Species</span><span class="op">)</span></span>
+<span><span class="co">#&gt; [1] "newlevel1" "newlevel2" "newlevel3"</span></span></code></pre></div>
+<p>If we summarize the variable, it gives us the number of observations per level — a head count, not a statistical summary:</p>
+<div class="sourceCode" id="cb129"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/summary.html">summary</a></span><span class="op">(</span><span class="va">playiris</span><span class="op">$</span><span class="va">Species</span><span class="op">)</span></span>
+<span><span class="co">#&gt; newlevel1 newlevel2 newlevel3 </span></span>
+<span><span class="co">#&gt;        50        50        50</span></span></code></pre></div>
+<p>Let us convert the level labels to numbers:</p>
+<div class="sourceCode" id="cb130"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/levels.html">levels</a></span><span class="op">(</span><span class="va">playiris</span><span class="op">$</span><span class="va">Species</span><span class="op">)</span><span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"1"</span>,<span class="st">"2"</span>,<span class="st">"3"</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/summary.html">summary</a></span><span class="op">(</span><span class="va">playiris</span><span class="op">$</span><span class="va">Species</span><span class="op">)</span></span>
+<span><span class="co">#&gt;  1  2  3 </span></span>
+<span><span class="co">#&gt; 50 50 50</span></span></code></pre></div>
+<p>Here is the sneaky part. Even though the labels look like numbers now, R is still treating them as categories. It is still counting how many observations fall in each bucket instead of computing a mean. R does not care what the labels look like — it cares about the data type under the hood. It is like putting a “Ferrari” bumper sticker on your Civic: it might say Ferrari, but it is still a Civic. To actually make the switch, you need to explicitly convert:</p>
+<div class="sourceCode" id="cb131"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">playiris</span><span class="op">$</span><span class="va">Species</span><span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/numeric.html">as.numeric</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/levels.html">levels</a></span><span class="op">(</span><span class="va">playiris</span><span class="op">$</span><span class="va">Species</span><span class="op">)</span><span class="op">)</span><span class="op">[</span><span class="va">playiris</span><span class="op">$</span><span class="va">Species</span><span class="op">]</span></span>
+<span><span class="co"># This can also be accomplished by the following.</span></span>
+<span><span class="co"># playiris$Species=as.numeric(as.character(playiris$Species))</span></span></code></pre></div>
+<p>Now if we summarize the variable, we get the real numeric summary — min, max, mean, quartiles, the whole executive dashboard:</p>
+<div class="sourceCode" id="cb132"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/summary.html">summary</a></span><span class="op">(</span><span class="va">playiris</span><span class="op">$</span><span class="va">Species</span><span class="op">)</span></span>
+<span><span class="co">#&gt;    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. </span></span>
+<span><span class="co">#&gt;       1       1       2       2       3       3</span></span></code></pre></div>
+</div>
+<div id="numeric-to-factor---binning-variables" class="section level3" number="6.7.2">
+<h3>
+<span class="header-section-number">6.7.2</span> Numeric to Factor - Binning variables<a class="anchor" aria-label="anchor" href="#numeric-to-factor---binning-variables"><i class="fas fa-link"></i></a>
+</h3>
+<p>Let us re-convert the Species variable back to a factor:</p>
+<div class="sourceCode" id="cb133"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">playiris</span><span class="op">$</span><span class="va">Species</span><span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/factor.html">factor</a></span><span class="op">(</span><span class="va">playiris</span><span class="op">$</span><span class="va">Species</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/summary.html">summary</a></span><span class="op">(</span><span class="va">playiris</span><span class="op">$</span><span class="va">Species</span><span class="op">)</span></span>
+<span><span class="co">#&gt;  1  2  3 </span></span>
+<span><span class="co">#&gt; 50 50 50</span></span></code></pre></div>
+<p>Sometimes you need to go the other direction — take a continuous number and chop it into categories. In business, this is incredibly common and you have probably already seen it without knowing the name for it. Think “low / medium / high revenue customers” or “small / medium / large deal sizes” or the classic credit-score tiers. This process is called binning, and it is one of the most practical things you will learn today.</p>
+<div class="sourceCode" id="cb134"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/summary.html">summary</a></span><span class="op">(</span><span class="va">playiris</span><span class="op">$</span><span class="va">Petal.Length</span><span class="op">)</span></span>
+<span><span class="co">#&gt;    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. </span></span>
+<span><span class="co">#&gt;   1.000   1.600   4.350   3.758   5.100   6.900</span></span></code></pre></div>
+<p>Our goal is to place all observations with <code>Petal.Length</code> at or below the 25th percentile (1.6) as “low” and those above the 75th percentile (5.1) as “high.” Everything in between gets “medium.” Think of it like segmenting your customer base: the bottom 25% by spending are “budget,” the top 25% are “premium,” and everyone else is “standard.” The <code><a href="https://rdrr.io/r/base/cut.html">cut()</a></code> function does the heavy lifting:</p>
+<div class="sourceCode" id="cb135"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">playiris</span><span class="op">$</span><span class="va">Petal.LengthFactor</span><span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/cut.html">cut</a></span><span class="op">(</span><span class="va">playiris</span><span class="op">$</span><span class="va">Petal.Length</span>,breaks <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">1</span>,<span class="fl">1.6</span>,<span class="fl">5.1</span>,<span class="fl">6.9</span><span class="op">)</span>,labels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"low"</span>,<span class="st">"medium"</span>,<span class="st">"high"</span><span class="op">)</span>,include.lowest <span class="op">=</span> <span class="cn">TRUE</span>,ordered_result <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
+<p>Another approach uses nested <code>ifelse</code> statements — a bit harder to read (OK, a lot harder to read), but flexible for custom logic:</p>
+<div class="sourceCode" id="cb136"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">playiris</span><span class="op">$</span><span class="va">Petallength.Factor</span><span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/ifelse.html">ifelse</a></span><span class="op">(</span><span class="va">playiris</span><span class="op">$</span><span class="va">Petal.Length</span><span class="op">&lt;=</span><span class="fl">1.6</span>,<span class="st">"low"</span>,<span class="fu"><a href="https://rdrr.io/r/base/ifelse.html">ifelse</a></span><span class="op">(</span><span class="va">playiris</span><span class="op">$</span><span class="va">Petal.Length</span><span class="op">&gt;</span><span class="fl">5.1</span>,<span class="st">"high"</span>,<span class="st">"medium"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<p>Binning may also be needed to create equal interval bins and equal frequency bins. Please see <a href="https://stackoverflow.com/questions/42037740/equal-frequency-and-equal-width-binning-in-r">this response</a> and <a href="https://stackoverflow.com/questions/5731116/equal-frequency-discretization-in-r/5741495#5741495">this response</a> on Stack Overflow for more details on the possible solutions.</p>
+</div>
+<div id="factor-and-numeric-to-character-and-vice-versa" class="section level3" number="6.7.3">
+<h3>
+<span class="header-section-number">6.7.3</span> Factor and Numeric to Character and vice versa<a class="anchor" aria-label="anchor" href="#factor-and-numeric-to-character-and-vice-versa"><i class="fas fa-link"></i></a>
+</h3>
+<p>There are times when you need your values as plain text — maybe for string matching, text mining, or just to get a clean CSV export for that one colleague who insists on doing everything in Excel. Converting between data types is like exchanging currency: the underlying value stays the same, but the format matters depending on where you are trying to spend it.</p>
+<p>Let us look at the structure of our playground dataset:</p>
+<div class="sourceCode" id="cb137"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/str.html">str</a></span><span class="op">(</span><span class="va">playiris</span><span class="op">)</span></span>
+<span><span class="co">#&gt; 'data.frame':    150 obs. of  7 variables:</span></span>
+<span><span class="co">#&gt;  $ Sepal.Length      : num  5.1 4.9 4.7 4.6 5 5.4 4.6 5 4.4 4.9 ...</span></span>
+<span><span class="co">#&gt;  $ Sepal.Width       : num  3.5 3 3.2 3.1 3.6 3.9 3.4 3.4 2.9 3.1 ...</span></span>
+<span><span class="co">#&gt;  $ Petal.Length      : num  1.4 1.4 1.3 1.5 1.4 1.7 1.4 1.5 1.4 1.5 ...</span></span>
+<span><span class="co">#&gt;  $ Petal.Width       : num  0.2 0.2 0.2 0.2 0.2 0.4 0.3 0.2 0.2 0.1 ...</span></span>
+<span><span class="co">#&gt;  $ Species           : Factor w/ 3 levels "1","2","3": 1 1 1 1 1 1 1 1 1 1 ...</span></span>
+<span><span class="co">#&gt;  $ Petal.LengthFactor: Ord.factor w/ 3 levels "low"&lt;"medium"&lt;..: 1 1 1 1 1 2 1 1 1 1 ...</span></span>
+<span><span class="co">#&gt;  $ Petallength.Factor: chr  "low" "low" "low" "low" ...</span></span></code></pre></div>
+<p>Convert <code>Species</code> and <code>Petal.LengthFactor</code> to character variables:</p>
+<div class="sourceCode" id="cb138"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">playiris</span><span class="op">$</span><span class="va">Species</span><span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/character.html">as.character</a></span><span class="op">(</span><span class="va">playiris</span><span class="op">$</span><span class="va">Species</span><span class="op">)</span></span>
+<span><span class="va">playiris</span><span class="op">$</span><span class="va">Petal.LengthFactor</span><span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/character.html">as.character</a></span><span class="op">(</span><span class="va">playiris</span><span class="op">$</span><span class="va">Petal.LengthFactor</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/utils/str.html">str</a></span><span class="op">(</span><span class="va">playiris</span><span class="op">)</span></span>
+<span><span class="co">#&gt; 'data.frame':    150 obs. of  7 variables:</span></span>
+<span><span class="co">#&gt;  $ Sepal.Length      : num  5.1 4.9 4.7 4.6 5 5.4 4.6 5 4.4 4.9 ...</span></span>
+<span><span class="co">#&gt;  $ Sepal.Width       : num  3.5 3 3.2 3.1 3.6 3.9 3.4 3.4 2.9 3.1 ...</span></span>
+<span><span class="co">#&gt;  $ Petal.Length      : num  1.4 1.4 1.3 1.5 1.4 1.7 1.4 1.5 1.4 1.5 ...</span></span>
+<span><span class="co">#&gt;  $ Petal.Width       : num  0.2 0.2 0.2 0.2 0.2 0.4 0.3 0.2 0.2 0.1 ...</span></span>
+<span><span class="co">#&gt;  $ Species           : chr  "1" "1" "1" "1" ...</span></span>
+<span><span class="co">#&gt;  $ Petal.LengthFactor: chr  "low" "low" "low" "low" ...</span></span>
+<span><span class="co">#&gt;  $ Petallength.Factor: chr  "low" "low" "low" "low" ...</span></span></code></pre></div>
+<p>The results confirm our conversion worked. Converting them back to factors or numeric is straightforward — just use the corresponding <code>as.*</code> function. Think of it as a round trip: you can always convert back.</p>
+<div class="sourceCode" id="cb139"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">playiris</span><span class="op">$</span><span class="va">Species</span><span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/numeric.html">as.numeric</a></span><span class="op">(</span><span class="va">playiris</span><span class="op">$</span><span class="va">Species</span><span class="op">)</span></span>
+<span><span class="va">playiris</span><span class="op">$</span><span class="va">Petal.LengthFactor</span><span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/factor.html">as.factor</a></span><span class="op">(</span><span class="va">playiris</span><span class="op">$</span><span class="va">Petal.LengthFactor</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/utils/str.html">str</a></span><span class="op">(</span><span class="va">playiris</span><span class="op">)</span></span>
+<span><span class="co">#&gt; 'data.frame':    150 obs. of  7 variables:</span></span>
+<span><span class="co">#&gt;  $ Sepal.Length      : num  5.1 4.9 4.7 4.6 5 5.4 4.6 5 4.4 4.9 ...</span></span>
+<span><span class="co">#&gt;  $ Sepal.Width       : num  3.5 3 3.2 3.1 3.6 3.9 3.4 3.4 2.9 3.1 ...</span></span>
+<span><span class="co">#&gt;  $ Petal.Length      : num  1.4 1.4 1.3 1.5 1.4 1.7 1.4 1.5 1.4 1.5 ...</span></span>
+<span><span class="co">#&gt;  $ Petal.Width       : num  0.2 0.2 0.2 0.2 0.2 0.4 0.3 0.2 0.2 0.1 ...</span></span>
+<span><span class="co">#&gt;  $ Species           : num  1 1 1 1 1 1 1 1 1 1 ...</span></span>
+<span><span class="co">#&gt;  $ Petal.LengthFactor: Factor w/ 3 levels "high","low","medium": 2 2 2 2 2 3 2 2 2 2 ...</span></span>
+<span><span class="co">#&gt;  $ Petallength.Factor: chr  "low" "low" "low" "low" ...</span></span></code></pre></div>
+<p>The following diagram summarizes the conversion paths between factor, numeric, and character variables. Bookmark this one — you will come back to it more often than you think.</p>
+<div class="inline-figure"><img src="04files/conversion.png"></div>
 
-    <div class="book-body">
-      <div class="body-inner">
-        <div class="book-header" role="navigation">
-          <h1>
-            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Basic Insights from Data for Marketing Researchers</a>
-          </h1>
-        </div>
-
-        <div class="page-wrapper" tabindex="-1" role="main">
-          <div class="page-inner">
-
-            <section class="normal" id="section-">
-<div id="modifydata" class="section level1">
-<h1><span class="header-section-number">Chapter 4</span> Modifying Data</h1>
-<div id="creating-new-variables" class="section level2">
-<h2><span class="header-section-number">4.1</span> Creating new variables</h2>
-<p>We can create new variables that result from manipulations of existing variables. For example, if we wanted to create a variable in the <code>iris</code> dataset that was a sum of the variables <code>Sepal.Length</code> and <code>Sepal.Width</code> and we wanted to call it <code>Sepal.dimensions</code>, we could code it as follows.</p>
-<pre class="sourceCode r"><code class="sourceCode r">iris<span class="op">$</span>Sepal.dimensions=iris<span class="op">$</span>Sepal.Length <span class="op">+</span><span class="st"> </span>iris<span class="op">$</span>Sepal.Width</code></pre>
-<p>There might be instances where we might decide to not create new variables and modify existing variable values. In such a case, we would use the same variable name on the left hand side of the equation shown above. Thus, the line of code would now become</p>
-<pre class="sourceCode r"><code class="sourceCode r">iris<span class="op">$</span>Sepal.Length=<span class="st"> </span>iris<span class="op">$</span>Sepal.Length <span class="op">+</span><span class="st"> </span>iris<span class="op">$</span>Sepal.Width</code></pre>
-</div>
-<div id="subsetting-data-and-dropping-factor-levels" class="section level2">
-<h2><span class="header-section-number">4.2</span> Subsetting data and dropping factor levels</h2>
-<p>This creates a subset of <code>iris</code> such that <code>Sepal.Length</code> is greater than or equal to 5.8.</p>
-<pre class="sourceCode r"><code class="sourceCode r">irisSubset1=iris[iris<span class="op">$</span>Sepal.Length<span class="op">&gt;=</span><span class="fl">5.8</span>,]
-<span class="kw">summary</span>(irisSubset1<span class="op">$</span>Sepal.Length)</code></pre>
-<pre><code>##    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
-##   5.800   6.100   6.400   6.509   6.800   7.900</code></pre>
-<p>Multiple conditions can also be introduced for subsetting.</p>
-<pre class="sourceCode r"><code class="sourceCode r">irisSubset2=iris[iris<span class="op">$</span>Sepal.Length<span class="op">&gt;=</span><span class="fl">5.8</span> <span class="op">&amp;</span><span class="st"> </span>iris<span class="op">$</span>Sepal.Width<span class="op">&lt;</span><span class="dv">3</span>,]
-<span class="kw">summary</span>(irisSubset2)</code></pre>
-<pre><code>##   Sepal.Length   Sepal.Width     Petal.Length   Petal.Width   
-##  Min.   :5.80   Min.   :2.200   Min.   :3.90   Min.   :1.000  
-##  1st Qu.:6.00   1st Qu.:2.600   1st Qu.:4.50   1st Qu.:1.300  
-##  Median :6.30   Median :2.800   Median :4.90   Median :1.500  
-##  Mean   :6.34   Mean   :2.691   Mean   :5.00   Mean   :1.611  
-##  3rd Qu.:6.40   3rd Qu.:2.800   3rd Qu.:5.45   3rd Qu.:1.900  
-##  Max.   :7.70   Max.   :2.900   Max.   :6.90   Max.   :2.400  
-##        Species  
-##  setosa    : 0  
-##  versicolor:17  
-##  virginica :18  
-##                 
-##                 
-## </code></pre>
-<p>Subsetting based on a factor variable could be done using a different approach. The following line of code creates a subset of the <code>iris</code> dataset that has only two types of Species - setosa and versicolor.</p>
-<pre class="sourceCode r"><code class="sourceCode r">irisSubset3=<span class="kw">subset</span>(iris,Species <span class="op">%in%</span><span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;setosa&quot;</span>,<span class="st">&quot;versicolor&quot;</span>))
-<span class="co"># This can also be accomplished by the following statement</span>
-<span class="co"># irisSubset3=iris[iris$Species!=&quot;virginica&quot;,]</span></code></pre>
-<p>Let’s verify that we indeed have only two levels of the <code>Species</code> variable.</p>
-<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">summary</span>(irisSubset3<span class="op">$</span>Species)</code></pre>
-<pre><code>##     setosa versicolor  virginica 
-##         50         50          0</code></pre>
-<p>Please note since we excluded <code>virginica</code>, the resulting dataset, <code>irisSubset3</code> does not have any observations from that <code>Species</code>. However, that factor level is still shown with 0 observations. To drop that factor level, we would just re-factor it.</p>
-<pre class="sourceCode r"><code class="sourceCode r">irisSubset3<span class="op">$</span>Species=<span class="kw">factor</span>(irisSubset3<span class="op">$</span>Species)</code></pre>
-<p>Let’s verify that the earlier statement did its job.</p>
-<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">summary</span>(irisSubset3<span class="op">$</span>Species)</code></pre>
-<pre><code>##     setosa versicolor 
-##         50         50</code></pre>
-</div>
-<div id="reordering-factor-levels" class="section level2">
-<h2><span class="header-section-number">4.3</span> Reordering factor levels</h2>
-<p>There may be instances where we may want the order the factor levels of a variable in a difference sequence than the default one. This can be accomplished using the following procedure.</p>
-<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">levels</span>(iris<span class="op">$</span>Species)</code></pre>
-<pre><code>## [1] &quot;setosa&quot;     &quot;versicolor&quot; &quot;virginica&quot;</code></pre>
-<p>The default sequence is <code>setosa</code>, <code>versicolor</code>, and <code>virginica</code>. Let’s reverse the sequence.</p>
-<pre class="sourceCode r"><code class="sourceCode r">iris<span class="op">$</span>Species =<span class="st"> </span><span class="kw">factor</span>(iris<span class="op">$</span>Species,<span class="kw">levels</span>(iris<span class="op">$</span>Species)[<span class="kw">c</span>(<span class="dv">3</span>,<span class="dv">2</span>,<span class="dv">1</span>)])</code></pre>
-<p>By specifying the sequence, the earlier third level now becomes the first, the second level remains unchanged, and the new third level is the earlier first level. Let’s verify if this indeed occurred.</p>
-<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">levels</span>(iris<span class="op">$</span>Species)</code></pre>
-<pre><code>## [1] &quot;virginica&quot;  &quot;versicolor&quot; &quot;setosa&quot;</code></pre>
-</div>
-<div id="reordering-dataset-entries" class="section level2">
-<h2><span class="header-section-number">4.4</span> Reordering dataset entries</h2>
-<p>If there was a need to rearrange entries of a dataframe based on either an ascending or a descending order of values of one or more columns, the <code>order</code> function comes in handy.</p>
-<p>For example, the <code>Sepal.Length</code> of the first row of the <code>iris</code> dataset can be obtained using the following command.</p>
-<pre class="sourceCode r"><code class="sourceCode r">iris<span class="op">$</span>Sepal.Length[<span class="dv">1</span>]</code></pre>
-<pre><code>## [1] 5.1</code></pre>
-<p>We also know that the range of the <code>Sepal.Length</code> variable can be obtained using the following.</p>
-<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">range</span>(iris<span class="op">$</span>Sepal.Length)</code></pre>
-<pre><code>## [1] 4.3 7.9</code></pre>
-<p>If we now wanted to rearrange the rows of the iris dataset in an ascending order of <code>Sepal.Length</code>, we can do it in the following manner.</p>
-<pre class="sourceCode r"><code class="sourceCode r">ascendingiris=iris[<span class="kw">order</span>(iris<span class="op">$</span>Sepal.Length),]
-<span class="kw">head</span>(ascendingiris<span class="op">$</span>Sepal.Length)</code></pre>
-<pre><code>## [1] 4.3 4.4 4.4 4.4 4.5 4.6</code></pre>
-<p>For a descending order, we do the following.</p>
-<pre class="sourceCode r"><code class="sourceCode r">descendingiris=iris[<span class="kw">order</span>(<span class="op">-</span>iris<span class="op">$</span>Sepal.Length),]
-<span class="kw">head</span>(descendingiris<span class="op">$</span>Sepal.Length)</code></pre>
-<pre><code>## [1] 7.9 7.7 7.7 7.7 7.7 7.6</code></pre>
-</div>
-<div id="changing-column-names" class="section level2">
-<h2><span class="header-section-number">4.5</span> Changing column names</h2>
-<p>Current names of columns in dataset</p>
-<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">names</span>(irisSubset3)</code></pre>
-<pre><code>## [1] &quot;Sepal.Length&quot; &quot;Sepal.Width&quot;  &quot;Petal.Length&quot; &quot;Petal.Width&quot; 
-## [5] &quot;Species&quot;</code></pre>
-<p>Rename the <code>Species</code> column</p>
-<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">names</span>(irisSubset3)[<span class="dv">5</span>]=<span class="st">&quot;SpeciesWithoutvirginica&quot;</span>
-<span class="kw">names</span>(irisSubset3)</code></pre>
-<pre><code>## [1] &quot;Sepal.Length&quot;            &quot;Sepal.Width&quot;            
-## [3] &quot;Petal.Length&quot;            &quot;Petal.Width&quot;            
-## [5] &quot;SpeciesWithoutvirginica&quot;</code></pre>
-<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">names</span>(dataname)=<span class="kw">c</span>(<span class="st">&quot;newcol1&quot;</span>,<span class="st">&quot;newcol2&quot;</span>,<span class="st">&quot;newcol3&quot;</span>) <span class="co"># for a 3 column dataset</span>
-<span class="kw">names</span>(dataname)[<span class="dv">3</span>]=<span class="st">&quot;latestcol3name&quot;</span> <span class="co"># changing name for only the third column</span></code></pre>
-<p>Alternately, the <code>rename</code> function from the <code>dplyr</code> package can be used.</p>
-<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(dplyr)
-dataname=dataname <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">rename</span>(<span class="dt">newnamecol1=</span>oldnamecol1,<span class="dt">newnamecol2=</span>oldnamecol2)</code></pre>
-</div>
-<div id="renamingcollapsing-factor-levels" class="section level2">
-<h2><span class="header-section-number">4.6</span> Renaming/Collapsing factor levels</h2>
-<p>If we wanted to change the labels/values of a factor variable, then we have to alter the variable’s factor levels. (Alternately, one can convert the factor variable into a character variable and then make the change.) The following discussion permits us to collapse factor levels into fewer levels as well. Let us make a copy of the iris dataset to play around with the Species variable.</p>
-<pre class="sourceCode r"><code class="sourceCode r">playiris=iris
-<span class="kw">levels</span>(playiris<span class="op">$</span>Species)</code></pre>
-<pre><code>## [1] &quot;virginica&quot;  &quot;versicolor&quot; &quot;setosa&quot;</code></pre>
-<p>Please know the sequence in which the factor levels are presented. In the next step, we change the label <code>virginica</code> to <code>factor3</code> and <code>versicolor</code> to <code>factor 2</code> using two different approaches.</p>
-<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">levels</span>(playiris<span class="op">$</span>Species)[<span class="kw">levels</span>(playiris<span class="op">$</span>Species)<span class="op">==</span><span class="st">&quot;virginica&quot;</span>]=<span class="st">&quot;factor3&quot;</span>
-<span class="kw">levels</span>(playiris<span class="op">$</span>Species)</code></pre>
-<pre><code>## [1] &quot;factor3&quot;    &quot;versicolor&quot; &quot;setosa&quot;</code></pre>
-<p>In the next approach, we use the fact that the label <code>versicolor</code> that we are changing to <code>factor2</code> is the second factor level.</p>
-<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">levels</span>(playiris<span class="op">$</span>Species)[<span class="dv">2</span>]=<span class="st">&quot;factor2&quot;</span>
-<span class="kw">levels</span>(playiris<span class="op">$</span>Species)</code></pre>
-<pre><code>## [1] &quot;factor3&quot; &quot;factor2&quot; &quot;setosa&quot;</code></pre>
-<p>We can always rename all levels simultaneously using the following approach.</p>
-<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">levels</span>(playiris<span class="op">$</span>Species)=<span class="kw">c</span>(<span class="st">&quot;newlevel1&quot;</span>,<span class="st">&quot;newlevel2&quot;</span>,<span class="st">&quot;newlevel3&quot;</span>)
-<span class="kw">levels</span>(playiris<span class="op">$</span>Species)</code></pre>
-<pre><code>## [1] &quot;newlevel1&quot; &quot;newlevel2&quot; &quot;newlevel3&quot;</code></pre>
-</div>
-<div id="converting-data-types" class="section level2">
-<h2><span class="header-section-number">4.7</span> Converting data types</h2>
-<div id="factor-to-numeric" class="section level3">
-<h3><span class="header-section-number">4.7.1</span> Factor to numeric</h3>
-<p>This comes in handy when we have a factor variable with numbers as values and we want to treat the variable as a numeric variable. This discussion is <a href="http://stackoverflow.com/questions/3418128/how-to-convert-a-factor-to-an-integer-numeric-without-a-loss-of-information">based on this Stack Overflow post.</a></p>
-<p>Let us go back to the <code>playiris</code> dataset. Remember the factor levels of the <code>Species</code> variable?</p>
-<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">levels</span>(playiris<span class="op">$</span>Species)</code></pre>
-<pre><code>## [1] &quot;newlevel1&quot; &quot;newlevel2&quot; &quot;newlevel3&quot;</code></pre>
-<p>If we summarized the variable, it will give the number of observations with each level of <code>Species</code>.</p>
-<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">summary</span>(playiris<span class="op">$</span>Species)</code></pre>
-<pre><code>## newlevel1 newlevel2 newlevel3 
-##        50        50        50</code></pre>
-<p>Let us convert the levels of the variables to numbers using the approach we used previously.</p>
-<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">levels</span>(playiris<span class="op">$</span>Species)=<span class="kw">c</span>(<span class="st">&quot;1&quot;</span>,<span class="st">&quot;2&quot;</span>,<span class="st">&quot;3&quot;</span>)
-<span class="kw">summary</span>(playiris<span class="op">$</span>Species)</code></pre>
-<pre><code>##  1  2  3 
-## 50 50 50</code></pre>
-<p>This is insightful. Even though we have numbers as values for the <code>Species</code> variable, R is counting the number of observations with each value, instead of summarizing the variable with numeric values. To make the change, we have to convert that variable to a numeric variable.</p>
-<pre class="sourceCode r"><code class="sourceCode r">playiris<span class="op">$</span>Species=<span class="kw">as.numeric</span>(<span class="kw">levels</span>(playiris<span class="op">$</span>Species))[playiris<span class="op">$</span>Species] 
-<span class="co"># This can also be accomplished by the following.</span>
-<span class="co"># playiris$Species=as.numeric(as.character(playiris$Species))</span></code></pre>
-<p>Now, if we summarize the variable, we should get information on the min, max, mean and other summary statistics associated with numeric variables.</p>
-<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">summary</span>(playiris<span class="op">$</span>Species)</code></pre>
-<pre><code>##    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
-##       1       1       2       2       3       3</code></pre>
-</div>
-<div id="numeric-to-factor---binning-variables" class="section level3">
-<h3><span class="header-section-number">4.7.2</span> Numeric to Factor - Binning variables</h3>
-<p>Let us re-convert the Species variable to a factor variable - with numbers as values.</p>
-<pre class="sourceCode r"><code class="sourceCode r">playiris<span class="op">$</span>Species=<span class="kw">factor</span>(playiris<span class="op">$</span>Species)
-<span class="kw">summary</span>(playiris<span class="op">$</span>Species)</code></pre>
-<pre><code>##  1  2  3 
-## 50 50 50</code></pre>
-<p>Some times, we might have to create factor levels based on numeric values. For example, we might want to create three levels of the Petal length variable - low, medium and high.</p>
-<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">summary</span>(playiris<span class="op">$</span>Petal.Length)</code></pre>
-<pre><code>##    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
-##   1.000   1.600   4.350   3.758   5.100   6.900</code></pre>
-<p>Our goal is to place all observations with <code>Petal.Length</code> less than or equal to the 25th percentile value (1st quartile) of 1.6 as “low” and those greater than 5.1 (75th percentile value, 3rd quartile) as “high”. The rest of the observations get a value of “medium”. Instead of overwriting the</p>
-<pre class="sourceCode r"><code class="sourceCode r">playiris<span class="op">$</span>Petal.LengthFactor=<span class="kw">cut</span>(playiris<span class="op">$</span>Petal.Length,<span class="dt">breaks =</span> <span class="kw">c</span>(<span class="dv">1</span>,<span class="fl">1.6</span>,<span class="fl">5.1</span>,<span class="fl">6.9</span>),<span class="dt">labels =</span> <span class="kw">c</span>(<span class="st">&quot;low&quot;</span>,<span class="st">&quot;medium&quot;</span>,<span class="st">&quot;high&quot;</span>),<span class="dt">include.lowest =</span> <span class="ot">TRUE</span>,<span class="dt">ordered_result =</span> <span class="ot">TRUE</span>)</code></pre>
-<p>Another approach involves using if_else statement(s)</p>
-<pre class="sourceCode r"><code class="sourceCode r">playiris<span class="op">$</span>Petallength.Factor=<span class="kw">ifelse</span>(playiris<span class="op">$</span>Petal.Length<span class="op">&lt;=</span><span class="fl">1.6</span>,<span class="st">&quot;low&quot;</span>,<span class="kw">ifelse</span>(playiris<span class="op">$</span>Petal.Length<span class="op">&gt;</span><span class="fl">5.1</span>,<span class="st">&quot;high&quot;</span>,<span class="st">&quot;medium&quot;</span>))</code></pre>
-<p>Binning may also be needed to create equal interval bins and equal frequency bins. Please see <a href="https://stackoverflow.com/questions/42037740/equal-frequency-and-equal-width-binning-in-r">this response</a> and <a href="https://stackoverflow.com/questions/5731116/equal-frequency-discretization-in-r/5741495#5741495">this response</a> on Stack OVerflow for more details on the possible solutions.</p>
-</div>
-<div id="factor-and-numeric-to-character-and-vice-versa" class="section level3">
-<h3><span class="header-section-number">4.7.3</span> Factor and Numeric to Character and vice versa</h3>
-<p>There are times when we might want values of a column to be in a character format. For example, this may be necessary if we wanted to replace string patterns in the levels of factor variables or for text-mining purposes. In such cases, we can convert factor or numeric variables to character variables.</p>
-<p>Let us take a look at the structure of the playiris dataset.</p>
-<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">str</span>(playiris)</code></pre>
-<pre><code>## &#39;data.frame&#39;:    150 obs. of  7 variables:
-##  $ Sepal.Length      : num  5.1 4.9 4.7 4.6 5 5.4 4.6 5 4.4 4.9 ...
-##  $ Sepal.Width       : num  3.5 3 3.2 3.1 3.6 3.9 3.4 3.4 2.9 3.1 ...
-##  $ Petal.Length      : num  1.4 1.4 1.3 1.5 1.4 1.7 1.4 1.5 1.4 1.5 ...
-##  $ Petal.Width       : num  0.2 0.2 0.2 0.2 0.2 0.4 0.3 0.2 0.2 0.1 ...
-##  $ Species           : Factor w/ 3 levels &quot;1&quot;,&quot;2&quot;,&quot;3&quot;: 3 3 3 3 3 3 3 3 3 3 ...
-##  $ Petal.LengthFactor: Ord.factor w/ 3 levels &quot;low&quot;&lt;&quot;medium&quot;&lt;..: 1 1 1 1 1 2 1 1 1 1 ...
-##  $ Petallength.Factor: chr  &quot;low&quot; &quot;low&quot; &quot;low&quot; &quot;low&quot; ...</code></pre>
-<p>Let us convert <code>Species</code> and <code>Petal.LengthFactor</code> to character variables</p>
-<pre class="sourceCode r"><code class="sourceCode r">playiris<span class="op">$</span>Species=<span class="kw">as.character</span>(playiris<span class="op">$</span>Species)
-playiris<span class="op">$</span>Petal.LengthFactor=<span class="kw">as.character</span>(playiris<span class="op">$</span>Petal.LengthFactor)
-<span class="kw">str</span>(playiris)</code></pre>
-<pre><code>## &#39;data.frame&#39;:    150 obs. of  7 variables:
-##  $ Sepal.Length      : num  5.1 4.9 4.7 4.6 5 5.4 4.6 5 4.4 4.9 ...
-##  $ Sepal.Width       : num  3.5 3 3.2 3.1 3.6 3.9 3.4 3.4 2.9 3.1 ...
-##  $ Petal.Length      : num  1.4 1.4 1.3 1.5 1.4 1.7 1.4 1.5 1.4 1.5 ...
-##  $ Petal.Width       : num  0.2 0.2 0.2 0.2 0.2 0.4 0.3 0.2 0.2 0.1 ...
-##  $ Species           : chr  &quot;3&quot; &quot;3&quot; &quot;3&quot; &quot;3&quot; ...
-##  $ Petal.LengthFactor: chr  &quot;low&quot; &quot;low&quot; &quot;low&quot; &quot;low&quot; ...
-##  $ Petallength.Factor: chr  &quot;low&quot; &quot;low&quot; &quot;low&quot; &quot;low&quot; ...</code></pre>
-<p>The results indicate that our conversion worked. Converting these back to factors or numeric is as simple as doing the following.</p>
-<pre class="sourceCode r"><code class="sourceCode r">playiris<span class="op">$</span>Species=<span class="kw">as.numeric</span>(playiris<span class="op">$</span>Species)
-playiris<span class="op">$</span>Petal.LengthFactor=<span class="kw">as.factor</span>(playiris<span class="op">$</span>Petal.LengthFactor)
-<span class="kw">str</span>(playiris)</code></pre>
-<pre><code>## &#39;data.frame&#39;:    150 obs. of  7 variables:
-##  $ Sepal.Length      : num  5.1 4.9 4.7 4.6 5 5.4 4.6 5 4.4 4.9 ...
-##  $ Sepal.Width       : num  3.5 3 3.2 3.1 3.6 3.9 3.4 3.4 2.9 3.1 ...
-##  $ Petal.Length      : num  1.4 1.4 1.3 1.5 1.4 1.7 1.4 1.5 1.4 1.5 ...
-##  $ Petal.Width       : num  0.2 0.2 0.2 0.2 0.2 0.4 0.3 0.2 0.2 0.1 ...
-##  $ Species           : num  3 3 3 3 3 3 3 3 3 3 ...
-##  $ Petal.LengthFactor: Factor w/ 3 levels &quot;high&quot;,&quot;low&quot;,&quot;medium&quot;: 2 2 2 2 2 3 2 2 2 2 ...
-##  $ Petallength.Factor: chr  &quot;low&quot; &quot;low&quot; &quot;low&quot; &quot;low&quot; ...</code></pre>
-<p>The following summarizes our discussion about converting data types, especially among factor, numeric, and character variables.</p>
-<p><img src="04files/conversion.png"></p>
-
 </div>
 </div>
 </div>
-            </section>
-
-          </div>
-        </div>
-      </div>
-<a href="describedata.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
-<a href="summarystats.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
-    </div>
-  </div>
-<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
-<script src="libs/gitbook-2.6.7/js/lunr.js"></script>
-<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
-<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
-<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
-<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
-<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
 <script>
-gitbook.require(["gitbook"], function(gitbook) {
-gitbook.start({
-"sharing": {
-"github": false,
-"facebook": true,
-"twitter": true,
-"google": false,
-"linkedin": false,
-"weibo": false,
-"instapaper": false,
-"vk": false,
-"all": ["facebook", "google", "twitter", "linkedin", "weibo", "instapaper"]
-},
-"fontsettings": {
-"theme": "white",
-"family": "sans",
-"size": 2
-},
-"edit": {
-"link": null,
-"text": null
-},
-"history": {
-"link": null,
-"text": null
-},
-"download": null,
-"toc": {
-"collapse": "subsection"
-},
-"collapse": "section",
-"scroll_highlight": true,
-"toolbar": {
-"position": "fixed"
-},
-"search": true
+document.addEventListener("DOMContentLoaded", function() {
+  var sidebar = document.querySelector(".sidebar-book");
+  if (!sidebar) return;
+
+  // Create a slim tab on the left edge — visible, unobtrusive, clearly a toggle
+  var btn = document.createElement("button");
+  btn.innerHTML = '&#9776; Contents';
+  btn.setAttribute("aria-label", "Toggle table of contents");
+  btn.id = "sidebar-toggle-btn";
+  document.body.appendChild(btn);
+
+  var isOpen = false;
+
+  function openSidebar() {
+    isOpen = true;
+    sidebar.classList.add("sidebar-open");
+    btn.innerHTML = '&times; Close';
+    btn.classList.add("sidebar-toggle-active");
+  }
+
+  function closeSidebar() {
+    isOpen = false;
+    sidebar.classList.remove("sidebar-open");
+    btn.innerHTML = '&#9776; Contents';
+    btn.classList.remove("sidebar-toggle-active");
+  }
+
+  btn.addEventListener("click", function(e) {
+    e.stopPropagation();
+    if (isOpen) { closeSidebar(); } else { openSidebar(); }
+  });
+
+  // Close when clicking outside
+  document.addEventListener("click", function(e) {
+    if (isOpen && !sidebar.contains(e.target) && e.target !== btn) {
+      closeSidebar();
+    }
+  });
+
+  // Close on Escape key
+  document.addEventListener("keydown", function(e) {
+    if (e.key === "Escape" && isOpen) { closeSidebar(); }
+  });
+
+  // Only activate on wide screens
+  function checkWidth() {
+    if (window.innerWidth >= 992) {
+      btn.style.display = "flex";
+      sidebar.classList.add("sidebar-collapsed");
+    } else {
+      btn.style.display = "none";
+      sidebar.classList.remove("sidebar-collapsed");
+      sidebar.classList.remove("sidebar-open");
+    }
+  }
+
+  window.addEventListener("resize", checkWidth);
+  checkWidth();
 });
-});
+</script><div class="chapter-nav">
+<div class="prev"><a href="describedata.html"><span class="header-section-number">5</span> Describing Data</a></div>
+<div class="next"><a href="dplyr.html"><span class="header-section-number">7</span> Data Wrangling with dplyr</a></div>
+</div></main><div class="col-md-3 col-lg-2 d-none d-md-block sidebar sidebar-chapter">
+    <nav id="toc" data-toggle="toc" aria-label="On this page"><h2>On this page</h2>
+      <ul class="nav navbar-nav">
+<li><a class="nav-link" href="#modifydata"><span class="header-section-number">6</span> Modifying Data</a></li>
+<li><a class="nav-link" href="#creating-new-variables"><span class="header-section-number">6.1</span> Creating new variables</a></li>
+<li><a class="nav-link" href="#subsetting-data-and-dropping-factor-levels"><span class="header-section-number">6.2</span> Subsetting data and dropping factor levels</a></li>
+<li><a class="nav-link" href="#reordering-factor-levels"><span class="header-section-number">6.3</span> Reordering factor levels</a></li>
+<li><a class="nav-link" href="#reordering-dataset-entries"><span class="header-section-number">6.4</span> Reordering dataset entries</a></li>
+<li><a class="nav-link" href="#changing-column-names"><span class="header-section-number">6.5</span> Changing column names</a></li>
+<li><a class="nav-link" href="#renaming-and-collapsing-factor-levels"><span class="header-section-number">6.6</span> Renaming and collapsing factor levels</a></li>
+<li>
+<a class="nav-link" href="#converting-data-types"><span class="header-section-number">6.7</span> Converting data types</a><ul class="nav navbar-nav">
+<li><a class="nav-link" href="#factor-to-numeric"><span class="header-section-number">6.7.1</span> Factor to numeric</a></li>
+<li><a class="nav-link" href="#numeric-to-factor---binning-variables"><span class="header-section-number">6.7.2</span> Numeric to Factor - Binning variables</a></li>
+<li><a class="nav-link" href="#factor-and-numeric-to-character-and-vice-versa"><span class="header-section-number">6.7.3</span> Factor and Numeric to Character and vice versa</a></li>
+</ul>
+</li>
+</ul>
+
+      <div class="book-extra">
+        <ul class="list-unstyled">
+          
+        </ul>
+</div>
+    </nav>
+</div>
+
+</div>
+</div> <!-- .container -->
+
+<footer class="bg-primary text-light mt-5"><div class="container"><div class="row">
+
+  <div class="col-12 col-md-6 mt-3">
+    <p>"<strong>R and the Tidyverse: A Beginner’s Guide</strong>" was written by Vivek H. Patil. It was last built on 2026-02-27.</p>
+  </div>
+
+  <div class="col-12 col-md-6 mt-3">
+    <p>This book was built by the <a class="text-light" href="https://bookdown.org">bookdown</a> R package.</p>
+  </div>
+
+</div></div>
+</footer><!-- dynamically load mathjax for compatibility with self-contained --><script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "true";
+    if (src === "" || src === "true") src = "https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.9/latest.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:")
+      if (/^https?:/.test(src))
+        src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script><script type="text/x-mathjax-config">const popovers = document.querySelectorAll('a.footnote-ref[data-toggle="popover"]');
+for (let popover of popovers) {
+  const div = document.createElement('div');
+  div.setAttribute('style', 'position: absolute; top: 0, left:0; width:0, height:0, overflow: hidden; visibility: hidden;');
+  div.innerHTML = popover.getAttribute('data-content');
+
+  var has_math = div.querySelector("span.math");
+  if (has_math) {
+    document.body.appendChild(div);
+    MathJax.Hub.Queue(["Typeset", MathJax.Hub, div]);
+    MathJax.Hub.Queue(function() {
+      popover.setAttribute('data-content', div.innerHTML);
+      document.body.removeChild(div);
+    })
+  }
+}
 </script>
-
 </body>
-
 </html>

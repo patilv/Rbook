@@ -2,7 +2,8 @@
 
 ```{r include=FALSE}
 library(tidyverse)
-opts_chunk$set(echo=TRUE, warning=FALSE, message=FALSE)
+library(plotly)
+knitr::opts_chunk$set(echo=TRUE, warning=FALSE, message=FALSE)
 ```
 
 Now we are getting to the good stuff. Analyzing one variable at a time is like judging a basketball player by their height alone --- useful, but you are missing the whole picture. The real magic of data analysis happens when you start asking "how do these variables relate to each other?" This is where you go from describing your data to actually understanding it, and it is where the questions that keep business leaders up at night finally get answers:
@@ -12,7 +13,7 @@ Now we are getting to the good stuff. Analyzing one variable at a time is like j
 - Does customer satisfaction differ across our three service tiers? (ANOVA)
 - Is there a relationship between customer region and product preference? (Chi-square test of independence)
 
-This chapter covers bivariate and multivariate analysis --- fancy words for "looking at two or more variables at the same time and seeing what shakes out." We include both base R and ggplot2 visualizations throughout. For the full ggplot2 experience, see Chapters \@ref(ggplot2basics) and \@ref(ggplot2customize).
+This chapter covers bivariate and multivariate analysis --- fancy words for "looking at two or more variables at the same time and seeing what shakes out." We use visualizations throughout. For the full ggplot2 experience, see Chapters \@ref(ggplot2basics) and \@ref(ggplot2customize).
 
 ## Between continuous variables: Correlations
 
@@ -24,74 +25,50 @@ Correlation is the workhorse of "do these two things move together?" It produces
 
 In business, correlations are everywhere. A marketing analyst might correlate ad spend with website traffic. An operations manager might correlate warehouse staffing levels with order fulfillment speed. A finance analyst might correlate interest rates with loan applications. The correlation coefficient gives you a quick read on whether two things are related --- and how strongly --- before you invest time in deeper analysis.
 
+Here is a rough guide for interpreting correlation strength (these are rules of thumb, not hard boundaries):
+
+| Absolute Value of r | Interpretation |
+|:---------------------|:---------------|
+| 0.00 -- 0.19         | Very weak      |
+| 0.20 -- 0.39         | Weak           |
+| 0.40 -- 0.59         | Moderate       |
+| 0.60 -- 0.79         | Strong         |
+| 0.80 -- 1.00         | Very strong    |
+
+And one critical warning you will hear a hundred times in your career: **correlation does not imply causation.** Just because two things move together does not mean one causes the other. Ice cream sales and drowning deaths are positively correlated --- not because ice cream is dangerous, but because both go up in the summer. Always think about whether a lurking third variable (a "confound") could be driving both.
+
 ### Plotting
 
 The best way to start is with scatterplots. Below are several examples showing what different correlation values actually look like in practice. Notice how the dots cluster tighter around the blue line as the correlation gets stronger (closer to -1 or +1), and scatter into a shapeless cloud as it approaches 0. A correlation of 0.003 is basically "I drew dots at random and drew a line through them for fun":
 
 ```{r echo=FALSE}
-# NumVar1=rnorm(n=50,mean=0,sd=10)
-#
-# NumVar2= -.9*NumVar1+rnorm(50,0,10)
-#
-# NumVar3=-.25*NumVar1+rnorm(50,0,10)
-#
-# NumVar4=rnorm(50,0,1)
-#
-# NumVar5=.25*NumVar1+rnorm(50,0,10)
-#
-# NumVar6=.9*NumVar1+rnorm(50,0,10)
-
-# corrdata=data.frame(NumVar1,NumVar2,NumVar3,NumVar4,NumVar5,NumVar6)
-# save(corrdata,file="corrdata.Rda")
-
 load("data/corrdata.Rda")
-#
-#  cor(corrdata$NumVar1,corrdata$NumVar2)
-#
-#  cor(corrdata$NumVar1,corrdata$NumVar3)
-#
-#  cor(corrdata$NumVar1,corrdata$NumVar4)
-#
-#  cor(corrdata$NumVar1,corrdata$NumVar5)
-#
-#  cor(corrdata$NumVar1,corrdata$NumVar6)
 
+corrdata_long <- corrdata %>%
+  pivot_longer(cols = -NumVar1, names_to = "variable", values_to = "value") %>%
+  mutate(variable = recode(variable,
+    "NumVar2" = "Correlation of -0.65",
+    "NumVar3" = "Correlation of -0.16",
+    "NumVar4" = "Correlation of 0.003",
+    "NumVar5" = "Correlation of 0.20",
+    "NumVar6" = "Correlation of 0.69"
+  ))
 
-par(mfrow=c(2,3))
-plot(corrdata$NumVar1,corrdata$NumVar2,pch=18,col="red",xlab="Numeric Variable 1",ylab="Numeric Variable 2",main = "Correlation of -0.65")
-abline( lm(corrdata$NumVar2~corrdata$NumVar1),col="blue",) # regression line (y~x)
-
-plot(corrdata$NumVar1,corrdata$NumVar3,pch=18,col="red",xlab="Numeric Variable 1",ylab="Numeric Variable 2",main = "Correlation of -0.16")
-abline( lm(corrdata$NumVar3~corrdata$NumVar1),col="blue",) # regression line (y~x)
-
-plot(corrdata$NumVar1,corrdata$NumVar4,pch=18,col="red",xlab="Numeric Variable 1",ylab="Numeric Variable 2",main = "Correlation of 0.003")
-abline( lm(corrdata$NumVar4~corrdata$NumVar1),col="blue",) # regression line (y~x)
-
-
-plot(corrdata$NumVar1,corrdata$NumVar5,pch=18,col="red",xlab="Numeric Variable 1",ylab="Numeric Variable 2",main = "Correlation of 0.20")
-abline( lm(corrdata$NumVar5~corrdata$NumVar1),col="blue",) # regression line (y~x)
-
-
-plot(corrdata$NumVar1,corrdata$NumVar6,pch=18,col="red",xlab="Numeric Variable 1",ylab="Numeric Variable 2",main = "Correlation of 0.69")
-abline( lm(corrdata$NumVar6~corrdata$NumVar1),col="blue",) # regression line (y~x)
-
-
+ggplot(corrdata_long, aes(x = NumVar1, y = value)) +
+  geom_point(color = "red", shape = 18) +
+  geom_smooth(method = "lm", se = FALSE, color = "blue") +
+  facet_wrap(~ variable, scales = "free_y", ncol = 3) +
+  labs(x = "Numeric Variable 1", y = "Numeric Variable 2") +
+  theme_minimal()
 ```
+
+Look at how the visual pattern changes as the correlation number changes. At -0.65, the points form a clear downward-sloping cloud --- when one variable goes up, the other tends to go down. At -0.16 and 0.20, the relationship is so weak that you can barely see a trend; the dots look almost random. At 0.003, there is literally no pattern --- the blue line is nearly flat. At 0.69, a strong upward trend re-emerges. These panels give you visual intuition for what the numbers mean in practice.
 
 ### Correlations between two numeric variables
 
 Before running a correlation, there are a few assumptions to keep in mind: the variables should be on an interval or ratio scale (so, actual numbers --- not categories), the relationship between them should be roughly linear (not curved like a roller coaster), extreme outliers should not be hijacking the result, and ideally both variables are approximately normally distributed. Do not lose sleep over these for now, but keep them in the back of your mind like a mental sticky note.
 
 Let us plot Sepal.Length against Petal.Length. In a business context, think of this as plotting "years of experience" against "salary" or "social media followers" against "monthly revenue."
-
-**Base R:**
-
-```{r}
-plot(iris$Sepal.Length, iris$Petal.Length, col = "red", xlab = "Sepal.Length", ylab = "Petal.Length")
-abline(lm(iris$Petal.Length ~ iris$Sepal.Length), col = "blue")
-```
-
-**ggplot2:**
 
 ```{r}
 ggplot(iris, aes(x = Sepal.Length, y = Petal.Length)) +
@@ -102,16 +79,24 @@ ggplot(iris, aes(x = Sepal.Length, y = Petal.Length)) +
   theme_minimal()
 ```
 
-We can color by species to reveal group structure --- and this is a genuinely important technique. Sometimes the overall trend masks completely different patterns within subgroups. Imagine overall company revenue is flat, but when you break it down, the East region is booming while the West is tanking. The aggregate number hid the real story. Same idea here:
+The scatterplot shows a clear positive relationship --- as Sepal.Length increases, Petal.Length tends to increase as well. The blue **regression line** (also called a "line of best fit") is the straight line that comes closest to all the data points; it summarizes the overall trend in one stroke. The gray band around it is a **confidence band** --- it shows the range of uncertainty around the line. A narrow band (like this one) means the trend is reliable; a wide band means more uncertainty. In business terms, if these were "years of experience" and "salary," you would see that more experience is strongly associated with higher pay.
+
+We can color by species to reveal group structure --- and this is a genuinely important technique. Sometimes the overall trend masks completely different patterns within subgroups. Imagine overall company revenue is flat, but when you break it down, the East region is booming while the West is tanking. The aggregate number hid the real story. Same idea here.
+
+This matters beyond iris flowers. Aggregate numbers can mask real disparities --- in pay, in health outcomes, in loan approval rates. Disaggregating by demographic group is how you find out whether a system that looks fair on average is actually working for everyone. The Jesuit commitment to solidarity with the marginalized starts, in data work, with something deceptively simple: looking at the right level of detail.
 
 ```{r}
-ggplot(iris, aes(x = Sepal.Length, y = Petal.Length, color = Species)) +
+p_species <- ggplot(iris, aes(x = Sepal.Length, y = Petal.Length, color = Species)) +
   geom_point() +
   geom_smooth(method = "lm", se = FALSE) +
   labs(x = "Sepal Length", y = "Petal Length",
        title = "Sepal Length vs Petal Length by Species") +
   theme_minimal()
+
+ggplotly(p_species)
 ```
+
+Hover over any point to see its exact measurements and species. Interactive charts like this are useful when you want to identify specific data points --- something static plots cannot do. Try clicking a species name in the legend to show or hide that group.
 
 Now let us put an actual number on it. The Pearson correlation coefficient:
 
@@ -119,17 +104,29 @@ Now let us put an actual number on it. The Pearson correlation coefficient:
 cor(iris$Sepal.Length,iris$Petal.Length)
 ```
 
-That is a strong positive correlation. But here is the question that separates a good analyst from a great one: is it *statistically significant*, or could we have gotten a number like this purely by chance? The `cor.test()` function answers that. Testing whether the observed correlation coefficient is different from 0:
+The result is approximately 0.87 --- a very strong positive correlation (refer to the table above). This means that as Sepal.Length increases, Petal.Length almost always increases too, and the relationship is tight. In business terms, if these two variables were "marketing spend" and "revenue," a correlation of 0.87 would make the marketing team very happy.
+
+But here is the question that separates a good analyst from a great one: is it *statistically significant*, or could we have gotten a number like this purely by chance? The `cor.test()` function answers that. Testing whether the observed correlation coefficient is different from 0:
 
 ```{r}
 cor.test(iris$Sepal.Length,iris$Petal.Length)
 ```
+
+**How to read this output:**
+
+- **t = 21.646**: The test statistic. It measures how many standard errors the observed correlation is away from zero. A t-value this large is overwhelming evidence.
+- **df = 148**: Degrees of freedom (sample size minus 2 for a correlation test).
+- **p-value < 2.2e-16**: Essentially zero. If there truly were no relationship between these variables, the chance of observing a correlation this strong is astronomically small. We reject the null hypothesis that the correlation is zero.
+- **95 percent confidence interval: 0.827 to 0.906**: We are 95% confident the true population correlation falls in this range. The entire interval is above 0.8, confirming a very strong relationship.
+- **sample estimate (cor = 0.872)**: The correlation coefficient we computed.
 
 We can also do a one-sided test --- testing whether the correlation is *greater* than 0. This is useful when you already have a directional hypothesis going in, like "I expect ad spend and revenue to be positively correlated" (if they were negatively correlated, your marketing department has some explaining to do):
 
 ```{r}
 cor.test(iris$Sepal.Length,iris$Petal.Length,alternative = "greater")
 ```
+
+The one-sided test gives an even smaller p-value and a 95% confidence interval that starts at 0.836. The conclusion is the same: this is a strong, statistically significant positive relationship.
 
 
 
@@ -140,8 +137,11 @@ Sometimes you want to compare two measurements taken on the *same* subjects. Thi
 In our data, we have measurements of writing-hand span and non-writing-hand span for the same students. Think of this as comparing an employee's performance review score before and after a development program --- same people, two time points:
 
 ```{r}
+load("data/survey.Rda")
 summary(survey[,c(2,3)])
 ```
+
+The `summary()` output shows the min, median, mean, and max for each hand span, along with the count of missing values. Both hand spans have similar means (around 18.7 cm), but we need a formal test to determine if the small difference is real or just noise.
 
 A paired t-test checks whether the average difference between the two measurements is statistically significant. It is smarter than just comparing two separate groups because it accounts for person-to-person variability:
 
@@ -149,28 +149,25 @@ A paired t-test checks whether the average difference between the two measuremen
 t.test(survey$Wr.Hnd,survey$NW.Hnd,paired = TRUE)
 ```
 
+**How to read this output:**
+
+- **t = 0.948**: The test statistic. It measures the average difference between writing-hand and non-writing-hand span, scaled by the variability of those differences. A t-value close to zero (like 0.95) suggests the difference is small relative to the noise.
+- **df = 235**: Degrees of freedom (number of complete pairs minus 1).
+- **p-value = 0.344**: This is well above .05. We fail to reject the null hypothesis --- there is no statistically significant difference between writing-hand and non-writing-hand spans.
+- **95 percent confidence interval: -0.055 to 0.157**: The interval includes zero, which is consistent with the high p-value. If zero is inside the CI, the difference could plausibly be zero.
+- **mean difference = 0.051**: The average difference between the two measurements. It is tiny --- about half a millimeter.
+
+Bottom line: writing-hand and non-writing-hand spans are essentially the same. In a business context, if this were a "before and after" test of a training program, this result would mean the program had no measurable effect.
 
 ### Relationships between more than two numeric variables
 
-When you have a bunch of numeric variables and you want to see all their pairwise relationships at once, a scatterplot matrix is your best friend. It is like speed-dating for variables --- every possible pair gets a quick look, and you can spot which ones have chemistry at a glance:
-
-```{r}
-pairs(iris[,1:4])
-
-```
-
-For a fancier version with added density curves and correlation information, the `car` package has you covered. Think of it as the premium upgrade --- same information, but presented more elegantly:
-
-```{r}
-library(car)
-scatterplotMatrix(iris[,1:4])
-```
-
-Now let us look at the actual numbers. The correlation matrix is the "at-a-glance" table that lets you quickly spot which pairs of variables are strongly related. In a business setting, you might run this on metrics like revenue, profit margin, customer count, marketing spend, and employee count to see which ones move together:
+When you have a bunch of numeric variables and you want to see all their pairwise relationships at once, a correlation matrix is your best friend. It is the "at-a-glance" table that lets you quickly spot which pairs of variables are strongly related. In a business setting, you might run this on metrics like revenue, profit margin, customer count, marketing spend, and employee count to see which ones move together:
 
 ```{r}
 cor(iris[,1:4])
 ```
+
+**Reading the correlation matrix:** Each cell shows the Pearson correlation between two variables. The diagonal is always 1.00 (every variable is perfectly correlated with itself). The matrix is symmetric --- the value in row 1, column 3 is the same as row 3, column 1. Scan for the largest absolute values to find the strongest relationships. Here, Petal.Length and Petal.Width have a very strong correlation (about 0.96), and Sepal.Length and Petal.Length are also very strong (0.87). Sepal.Width has weak or negative correlations with the other variables --- it marches to its own beat.
 
 A correlation matrix is great, but how do you know which of those numbers are statistically significant versus just noise? The `rcorr()` function from the **Hmisc** package gives you the correlation coefficients *and* their p-values side by side. This is the "show me the receipts" version --- essential when you need to back up your findings in a report:
 
@@ -178,8 +175,13 @@ A correlation matrix is great, but how do you know which of those numbers are st
 # Correlations with significance levels
 library(Hmisc)
 rcorr(as.matrix(iris[,1:4]), type="pearson") # type can be pearson or spearman
-
 ```
+
+```{r include=FALSE}
+detach("package:Hmisc", unload = TRUE)
+```
+
+**Reading this output:** The `rcorr()` function prints three tables. The first table shows the correlation coefficients (same as before). The second shows the sample size (n) for each pair --- typically the same for all pairs unless there are missing values. The third table shows p-values. A p-value of 0 (or very close to it) means the correlation is statistically significant. Here, almost all pairwise correlations are significant. The one exception to watch for is Sepal.Width with other variables --- the correlations are weaker, and you should check whether the p-values still clear your significance threshold.
 
 ## Relationships between factor variables
 
@@ -206,7 +208,7 @@ crosstab <- table(survey$Exer, survey$Sex)
 crosstab
 ```
 
-### Tidyverse cross-tabulation
+**Reading the cross-tab:** Each cell shows the count of observations for that combination. For example, 49 females exercise frequently, compared to 65 males. Both sexes have "Freq" as their most common category, and "None" is the smallest group for both. The question is whether the *proportional* breakdown differs between sexes --- and that is what the chi-square test will formally check.
 
 The tidyverse way of building a cross-tab uses `count()` and `pivot_wider()`. It reads more like a recipe than a math equation, which is always a win for readability:
 
@@ -218,20 +220,6 @@ survey %>%
 ```
 
 We could also plot that data in the form of stacked or dodged bar graphs. These are the kinds of charts that show up in every quarterly business review presentation, so get comfortable making them.
-
-**Base R:**
-
-```{r}
-barplot(crosstab, beside = TRUE, legend = levels(unique(survey$Exer)),
-        args.legend = list(x = 8, y = 70))
-```
-
-```{r}
-barplot(crosstab, legend = levels(unique(survey$Exer)),
-        args.legend = list(x = 1.75, y = 150, horiz = TRUE))
-```
-
-**ggplot2:**
 
 Dodged bar chart --- bars side by side for easy comparison. This is the "which group is bigger?" view:
 
@@ -256,6 +244,8 @@ survey %>%
   theme_minimal()
 ```
 
+The dodged bar chart shows that both males and females exercise frequently, with "Freq" being the most common category for both groups. The proportional chart makes it easier to compare: the split between exercise levels looks similar across sexes, suggesting that exercise habits may not differ much by gender in this sample.
+
 OK, so the charts look like there might be a pattern. But "looks like" is not good enough for a business decision. We need a formal test. The chi-square test of independence tells us whether the two variables are actually related or whether any apparent pattern in the chart is just random noise doing random noise things.
 
 An HR analyst might use this exact test to determine whether participation in the company wellness program differs by department. A marketer might test whether response to a campaign varies by customer segment.
@@ -265,6 +255,12 @@ The null hypothesis is that the two variables are independent (no relationship).
 ```{r}
 chisq.test(crosstab)
 ```
+
+**How to read this output:**
+
+- **X-squared = 5.7186**: The chi-square test statistic. It sums up how far each observed cell count is from the count you would expect if the variables were completely independent. Larger values mean bigger deviations from independence.
+- **df = 2**: Degrees of freedom, calculated as (number of rows - 1) x (number of columns - 1). Here, (3-1) x (2-1) = 2.
+- **p-value = 0.05731**: Just barely above .05. This is a borderline result --- tantalizingly close to significance but not quite there.
 
 Interpretation: the p-value of .057 is above the typical .05 threshold, which means we do not have strong enough evidence to claim a relationship between sex and exercise frequency. The variables appear to be independent of each other. In business terms, if "sex" were "customer segment" and "exercise" were "product preference," you would conclude that product preference does not significantly differ across segments --- at least not based on this data. And that is a perfectly valid finding. Sometimes the most useful answer is "nope, those two things are not connected."
 
@@ -284,30 +280,14 @@ When you have exactly two groups and one numeric variable, the independent sampl
 
 Let us check the mean height of different genders in the `survey` data.
 
-**Base R:**
-
-```{r}
-aggregate(survey$Height, list(survey$Sex), mean, na.rm = T)
-```
-
-**Tidyverse:**
-
 ```{r}
 survey %>%
   filter(!is.na(Sex), !is.na(Height)) %>%
   group_by(Sex) %>%
-  summarize(mean_height = mean(Height))
+  dplyr::summarize(mean_height = mean(Height))
 ```
 
 The numbers look different, but --- and this is critical --- "looks different" and "is statistically different" are not the same thing. (This distinction has saved many analysts from embarrassing PowerPoint corrections.) Let us visualize the distributions to get a better feel.
-
-**Base R:**
-
-```{r}
-plot(survey$Height ~ survey$Sex)
-```
-
-**ggplot2:**
 
 ```{r}
 survey %>%
@@ -320,13 +300,23 @@ survey %>%
   theme(legend.position = "none")
 ```
 
+The boxplot shows a clear separation: males have a higher median height (around 178 cm) compared to females (around 165 cm). The IQRs barely overlap, and the jittered points confirm the pattern is not driven by a few outliers. Both distributions look roughly symmetric, which is good news for the t-test assumptions.
+
 Males appear taller than females in the charts, but "appear" is a weasel word. Is the difference statistically significant, or could it be due to the luck of the draw in our particular sample? Time to bring in the t-test. We are testing whether the mean height of females is less than the mean height of males, with a 99% confidence level (because we want to be really sure):
 
 ```{r}
 t.test(survey$Height ~ survey$Sex, alternative = 'less', conf.level = .99, var.equal = FALSE)
 ```
 
-Note that the mean height of females is lower than the mean height of males. Hence the test-statistic is negative. The result suggests that mean height of females is indeed less than the mean height of males. (The p-value is tiny --- way below .01 --- and the t-value falls within the 99% confidence interval.) In business terms, this level of confidence means you can walk into the meeting and say "yes, these two groups are genuinely different" without anyone being able to poke holes in your analysis. That is a good feeling.
+**How to read this output:**
+
+- **t = -12.12**: The test statistic is large and negative. It is negative because the first group (Female) has a lower mean than the second group (Male), and we specified `alternative = 'less'`. The magnitude (12.12) is very large, meaning the difference is many standard errors away from zero.
+- **df = 196.7**: Degrees of freedom. Because we set `var.equal = FALSE`, R uses the Welch approximation, which can produce non-integer degrees of freedom.
+- **p-value < 2.2e-16**: Essentially zero. The evidence against the null hypothesis is overwhelming.
+- **99 percent confidence interval: -Inf to -10.03**: We are 99% confident the true difference in means (Female - Male) is at most -10.03 cm. Since the upper bound is well below zero, the difference is not just statistically significant --- it is large.
+- **sample estimates (mean Female = 165.7, mean Male = 178.8)**: A difference of about 13 cm.
+
+The result confirms that mean height of females is indeed less than the mean height of males. In business terms, this level of confidence means you can walk into the meeting and say "yes, these two groups are genuinely different" without anyone being able to poke holes in your analysis. That is a good feeling.
 
 ### More than two levels of a factor variable and one continuous variable - One-Way ANOVA
 
@@ -336,32 +326,18 @@ Instead, you use ANOVA --- Analysis of Variance. Despite the name (which sounds 
 
 Let us check the mean height of people who engage in different levels of exercising.
 
-**Base R:**
-
-```{r}
-aggregate(survey$Height, list(survey$Exer), mean, na.rm = T)
-```
-
-**Tidyverse:**
-
 ```{r}
 survey %>%
   filter(!is.na(Exer), !is.na(Height)) %>%
   group_by(Exer) %>%
-  summarize(
+  dplyr::summarize(
     n = n(),
     mean_height = mean(Height),
     sd_height = sd(Height)
   )
 ```
 
-**Base R box plot:**
-
-```{r}
-plot(survey$Height ~ survey$Exer)
-```
-
-**ggplot2:**
+The table shows that the "Freq" group has the highest mean height (around 172 cm), followed by "Some" (around 170 cm), and "None" (around 167 cm). The standard deviations are similar across groups (around 9--10 cm), which is a good sign for ANOVA assumptions. The group sizes are unequal --- "Freq" has the most observations --- but ANOVA can handle that.
 
 ```{r}
 survey %>%
@@ -375,6 +351,8 @@ survey %>%
   theme(legend.position = "none")
 ```
 
+The boxplots show that the "Freq" group has a slightly higher median height than "Some," and "Some" has a slightly higher median than "None." The spread (IQR) is fairly similar across groups. There are a few outliers in each group, but nothing extreme. The differences look modest --- which is exactly why we need a formal test instead of eyeballing it.
+
 Interestingly, we find that those who engage in frequent exercise have a higher mean height than those who engage in some exercise. In a similar vein, those who engage in some exercise seem to have a higher mean height than those who do not engage in any exercise. But, are these differences statistically significant? Since we have more than two groups, it is ANOVA time.
 
 The null hypothesis is that the means of all groups are the same (boring world, no differences). The alternative is that at least one mean is different from the others (interesting world, something is going on):
@@ -384,6 +362,14 @@ results <- aov(survey$Height ~ survey$Exer)
 summary(results)
 ```
 
+**How to read the ANOVA table:**
+
+- **Df (Degrees of Freedom)**: The first row (`survey$Exer`) shows df = 2 (number of groups minus 1: 3 - 1 = 2). The second row (`Residuals`) shows the remaining degrees of freedom (total observations minus number of groups).
+- **Sum Sq (Sum of Squares)**: Measures variability. The `survey$Exer` row shows how much variability in height is explained by exercise group differences. The `Residuals` row shows the remaining unexplained variability.
+- **Mean Sq (Mean Square)**: Sum of Squares divided by its degrees of freedom. This gives an "average" variability per degree of freedom.
+- **F value = 5.72**: The ratio of the between-group variability to the within-group variability. A large F means the group differences are large relative to the noise within groups. An F of 1.0 would mean no group differences at all.
+- **Pr(>F) = 0.00354**: The p-value. This is the probability of getting an F-value this large if all three group means were truly equal. At 0.0035, this is well below .01.
+
 The findings suggest that we have evidence that at least one of the three means is different from the others. (The p-value of .00354 indicates significance at the .01 level --- this is not a fluke.) In a business context, if these three groups were pricing strategies and the outcome was revenue, you would now know that pricing strategy *matters* --- at least one approach is producing meaningfully different results. **But ANOVA does not tell you which specific groups differ.** It just sounds the alarm.
 
 So naturally, the next question is: OK, *which* groups are different from each other? Is "Frequent" different from "None"? Is "Some" different from "Frequent"? Are all three different from each other? For that detective work, we use Tukey's HSD (Honestly Significant Difference) test. It compares every possible pair of group means and tells you exactly where the statistically significant differences live:
@@ -391,3 +377,11 @@ So naturally, the next question is: OK, *which* groups are different from each o
 ```{r}
 TukeyHSD(results, conf.level = .99)
 ```
+
+**How to read this output:** Each row compares two groups. The columns are:
+
+- **diff**: The difference in group means. For example, if "Freq-None" shows a diff of about 5.0, it means the "Freq" group's average height is about 5 cm higher than the "None" group's.
+- **lwr and upr**: The lower and upper bounds of the 99% confidence interval for the difference. If this interval does *not* include zero, the difference is statistically significant at the 99% level.
+- **p adj**: The adjusted p-value. "Adjusted" because Tukey's method accounts for the fact that we are making multiple comparisons at once (which inflates the chance of false positives). Look for p adj values below .01 (since we set `conf.level = .99`).
+
+Check each row: if the confidence interval for a pair includes zero, those two groups are not significantly different. If it excludes zero, they are. This tells you exactly which exercise groups have meaningfully different average heights --- and by how much.

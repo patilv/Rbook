@@ -1,0 +1,827 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<title>Chapter 10 Data Visualization with ggplot2 | R and the Tidyverse: A Beginner’s Guide</title>
+<meta name="author" content="Vivek H. Patil">
+<meta name="description" content="If data is the new oil, then ggplot2 is the refinery that turns crude numbers into something people actually want to look at. It is the most popular visualization package in R, and for good reason...">
+<meta name="generator" content="bookdown 0.46 with bs4_book()">
+<meta property="og:title" content="Chapter 10 Data Visualization with ggplot2 | R and the Tidyverse: A Beginner’s Guide">
+<meta property="og:type" content="book">
+<meta property="og:image" content="/cover.png">
+<meta property="og:description" content="If data is the new oil, then ggplot2 is the refinery that turns crude numbers into something people actually want to look at. It is the most popular visualization package in R, and for good reason...">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Chapter 10 Data Visualization with ggplot2 | R and the Tidyverse: A Beginner’s Guide">
+<meta name="twitter:description" content="If data is the new oil, then ggplot2 is the refinery that turns crude numbers into something people actually want to look at. It is the most popular visualization package in R, and for good reason...">
+<meta name="twitter:image" content="/cover.png">
+<!-- JS --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script><script src="https://kit.fontawesome.com/6ecbd6c532.js" crossorigin="anonymous"></script><script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<link href="libs/bootstrap-4.6.0/bootstrap.min.css" rel="stylesheet">
+<script src="libs/bootstrap-4.6.0/bootstrap.bundle.min.js"></script><script src="libs/bs3compat-0.10.0/transition.js"></script><script src="libs/bs3compat-0.10.0/tabs.js"></script><script src="libs/bs3compat-0.10.0/bs3compat.js"></script><link href="libs/bs4_book-1.0.0/bs4_book.css" rel="stylesheet">
+<script src="libs/bs4_book-1.0.0/bs4_book.js"></script><link href="libs/htmltools-fill-0.5.9/fill.css" rel="stylesheet">
+<script src="libs/htmlwidgets-1.6.4/htmlwidgets.js"></script><link href="libs/datatables-css-0.0.0/datatables-crosstalk.css" rel="stylesheet">
+<script src="libs/datatables-binding-0.34.0/datatables.js"></script><link href="libs/dt-core-1.13.6/css/jquery.dataTables.min.css" rel="stylesheet">
+<link href="libs/dt-core-1.13.6/css/jquery.dataTables.extra.css" rel="stylesheet">
+<script src="libs/dt-core-1.13.6/js/jquery.dataTables.min.js"></script><link href="libs/crosstalk-1.2.2/css/crosstalk.min.css" rel="stylesheet">
+<script src="libs/crosstalk-1.2.2/js/crosstalk.min.js"></script><script src="libs/plotly-binding-4.12.0/plotly.js"></script><script src="libs/typedarray-0.1/typedarray.min.js"></script><link href="libs/plotly-htmlwidgets-css-2.25.2/plotly-htmlwidgets.css" rel="stylesheet">
+<script src="libs/plotly-main-2.25.2/plotly-latest.min.js"></script><script src="libs/kePrint-0.0.1/kePrint.js"></script><link href="libs/lightable-0.0.1/lightable.css" rel="stylesheet">
+<link href="libs/nouislider-7.0.10/jquery.nouislider.min.css" rel="stylesheet">
+<script src="libs/nouislider-7.0.10/jquery.nouislider.min.js"></script><link href="libs/selectize-0.12.0/selectize.bootstrap3.css" rel="stylesheet">
+<script src="libs/selectize-0.12.0/selectize.min.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/autocomplete.js/0.38.0/autocomplete.jquery.min.js" integrity="sha512-GU9ayf+66Xx2TmpxqJpliWbT5PiGYxpaG8rfnBEk1LL8l1KGkRShhngwdXK1UgqhAzWpZHSiYPc09/NwDQIGyg==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/mark.min.js" integrity="sha512-5CYOlHXGh6QpOFA/TeTylKLWfB3ftPsde7AnmhuitiTX4K5SqCLBeKro6sPS8ilsz1Q4NRx3v8Ko2IBiszzdww==" crossorigin="anonymous"></script><!-- CSS --><style type="text/css">
+    
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  </style>
+<style type="text/css">
+    /* Used with Pandoc 2.11+ new --citeproc when CSL is used */
+    div.csl-bib-body { }
+    div.csl-entry {
+      clear: both;
+          margin-bottom: 0em;
+        }
+    .hanging div.csl-entry {
+      margin-left:2em;
+      text-indent:-2em;
+    }
+    div.csl-left-margin {
+      min-width:2em;
+      float:left;
+    }
+    div.csl-right-inline {
+      margin-left:2em;
+      padding-left:1em;
+    }
+    div.csl-indent {
+      margin-left: 2em;
+    }
+  </style>
+<link rel="stylesheet" href="style.css">
+</head>
+<body data-spy="scroll" data-target="#toc">
+
+<div class="container-fluid">
+<div class="row">
+  <header class="col-sm-12 col-lg-3 sidebar sidebar-book"><a class="sr-only sr-only-focusable" href="#content">Skip to main content</a>
+
+    <div class="d-flex align-items-start justify-content-between">
+      <h1>
+        <a href="index.html" title="">R and the Tidyverse: A Beginner’s Guide</a>
+      </h1>
+      <button class="btn btn-outline-primary d-lg-none ml-2 mt-1" type="button" data-toggle="collapse" data-target="#main-nav" aria-expanded="true" aria-controls="main-nav"><i class="fas fa-bars"></i><span class="sr-only">Show table of contents</span></button>
+    </div>
+
+    <div id="main-nav" class="collapse-lg">
+      <form role="search">
+        <input id="search" class="form-control" type="search" placeholder="Search" aria-label="Search">
+</form>
+
+      <nav aria-label="Table of contents"><h2>Table of contents</h2>
+        <ul class="book-toc list-unstyled">
+<li><a class="" href="index.html">Preface</a></li>
+<li><a class="" href="introR.html"><span class="header-section-number">1</span> Introduction to R</a></li>
+<li><a class="" href="Rgettingstarted.html"><span class="header-section-number">2</span> Getting Started with R</a></li>
+<li><a class="" href="tidyverse.html"><span class="header-section-number">3</span> Your Data Analysis Toolkit</a></li>
+<li><a class="" href="dataimport.html"><span class="header-section-number">4</span> Data Import</a></li>
+<li><a class="" href="describedata.html"><span class="header-section-number">5</span> Describing Data</a></li>
+<li><a class="" href="modifydata.html"><span class="header-section-number">6</span> Modifying Data</a></li>
+<li><a class="" href="dplyr.html"><span class="header-section-number">7</span> Data Wrangling with dplyr</a></li>
+<li><a class="" href="tidyr.html"><span class="header-section-number">8</span> Tidy Data with tidyr</a></li>
+<li><a class="" href="summarystats.html"><span class="header-section-number">9</span> Summary Statistics</a></li>
+<li><a class="active" href="ggplot2basics.html"><span class="header-section-number">10</span> Data Visualization with ggplot2</a></li>
+<li><a class="" href="ggplot2customize.html"><span class="header-section-number">11</span> Customizing ggplot2 Visualizations</a></li>
+<li><a class="" href="singlevar.html"><span class="header-section-number">12</span> Single Variable Analysis</a></li>
+<li><a class="" href="multivar.html"><span class="header-section-number">13</span> Relationships Between Variables</a></li>
+<li><a class="" href="stringr.html"><span class="header-section-number">14</span> Working with Text Data</a></li>
+<li><a class="" href="forcats.html"><span class="header-section-number">15</span> Wrangling Categories with forcats</a></li>
+<li><a class="" href="lubridate.html"><span class="header-section-number">16</span> Working with Dates and Times</a></li>
+<li><a class="" href="purrr.html"><span class="header-section-number">17</span> Doing the Same Thing to Many Things at Once</a></li>
+<li><a class="" href="rmarkdown.html"><span class="header-section-number">18</span> R Markdown</a></li>
+<li><a class="" href="rmarkdown-advanced.html"><span class="header-section-number">19</span> Advanced R Markdown</a></li>
+</ul>
+
+        <div class="book-extra">
+          
+        </div>
+      </nav>
+</div>
+  </header><main class="col-sm-12 col-md-9 col-lg-7" id="content"><div id="ggplot2basics" class="section level1" number="10">
+<h1>
+<span class="header-section-number">10</span> Data Visualization with ggplot2<a class="anchor" aria-label="anchor" href="#ggplot2basics"><i class="fas fa-link"></i></a>
+</h1>
+<p>If data is the new oil, then <strong>ggplot2</strong> is the refinery that turns crude numbers into something people actually want to look at. It is the most popular visualization package in R, and for good reason — it makes charts that are clean enough for a board presentation and flexible enough for a quick-and-dirty exploration of last quarter’s sales.</p>
+<p>Journalists at The New York Times use it. Analysts at Fortune 500 companies use it. After this chapter, you will use it too.</p>
+<p>This chapter teaches you the mechanics of building charts. As you practice, you will develop intuition for which chart types work best for different data stories.</p>
+<div id="the-grammar-of-graphics-the-30-second-version" class="section level2" number="10.1">
+<h2>
+<span class="header-section-number">10.1</span> The Grammar of Graphics (the 30-Second Version)<a class="anchor" aria-label="anchor" href="#the-grammar-of-graphics-the-30-second-version"><i class="fas fa-link"></i></a>
+</h2>
+<p>Here is the big idea: every chart is built from the same three ingredients, kind of like how every business presentation has data, a story, and (hopefully) a point.</p>
+<ol style="list-style-type: decimal">
+<li>
+<strong>Data</strong> – the dataset you want to visualize.</li>
+<li>
+<strong>Aesthetics</strong> (<code><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes()</a></code>) – which columns go where. This is where you say “put Revenue on the y-axis and Quarter on the x-axis.”</li>
+<li>
+<strong>Geoms</strong> – the shapes that represent your data (points, bars, lines, etc.).</li>
+</ol>
+<p>Data + mapping + shape. You can layer on extras (facets, labels, themes), but those three are the foundation of every single ggplot2 chart.</p>
+<p>The template:</p>
+<pre><code>ggplot(data = &lt;DATA&gt;, mapping = aes(&lt;MAPPINGS&gt;)) +
+  &lt;GEOM_FUNCTION&gt;()</code></pre>
+<p>You call <code><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot()</a></code>, tell it what data and mappings to use, then add a geom with <code>+</code>. That is it. Let’s see it in action.</p>
+</div>
+<div id="your-first-ggplot" class="section level2" number="10.2">
+<h2>
+<span class="header-section-number">10.2</span> Your First ggplot<a class="anchor" aria-label="anchor" href="#your-first-ggplot"><i class="fas fa-link"></i></a>
+</h2>
+<p>We will use the <code>mpg</code> dataset that comes built into ggplot2 — fuel economy data for popular car models. Think of it as a product performance report for the auto industry.</p>
+<div class="sourceCode" id="cb260"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://pillar.r-lib.org/reference/glimpse.html">glimpse</a></span><span class="op">(</span><span class="va">mpg</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Rows: 234</span></span>
+<span><span class="co">#&gt; Columns: 11</span></span>
+<span><span class="co">#&gt; $ manufacturer &lt;chr&gt; "audi", "audi", "audi", "audi", "audi", "audi", "audi", "…</span></span>
+<span><span class="co">#&gt; $ model        &lt;chr&gt; "a4", "a4", "a4", "a4", "a4", "a4", "a4", "a4 quattro", "…</span></span>
+<span><span class="co">#&gt; $ displ        &lt;dbl&gt; 1.8, 1.8, 2.0, 2.0, 2.8, 2.8, 3.1, 1.8, 1.8, 2.0, 2.0, 2.…</span></span>
+<span><span class="co">#&gt; $ year         &lt;int&gt; 1999, 1999, 2008, 2008, 1999, 1999, 2008, 1999, 1999, 200…</span></span>
+<span><span class="co">#&gt; $ cyl          &lt;int&gt; 4, 4, 4, 4, 6, 6, 6, 4, 4, 4, 4, 6, 6, 6, 6, 6, 6, 8, 8, …</span></span>
+<span><span class="co">#&gt; $ trans        &lt;chr&gt; "auto(l5)", "manual(m5)", "manual(m6)", "auto(av)", "auto…</span></span>
+<span><span class="co">#&gt; $ drv          &lt;chr&gt; "f", "f", "f", "f", "f", "f", "f", "4", "4", "4", "4", "4…</span></span>
+<span><span class="co">#&gt; $ cty          &lt;int&gt; 18, 21, 20, 21, 16, 18, 18, 18, 16, 20, 19, 15, 17, 17, 1…</span></span>
+<span><span class="co">#&gt; $ hwy          &lt;int&gt; 29, 29, 31, 30, 26, 26, 27, 26, 25, 28, 27, 25, 25, 25, 2…</span></span>
+<span><span class="co">#&gt; $ fl           &lt;chr&gt; "p", "p", "p", "p", "p", "p", "p", "p", "p", "p", "p", "p…</span></span>
+<span><span class="co">#&gt; $ class        &lt;chr&gt; "compact", "compact", "compact", "compact", "compact", "c…</span></span></code></pre></div>
+<div id="step-1-create-the-canvas" class="section level3" number="10.2.1">
+<h3>
+<span class="header-section-number">10.2.1</span> Step 1: Create the canvas<a class="anchor" aria-label="anchor" href="#step-1-create-the-canvas"><i class="fas fa-link"></i></a>
+</h3>
+<p><code><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot()</a></code> sets up a blank canvas. By itself, it draws nothing — like opening PowerPoint and staring at a blank slide:</p>
+<div class="sourceCode" id="cb261"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">mpg</span><span class="op">)</span></span></code></pre></div>
+<div class="inline-figure"><img src="Rbook_files/figure-html/unnamed-chunk-262-1.png" alt="" width="672"></div>
+</div>
+<div id="step-2-map-your-variables" class="section level3" number="10.2.2">
+<h3>
+<span class="header-section-number">10.2.2</span> Step 2: Map your variables<a class="anchor" aria-label="anchor" href="#step-2-map-your-variables"><i class="fas fa-link"></i></a>
+</h3>
+<p>Now we tell ggplot2 which variables go where using <code><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes()</a></code>. Still no visible data — just the axes:</p>
+<div class="sourceCode" id="cb262"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">mpg</span>, mapping <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">displ</span>, y <span class="op">=</span> <span class="va">hwy</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<div class="inline-figure"><img src="Rbook_files/figure-html/unnamed-chunk-263-1.png" alt="" width="672"></div>
+</div>
+<div id="step-3-add-the-geom" class="section level3" number="10.2.3">
+<h3>
+<span class="header-section-number">10.2.3</span> Step 3: Add the geom<a class="anchor" aria-label="anchor" href="#step-3-add-the-geom"><i class="fas fa-link"></i></a>
+</h3>
+<p>Finally, we tell ggplot2 <em>how</em> to draw the data. For a scatter plot, use <code><a href="https://ggplot2.tidyverse.org/reference/geom_point.html">geom_point()</a></code>:</p>
+<div class="sourceCode" id="cb263"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">mpg</span>, mapping <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">displ</span>, y <span class="op">=</span> <span class="va">hwy</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html">geom_point</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
+<div class="inline-figure"><img src="Rbook_files/figure-html/unnamed-chunk-264-1.png" alt="" width="672"></div>
+<p>Bigger engines (<code>displ</code>) tend to get worse highway mileage (<code>hwy</code>). The outliers in the upper right? Two-seater sports cars with efficient highway gearing. Even your first chart tells a story.</p>
+<blockquote>
+<p><strong>Common mistake:</strong> Putting the <code>+</code> at the <em>beginning</em> of a new line instead of the <em>end</em> of the previous line. The <code>+</code> must come at the end. Think of it like ending a sentence with “and” before starting the next clause.</p>
+</blockquote>
+</div>
+</div>
+<div id="aesthetic-mappings-making-charts-informative" class="section level2" number="10.3">
+<h2>
+<span class="header-section-number">10.3</span> Aesthetic Mappings – Making Charts Informative<a class="anchor" aria-label="anchor" href="#aesthetic-mappings-making-charts-informative"><i class="fas fa-link"></i></a>
+</h2>
+<p><code><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes()</a></code> is where you tell ggplot which columns from your data control which visual properties. Think of it as assigning roles in a play — “you are the x-axis, you control the color, you determine the size.”</p>
+<div class="inline-table"><table class="table table-sm">
+<thead><tr class="header">
+<th>Aesthetic</th>
+<th>What It Controls</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td><code>x</code></td>
+<td>Position on the x-axis</td>
+</tr>
+<tr class="even">
+<td><code>y</code></td>
+<td>Position on the y-axis</td>
+</tr>
+<tr class="odd">
+<td><code>color</code></td>
+<td>Color of points, lines, outlines</td>
+</tr>
+<tr class="even">
+<td><code>fill</code></td>
+<td>Fill color of bars and areas</td>
+</tr>
+<tr class="odd">
+<td><code>size</code></td>
+<td>Size of points or line thickness</td>
+</tr>
+<tr class="even">
+<td><code>shape</code></td>
+<td>Shape of points</td>
+</tr>
+<tr class="odd">
+<td><code>alpha</code></td>
+<td>Transparency (0 = invisible, 1 = solid)</td>
+</tr>
+</tbody>
+</table></div>
+<div id="mapping-vs.-setting-this-trips-everyone-up" class="section level3" number="10.3.1">
+<h3>
+<span class="header-section-number">10.3.1</span> Mapping vs. Setting – This Trips Everyone Up<a class="anchor" aria-label="anchor" href="#mapping-vs.-setting-this-trips-everyone-up"><i class="fas fa-link"></i></a>
+</h3>
+<p>There is one distinction that trips up nearly every beginner. Read this twice.</p>
+<p><strong>Mapping</strong> (inside <code><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes()</a></code>) connects a <em>variable</em> to a visual property. ggplot2 picks colors automatically and creates a legend:</p>
+<div class="sourceCode" id="cb264"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">p_class</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">mpg</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">displ</span>, y <span class="op">=</span> <span class="va">hwy</span>, color <span class="op">=</span> <span class="va">class</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html">geom_point</a></span><span class="op">(</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">ggplotly</span><span class="op">(</span><span class="va">p_class</span><span class="op">)</span></span></code></pre></div>
+<div class="plotly html-widget html-fill-item" id="htmlwidget-0a7fff80a8e77f2f5df6" style="width:672px;height:480px;"></div>
+<script type="application/json" data-for="htmlwidget-0a7fff80a8e77f2f5df6">{"x":{"data":[{"x":[5.7000000000000002,5.7000000000000002,6.2000000000000002,6.2000000000000002,7],"y":[26,23,26,25,24],"text":["displ: 5.7<br />hwy: 26<br />class: 2seater","displ: 5.7<br />hwy: 23<br />class: 2seater","displ: 6.2<br />hwy: 26<br />class: 2seater","displ: 6.2<br />hwy: 25<br />class: 2seater","displ: 7.0<br />hwy: 24<br />class: 2seater"],"type":"scatter","mode":"markers","marker":{"autocolorscale":false,"color":"rgba(248,118,109,1)","opacity":1,"size":5.6692913385826778,"symbol":"circle","line":{"width":1.8897637795275593,"color":"rgba(248,118,109,1)"}},"hoveron":"points","name":"2seater","legendgroup":"2seater","showlegend":true,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null},{"x":[1.8,1.8,2,2,2.7999999999999998,2.7999999999999998,3.1000000000000001,1.8,1.8,2,2,2.7999999999999998,2.7999999999999998,3.1000000000000001,3.1000000000000001,2.3999999999999999,2.3999999999999999,2.5,2.5,2.5,2.5,2.2000000000000002,2.2000000000000002,2.3999999999999999,2.3999999999999999,3,3,3.2999999999999998,1.8,1.8,1.8,1.8,1.8,2,2,2,2,2.7999999999999998,1.8999999999999999,2,2,2,2,2.5,2.5,2.7999999999999998,2.7999999999999998],"y":[29,29,31,30,26,26,27,26,25,28,27,25,25,25,25,29,27,25,27,25,27,27,29,31,31,26,26,27,30,33,35,37,35,29,26,29,29,24,44,29,26,29,29,29,29,23,24],"text":["displ: 1.8<br />hwy: 29<br />class: compact","displ: 1.8<br />hwy: 29<br />class: compact","displ: 2.0<br />hwy: 31<br />class: compact","displ: 2.0<br />hwy: 30<br />class: compact","displ: 2.8<br />hwy: 26<br />class: compact","displ: 2.8<br />hwy: 26<br />class: compact","displ: 3.1<br />hwy: 27<br />class: compact","displ: 1.8<br />hwy: 26<br />class: compact","displ: 1.8<br />hwy: 25<br />class: compact","displ: 2.0<br />hwy: 28<br />class: compact","displ: 2.0<br />hwy: 27<br />class: compact","displ: 2.8<br />hwy: 25<br />class: compact","displ: 2.8<br />hwy: 25<br />class: compact","displ: 3.1<br />hwy: 25<br />class: compact","displ: 3.1<br />hwy: 25<br />class: compact","displ: 2.4<br />hwy: 29<br />class: compact","displ: 2.4<br />hwy: 27<br />class: compact","displ: 2.5<br />hwy: 25<br />class: compact","displ: 2.5<br />hwy: 27<br />class: compact","displ: 2.5<br />hwy: 25<br />class: compact","displ: 2.5<br />hwy: 27<br />class: compact","displ: 2.2<br />hwy: 27<br />class: compact","displ: 2.2<br />hwy: 29<br />class: compact","displ: 2.4<br />hwy: 31<br />class: compact","displ: 2.4<br />hwy: 31<br />class: compact","displ: 3.0<br />hwy: 26<br />class: compact","displ: 3.0<br />hwy: 26<br />class: compact","displ: 3.3<br />hwy: 27<br />class: compact","displ: 1.8<br />hwy: 30<br />class: compact","displ: 1.8<br />hwy: 33<br />class: compact","displ: 1.8<br />hwy: 35<br />class: compact","displ: 1.8<br />hwy: 37<br />class: compact","displ: 1.8<br />hwy: 35<br />class: compact","displ: 2.0<br />hwy: 29<br />class: compact","displ: 2.0<br />hwy: 26<br />class: compact","displ: 2.0<br />hwy: 29<br />class: compact","displ: 2.0<br />hwy: 29<br />class: compact","displ: 2.8<br />hwy: 24<br />class: compact","displ: 1.9<br />hwy: 44<br />class: compact","displ: 2.0<br />hwy: 29<br />class: compact","displ: 2.0<br />hwy: 26<br />class: compact","displ: 2.0<br />hwy: 29<br />class: compact","displ: 2.0<br />hwy: 29<br />class: compact","displ: 2.5<br />hwy: 29<br />class: compact","displ: 2.5<br />hwy: 29<br />class: compact","displ: 2.8<br />hwy: 23<br />class: compact","displ: 2.8<br />hwy: 24<br />class: compact"],"type":"scatter","mode":"markers","marker":{"autocolorscale":false,"color":"rgba(196,154,0,1)","opacity":1,"size":5.6692913385826778,"symbol":"circle","line":{"width":1.8897637795275593,"color":"rgba(196,154,0,1)"}},"hoveron":"points","name":"compact","legendgroup":"compact","showlegend":true,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null},{"x":[2.7999999999999998,3.1000000000000001,4.2000000000000002,2.3999999999999999,2.3999999999999999,3.1000000000000001,3.5,3.6000000000000001,2.3999999999999999,2.3999999999999999,2.3999999999999999,2.3999999999999999,2.5,2.5,3.2999999999999998,2.5,2.5,3.5,3.5,3,3,3.5,3.1000000000000001,3.7999999999999998,3.7999999999999998,3.7999999999999998,5.2999999999999998,2.2000000000000002,2.2000000000000002,2.3999999999999999,2.3999999999999999,3,3,3.5,1.8,1.8,2,2,2.7999999999999998,2.7999999999999998,3.6000000000000001],"y":[24,25,23,27,30,26,29,26,26,27,30,31,26,26,28,31,32,27,26,26,25,25,26,26,27,28,25,29,27,31,31,26,26,28,29,29,28,29,26,26,26],"text":["displ: 2.8<br />hwy: 24<br />class: midsize","displ: 3.1<br />hwy: 25<br />class: midsize","displ: 4.2<br />hwy: 23<br />class: midsize","displ: 2.4<br />hwy: 27<br />class: midsize","displ: 2.4<br />hwy: 30<br />class: midsize","displ: 3.1<br />hwy: 26<br />class: midsize","displ: 3.5<br />hwy: 29<br />class: midsize","displ: 3.6<br />hwy: 26<br />class: midsize","displ: 2.4<br />hwy: 26<br />class: midsize","displ: 2.4<br />hwy: 27<br />class: midsize","displ: 2.4<br />hwy: 30<br />class: midsize","displ: 2.4<br />hwy: 31<br />class: midsize","displ: 2.5<br />hwy: 26<br />class: midsize","displ: 2.5<br />hwy: 26<br />class: midsize","displ: 3.3<br />hwy: 28<br />class: midsize","displ: 2.5<br />hwy: 31<br />class: midsize","displ: 2.5<br />hwy: 32<br />class: midsize","displ: 3.5<br />hwy: 27<br />class: midsize","displ: 3.5<br />hwy: 26<br />class: midsize","displ: 3.0<br />hwy: 26<br />class: midsize","displ: 3.0<br />hwy: 25<br />class: midsize","displ: 3.5<br />hwy: 25<br />class: midsize","displ: 3.1<br />hwy: 26<br />class: midsize","displ: 3.8<br />hwy: 26<br />class: midsize","displ: 3.8<br />hwy: 27<br />class: midsize","displ: 3.8<br />hwy: 28<br />class: midsize","displ: 5.3<br />hwy: 25<br />class: midsize","displ: 2.2<br />hwy: 29<br />class: midsize","displ: 2.2<br />hwy: 27<br />class: midsize","displ: 2.4<br />hwy: 31<br />class: midsize","displ: 2.4<br />hwy: 31<br />class: midsize","displ: 3.0<br />hwy: 26<br />class: midsize","displ: 3.0<br />hwy: 26<br />class: midsize","displ: 3.5<br />hwy: 28<br />class: midsize","displ: 1.8<br />hwy: 29<br />class: midsize","displ: 1.8<br />hwy: 29<br />class: midsize","displ: 2.0<br />hwy: 28<br />class: midsize","displ: 2.0<br />hwy: 29<br />class: midsize","displ: 2.8<br />hwy: 26<br />class: midsize","displ: 2.8<br />hwy: 26<br />class: midsize","displ: 3.6<br />hwy: 26<br />class: midsize"],"type":"scatter","mode":"markers","marker":{"autocolorscale":false,"color":"rgba(83,180,0,1)","opacity":1,"size":5.6692913385826778,"symbol":"circle","line":{"width":1.8897637795275593,"color":"rgba(83,180,0,1)"}},"hoveron":"points","name":"midsize","legendgroup":"midsize","showlegend":true,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null},{"x":[2.3999999999999999,3,3.2999999999999998,3.2999999999999998,3.2999999999999998,3.2999999999999998,3.2999999999999998,3.7999999999999998,3.7999999999999998,3.7999999999999998,4],"y":[24,24,22,22,24,24,17,22,21,23,23],"text":["displ: 2.4<br />hwy: 24<br />class: minivan","displ: 3.0<br />hwy: 24<br />class: minivan","displ: 3.3<br />hwy: 22<br />class: minivan","displ: 3.3<br />hwy: 22<br />class: minivan","displ: 3.3<br />hwy: 24<br />class: minivan","displ: 3.3<br />hwy: 24<br />class: minivan","displ: 3.3<br />hwy: 17<br />class: minivan","displ: 3.8<br />hwy: 22<br />class: minivan","displ: 3.8<br />hwy: 21<br />class: minivan","displ: 3.8<br />hwy: 23<br />class: minivan","displ: 4.0<br />hwy: 23<br />class: minivan"],"type":"scatter","mode":"markers","marker":{"autocolorscale":false,"color":"rgba(0,192,148,1)","opacity":1,"size":5.6692913385826778,"symbol":"circle","line":{"width":1.8897637795275593,"color":"rgba(0,192,148,1)"}},"hoveron":"points","name":"minivan","legendgroup":"minivan","showlegend":true,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null},{"x":[3.7000000000000002,3.7000000000000002,3.8999999999999999,3.8999999999999999,4.7000000000000002,4.7000000000000002,4.7000000000000002,5.2000000000000002,5.2000000000000002,4.7000000000000002,4.7000000000000002,4.7000000000000002,4.7000000000000002,4.7000000000000002,4.7000000000000002,5.2000000000000002,5.2000000000000002,5.7000000000000002,5.9000000000000004,4.2000000000000002,4.2000000000000002,4.5999999999999996,4.5999999999999996,4.5999999999999996,5.4000000000000004,5.4000000000000004,2.7000000000000002,2.7000000000000002,2.7000000000000002,3.3999999999999999,3.3999999999999999,4,4],"y":[19,18,17,17,19,19,12,17,15,16,12,17,17,16,12,15,16,17,15,17,17,16,16,17,15,17,20,20,22,17,19,18,20],"text":["displ: 3.7<br />hwy: 19<br />class: pickup","displ: 3.7<br />hwy: 18<br />class: pickup","displ: 3.9<br />hwy: 17<br />class: pickup","displ: 3.9<br />hwy: 17<br />class: pickup","displ: 4.7<br />hwy: 19<br />class: pickup","displ: 4.7<br />hwy: 19<br />class: pickup","displ: 4.7<br />hwy: 12<br />class: pickup","displ: 5.2<br />hwy: 17<br />class: pickup","displ: 5.2<br />hwy: 15<br />class: pickup","displ: 4.7<br />hwy: 16<br />class: pickup","displ: 4.7<br />hwy: 12<br />class: pickup","displ: 4.7<br />hwy: 17<br />class: pickup","displ: 4.7<br />hwy: 17<br />class: pickup","displ: 4.7<br />hwy: 16<br />class: pickup","displ: 4.7<br />hwy: 12<br />class: pickup","displ: 5.2<br />hwy: 15<br />class: pickup","displ: 5.2<br />hwy: 16<br />class: pickup","displ: 5.7<br />hwy: 17<br />class: pickup","displ: 5.9<br />hwy: 15<br />class: pickup","displ: 4.2<br />hwy: 17<br />class: pickup","displ: 4.2<br />hwy: 17<br />class: pickup","displ: 4.6<br />hwy: 16<br />class: pickup","displ: 4.6<br />hwy: 16<br />class: pickup","displ: 4.6<br />hwy: 17<br />class: pickup","displ: 5.4<br />hwy: 15<br />class: pickup","displ: 5.4<br />hwy: 17<br />class: pickup","displ: 2.7<br />hwy: 20<br />class: pickup","displ: 2.7<br />hwy: 20<br />class: pickup","displ: 2.7<br />hwy: 22<br />class: pickup","displ: 3.4<br />hwy: 17<br />class: pickup","displ: 3.4<br />hwy: 19<br />class: pickup","displ: 4.0<br />hwy: 18<br />class: pickup","displ: 4.0<br />hwy: 20<br />class: pickup"],"type":"scatter","mode":"markers","marker":{"autocolorscale":false,"color":"rgba(0,182,235,1)","opacity":1,"size":5.6692913385826778,"symbol":"circle","line":{"width":1.8897637795275593,"color":"rgba(0,182,235,1)"}},"hoveron":"points","name":"pickup","legendgroup":"pickup","showlegend":true,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null},{"x":[3.7999999999999998,3.7999999999999998,4,4,4.5999999999999996,4.5999999999999996,4.5999999999999996,4.5999999999999996,5.4000000000000004,1.6000000000000001,1.6000000000000001,1.6000000000000001,1.6000000000000001,1.6000000000000001,1.8,1.8,1.8,2,2,2,2,2,2.7000000000000002,2.7000000000000002,2.7000000000000002,2.2000000000000002,2.2000000000000002,2.5,2.5,1.8999999999999999,1.8999999999999999,2,2,2.5,2.5],"y":[26,25,26,24,21,22,23,22,20,33,32,32,29,32,34,36,36,29,26,29,28,27,24,24,24,26,26,26,26,44,41,29,26,28,29],"text":["displ: 3.8<br />hwy: 26<br />class: subcompact","displ: 3.8<br />hwy: 25<br />class: subcompact","displ: 4.0<br />hwy: 26<br />class: subcompact","displ: 4.0<br />hwy: 24<br />class: subcompact","displ: 4.6<br />hwy: 21<br />class: subcompact","displ: 4.6<br />hwy: 22<br />class: subcompact","displ: 4.6<br />hwy: 23<br />class: subcompact","displ: 4.6<br />hwy: 22<br />class: subcompact","displ: 5.4<br />hwy: 20<br />class: subcompact","displ: 1.6<br />hwy: 33<br />class: subcompact","displ: 1.6<br />hwy: 32<br />class: subcompact","displ: 1.6<br />hwy: 32<br />class: subcompact","displ: 1.6<br />hwy: 29<br />class: subcompact","displ: 1.6<br />hwy: 32<br />class: subcompact","displ: 1.8<br />hwy: 34<br />class: subcompact","displ: 1.8<br />hwy: 36<br />class: subcompact","displ: 1.8<br />hwy: 36<br />class: subcompact","displ: 2.0<br />hwy: 29<br />class: subcompact","displ: 2.0<br />hwy: 26<br />class: subcompact","displ: 2.0<br />hwy: 29<br />class: subcompact","displ: 2.0<br />hwy: 28<br />class: subcompact","displ: 2.0<br />hwy: 27<br />class: subcompact","displ: 2.7<br />hwy: 24<br />class: subcompact","displ: 2.7<br />hwy: 24<br />class: subcompact","displ: 2.7<br />hwy: 24<br />class: subcompact","displ: 2.2<br />hwy: 26<br />class: subcompact","displ: 2.2<br />hwy: 26<br />class: subcompact","displ: 2.5<br />hwy: 26<br />class: subcompact","displ: 2.5<br />hwy: 26<br />class: subcompact","displ: 1.9<br />hwy: 44<br />class: subcompact","displ: 1.9<br />hwy: 41<br />class: subcompact","displ: 2.0<br />hwy: 29<br />class: subcompact","displ: 2.0<br />hwy: 26<br />class: subcompact","displ: 2.5<br />hwy: 28<br />class: subcompact","displ: 2.5<br />hwy: 29<br />class: subcompact"],"type":"scatter","mode":"markers","marker":{"autocolorscale":false,"color":"rgba(165,138,255,1)","opacity":1,"size":5.6692913385826778,"symbol":"circle","line":{"width":1.8897637795275593,"color":"rgba(165,138,255,1)"}},"hoveron":"points","name":"subcompact","legendgroup":"subcompact","showlegend":true,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null},{"x":[5.2999999999999998,5.2999999999999998,5.2999999999999998,5.7000000000000002,6,5.2999999999999998,5.2999999999999998,5.7000000000000002,6.5,3.8999999999999999,4.7000000000000002,4.7000000000000002,4.7000000000000002,5.2000000000000002,5.7000000000000002,5.9000000000000004,4.5999999999999996,5.4000000000000004,5.4000000000000004,4,4,4,4,4.5999999999999996,5,3,3.7000000000000002,4,4.7000000000000002,4.7000000000000002,4.7000000000000002,5.7000000000000002,6.0999999999999996,4,4.2000000000000002,4.4000000000000004,4.5999999999999996,5.4000000000000004,5.4000000000000004,5.4000000000000004,4,4,4.5999999999999996,5,3.2999999999999998,3.2999999999999998,4,5.5999999999999996,2.5,2.5,2.5,2.5,2.5,2.5,2.7000000000000002,2.7000000000000002,3.3999999999999999,3.3999999999999999,4,4.7000000000000002,4.7000000000000002,5.7000000000000002],"y":[20,15,20,17,17,19,14,15,17,17,17,12,17,16,18,15,17,17,18,17,19,17,19,19,17,22,19,20,17,12,19,18,14,15,18,18,15,17,16,18,17,19,19,17,17,17,20,18,25,24,27,25,26,23,20,20,19,17,20,17,15,18],"text":["displ: 5.3<br />hwy: 20<br />class: suv","displ: 5.3<br />hwy: 15<br />class: suv","displ: 5.3<br />hwy: 20<br />class: suv","displ: 5.7<br />hwy: 17<br />class: suv","displ: 6.0<br />hwy: 17<br />class: suv","displ: 5.3<br />hwy: 19<br />class: suv","displ: 5.3<br />hwy: 14<br />class: suv","displ: 5.7<br />hwy: 15<br />class: suv","displ: 6.5<br />hwy: 17<br />class: suv","displ: 3.9<br />hwy: 17<br />class: suv","displ: 4.7<br />hwy: 17<br />class: suv","displ: 4.7<br />hwy: 12<br />class: suv","displ: 4.7<br />hwy: 17<br />class: suv","displ: 5.2<br />hwy: 16<br />class: suv","displ: 5.7<br />hwy: 18<br />class: suv","displ: 5.9<br />hwy: 15<br />class: suv","displ: 4.6<br />hwy: 17<br />class: suv","displ: 5.4<br />hwy: 17<br />class: suv","displ: 5.4<br />hwy: 18<br />class: suv","displ: 4.0<br />hwy: 17<br />class: suv","displ: 4.0<br />hwy: 19<br />class: suv","displ: 4.0<br />hwy: 17<br />class: suv","displ: 4.0<br />hwy: 19<br />class: suv","displ: 4.6<br />hwy: 19<br />class: suv","displ: 5.0<br />hwy: 17<br />class: suv","displ: 3.0<br />hwy: 22<br />class: suv","displ: 3.7<br />hwy: 19<br />class: suv","displ: 4.0<br />hwy: 20<br />class: suv","displ: 4.7<br />hwy: 17<br />class: suv","displ: 4.7<br />hwy: 12<br />class: suv","displ: 4.7<br />hwy: 19<br />class: suv","displ: 5.7<br />hwy: 18<br />class: suv","displ: 6.1<br />hwy: 14<br />class: suv","displ: 4.0<br />hwy: 15<br />class: suv","displ: 4.2<br />hwy: 18<br />class: suv","displ: 4.4<br />hwy: 18<br />class: suv","displ: 4.6<br />hwy: 15<br />class: suv","displ: 5.4<br />hwy: 17<br />class: suv","displ: 5.4<br />hwy: 16<br />class: suv","displ: 5.4<br />hwy: 18<br />class: suv","displ: 4.0<br />hwy: 17<br />class: suv","displ: 4.0<br />hwy: 19<br />class: suv","displ: 4.6<br />hwy: 19<br />class: suv","displ: 5.0<br />hwy: 17<br />class: suv","displ: 3.3<br />hwy: 17<br />class: suv","displ: 3.3<br />hwy: 17<br />class: suv","displ: 4.0<br />hwy: 20<br />class: suv","displ: 5.6<br />hwy: 18<br />class: suv","displ: 2.5<br />hwy: 25<br />class: suv","displ: 2.5<br />hwy: 24<br />class: suv","displ: 2.5<br />hwy: 27<br />class: suv","displ: 2.5<br />hwy: 25<br />class: suv","displ: 2.5<br />hwy: 26<br />class: suv","displ: 2.5<br />hwy: 23<br />class: suv","displ: 2.7<br />hwy: 20<br />class: suv","displ: 2.7<br />hwy: 20<br />class: suv","displ: 3.4<br />hwy: 19<br />class: suv","displ: 3.4<br />hwy: 17<br />class: suv","displ: 4.0<br />hwy: 20<br />class: suv","displ: 4.7<br />hwy: 17<br />class: suv","displ: 4.7<br />hwy: 15<br />class: suv","displ: 5.7<br />hwy: 18<br />class: suv"],"type":"scatter","mode":"markers","marker":{"autocolorscale":false,"color":"rgba(251,97,215,1)","opacity":1,"size":5.6692913385826778,"symbol":"circle","line":{"width":1.8897637795275593,"color":"rgba(251,97,215,1)"}},"hoveron":"points","name":"suv","legendgroup":"suv","showlegend":true,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null}],"layout":{"margin":{"t":23.305936073059364,"r":7.3059360730593621,"b":37.260273972602747,"l":37.260273972602747},"plot_bgcolor":"rgba(235,235,235,1)","paper_bgcolor":"rgba(255,255,255,1)","font":{"color":"rgba(0,0,0,1)","family":"","size":14.611872146118724},"xaxis":{"domain":[0,1],"automargin":true,"type":"linear","autorange":false,"range":[1.3300000000000001,7.2699999999999996],"tickmode":"array","ticktext":["2","3","4","5","6","7"],"tickvals":[2,3,4,5,6,7],"categoryorder":"array","categoryarray":["2","3","4","5","6","7"],"nticks":null,"ticks":"outside","tickcolor":"rgba(51,51,51,1)","ticklen":3.6529680365296811,"tickwidth":0.66417600664176002,"showticklabels":true,"tickfont":{"color":"rgba(77,77,77,1)","family":"","size":11.68949771689498},"tickangle":-0,"showline":false,"linecolor":null,"linewidth":0,"showgrid":true,"gridcolor":"rgba(255,255,255,1)","gridwidth":0.66417600664176002,"zeroline":false,"anchor":"y","title":{"text":"displ","font":{"color":"rgba(0,0,0,1)","family":"","size":14.611872146118724}},"hoverformat":".2f"},"yaxis":{"domain":[0,1],"automargin":true,"type":"linear","autorange":false,"range":[10.4,45.600000000000001],"tickmode":"array","ticktext":["20","30","40"],"tickvals":[20,30,40],"categoryorder":"array","categoryarray":["20","30","40"],"nticks":null,"ticks":"outside","tickcolor":"rgba(51,51,51,1)","ticklen":3.6529680365296811,"tickwidth":0.66417600664176002,"showticklabels":true,"tickfont":{"color":"rgba(77,77,77,1)","family":"","size":11.68949771689498},"tickangle":-0,"showline":false,"linecolor":null,"linewidth":0,"showgrid":true,"gridcolor":"rgba(255,255,255,1)","gridwidth":0.66417600664176002,"zeroline":false,"anchor":"x","title":{"text":"hwy","font":{"color":"rgba(0,0,0,1)","family":"","size":14.611872146118724}},"hoverformat":".2f"},"shapes":[],"showlegend":true,"legend":{"bgcolor":"rgba(255,255,255,1)","bordercolor":"transparent","borderwidth":1.8897637795275593,"font":{"color":"rgba(0,0,0,1)","family":"","size":11.68949771689498},"title":{"text":"class","font":{"color":"rgba(0,0,0,1)","family":"","size":14.611872146118724}}},"hovermode":"closest","barmode":"relative"},"config":{"doubleClick":"reset","modeBarButtonsToAdd":["hoverclosest","hovercompare"],"showSendToCloud":false},"source":"A","attrs":{"a06c4a5946f5":{"x":{},"y":{},"colour":{},"type":"scatter"}},"cur_data":"a06c4a5946f5","visdat":{"a06c4a5946f5":["function (y) ","x"]},"highlight":{"on":"plotly_click","persistent":false,"dynamic":false,"selectize":false,"opacityDim":0.20000000000000001,"selected":{"opacity":1},"debounce":0},"shinyEvents":["plotly_hover","plotly_click","plotly_selected","plotly_relayout","plotly_brushed","plotly_brushing","plotly_clickannotation","plotly_doubleclick","plotly_deselect","plotly_afterplot","plotly_sunburstclick"],"base_url":"https://plot.ly"},"evals":[],"jsHooks":[]}</script><p>Each car class gets its own color. Legend appears automatically. You did not pick the colors — ggplot did. <strong>Hover over any point</strong> to see the exact engine size, highway mpg, and vehicle class — this is what interactive visualization looks like in practice. Click a class name in the legend to show or hide it.</p>
+<p><strong>Setting</strong> (outside <code><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes()</a></code>) applies a <em>fixed</em> value to everything. No variable, no legend:</p>
+<div class="sourceCode" id="cb265"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">mpg</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">displ</span>, y <span class="op">=</span> <span class="va">hwy</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html">geom_point</a></span><span class="op">(</span>color <span class="op">=</span> <span class="st">"steelblue"</span>, size <span class="op">=</span> <span class="fl">3</span>, alpha <span class="op">=</span> <span class="fl">0.6</span><span class="op">)</span></span></code></pre></div>
+<div class="inline-figure"><img src="Rbook_files/figure-html/unnamed-chunk-266-1.png" alt="" width="672"></div>
+<p>All points are steel blue, size 3, 60% opaque. If you accidentally put <code>color = "steelblue"</code> inside <code><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes()</a></code>, you will get bizarre results and a useless legend. Mapped aesthetics go inside <code><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes()</a></code>. Fixed values go outside.</p>
+</div>
+<div id="combining-multiple-aesthetics" class="section level3" number="10.3.2">
+<h3>
+<span class="header-section-number">10.3.2</span> Combining Multiple Aesthetics<a class="anchor" aria-label="anchor" href="#combining-multiple-aesthetics"><i class="fas fa-link"></i></a>
+</h3>
+<p>You can map several variables at once for richer, more informative charts:</p>
+<div class="sourceCode" id="cb266"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">mpg</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">displ</span>, y <span class="op">=</span> <span class="va">hwy</span>, color <span class="op">=</span> <span class="va">class</span>, shape <span class="op">=</span> <span class="va">drv</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html">geom_point</a></span><span class="op">(</span>size <span class="op">=</span> <span class="fl">2.5</span><span class="op">)</span></span></code></pre></div>
+<div class="inline-figure"><img src="Rbook_files/figure-html/unnamed-chunk-267-1.png" alt="" width="672"></div>
+<p>Map a continuous variable to color and you get a gradient:</p>
+<div class="sourceCode" id="cb267"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">mpg</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">displ</span>, y <span class="op">=</span> <span class="va">hwy</span>, color <span class="op">=</span> <span class="va">cty</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html">geom_point</a></span><span class="op">(</span>size <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span></code></pre></div>
+<div class="inline-figure"><img src="Rbook_files/figure-html/unnamed-chunk-268-1.png" alt="" width="672"></div>
+</div>
+</div>
+<div id="geoms-the-chart-types-that-matter" class="section level2" number="10.4">
+<h2>
+<span class="header-section-number">10.4</span> Geoms – The Chart Types That Matter<a class="anchor" aria-label="anchor" href="#geoms-the-chart-types-that-matter"><i class="fas fa-link"></i></a>
+</h2>
+<p>Geoms are the building blocks. Each one draws a different shape. Here are the ones you will use 90% of the time in any business context.</p>
+<div id="bar-chart-counting-categories" class="section level3" number="10.4.1">
+<h3>
+<span class="header-section-number">10.4.1</span> Bar Chart – Counting Categories<a class="anchor" aria-label="anchor" href="#bar-chart-counting-categories"><i class="fas fa-link"></i></a>
+</h3>
+<p>How many observations in each category? <code><a href="https://ggplot2.tidyverse.org/reference/geom_bar.html">geom_bar()</a></code> counts for you automatically — no pre-calculation needed:</p>
+<div class="sourceCode" id="cb268"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">mpg</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">class</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_bar.html">geom_bar</a></span><span class="op">(</span>fill <span class="op">=</span> <span class="st">"steelblue"</span><span class="op">)</span></span></code></pre></div>
+<div class="inline-figure"><img src="Rbook_files/figure-html/unnamed-chunk-269-1.png" alt="" width="672"></div>
+<p>If you already have pre-computed values (say, average revenue by region from a summary table), use <code><a href="https://ggplot2.tidyverse.org/reference/geom_bar.html">geom_col()</a></code> instead:</p>
+<div class="sourceCode" id="cb269"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">mpg_avg</span> <span class="op">&lt;-</span> <span class="va">mpg</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html">group_by</a></span><span class="op">(</span><span class="va">class</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/summarise.html">summarize</a></span><span class="op">(</span>avg_hwy <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span><span class="op">(</span><span class="va">hwy</span><span class="op">)</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">mpg_avg</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">class</span>, y <span class="op">=</span> <span class="va">avg_hwy</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_bar.html">geom_col</a></span><span class="op">(</span>fill <span class="op">=</span> <span class="st">"steelblue"</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_text.html">geom_text</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>label <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Round.html">round</a></span><span class="op">(</span><span class="va">avg_hwy</span>, <span class="fl">1</span><span class="op">)</span><span class="op">)</span>, vjust <span class="op">=</span> <span class="op">-</span><span class="fl">0.5</span>, size <span class="op">=</span> <span class="fl">3.5</span><span class="op">)</span></span></code></pre></div>
+<div class="inline-figure"><img src="Rbook_files/figure-html/unnamed-chunk-270-1.png" alt="" width="672"></div>
+<p>Adding value labels on top of bars is the kind of small touch that makes your manager think you have been doing this for years.</p>
+</div>
+<div id="histogram-distribution-of-a-continuous-variable" class="section level3" number="10.4.2">
+<h3>
+<span class="header-section-number">10.4.2</span> Histogram – Distribution of a Continuous Variable<a class="anchor" aria-label="anchor" href="#histogram-distribution-of-a-continuous-variable"><i class="fas fa-link"></i></a>
+</h3>
+<p>“How are values spread out?” is one of the first questions any analyst should ask. Histograms answer it:</p>
+<div class="sourceCode" id="cb270"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">mpg</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">hwy</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_histogram.html">geom_histogram</a></span><span class="op">(</span>binwidth <span class="op">=</span> <span class="fl">2</span>, fill <span class="op">=</span> <span class="st">"steelblue"</span>, color <span class="op">=</span> <span class="st">"white"</span><span class="op">)</span></span></code></pre></div>
+<div class="inline-figure"><img src="Rbook_files/figure-html/unnamed-chunk-271-1.png" alt="" width="672"></div>
+<p>The histogram reveals that highway fuel economy clusters around two peaks — one near 17 mpg and another near 26–29 mpg — suggesting two distinct groups of vehicles (likely city-friendly small cars versus larger trucks/SUVs). This bimodal shape is a story in itself.</p>
+<p>Play with <code>binwidth</code> to change the granularity. Too few bins hides patterns; too many creates noise. It is like choosing the right zoom level on a map.</p>
+</div>
+<div id="scatter-plot-relationships-between-two-numbers" class="section level3" number="10.4.3">
+<h3>
+<span class="header-section-number">10.4.3</span> Scatter Plot – Relationships Between Two Numbers<a class="anchor" aria-label="anchor" href="#scatter-plot-relationships-between-two-numbers"><i class="fas fa-link"></i></a>
+</h3>
+<p>The workhorse of exploratory analysis. Great for spotting correlations, clusters, and that one weird outlier your intern accidentally entered:</p>
+<div class="sourceCode" id="cb271"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">mpg</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">displ</span>, y <span class="op">=</span> <span class="va">hwy</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html">geom_point</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
+<div class="inline-figure"><img src="Rbook_files/figure-html/unnamed-chunk-272-1.png" alt="" width="672"></div>
+<p>When points pile on top of each other (overplotting), use transparency or jitter:</p>
+<div class="sourceCode" id="cb272"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">mpg</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">displ</span>, y <span class="op">=</span> <span class="va">hwy</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_jitter.html">geom_jitter</a></span><span class="op">(</span>width <span class="op">=</span> <span class="fl">0.2</span>, height <span class="op">=</span> <span class="fl">0.5</span>, alpha <span class="op">=</span> <span class="fl">0.6</span><span class="op">)</span></span></code></pre></div>
+<div class="inline-figure"><img src="Rbook_files/figure-html/unnamed-chunk-273-1.png" alt="" width="672"></div>
+</div>
+<div id="line-chart-trends-over-time" class="section level3" number="10.4.4">
+<h3>
+<span class="header-section-number">10.4.4</span> Line Chart – Trends Over Time<a class="anchor" aria-label="anchor" href="#line-chart-trends-over-time"><i class="fas fa-link"></i></a>
+</h3>
+<p>The bread and butter of business dashboards. Revenue by month, stock prices, KPIs over time:</p>
+<div class="sourceCode" id="cb273"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">economics</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">date</span>, y <span class="op">=</span> <span class="va">unemploy</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_path.html">geom_line</a></span><span class="op">(</span>color <span class="op">=</span> <span class="st">"steelblue"</span><span class="op">)</span></span></code></pre></div>
+<div class="inline-figure"><img src="Rbook_files/figure-html/unnamed-chunk-274-1.png" alt="" width="672"></div>
+<p>The unemployment trend shows dramatic spikes during major recessions (early 1980s, 2008–2010) followed by gradual recoveries. The long-term pattern is cyclical, and the overall level has trended upward over decades as the labor force has grown. A chart like this immediately tells a story that a table of monthly numbers never could.</p>
+</div>
+<div id="smooth-line-trend-lines-and-regression" class="section level3" number="10.4.5">
+<h3>
+<span class="header-section-number">10.4.5</span> Smooth Line – Trend Lines and Regression<a class="anchor" aria-label="anchor" href="#smooth-line-trend-lines-and-regression"><i class="fas fa-link"></i></a>
+</h3>
+<p>Add a trend line to a scatter plot with <code><a href="https://ggplot2.tidyverse.org/reference/geom_smooth.html">geom_smooth()</a></code>. By default, it uses a method called <strong>LOESS</strong> (LOcally Estimated Scatterplot Smoothing) — a flexible curve that adapts to the shape of your data. Think of it as a moving average that bends to follow the trend. This is incredibly useful for showing the overall direction without getting lost in the noise:</p>
+<div class="sourceCode" id="cb274"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">mpg</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">displ</span>, y <span class="op">=</span> <span class="va">hwy</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html">geom_point</a></span><span class="op">(</span>alpha <span class="op">=</span> <span class="fl">0.4</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_smooth.html">geom_smooth</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
+<div class="inline-figure"><img src="Rbook_files/figure-html/unnamed-chunk-275-1.png" alt="" width="672"></div>
+<p>The smooth curve shows a clear downward trend: as engine size increases, highway fuel economy drops. The gray band around the line is a confidence interval — wider at the edges where there are fewer data points, narrower in the middle where the estimate is more certain.</p>
+<p>Want a straight regression line? Specify <code>method = "lm"</code>:</p>
+<div class="sourceCode" id="cb275"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">mpg</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">displ</span>, y <span class="op">=</span> <span class="va">hwy</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html">geom_point</a></span><span class="op">(</span>alpha <span class="op">=</span> <span class="fl">0.4</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_smooth.html">geom_smooth</a></span><span class="op">(</span>method <span class="op">=</span> <span class="st">"lm"</span>, se <span class="op">=</span> <span class="cn">TRUE</span>, color <span class="op">=</span> <span class="st">"red"</span><span class="op">)</span></span></code></pre></div>
+<div class="inline-figure"><img src="Rbook_files/figure-html/unnamed-chunk-276-1.png" alt="" width="672"></div>
+</div>
+<div id="boxplot-comparing-distributions-across-groups" class="section level3" number="10.4.6">
+<h3>
+<span class="header-section-number">10.4.6</span> Boxplot – Comparing Distributions Across Groups<a class="anchor" aria-label="anchor" href="#boxplot-comparing-distributions-across-groups"><i class="fas fa-link"></i></a>
+</h3>
+<p>Boxplots let you compare a numeric variable across categories at a glance — like highway mileage by vehicle class:</p>
+<div class="sourceCode" id="cb276"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">mpg</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">class</span>, y <span class="op">=</span> <span class="va">hwy</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_boxplot.html">geom_boxplot</a></span><span class="op">(</span>fill <span class="op">=</span> <span class="st">"lightblue"</span>, color <span class="op">=</span> <span class="st">"navy"</span><span class="op">)</span></span></code></pre></div>
+<div class="inline-figure"><img src="Rbook_files/figure-html/unnamed-chunk-277-1.png" alt="" width="672"></div>
+<p>The box is the middle 50%, the line is the median, and the dots are outliers. It is the executive summary of a distribution. Here we can see that pickups and SUVs have the lowest highway fuel economy (medians around 17–18 mpg), while compact and subcompact cars lead the pack (medians around 27–28 mpg). The midsize class has the tightest IQR, meaning those vehicles are the most consistent.</p>
+</div>
+<div id="layering-multiple-geoms" class="section level3" number="10.4.7">
+<h3>
+<span class="header-section-number">10.4.7</span> Layering Multiple Geoms<a class="anchor" aria-label="anchor" href="#layering-multiple-geoms"><i class="fas fa-link"></i></a>
+</h3>
+<p>One of the best things about ggplot2 is that you stack geoms like layers on a cake. Points plus a trend line plus a reference line? No problem:</p>
+<div class="sourceCode" id="cb277"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">mpg</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">displ</span>, y <span class="op">=</span> <span class="va">hwy</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html">geom_point</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>color <span class="op">=</span> <span class="va">class</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_smooth.html">geom_smooth</a></span><span class="op">(</span>color <span class="op">=</span> <span class="st">"black"</span>, se <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_abline.html">geom_hline</a></span><span class="op">(</span>yintercept <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span><span class="op">(</span><span class="va">mpg</span><span class="op">$</span><span class="va">hwy</span><span class="op">)</span>, linetype <span class="op">=</span> <span class="st">"dotted"</span>, color <span class="op">=</span> <span class="st">"gray50"</span><span class="op">)</span></span></code></pre></div>
+<div class="inline-figure"><img src="Rbook_files/figure-html/unnamed-chunk-278-1.png" alt="" width="672"></div>
+<p>That dotted line shows the overall average highway mpg. Points above the line are above average; points below are below average. Notice how SUVs and pickups cluster below the line while compact cars float above it. Layering like this makes your charts tell a richer, more complete story.</p>
+</div>
+</div>
+<div id="faceting-one-chart-per-category" class="section level2" number="10.5">
+<h2>
+<span class="header-section-number">10.5</span> Faceting – One Chart Per Category<a class="anchor" aria-label="anchor" href="#faceting-one-chart-per-category"><i class="fas fa-link"></i></a>
+</h2>
+<p>Faceting splits your data into subsets and creates a separate panel for each one. In the data viz world, these are called “small multiples,” and they are one of the most powerful ways to compare groups without cramming everything into a single cluttered chart.</p>
+<div id="facet_wrap" class="section level3" number="10.5.1">
+<h3>
+<span class="header-section-number">10.5.1</span> facet_wrap()<a class="anchor" aria-label="anchor" href="#facet_wrap"><i class="fas fa-link"></i></a>
+</h3>
+<p>Wraps panels in a row-by-row layout:</p>
+<div class="sourceCode" id="cb278"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">mpg</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">displ</span>, y <span class="op">=</span> <span class="va">hwy</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html">geom_point</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/facet_wrap.html">facet_wrap</a></span><span class="op">(</span><span class="op">~</span> <span class="va">class</span><span class="op">)</span></span></code></pre></div>
+<div class="inline-figure"><img src="Rbook_files/figure-html/unnamed-chunk-279-1.png" alt="" width="672"></div>
+<p>Each panel tells its own story. Compact cars cluster in the upper-left (small engines, good mileage), while SUVs and pickups fill the lower-right (big engines, poor mileage). Two-seaters show an interesting outlier — a couple of high-mileage cars with large engines (likely sports cars with efficient highway gearing). Faceting lets you spot these patterns that would be hidden in a single crowded chart.</p>
+<p>Control the layout with <code>ncol</code>:</p>
+<div class="sourceCode" id="cb279"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">mpg</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">displ</span>, y <span class="op">=</span> <span class="va">hwy</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html">geom_point</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/facet_wrap.html">facet_wrap</a></span><span class="op">(</span><span class="op">~</span> <span class="va">class</span>, ncol <span class="op">=</span> <span class="fl">4</span><span class="op">)</span></span></code></pre></div>
+<div class="inline-figure"><img src="Rbook_files/figure-html/unnamed-chunk-280-1.png" alt="" width="672"></div>
+</div>
+<div id="facet_grid" class="section level3" number="10.5.2">
+<h3>
+<span class="header-section-number">10.5.2</span> facet_grid()<a class="anchor" aria-label="anchor" href="#facet_grid"><i class="fas fa-link"></i></a>
+</h3>
+<p>Creates a grid defined by two variables — rows and columns. Think of it as a pivot table, but visual:</p>
+<div class="sourceCode" id="cb280"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">mpg</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">displ</span>, y <span class="op">=</span> <span class="va">hwy</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html">geom_point</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/facet_grid.html">facet_grid</a></span><span class="op">(</span><span class="va">drv</span> <span class="op">~</span> <span class="va">cyl</span><span class="op">)</span></span></code></pre></div>
+<div class="inline-figure"><img src="Rbook_files/figure-html/unnamed-chunk-281-1.png" alt="" width="672"></div>
+<p>Each cell shows one combination of drive type (rows) and cylinder count (columns). Empty panels are informative too — there are no rear-wheel-drive (<code>r</code>) 4-cylinder cars, and no 4-wheel-drive (<code>4</code>) 5-cylinder cars in this dataset. The grid layout makes it easy to read both across (comparing cylinder counts within a drive type) and down (comparing drive types within a cylinder count).</p>
+</div>
+<div id="letting-axes-vary-with-free-scales" class="section level3" number="10.5.3">
+<h3>
+<span class="header-section-number">10.5.3</span> Letting Axes Vary with Free Scales<a class="anchor" aria-label="anchor" href="#letting-axes-vary-with-free-scales"><i class="fas fa-link"></i></a>
+</h3>
+<p>By default, all panels share the same axes. Sometimes that hides patterns in smaller groups. Use <code>scales = "free_y"</code> (or <code>"free_x"</code> or <code>"free"</code>) to let each panel set its own range:</p>
+<div class="sourceCode" id="cb281"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">mpg</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">hwy</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_histogram.html">geom_histogram</a></span><span class="op">(</span>binwidth <span class="op">=</span> <span class="fl">2</span>, fill <span class="op">=</span> <span class="st">"steelblue"</span>, color <span class="op">=</span> <span class="st">"white"</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/facet_wrap.html">facet_wrap</a></span><span class="op">(</span><span class="op">~</span> <span class="va">class</span>, scales <span class="op">=</span> <span class="st">"free_y"</span><span class="op">)</span></span></code></pre></div>
+<div class="inline-figure"><img src="Rbook_files/figure-html/unnamed-chunk-282-1.png" alt="" width="672"></div>
+</div>
+</div>
+<div id="position-adjustments-for-bar-charts" class="section level2" number="10.6">
+<h2>
+<span class="header-section-number">10.6</span> Position Adjustments for Bar Charts<a class="anchor" aria-label="anchor" href="#position-adjustments-for-bar-charts"><i class="fas fa-link"></i></a>
+</h2>
+<p>When your bar chart has a fill variable, you need to decide how the bars relate to each other. Three options worth knowing:</p>
+<div id="stacked-the-default" class="section level3" number="10.6.1">
+<h3>
+<span class="header-section-number">10.6.1</span> Stacked (the default)<a class="anchor" aria-label="anchor" href="#stacked-the-default"><i class="fas fa-link"></i></a>
+</h3>
+<p>Bars stacked on top of each other. Good for showing total sizes and composition:</p>
+<div class="sourceCode" id="cb282"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">diamonds</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">cut</span>, fill <span class="op">=</span> <span class="va">clarity</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_bar.html">geom_bar</a></span><span class="op">(</span>position <span class="op">=</span> <span class="st">"stack"</span><span class="op">)</span></span></code></pre></div>
+<div class="inline-figure"><img src="Rbook_files/figure-html/unnamed-chunk-283-1.png" alt="" width="672"></div>
+<p>The stacked bars show that “Ideal” cut has the most diamonds overall (tallest bar), and you can see the composition by clarity within each cut. However, comparing individual clarity levels across cuts is hard because the segments have different starting points — that is the trade-off of stacking.</p>
+</div>
+<div id="dodged-side-by-side" class="section level3" number="10.6.2">
+<h3>
+<span class="header-section-number">10.6.2</span> Dodged (side by side)<a class="anchor" aria-label="anchor" href="#dodged-side-by-side"><i class="fas fa-link"></i></a>
+</h3>
+<p>Bars placed next to each other. Better for comparing individual groups:</p>
+<div class="sourceCode" id="cb283"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">diamonds</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">cut</span>, fill <span class="op">=</span> <span class="va">clarity</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_bar.html">geom_bar</a></span><span class="op">(</span>position <span class="op">=</span> <span class="st">"dodge"</span><span class="op">)</span></span></code></pre></div>
+<div class="inline-figure"><img src="Rbook_files/figure-html/unnamed-chunk-284-1.png" alt="" width="672"></div>
+<p>Dodged bars make it easy to compare individual clarity levels across cuts. You can immediately see, for example, that SI1 and VS2 are the most common clarity grades within every cut quality. The trade-off is that with eight clarity levels, the bars get quite narrow — dodged position works best with fewer groups (three to five).</p>
+</div>
+<div id="filled-proportions" class="section level3" number="10.6.3">
+<h3>
+<span class="header-section-number">10.6.3</span> Filled (proportions)<a class="anchor" aria-label="anchor" href="#filled-proportions"><i class="fas fa-link"></i></a>
+</h3>
+<p>All bars stretched to the same height, showing percentages. Great for “what share of each category falls into each bucket?”:</p>
+<div class="sourceCode" id="cb284"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">diamonds</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">cut</span>, fill <span class="op">=</span> <span class="va">clarity</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_bar.html">geom_bar</a></span><span class="op">(</span>position <span class="op">=</span> <span class="st">"fill"</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">ylab</a></span><span class="op">(</span><span class="st">"Proportion"</span><span class="op">)</span></span></code></pre></div>
+<div class="inline-figure"><img src="Rbook_files/figure-html/unnamed-chunk-285-1.png" alt="" width="672"></div>
+<p>Filled bars normalize everything to 100%, so you can compare proportions directly. Here the clarity composition looks remarkably similar across cut qualities — a surprise, since you might expect “Ideal” cuts to have higher clarity. This tells you that cut and clarity are relatively independent in this dataset.</p>
+</div>
+</div>
+<div id="coordinate-systems" class="section level2" number="10.7">
+<h2>
+<span class="header-section-number">10.7</span> Coordinate Systems<a class="anchor" aria-label="anchor" href="#coordinate-systems"><i class="fas fa-link"></i></a>
+</h2>
+<p>A couple of coordinate tweaks that come up regularly.</p>
+<div id="coord_flip-horizontal-bar-charts" class="section level3" number="10.7.1">
+<h3>
+<span class="header-section-number">10.7.1</span> coord_flip() – Horizontal Bar Charts<a class="anchor" aria-label="anchor" href="#coord_flip-horizontal-bar-charts"><i class="fas fa-link"></i></a>
+</h3>
+<p>When your category labels are long and overlap, just flip the axes:</p>
+<div class="sourceCode" id="cb285"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">mpg</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">class</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_bar.html">geom_bar</a></span><span class="op">(</span>fill <span class="op">=</span> <span class="st">"steelblue"</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/coord_flip.html">coord_flip</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
+<div class="inline-figure"><img src="Rbook_files/figure-html/unnamed-chunk-286-1.png" alt="" width="672"></div>
+</div>
+<div id="coord_cartesian-zooming-without-losing-data" class="section level3" number="10.7.2">
+<h3>
+<span class="header-section-number">10.7.2</span> coord_cartesian() – Zooming Without Losing Data<a class="anchor" aria-label="anchor" href="#coord_cartesian-zooming-without-losing-data"><i class="fas fa-link"></i></a>
+</h3>
+<p>This lets you zoom into a region of your plot without actually throwing away data points:</p>
+<div class="sourceCode" id="cb286"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">mpg</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">displ</span>, y <span class="op">=</span> <span class="va">hwy</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html">geom_point</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_smooth.html">geom_smooth</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/coord_cartesian.html">coord_cartesian</a></span><span class="op">(</span>xlim <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">3</span>, <span class="fl">6</span><span class="op">)</span>, ylim <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">15</span>, <span class="fl">35</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<div class="inline-figure"><img src="Rbook_files/figure-html/unnamed-chunk-287-1.png" alt="" width="672"></div>
+<p>This is different from setting axis limits directly, which <em>removes</em> data outside the range and can distort trend lines. <code><a href="https://ggplot2.tidyverse.org/reference/coord_cartesian.html">coord_cartesian()</a></code> just changes the camera angle.</p>
+</div>
+</div>
+<div id="labels-and-annotations-making-charts-presentation-ready" class="section level2" number="10.8">
+<h2>
+<span class="header-section-number">10.8</span> Labels and Annotations – Making Charts Presentation-Ready<a class="anchor" aria-label="anchor" href="#labels-and-annotations-making-charts-presentation-ready"><i class="fas fa-link"></i></a>
+</h2>
+<p>A chart without labels is like a resume without your name on it. Technically it exists, but it is not doing you any favors.</p>
+<div id="the-labs-function" class="section level3" number="10.8.1">
+<h3>
+<span class="header-section-number">10.8.1</span> The labs() Function<a class="anchor" aria-label="anchor" href="#the-labs-function"><i class="fas fa-link"></i></a>
+</h3>
+<p><code><a href="https://ggplot2.tidyverse.org/reference/labs.html">labs()</a></code> is your one-stop shop for titles, subtitles, captions, and axis labels:</p>
+<div class="sourceCode" id="cb287"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">mpg</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">displ</span>, y <span class="op">=</span> <span class="va">hwy</span>, color <span class="op">=</span> <span class="va">class</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html">geom_point</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">labs</a></span><span class="op">(</span></span>
+<span>    title <span class="op">=</span> <span class="st">"Fuel Efficiency vs. Engine Displacement"</span>,</span>
+<span>    subtitle <span class="op">=</span> <span class="st">"Data from EPA for 38 popular car models (1999-2008)"</span>,</span>
+<span>    caption <span class="op">=</span> <span class="st">"Source: mpg dataset in ggplot2"</span>,</span>
+<span>    x <span class="op">=</span> <span class="st">"Engine Displacement (liters)"</span>,</span>
+<span>    y <span class="op">=</span> <span class="st">"Highway Fuel Economy (mpg)"</span>,</span>
+<span>    color <span class="op">=</span> <span class="st">"Vehicle Class"</span></span>
+<span>  <span class="op">)</span></span></code></pre></div>
+<div class="inline-figure"><img src="Rbook_files/figure-html/unnamed-chunk-288-1.png" alt="" width="672"></div>
+<p>Every chart you put in front of another human being should have, at minimum, a title and clear axis labels. Subtitles and captions are bonus polish that signal you actually care about your audience.</p>
+</div>
+<div id="annotate-adding-notes-to-specific-spots" class="section level3" number="10.8.2">
+<h3>
+<span class="header-section-number">10.8.2</span> annotate() – Adding Notes to Specific Spots<a class="anchor" aria-label="anchor" href="#annotate-adding-notes-to-specific-spots"><i class="fas fa-link"></i></a>
+</h3>
+<p><code><a href="https://ggplot2.tidyverse.org/reference/annotate.html">annotate()</a></code> lets you place text, rectangles, or arrows at exact positions on your plot — perfect for calling out that anomaly your boss will definitely ask about:</p>
+<div class="sourceCode" id="cb288"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">mpg</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">displ</span>, y <span class="op">=</span> <span class="va">hwy</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html">geom_point</a></span><span class="op">(</span>alpha <span class="op">=</span> <span class="fl">0.5</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/annotate.html">annotate</a></span><span class="op">(</span></span>
+<span>    <span class="st">"text"</span>,</span>
+<span>    x <span class="op">=</span> <span class="fl">6</span>, y <span class="op">=</span> <span class="fl">40</span>,</span>
+<span>    label <span class="op">=</span> <span class="st">"High efficiency\nlarge engines"</span>,</span>
+<span>    color <span class="op">=</span> <span class="st">"red"</span>, fontface <span class="op">=</span> <span class="st">"italic"</span>, size <span class="op">=</span> <span class="fl">4</span></span>
+<span>  <span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/annotate.html">annotate</a></span><span class="op">(</span></span>
+<span>    <span class="st">"rect"</span>,</span>
+<span>    xmin <span class="op">=</span> <span class="fl">5</span>, xmax <span class="op">=</span> <span class="fl">7</span>, ymin <span class="op">=</span> <span class="fl">35</span>, ymax <span class="op">=</span> <span class="fl">45</span>,</span>
+<span>    alpha <span class="op">=</span> <span class="fl">0.1</span>, fill <span class="op">=</span> <span class="st">"red"</span>, color <span class="op">=</span> <span class="st">"red"</span>, linetype <span class="op">=</span> <span class="st">"dashed"</span></span>
+<span>  <span class="op">)</span></span></code></pre></div>
+<div class="inline-figure"><img src="Rbook_files/figure-html/unnamed-chunk-289-1.png" alt="" width="672"></div>
+<p>Reference lines are also great for adding context — like showing the average so people know where “normal” is:</p>
+<div class="sourceCode" id="cb289"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">mpg</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">displ</span>, y <span class="op">=</span> <span class="va">hwy</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html">geom_point</a></span><span class="op">(</span>alpha <span class="op">=</span> <span class="fl">0.5</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_abline.html">geom_hline</a></span><span class="op">(</span>yintercept <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span><span class="op">(</span><span class="va">mpg</span><span class="op">$</span><span class="va">hwy</span><span class="op">)</span>, linetype <span class="op">=</span> <span class="st">"dashed"</span>, color <span class="op">=</span> <span class="st">"red"</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_abline.html">geom_vline</a></span><span class="op">(</span>xintercept <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span><span class="op">(</span><span class="va">mpg</span><span class="op">$</span><span class="va">displ</span><span class="op">)</span>, linetype <span class="op">=</span> <span class="st">"dashed"</span>, color <span class="op">=</span> <span class="st">"blue"</span><span class="op">)</span></span></code></pre></div>
+<div class="inline-figure"><img src="Rbook_files/figure-html/unnamed-chunk-290-1.png" alt="" width="672"></div>
+</div>
+</div>
+<div id="saving-your-plots" class="section level2" number="10.9">
+<h2>
+<span class="header-section-number">10.9</span> Saving Your Plots<a class="anchor" aria-label="anchor" href="#saving-your-plots"><i class="fas fa-link"></i></a>
+</h2>
+<p>Made something worth sharing? Save it with <code><a href="https://ggplot2.tidyverse.org/reference/ggsave.html">ggsave()</a></code>:</p>
+<div class="sourceCode" id="cb290"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Save the last plot as a PNG</span></span>
+<span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsave.html">ggsave</a></span><span class="op">(</span><span class="st">"my_plot.png"</span>, width <span class="op">=</span> <span class="fl">8</span>, height <span class="op">=</span> <span class="fl">6</span>, dpi <span class="op">=</span> <span class="fl">300</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Save as PDF (great for print or presentations)</span></span>
+<span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsave.html">ggsave</a></span><span class="op">(</span><span class="st">"my_plot.pdf"</span>, width <span class="op">=</span> <span class="fl">8</span>, height <span class="op">=</span> <span class="fl">6</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Save a specific plot object</span></span>
+<span><span class="va">my_plot</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span><span class="va">mpg</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span><span class="va">displ</span>, <span class="va">hwy</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html">geom_point</a></span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsave.html">ggsave</a></span><span class="op">(</span><span class="st">"specific_plot.png"</span>, plot <span class="op">=</span> <span class="va">my_plot</span>, width <span class="op">=</span> <span class="fl">10</span>, height <span class="op">=</span> <span class="fl">7</span>, dpi <span class="op">=</span> <span class="fl">150</span><span class="op">)</span></span></code></pre></div>
+</div>
+<div id="putting-it-all-together-1" class="section level2" number="10.10">
+<h2>
+<span class="header-section-number">10.10</span> Putting It All Together<a class="anchor" aria-label="anchor" href="#putting-it-all-together-1"><i class="fas fa-link"></i></a>
+</h2>
+<p>Let’s build a polished visualization step by step, applying everything from this chapter. We will use the <code>diamonds</code> dataset to see how price relates to carat weight across cut qualities.</p>
+<div id="start-simple" class="section level3" number="10.10.1">
+<h3>
+<span class="header-section-number">10.10.1</span> Start simple<a class="anchor" aria-label="anchor" href="#start-simple"><i class="fas fa-link"></i></a>
+</h3>
+<div class="sourceCode" id="cb291"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">diamonds</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">carat</span>, y <span class="op">=</span> <span class="va">price</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html">geom_point</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
+<div class="inline-figure"><img src="Rbook_files/figure-html/unnamed-chunk-292-1.png" alt="" width="672"></div>
+<p>Over 50,000 data points. Everything is overplotted into an unreadable blob. Let’s fix that.</p>
+</div>
+<div id="fix-overplotting" class="section level3" number="10.10.2">
+<h3>
+<span class="header-section-number">10.10.2</span> Fix overplotting<a class="anchor" aria-label="anchor" href="#fix-overplotting"><i class="fas fa-link"></i></a>
+</h3>
+<div class="sourceCode" id="cb292"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">diamonds</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">carat</span>, y <span class="op">=</span> <span class="va">price</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html">geom_point</a></span><span class="op">(</span>alpha <span class="op">=</span> <span class="fl">0.05</span>, size <span class="op">=</span> <span class="fl">0.5</span><span class="op">)</span></span></code></pre></div>
+<div class="inline-figure"><img src="Rbook_files/figure-html/unnamed-chunk-293-1.png" alt="" width="672"></div>
+</div>
+<div id="add-color-for-cut-quality" class="section level3" number="10.10.3">
+<h3>
+<span class="header-section-number">10.10.3</span> Add color for cut quality<a class="anchor" aria-label="anchor" href="#add-color-for-cut-quality"><i class="fas fa-link"></i></a>
+</h3>
+<div class="sourceCode" id="cb293"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">diamonds</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">carat</span>, y <span class="op">=</span> <span class="va">price</span>, color <span class="op">=</span> <span class="va">cut</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html">geom_point</a></span><span class="op">(</span>alpha <span class="op">=</span> <span class="fl">0.05</span>, size <span class="op">=</span> <span class="fl">0.3</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_smooth.html">geom_smooth</a></span><span class="op">(</span>se <span class="op">=</span> <span class="cn">FALSE</span>, linewidth <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span></code></pre></div>
+<div class="inline-figure"><img src="Rbook_files/figure-html/unnamed-chunk-294-1.png" alt="" width="672"></div>
+</div>
+<div id="facet-for-clarity-and-polish-it" class="section level3" number="10.10.4">
+<h3>
+<span class="header-section-number">10.10.4</span> Facet for clarity and polish it<a class="anchor" aria-label="anchor" href="#facet-for-clarity-and-polish-it"><i class="fas fa-link"></i></a>
+</h3>
+<div class="sourceCode" id="cb294"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">diamonds</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">carat</span>, y <span class="op">=</span> <span class="va">price</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html">geom_point</a></span><span class="op">(</span>alpha <span class="op">=</span> <span class="fl">0.05</span>, size <span class="op">=</span> <span class="fl">0.3</span>, color <span class="op">=</span> <span class="st">"steelblue"</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_smooth.html">geom_smooth</a></span><span class="op">(</span>color <span class="op">=</span> <span class="st">"red"</span>, se <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/facet_wrap.html">facet_wrap</a></span><span class="op">(</span><span class="op">~</span> <span class="va">cut</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_continuous.html">scale_y_continuous</a></span><span class="op">(</span>labels <span class="op">=</span> <span class="fu">scales</span><span class="fu">::</span><span class="fu"><a href="https://scales.r-lib.org/reference/dollar_format.html">dollar_format</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">labs</a></span><span class="op">(</span></span>
+<span>    title <span class="op">=</span> <span class="st">"Diamond Price by Carat Weight and Cut Quality"</span>,</span>
+<span>    subtitle <span class="op">=</span> <span class="st">"Each panel shows one of five cut grades; red line is a LOESS smooth"</span>,</span>
+<span>    caption <span class="op">=</span> <span class="st">"Source: diamonds dataset in ggplot2"</span>,</span>
+<span>    x <span class="op">=</span> <span class="st">"Carat Weight"</span>,</span>
+<span>    y <span class="op">=</span> <span class="st">"Price (USD)"</span></span>
+<span>  <span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html">theme_minimal</a></span><span class="op">(</span>base_size <span class="op">=</span> <span class="fl">12</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html">theme</a></span><span class="op">(</span></span>
+<span>    plot.title <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html">element_text</a></span><span class="op">(</span>face <span class="op">=</span> <span class="st">"bold"</span><span class="op">)</span>,</span>
+<span>    strip.text <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html">element_text</a></span><span class="op">(</span>face <span class="op">=</span> <span class="st">"bold"</span><span class="op">)</span>,</span>
+<span>    panel.grid.minor <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html">element_blank</a></span><span class="op">(</span><span class="op">)</span></span>
+<span>  <span class="op">)</span></span></code></pre></div>
+<div class="inline-figure"><img src="Rbook_files/figure-html/unnamed-chunk-295-1.png" alt="" width="672"></div>
+<p>The finished chart reveals a clear pattern: price rises steeply with carat weight for all cut grades, but the relationship is nonlinear — price accelerates at higher carat weights. Interestingly, the curves look similar across cut qualities, suggesting that carat weight dominates price more than cut does (at least in this dataset). That is the grammar of graphics at work. Data, aesthetics, geoms, facets, labels, theme — all layered incrementally so you can experiment and debug at each step. It is like building a presentation slide by slide instead of trying to design the whole deck at once.</p>
+</div>
+<div id="one-more-a-time-series" class="section level3" number="10.10.5">
+<h3>
+<span class="header-section-number">10.10.5</span> One more: a time series<a class="anchor" aria-label="anchor" href="#one-more-a-time-series"><i class="fas fa-link"></i></a>
+</h3>
+<div class="sourceCode" id="cb295"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">economics</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">date</span>, y <span class="op">=</span> <span class="va">unemploy</span> <span class="op">/</span> <span class="fl">1000</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_path.html">geom_line</a></span><span class="op">(</span>color <span class="op">=</span> <span class="st">"steelblue"</span>, linewidth <span class="op">=</span> <span class="fl">0.8</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_smooth.html">geom_smooth</a></span><span class="op">(</span>method <span class="op">=</span> <span class="st">"loess"</span>, span <span class="op">=</span> <span class="fl">0.1</span>, se <span class="op">=</span> <span class="cn">FALSE</span>, color <span class="op">=</span> <span class="st">"red"</span>, linewidth <span class="op">=</span> <span class="fl">0.5</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_date.html">scale_x_date</a></span><span class="op">(</span>date_labels <span class="op">=</span> <span class="st">"%Y"</span>, date_breaks <span class="op">=</span> <span class="st">"5 years"</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">labs</a></span><span class="op">(</span></span>
+<span>    title <span class="op">=</span> <span class="st">"U.S. Unemployment Over Time"</span>,</span>
+<span>    subtitle <span class="op">=</span> <span class="st">"Monthly number of unemployed persons (in thousands), 1967-2015"</span>,</span>
+<span>    caption <span class="op">=</span> <span class="st">"Source: economics dataset in ggplot2"</span>,</span>
+<span>    x <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>    y <span class="op">=</span> <span class="st">"Unemployed (thousands)"</span></span>
+<span>  <span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html">theme_minimal</a></span><span class="op">(</span>base_size <span class="op">=</span> <span class="fl">12</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html">theme</a></span><span class="op">(</span></span>
+<span>    plot.title <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html">element_text</a></span><span class="op">(</span>face <span class="op">=</span> <span class="st">"bold"</span><span class="op">)</span>,</span>
+<span>    axis.text.x <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html">element_text</a></span><span class="op">(</span>angle <span class="op">=</span> <span class="fl">45</span>, hjust <span class="op">=</span> <span class="fl">1</span><span class="op">)</span>,</span>
+<span>    panel.grid.minor <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html">element_blank</a></span><span class="op">(</span><span class="op">)</span></span>
+<span>  <span class="op">)</span></span></code></pre></div>
+<div class="inline-figure"><img src="Rbook_files/figure-html/unnamed-chunk-296-1.png" alt="" width="672"></div>
+<p>You now have everything you need to build charts that make people stop scrolling through their phones in meetings. In the next chapter, we will cover how to customize colors, themes, and layouts to make your plots look truly professional.</p>
+<p>One thing worth remembering: a well-made chart is a persuasive thing, and persuasive things carry responsibility. Misleading axis scales, cherry-picked time ranges, and conveniently buried subgroup patterns are all forms of dishonesty — even if the underlying data is real. The same skills that let you make a chart compelling also let you make it deceptive. Show the data honestly, even when honest is inconvenient. That is not idealism. That is professional integrity, and it is non-negotiable.</p>
+
+</div>
+</div>
+</div>
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+  var sidebar = document.querySelector(".sidebar-book");
+  if (!sidebar) return;
+
+  // Create a slim tab on the left edge — visible, unobtrusive, clearly a toggle
+  var btn = document.createElement("button");
+  btn.innerHTML = '&#9776; Contents';
+  btn.setAttribute("aria-label", "Toggle table of contents");
+  btn.id = "sidebar-toggle-btn";
+  document.body.appendChild(btn);
+
+  var isOpen = false;
+
+  function openSidebar() {
+    isOpen = true;
+    sidebar.classList.add("sidebar-open");
+    btn.innerHTML = '&times; Close';
+    btn.classList.add("sidebar-toggle-active");
+  }
+
+  function closeSidebar() {
+    isOpen = false;
+    sidebar.classList.remove("sidebar-open");
+    btn.innerHTML = '&#9776; Contents';
+    btn.classList.remove("sidebar-toggle-active");
+  }
+
+  btn.addEventListener("click", function(e) {
+    e.stopPropagation();
+    if (isOpen) { closeSidebar(); } else { openSidebar(); }
+  });
+
+  // Close when clicking outside
+  document.addEventListener("click", function(e) {
+    if (isOpen && !sidebar.contains(e.target) && e.target !== btn) {
+      closeSidebar();
+    }
+  });
+
+  // Close on Escape key
+  document.addEventListener("keydown", function(e) {
+    if (e.key === "Escape" && isOpen) { closeSidebar(); }
+  });
+
+  // Only activate on wide screens
+  function checkWidth() {
+    if (window.innerWidth >= 992) {
+      btn.style.display = "flex";
+      sidebar.classList.add("sidebar-collapsed");
+    } else {
+      btn.style.display = "none";
+      sidebar.classList.remove("sidebar-collapsed");
+      sidebar.classList.remove("sidebar-open");
+    }
+  }
+
+  window.addEventListener("resize", checkWidth);
+  checkWidth();
+});
+</script><div class="chapter-nav">
+<div class="prev"><a href="summarystats.html"><span class="header-section-number">9</span> Summary Statistics</a></div>
+<div class="next"><a href="ggplot2customize.html"><span class="header-section-number">11</span> Customizing ggplot2 Visualizations</a></div>
+</div></main><div class="col-md-3 col-lg-2 d-none d-md-block sidebar sidebar-chapter">
+    <nav id="toc" data-toggle="toc" aria-label="On this page"><h2>On this page</h2>
+      <ul class="nav navbar-nav">
+<li><a class="nav-link" href="#ggplot2basics"><span class="header-section-number">10</span> Data Visualization with ggplot2</a></li>
+<li><a class="nav-link" href="#the-grammar-of-graphics-the-30-second-version"><span class="header-section-number">10.1</span> The Grammar of Graphics (the 30-Second Version)</a></li>
+<li>
+<a class="nav-link" href="#your-first-ggplot"><span class="header-section-number">10.2</span> Your First ggplot</a><ul class="nav navbar-nav">
+<li><a class="nav-link" href="#step-1-create-the-canvas"><span class="header-section-number">10.2.1</span> Step 1: Create the canvas</a></li>
+<li><a class="nav-link" href="#step-2-map-your-variables"><span class="header-section-number">10.2.2</span> Step 2: Map your variables</a></li>
+<li><a class="nav-link" href="#step-3-add-the-geom"><span class="header-section-number">10.2.3</span> Step 3: Add the geom</a></li>
+</ul>
+</li>
+<li>
+<a class="nav-link" href="#aesthetic-mappings-making-charts-informative"><span class="header-section-number">10.3</span> Aesthetic Mappings – Making Charts Informative</a><ul class="nav navbar-nav">
+<li><a class="nav-link" href="#mapping-vs.-setting-this-trips-everyone-up"><span class="header-section-number">10.3.1</span> Mapping vs. Setting – This Trips Everyone Up</a></li>
+<li><a class="nav-link" href="#combining-multiple-aesthetics"><span class="header-section-number">10.3.2</span> Combining Multiple Aesthetics</a></li>
+</ul>
+</li>
+<li>
+<a class="nav-link" href="#geoms-the-chart-types-that-matter"><span class="header-section-number">10.4</span> Geoms – The Chart Types That Matter</a><ul class="nav navbar-nav">
+<li><a class="nav-link" href="#bar-chart-counting-categories"><span class="header-section-number">10.4.1</span> Bar Chart – Counting Categories</a></li>
+<li><a class="nav-link" href="#histogram-distribution-of-a-continuous-variable"><span class="header-section-number">10.4.2</span> Histogram – Distribution of a Continuous Variable</a></li>
+<li><a class="nav-link" href="#scatter-plot-relationships-between-two-numbers"><span class="header-section-number">10.4.3</span> Scatter Plot – Relationships Between Two Numbers</a></li>
+<li><a class="nav-link" href="#line-chart-trends-over-time"><span class="header-section-number">10.4.4</span> Line Chart – Trends Over Time</a></li>
+<li><a class="nav-link" href="#smooth-line-trend-lines-and-regression"><span class="header-section-number">10.4.5</span> Smooth Line – Trend Lines and Regression</a></li>
+<li><a class="nav-link" href="#boxplot-comparing-distributions-across-groups"><span class="header-section-number">10.4.6</span> Boxplot – Comparing Distributions Across Groups</a></li>
+<li><a class="nav-link" href="#layering-multiple-geoms"><span class="header-section-number">10.4.7</span> Layering Multiple Geoms</a></li>
+</ul>
+</li>
+<li>
+<a class="nav-link" href="#faceting-one-chart-per-category"><span class="header-section-number">10.5</span> Faceting – One Chart Per Category</a><ul class="nav navbar-nav">
+<li><a class="nav-link" href="#facet_wrap"><span class="header-section-number">10.5.1</span> facet_wrap()</a></li>
+<li><a class="nav-link" href="#facet_grid"><span class="header-section-number">10.5.2</span> facet_grid()</a></li>
+<li><a class="nav-link" href="#letting-axes-vary-with-free-scales"><span class="header-section-number">10.5.3</span> Letting Axes Vary with Free Scales</a></li>
+</ul>
+</li>
+<li>
+<a class="nav-link" href="#position-adjustments-for-bar-charts"><span class="header-section-number">10.6</span> Position Adjustments for Bar Charts</a><ul class="nav navbar-nav">
+<li><a class="nav-link" href="#stacked-the-default"><span class="header-section-number">10.6.1</span> Stacked (the default)</a></li>
+<li><a class="nav-link" href="#dodged-side-by-side"><span class="header-section-number">10.6.2</span> Dodged (side by side)</a></li>
+<li><a class="nav-link" href="#filled-proportions"><span class="header-section-number">10.6.3</span> Filled (proportions)</a></li>
+</ul>
+</li>
+<li>
+<a class="nav-link" href="#coordinate-systems"><span class="header-section-number">10.7</span> Coordinate Systems</a><ul class="nav navbar-nav">
+<li><a class="nav-link" href="#coord_flip-horizontal-bar-charts"><span class="header-section-number">10.7.1</span> coord_flip() – Horizontal Bar Charts</a></li>
+<li><a class="nav-link" href="#coord_cartesian-zooming-without-losing-data"><span class="header-section-number">10.7.2</span> coord_cartesian() – Zooming Without Losing Data</a></li>
+</ul>
+</li>
+<li>
+<a class="nav-link" href="#labels-and-annotations-making-charts-presentation-ready"><span class="header-section-number">10.8</span> Labels and Annotations – Making Charts Presentation-Ready</a><ul class="nav navbar-nav">
+<li><a class="nav-link" href="#the-labs-function"><span class="header-section-number">10.8.1</span> The labs() Function</a></li>
+<li><a class="nav-link" href="#annotate-adding-notes-to-specific-spots"><span class="header-section-number">10.8.2</span> annotate() – Adding Notes to Specific Spots</a></li>
+</ul>
+</li>
+<li><a class="nav-link" href="#saving-your-plots"><span class="header-section-number">10.9</span> Saving Your Plots</a></li>
+<li>
+<a class="nav-link" href="#putting-it-all-together-1"><span class="header-section-number">10.10</span> Putting It All Together</a><ul class="nav navbar-nav">
+<li><a class="nav-link" href="#start-simple"><span class="header-section-number">10.10.1</span> Start simple</a></li>
+<li><a class="nav-link" href="#fix-overplotting"><span class="header-section-number">10.10.2</span> Fix overplotting</a></li>
+<li><a class="nav-link" href="#add-color-for-cut-quality"><span class="header-section-number">10.10.3</span> Add color for cut quality</a></li>
+<li><a class="nav-link" href="#facet-for-clarity-and-polish-it"><span class="header-section-number">10.10.4</span> Facet for clarity and polish it</a></li>
+<li><a class="nav-link" href="#one-more-a-time-series"><span class="header-section-number">10.10.5</span> One more: a time series</a></li>
+</ul>
+</li>
+</ul>
+
+      <div class="book-extra">
+        <ul class="list-unstyled">
+          
+        </ul>
+</div>
+    </nav>
+</div>
+
+</div>
+</div> <!-- .container -->
+
+<footer class="bg-primary text-light mt-5"><div class="container"><div class="row">
+
+  <div class="col-12 col-md-6 mt-3">
+    <p>"<strong>R and the Tidyverse: A Beginner’s Guide</strong>" was written by Vivek H. Patil. It was last built on 2026-02-27.</p>
+  </div>
+
+  <div class="col-12 col-md-6 mt-3">
+    <p>This book was built by the <a class="text-light" href="https://bookdown.org">bookdown</a> R package.</p>
+  </div>
+
+</div></div>
+</footer><!-- dynamically load mathjax for compatibility with self-contained --><script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "true";
+    if (src === "" || src === "true") src = "https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.9/latest.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:")
+      if (/^https?:/.test(src))
+        src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script><script type="text/x-mathjax-config">const popovers = document.querySelectorAll('a.footnote-ref[data-toggle="popover"]');
+for (let popover of popovers) {
+  const div = document.createElement('div');
+  div.setAttribute('style', 'position: absolute; top: 0, left:0; width:0, height:0, overflow: hidden; visibility: hidden;');
+  div.innerHTML = popover.getAttribute('data-content');
+
+  var has_math = div.querySelector("span.math");
+  if (has_math) {
+    document.body.appendChild(div);
+    MathJax.Hub.Queue(["Typeset", MathJax.Hub, div]);
+    MathJax.Hub.Queue(function() {
+      popover.setAttribute('data-content', div.innerHTML);
+      document.body.removeChild(div);
+    })
+  }
+}
+</script>
+</body>
+</html>

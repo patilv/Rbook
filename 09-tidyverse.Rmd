@@ -1,4 +1,4 @@
-# The Tidyverse Ecosystem {#tidyverse}
+# Your Data Analysis Toolkit {#tidyverse}
 
 ```{r include=FALSE}
 library(knitr)
@@ -6,9 +6,7 @@ opts_chunk$set(echo = TRUE, warning = FALSE, message = FALSE,
                comment = "#>", collapse = TRUE)
 ```
 
-If base R is a Swiss Army knife, the tidyverse is the entire Williams-Sonoma catalog --- beautifully designed, everything matches, and once you learn where things go, cooking (er, analyzing data) becomes a joy instead of a chore.
-
-This chapter gives you the 30,000-foot overview before we dive into individual packages later. Think of it as the orientation session before your first day at the office.
+This chapter introduces the core set of tools you will use throughout this book. Think of it as the orientation session before your first day at the office --- a 30,000-foot overview before we dive into individual packages later.
 
 ## What is the Tidyverse?
 
@@ -19,8 +17,6 @@ The "tidy" in tidyverse boils down to two big ideas:
 1. **Tidy data.** Your data should be organized so that each variable is a column, each observation is a row, and each cell has one value. (More on this soon --- it matters more than you think.)
 
 2. **Tidy code.** Your code should read like a sentence, not an encrypted ransom note. Tidyverse functions have verb-based names --- `filter()`, `select()`, `mutate()`, `summarize()` --- so a pipeline of code practically narrates what you are doing.
-
-The tidyverse is not a replacement for base R. It is an opinionated, well-organized toolkit that most people find easier to learn and read for everyday data analysis. Base R is still essential for programming, package development, and plenty of specialized tasks.
 
 ## Installing and Loading the Tidyverse
 
@@ -41,7 +37,7 @@ When you run `library(tidyverse)`, R prints two things. First, the **core packag
 - `dplyr::filter()` masks `stats::filter()`
 - `dplyr::lag()` masks `stats::lag()`
 
-Do not panic. This just means that typing `filter()` now calls the dplyr version (which is what you want 99% of the time). If you ever need the base R version, use `stats::filter()`.
+Do not panic. This just means that typing `filter()` now calls the dplyr version (which is what you want 99% of the time). If you ever need R's different built-in function with the same name, use `stats::filter()`.
 
 You can also load packages individually if you prefer a lighter footprint:
 
@@ -81,13 +77,15 @@ mtcars %>%
   )
 ```
 
+Three rows, one per cylinder group. The pattern is clear: more cylinders means more horsepower (from 83 to 209) but worse fuel economy (from 27 to 15 mpg). That is a classic trade-off, summarized in three lines of code.
+
 ### tidyr --- Data Tidying
 
 **tidyr** reshapes your data between "wide" and "long" formats with `pivot_longer()` and `pivot_wider()`. If you have ever wrestled with a spreadsheet where the column headers are actually data values, tidyr is your new best friend. Chapter \@ref(tidyr) has the details.
 
 ### readr --- Data Import
 
-**readr** reads rectangular data from CSV, TSV, and other delimited files. Its `read_csv()` is faster than base R's `read.csv()`, produces tibbles, and has better defaults (no surprise factor conversions). Chapter \@ref(dataimport) covers data import.
+**readr** reads rectangular data from CSV, TSV, and other delimited files. Its `read_csv()` is fast, produces tibbles, and has sensible defaults (no surprise factor conversions). Chapter \@ref(dataimport) covers data import.
 
 ### purrr --- Functional Programming
 
@@ -96,6 +94,8 @@ mtcars %>%
 ```{r}
 map_dbl(iris[, 1:4], mean)
 ```
+
+One line computed the mean of all four numeric columns: Sepal.Length averages 5.84 cm, Sepal.Width 3.06 cm, Petal.Length 3.76 cm, and Petal.Width 1.20 cm. Petal measurements are smaller on average than sepal measurements.
 
 ### tibble --- Modern Data Frames
 
@@ -143,7 +143,7 @@ The magrittr pipe `%>%` (loaded with the tidyverse):
 
 > `x %>% f(y)` is the same as `f(x, y)`
 
-The base R pipe `|>` (available since R 4.1):
+The native pipe `|>` (available since R 4.1):
 
 > `x |> f(y)` is the same as `f(x, y)`
 
@@ -289,20 +289,20 @@ With the messy version, you would need a lot more manual reshaping. Tidy data sa
 
 Short version: **tibbles are data frames that learned manners.** They are technically still data frames under the hood, but they behave more predictably. Here is what you need to know.
 
-**They print nicely.** Tibbles show just the first 10 rows and fit columns to your screen, instead of dumping 10,000 rows into your console like a base R data frame would.
+**They print nicely.** Tibbles show just the first 10 rows and fit columns to your screen, instead of dumping 10,000 rows into your console.
 
 ```{r}
 # A tibble prints neatly
 as_tibble(mtcars)
 ```
 
-**No sneaky partial matching.** Base R lets you type `df$cat` and it will guess you meant `df$category`. Tibbles require the exact name. Fewer bugs, fewer "wait, what just happened?" moments.
+**No sneaky partial matching.** Tibbles require exact column names. Fewer bugs, fewer "wait, what just happened?" moments.
 
 **No surprise factor conversions.** Tibbles keep your text as text. No silent conversions.
 
-**Consistent subsetting.** Pulling one column from a tibble with `[` always gives you a tibble back. Base R data frames sometimes give you a vector, sometimes a data frame. Tibbles are predictable.
+**Consistent subsetting.** Pulling one column from a tibble with `[` always gives you a tibble back, so behavior is predictable.
 
-In practice, you rarely need to think about this distinction. Tidyverse functions return tibbles automatically. If older code needs a base data frame, just use `as.data.frame()`.
+In practice, you rarely need to think about this distinction. Tidyverse functions return tibbles automatically. If older code needs a standard data frame, just use `as.data.frame()`.
 
 ## The Tidyverse Workflow {#workflow}
 
@@ -342,6 +342,8 @@ top_manufacturers <- mpg %>%
 
 top_manufacturers
 ```
+
+Honda leads the pack at 32.6 average highway mpg, followed by Volkswagen and Hyundai. The `n_models` column is important context --- Honda's impressive average is based on 9 models, while some manufacturers with high averages might only have 2--3 models in the dataset. Sample size matters when comparing group averages.
 
 ### Visualize
 

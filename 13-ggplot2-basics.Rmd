@@ -2,6 +2,7 @@
 
 ```{r include=FALSE}
 library(tidyverse)
+library(plotly)
 knitr::opts_chunk$set(echo = TRUE, warning = FALSE, message = FALSE)
 ```
 
@@ -9,7 +10,7 @@ If data is the new oil, then **ggplot2** is the refinery that turns crude number
 
 Journalists at The New York Times use it. Analysts at Fortune 500 companies use it. After this chapter, you will use it too.
 
-> **Note:** This chapter teaches you *how* to build charts in R. For the *why* behind choosing the right chart type --- when to use a bar chart vs. a line chart, how to design for your audience --- check the [Visual Analytics and Data Storytelling](http://patilv.com/VizAnalytics4Biz/) course.
+This chapter teaches you the mechanics of building charts. As you practice, you will develop intuition for which chart types work best for different data stories.
 
 ## The Grammar of Graphics (the 30-Second Version)
 
@@ -90,11 +91,13 @@ There is one distinction that trips up nearly every beginner. Read this twice.
 **Mapping** (inside `aes()`) connects a *variable* to a visual property. ggplot2 picks colors automatically and creates a legend:
 
 ```{r}
-ggplot(data = mpg, aes(x = displ, y = hwy, color = class)) +
+p_class <- ggplot(data = mpg, aes(x = displ, y = hwy, color = class)) +
   geom_point()
+
+ggplotly(p_class)
 ```
 
-Each car class gets its own color. Legend appears automatically. You did not pick the colors --- ggplot did.
+Each car class gets its own color. Legend appears automatically. You did not pick the colors --- ggplot did. **Hover over any point** to see the exact engine size, highway mpg, and vehicle class --- this is what interactive visualization looks like in practice. Click a class name in the legend to show or hide it.
 
 **Setting** (outside `aes()`) applies a *fixed* value to everything. No variable, no legend:
 
@@ -158,6 +161,8 @@ ggplot(data = mpg, aes(x = hwy)) +
   geom_histogram(binwidth = 2, fill = "steelblue", color = "white")
 ```
 
+The histogram reveals that highway fuel economy clusters around two peaks --- one near 17 mpg and another near 26--29 mpg --- suggesting two distinct groups of vehicles (likely city-friendly small cars versus larger trucks/SUVs). This bimodal shape is a story in itself.
+
 Play with `binwidth` to change the granularity. Too few bins hides patterns; too many creates noise. It is like choosing the right zoom level on a map.
 
 ### Scatter Plot -- Relationships Between Two Numbers
@@ -185,15 +190,19 @@ ggplot(data = economics, aes(x = date, y = unemploy)) +
   geom_line(color = "steelblue")
 ```
 
+The unemployment trend shows dramatic spikes during major recessions (early 1980s, 2008--2010) followed by gradual recoveries. The long-term pattern is cyclical, and the overall level has trended upward over decades as the labor force has grown. A chart like this immediately tells a story that a table of monthly numbers never could.
+
 ### Smooth Line -- Trend Lines and Regression
 
-Add a trend line to a scatter plot with `geom_smooth()`. This is incredibly useful for showing the overall direction without getting lost in the noise:
+Add a trend line to a scatter plot with `geom_smooth()`. By default, it uses a method called **LOESS** (LOcally Estimated Scatterplot Smoothing) --- a flexible curve that adapts to the shape of your data. Think of it as a moving average that bends to follow the trend. This is incredibly useful for showing the overall direction without getting lost in the noise:
 
 ```{r}
 ggplot(data = mpg, aes(x = displ, y = hwy)) +
   geom_point(alpha = 0.4) +
   geom_smooth()
 ```
+
+The smooth curve shows a clear downward trend: as engine size increases, highway fuel economy drops. The gray band around the line is a confidence interval --- wider at the edges where there are fewer data points, narrower in the middle where the estimate is more certain.
 
 Want a straight regression line? Specify `method = "lm"`:
 
@@ -212,7 +221,7 @@ ggplot(data = mpg, aes(x = class, y = hwy)) +
   geom_boxplot(fill = "lightblue", color = "navy")
 ```
 
-The box is the middle 50%, the line is the median, and the dots are outliers. It is the executive summary of a distribution.
+The box is the middle 50%, the line is the median, and the dots are outliers. It is the executive summary of a distribution. Here we can see that pickups and SUVs have the lowest highway fuel economy (medians around 17--18 mpg), while compact and subcompact cars lead the pack (medians around 27--28 mpg). The midsize class has the tightest IQR, meaning those vehicles are the most consistent.
 
 ### Layering Multiple Geoms
 
@@ -225,7 +234,7 @@ ggplot(data = mpg, aes(x = displ, y = hwy)) +
   geom_hline(yintercept = mean(mpg$hwy), linetype = "dotted", color = "gray50")
 ```
 
-That dotted line shows the overall average. Layering like this makes your charts tell a richer, more complete story.
+That dotted line shows the overall average highway mpg. Points above the line are above average; points below are below average. Notice how SUVs and pickups cluster below the line while compact cars float above it. Layering like this makes your charts tell a richer, more complete story.
 
 
 ## Faceting -- One Chart Per Category
@@ -241,6 +250,8 @@ ggplot(data = mpg, aes(x = displ, y = hwy)) +
   geom_point() +
   facet_wrap(~ class)
 ```
+
+Each panel tells its own story. Compact cars cluster in the upper-left (small engines, good mileage), while SUVs and pickups fill the lower-right (big engines, poor mileage). Two-seaters show an interesting outlier --- a couple of high-mileage cars with large engines (likely sports cars with efficient highway gearing). Faceting lets you spot these patterns that would be hidden in a single crowded chart.
 
 Control the layout with `ncol`:
 
@@ -259,6 +270,8 @@ ggplot(data = mpg, aes(x = displ, y = hwy)) +
   geom_point() +
   facet_grid(drv ~ cyl)
 ```
+
+Each cell shows one combination of drive type (rows) and cylinder count (columns). Empty panels are informative too --- there are no rear-wheel-drive (`r`) 4-cylinder cars, and no 4-wheel-drive (`4`) 5-cylinder cars in this dataset. The grid layout makes it easy to read both across (comparing cylinder counts within a drive type) and down (comparing drive types within a cylinder count).
 
 ### Letting Axes Vary with Free Scales
 
@@ -284,6 +297,8 @@ ggplot(data = diamonds, aes(x = cut, fill = clarity)) +
   geom_bar(position = "stack")
 ```
 
+The stacked bars show that "Ideal" cut has the most diamonds overall (tallest bar), and you can see the composition by clarity within each cut. However, comparing individual clarity levels across cuts is hard because the segments have different starting points --- that is the trade-off of stacking.
+
 ### Dodged (side by side)
 
 Bars placed next to each other. Better for comparing individual groups:
@@ -292,6 +307,8 @@ Bars placed next to each other. Better for comparing individual groups:
 ggplot(data = diamonds, aes(x = cut, fill = clarity)) +
   geom_bar(position = "dodge")
 ```
+
+Dodged bars make it easy to compare individual clarity levels across cuts. You can immediately see, for example, that SI1 and VS2 are the most common clarity grades within every cut quality. The trade-off is that with eight clarity levels, the bars get quite narrow --- dodged position works best with fewer groups (three to five).
 
 ### Filled (proportions)
 
@@ -303,6 +320,7 @@ ggplot(data = diamonds, aes(x = cut, fill = clarity)) +
   ylab("Proportion")
 ```
 
+Filled bars normalize everything to 100%, so you can compare proportions directly. Here the clarity composition looks remarkably similar across cut qualities --- a surprise, since you might expect "Ideal" cuts to have higher clarity. This tells you that cut and clarity are relatively independent in this dataset.
 
 ## Coordinate Systems
 
@@ -453,7 +471,7 @@ ggplot(data = diamonds, aes(x = carat, y = price)) +
   )
 ```
 
-That is the grammar of graphics at work. Data, aesthetics, geoms, facets, labels, theme --- all layered incrementally so you can experiment and debug at each step. It is like building a presentation slide by slide instead of trying to design the whole deck at once.
+The finished chart reveals a clear pattern: price rises steeply with carat weight for all cut grades, but the relationship is nonlinear --- price accelerates at higher carat weights. Interestingly, the curves look similar across cut qualities, suggesting that carat weight dominates price more than cut does (at least in this dataset). That is the grammar of graphics at work. Data, aesthetics, geoms, facets, labels, theme --- all layered incrementally so you can experiment and debug at each step. It is like building a presentation slide by slide instead of trying to design the whole deck at once.
 
 ### One more: a time series
 
@@ -478,3 +496,5 @@ ggplot(data = economics, aes(x = date, y = unemploy / 1000)) +
 ```
 
 You now have everything you need to build charts that make people stop scrolling through their phones in meetings. In the next chapter, we will cover how to customize colors, themes, and layouts to make your plots look truly professional.
+
+One thing worth remembering: a well-made chart is a persuasive thing, and persuasive things carry responsibility. Misleading axis scales, cherry-picked time ranges, and conveniently buried subgroup patterns are all forms of dishonesty --- even if the underlying data is real. The same skills that let you make a chart compelling also let you make it deceptive. Show the data honestly, even when honest is inconvenient. That is not idealism. That is professional integrity, and it is non-negotiable.

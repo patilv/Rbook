@@ -103,7 +103,7 @@ Run that, go get coffee, and come back to four finished reports. Your manager th
 
 ## Presentations {#rmarkdown-presentations}
 
-Yes, you can make slide decks with R Markdown. No, they will not replace PowerPoint for your group project where Karen insists on clipart. But for data-driven presentations where your charts need to match your analysis exactly, this is a game-changer.
+Yes, you can make slide decks with R Markdown. They will not replace PowerPoint for every group project, but for data-driven presentations where your charts need to match your analysis exactly, this is a game-changer.
 
 The easiest option is **ioslides**, which gives you HTML slides that open in any browser:
 
@@ -295,7 +295,7 @@ A quick checklist for reproducible work:
 
 - **Use RStudio Projects** (the `.Rproj` file) so your working directory is always the project root.
 - **Never modify raw data.** Keep originals in a `data/raw/` folder and write code that creates cleaned versions.
-- **Use relative file paths.** Write `read_csv("data/sales.csv")`, not `read_csv("C:/Users/Karen/Desktop/stuff/sales.csv")`. Your coworkers will thank you.
+- **Use relative file paths.** Write `read_csv("data/sales.csv")`, not `read_csv("C:/Users/jsmith/Desktop/stuff/sales.csv")`. Your coworkers will thank you.
 - **Knit from a clean session.** Before you share a report, restart R and knit the whole thing from scratch. If it does not work in a clean session, it does not work.
 
 If you followed the advice in earlier chapters, you are already doing most of this. The point is: future you should be able to open this project in six months and have everything just run.

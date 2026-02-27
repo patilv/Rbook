@@ -1,0 +1,602 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<title>Chapter 14 Working with Text Data | R and the Tidyverse: A Beginner’s Guide</title>
+<meta name="author" content="Vivek H. Patil">
+<meta name="description" content="14.1 Why You Need This Here is an uncomfortable truth about business data: a horrifying amount of it is just text that humans typed with reckless abandon. Survey responses. Product names. Customer...">
+<meta name="generator" content="bookdown 0.46 with bs4_book()">
+<meta property="og:title" content="Chapter 14 Working with Text Data | R and the Tidyverse: A Beginner’s Guide">
+<meta property="og:type" content="book">
+<meta property="og:image" content="/cover.png">
+<meta property="og:description" content="14.1 Why You Need This Here is an uncomfortable truth about business data: a horrifying amount of it is just text that humans typed with reckless abandon. Survey responses. Product names. Customer...">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Chapter 14 Working with Text Data | R and the Tidyverse: A Beginner’s Guide">
+<meta name="twitter:description" content="14.1 Why You Need This Here is an uncomfortable truth about business data: a horrifying amount of it is just text that humans typed with reckless abandon. Survey responses. Product names. Customer...">
+<meta name="twitter:image" content="/cover.png">
+<!-- JS --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script><script src="https://kit.fontawesome.com/6ecbd6c532.js" crossorigin="anonymous"></script><script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<link href="libs/bootstrap-4.6.0/bootstrap.min.css" rel="stylesheet">
+<script src="libs/bootstrap-4.6.0/bootstrap.bundle.min.js"></script><script src="libs/bs3compat-0.10.0/transition.js"></script><script src="libs/bs3compat-0.10.0/tabs.js"></script><script src="libs/bs3compat-0.10.0/bs3compat.js"></script><link href="libs/bs4_book-1.0.0/bs4_book.css" rel="stylesheet">
+<script src="libs/bs4_book-1.0.0/bs4_book.js"></script><link href="libs/htmltools-fill-0.5.9/fill.css" rel="stylesheet">
+<script src="libs/htmlwidgets-1.6.4/htmlwidgets.js"></script><link href="libs/datatables-css-0.0.0/datatables-crosstalk.css" rel="stylesheet">
+<script src="libs/datatables-binding-0.34.0/datatables.js"></script><link href="libs/dt-core-1.13.6/css/jquery.dataTables.min.css" rel="stylesheet">
+<link href="libs/dt-core-1.13.6/css/jquery.dataTables.extra.css" rel="stylesheet">
+<script src="libs/dt-core-1.13.6/js/jquery.dataTables.min.js"></script><link href="libs/crosstalk-1.2.2/css/crosstalk.min.css" rel="stylesheet">
+<script src="libs/crosstalk-1.2.2/js/crosstalk.min.js"></script><script src="libs/plotly-binding-4.12.0/plotly.js"></script><script src="libs/typedarray-0.1/typedarray.min.js"></script><link href="libs/plotly-htmlwidgets-css-2.25.2/plotly-htmlwidgets.css" rel="stylesheet">
+<script src="libs/plotly-main-2.25.2/plotly-latest.min.js"></script><script src="libs/kePrint-0.0.1/kePrint.js"></script><link href="libs/lightable-0.0.1/lightable.css" rel="stylesheet">
+<link href="libs/nouislider-7.0.10/jquery.nouislider.min.css" rel="stylesheet">
+<script src="libs/nouislider-7.0.10/jquery.nouislider.min.js"></script><link href="libs/selectize-0.12.0/selectize.bootstrap3.css" rel="stylesheet">
+<script src="libs/selectize-0.12.0/selectize.min.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/autocomplete.js/0.38.0/autocomplete.jquery.min.js" integrity="sha512-GU9ayf+66Xx2TmpxqJpliWbT5PiGYxpaG8rfnBEk1LL8l1KGkRShhngwdXK1UgqhAzWpZHSiYPc09/NwDQIGyg==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/mark.min.js" integrity="sha512-5CYOlHXGh6QpOFA/TeTylKLWfB3ftPsde7AnmhuitiTX4K5SqCLBeKro6sPS8ilsz1Q4NRx3v8Ko2IBiszzdww==" crossorigin="anonymous"></script><!-- CSS --><style type="text/css">
+    
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  </style>
+<style type="text/css">
+    /* Used with Pandoc 2.11+ new --citeproc when CSL is used */
+    div.csl-bib-body { }
+    div.csl-entry {
+      clear: both;
+          margin-bottom: 0em;
+        }
+    .hanging div.csl-entry {
+      margin-left:2em;
+      text-indent:-2em;
+    }
+    div.csl-left-margin {
+      min-width:2em;
+      float:left;
+    }
+    div.csl-right-inline {
+      margin-left:2em;
+      padding-left:1em;
+    }
+    div.csl-indent {
+      margin-left: 2em;
+    }
+  </style>
+<link rel="stylesheet" href="style.css">
+</head>
+<body data-spy="scroll" data-target="#toc">
+
+<div class="container-fluid">
+<div class="row">
+  <header class="col-sm-12 col-lg-3 sidebar sidebar-book"><a class="sr-only sr-only-focusable" href="#content">Skip to main content</a>
+
+    <div class="d-flex align-items-start justify-content-between">
+      <h1>
+        <a href="index.html" title="">R and the Tidyverse: A Beginner’s Guide</a>
+      </h1>
+      <button class="btn btn-outline-primary d-lg-none ml-2 mt-1" type="button" data-toggle="collapse" data-target="#main-nav" aria-expanded="true" aria-controls="main-nav"><i class="fas fa-bars"></i><span class="sr-only">Show table of contents</span></button>
+    </div>
+
+    <div id="main-nav" class="collapse-lg">
+      <form role="search">
+        <input id="search" class="form-control" type="search" placeholder="Search" aria-label="Search">
+</form>
+
+      <nav aria-label="Table of contents"><h2>Table of contents</h2>
+        <ul class="book-toc list-unstyled">
+<li><a class="" href="index.html">Preface</a></li>
+<li><a class="" href="introR.html"><span class="header-section-number">1</span> Introduction to R</a></li>
+<li><a class="" href="Rgettingstarted.html"><span class="header-section-number">2</span> Getting Started with R</a></li>
+<li><a class="" href="tidyverse.html"><span class="header-section-number">3</span> Your Data Analysis Toolkit</a></li>
+<li><a class="" href="dataimport.html"><span class="header-section-number">4</span> Data Import</a></li>
+<li><a class="" href="describedata.html"><span class="header-section-number">5</span> Describing Data</a></li>
+<li><a class="" href="modifydata.html"><span class="header-section-number">6</span> Modifying Data</a></li>
+<li><a class="" href="dplyr.html"><span class="header-section-number">7</span> Data Wrangling with dplyr</a></li>
+<li><a class="" href="tidyr.html"><span class="header-section-number">8</span> Tidy Data with tidyr</a></li>
+<li><a class="" href="summarystats.html"><span class="header-section-number">9</span> Summary Statistics</a></li>
+<li><a class="" href="ggplot2basics.html"><span class="header-section-number">10</span> Data Visualization with ggplot2</a></li>
+<li><a class="" href="ggplot2customize.html"><span class="header-section-number">11</span> Customizing ggplot2 Visualizations</a></li>
+<li><a class="" href="singlevar.html"><span class="header-section-number">12</span> Single Variable Analysis</a></li>
+<li><a class="" href="multivar.html"><span class="header-section-number">13</span> Relationships Between Variables</a></li>
+<li><a class="active" href="stringr.html"><span class="header-section-number">14</span> Working with Text Data</a></li>
+<li><a class="" href="forcats.html"><span class="header-section-number">15</span> Wrangling Categories with forcats</a></li>
+<li><a class="" href="lubridate.html"><span class="header-section-number">16</span> Working with Dates and Times</a></li>
+<li><a class="" href="purrr.html"><span class="header-section-number">17</span> Doing the Same Thing to Many Things at Once</a></li>
+<li><a class="" href="rmarkdown.html"><span class="header-section-number">18</span> R Markdown</a></li>
+<li><a class="" href="rmarkdown-advanced.html"><span class="header-section-number">19</span> Advanced R Markdown</a></li>
+</ul>
+
+        <div class="book-extra">
+          
+        </div>
+      </nav>
+</div>
+  </header><main class="col-sm-12 col-md-9 col-lg-7" id="content"><div id="stringr" class="section level1" number="14">
+<h1>
+<span class="header-section-number">14</span> Working with Text Data<a class="anchor" aria-label="anchor" href="#stringr"><i class="fas fa-link"></i></a>
+</h1>
+<div id="why-you-need-this" class="section level2" number="14.1">
+<h2>
+<span class="header-section-number">14.1</span> Why You Need This<a class="anchor" aria-label="anchor" href="#why-you-need-this"><i class="fas fa-link"></i></a>
+</h2>
+<p>Here is an uncomfortable truth about business data: a horrifying amount of it is just text that humans typed with reckless abandon. Survey responses. Product names. Customer addresses. Free-form NPS comments like ” GREAT product!! ” and “great Product” — which any reasonable person would call identical, but R sees them as completely different values.</p>
+<p>The <strong>stringr</strong> package is your data janitor. Every function starts with <code>str_</code>, takes the string first (pipe-friendly), and does exactly what its name says. Think of it as spell-check for your datasets.</p>
+</div>
+<div id="string-basics" class="section level2" number="14.2">
+<h2>
+<span class="header-section-number">14.2</span> String Basics<a class="anchor" aria-label="anchor" href="#string-basics"><i class="fas fa-link"></i></a>
+</h2>
+<p>Strings in R live inside quotes. Double quotes are standard.</p>
+<div class="sourceCode" id="cb368"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">product</span> <span class="op">&lt;-</span> <span class="st">"Wireless Bluetooth Speaker"</span></span>
+<span><span class="va">product</span></span>
+<span><span class="co">#&gt; [1] "Wireless Bluetooth Speaker"</span></span></code></pre></div>
+<p>If your string itself contains a quote, wrap it in single quotes:</p>
+<div class="sourceCode" id="cb369"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">tagline</span> <span class="op">&lt;-</span> <span class="st">'She said, "Take my money!"'</span></span>
+<span><span class="va">tagline</span></span>
+<span><span class="co">#&gt; [1] "She said, \"Take my money!\""</span></span></code></pre></div>
+<p><code><a href="https://stringr.tidyverse.org/reference/str_length.html">str_length()</a></code> counts characters — useful for flagging those one-word survey responses from people who clearly had somewhere else to be:</p>
+<div class="sourceCode" id="cb370"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">responses</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"Great product!"</span>, <span class="st">"OK"</span>, <span class="st">"This changed my life and I want to tell everyone"</span>, <span class="st">"N/A"</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://stringr.tidyverse.org/reference/str_length.html">str_length</a></span><span class="op">(</span><span class="va">responses</span><span class="op">)</span></span>
+<span><span class="co">#&gt; [1] 14  2 48  3</span></span></code></pre></div>
+</div>
+<div id="combining-strings-with-str_c" class="section level2" number="14.3">
+<h2>
+<span class="header-section-number">14.3</span> Combining Strings with <code>str_c()</code><a class="anchor" aria-label="anchor" href="#combining-strings-with-str_c"><i class="fas fa-link"></i></a>
+</h2>
+<p><code><a href="https://stringr.tidyverse.org/reference/str_c.html">str_c()</a></code> glues strings together. It is <code><a href="https://rdrr.io/r/base/paste.html">paste()</a></code> but tidyverse-flavored.</p>
+<div class="sourceCode" id="cb371"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://stringr.tidyverse.org/reference/str_c.html">str_c</a></span><span class="op">(</span><span class="st">"Q"</span>, <span class="fl">1</span><span class="op">:</span><span class="fl">4</span><span class="op">)</span></span>
+<span><span class="co">#&gt; [1] "Q1" "Q2" "Q3" "Q4"</span></span>
+<span><span class="fu"><a href="https://stringr.tidyverse.org/reference/str_c.html">str_c</a></span><span class="op">(</span><span class="st">"Hello"</span>, <span class="st">"World"</span>, sep <span class="op">=</span> <span class="st">" "</span><span class="op">)</span></span>
+<span><span class="co">#&gt; [1] "Hello World"</span></span></code></pre></div>
+<p>The <code>collapse</code> argument squashes a whole vector into one string — great for building labels or email subject lines:</p>
+<div class="sourceCode" id="cb372"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">departments</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"Marketing"</span>, <span class="st">"Finance"</span>, <span class="st">"Operations"</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://stringr.tidyverse.org/reference/str_c.html">str_c</a></span><span class="op">(</span><span class="va">departments</span>, collapse <span class="op">=</span> <span class="st">", "</span><span class="op">)</span></span>
+<span><span class="co">#&gt; [1] "Marketing, Finance, Operations"</span></span>
+<span><span class="fu"><a href="https://stringr.tidyverse.org/reference/str_c.html">str_c</a></span><span class="op">(</span><span class="va">departments</span>, collapse <span class="op">=</span> <span class="st">" &amp; "</span><span class="op">)</span></span>
+<span><span class="co">#&gt; [1] "Marketing &amp; Finance &amp; Operations"</span></span></code></pre></div>
+</div>
+<div id="changing-case-your-most-used-trick" class="section level2" number="14.4">
+<h2>
+<span class="header-section-number">14.4</span> Changing Case — Your Most-Used Trick<a class="anchor" aria-label="anchor" href="#changing-case-your-most-used-trick"><i class="fas fa-link"></i></a>
+</h2>
+<p>When survey respondents type “NEW YORK”, “new york”, and “New york” — R sees three different values. One line fixes all of them:</p>
+<div class="sourceCode" id="cb373"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">cities</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"new york"</span>, <span class="st">"LOS ANGELES"</span>, <span class="st">"chicago"</span>, <span class="st">"SAN FRANCISCO"</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://stringr.tidyverse.org/reference/case.html">str_to_title</a></span><span class="op">(</span><span class="va">cities</span><span class="op">)</span></span>
+<span><span class="co">#&gt; [1] "New York"      "Los Angeles"   "Chicago"       "San Francisco"</span></span></code></pre></div>
+<p>The full case family:</p>
+<div class="sourceCode" id="cb374"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">sample_text</span> <span class="op">&lt;-</span> <span class="st">"the QUICK brown FOX"</span></span>
+<span><span class="fu"><a href="https://stringr.tidyverse.org/reference/case.html">str_to_lower</a></span><span class="op">(</span><span class="va">sample_text</span><span class="op">)</span></span>
+<span><span class="co">#&gt; [1] "the quick brown fox"</span></span>
+<span><span class="fu"><a href="https://stringr.tidyverse.org/reference/case.html">str_to_upper</a></span><span class="op">(</span><span class="va">sample_text</span><span class="op">)</span></span>
+<span><span class="co">#&gt; [1] "THE QUICK BROWN FOX"</span></span>
+<span><span class="fu"><a href="https://stringr.tidyverse.org/reference/case.html">str_to_title</a></span><span class="op">(</span><span class="va">sample_text</span><span class="op">)</span></span>
+<span><span class="co">#&gt; [1] "The Quick Brown Fox"</span></span></code></pre></div>
+<p>You will use these every single time you clean data where humans had a keyboard and zero standards. So… every time.</p>
+</div>
+<div id="trimming-whitespace" class="section level2" number="14.5">
+<h2>
+<span class="header-section-number">14.5</span> Trimming Whitespace<a class="anchor" aria-label="anchor" href="#trimming-whitespace"><i class="fas fa-link"></i></a>
+</h2>
+<p>Extra spaces are the silent killer of data joins. If one spreadsheet has “Marketing” and another has ” Marketing “, your <code><a href="https://dplyr.tidyverse.org/reference/mutate-joins.html">left_join()</a></code> will silently drop rows and you will silently lose your mind trying to figure out why.</p>
+<div class="sourceCode" id="cb375"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">messy</span> <span class="op">&lt;-</span> <span class="st">"   too  much   space   "</span></span>
+<span><span class="fu"><a href="https://stringr.tidyverse.org/reference/str_trim.html">str_trim</a></span><span class="op">(</span><span class="va">messy</span><span class="op">)</span>       <span class="co"># removes leading/trailing spaces</span></span>
+<span><span class="co">#&gt; [1] "too  much   space"</span></span>
+<span><span class="fu"><a href="https://stringr.tidyverse.org/reference/str_trim.html">str_squish</a></span><span class="op">(</span><span class="va">messy</span><span class="op">)</span>     <span class="co"># also collapses internal spaces to one</span></span>
+<span><span class="co">#&gt; [1] "too much space"</span></span></code></pre></div>
+<p><code><a href="https://stringr.tidyverse.org/reference/str_trim.html">str_squish()</a></code> handles everything. Just use it by default and move on with your life.</p>
+</div>
+<div id="detecting-patterns-with-str_detect" class="section level2" number="14.6">
+<h2>
+<span class="header-section-number">14.6</span> Detecting Patterns with <code>str_detect()</code><a class="anchor" aria-label="anchor" href="#detecting-patterns-with-str_detect"><i class="fas fa-link"></i></a>
+</h2>
+<p>“Does this string contain this word?” That is <code><a href="https://stringr.tidyverse.org/reference/str_detect.html">str_detect()</a></code>. It returns TRUE/FALSE, which makes it a perfect partner for <code><a href="https://dplyr.tidyverse.org/reference/filter.html">filter()</a></code>.</p>
+<div class="sourceCode" id="cb376"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">products</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"iPhone 15 Pro"</span>, <span class="st">"Samsung Galaxy S24"</span>, <span class="st">"iPhone 15"</span>, <span class="st">"Google Pixel 8"</span>, <span class="st">"iPhone SE"</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://stringr.tidyverse.org/reference/str_detect.html">str_detect</a></span><span class="op">(</span><span class="va">products</span>, <span class="st">"iPhone"</span><span class="op">)</span></span>
+<span><span class="co">#&gt; [1]  TRUE FALSE  TRUE FALSE  TRUE</span></span></code></pre></div>
+<p>Inside a data frame — this is where it earns its paycheck:</p>
+<div class="sourceCode" id="cb377"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">product_df</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://tibble.tidyverse.org/reference/tibble.html">tibble</a></span><span class="op">(</span></span>
+<span>  product <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"iPhone 15 Pro"</span>, <span class="st">"Samsung Galaxy S24"</span>, <span class="st">"iPhone 15"</span>, <span class="st">"Google Pixel 8"</span><span class="op">)</span>,</span>
+<span>  revenue <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">45000</span>, <span class="fl">32000</span>, <span class="fl">38000</span>, <span class="fl">15000</span><span class="op">)</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">product_df</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span><span class="fu"><a href="https://stringr.tidyverse.org/reference/str_detect.html">str_detect</a></span><span class="op">(</span><span class="va">product</span>, <span class="st">"iPhone"</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="co">#&gt; # A tibble: 2 × 2</span></span>
+<span><span class="co">#&gt;   product       revenue</span></span>
+<span><span class="co">#&gt;   &lt;chr&gt;           &lt;dbl&gt;</span></span>
+<span><span class="co">#&gt; 1 iPhone 15 Pro   45000</span></span>
+<span><span class="co">#&gt; 2 iPhone 15       38000</span></span></code></pre></div>
+<p>You just filtered to Apple products without needing a separate category column. Bill 3 hours for it anyway.</p>
+</div>
+<div id="replacing-text-with-str_replace" class="section level2" number="14.7">
+<h2>
+<span class="header-section-number">14.7</span> Replacing Text with <code>str_replace()</code><a class="anchor" aria-label="anchor" href="#replacing-text-with-str_replace"><i class="fas fa-link"></i></a>
+</h2>
+<p><code><a href="https://stringr.tidyverse.org/reference/str_replace.html">str_replace()</a></code> fixes the first match. <code><a href="https://stringr.tidyverse.org/reference/str_replace.html">str_replace_all()</a></code> fixes every match. Think “Find and Replace” in Excel, but it actually works on 50,000 rows.</p>
+<div class="sourceCode" id="cb378"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">reviews</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"This product is gr8"</span>, <span class="st">"Loved it!! Will buy again!!"</span>, <span class="st">"Good product, good price"</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://stringr.tidyverse.org/reference/str_replace.html">str_replace_all</a></span><span class="op">(</span><span class="va">reviews</span>, <span class="st">"!!"</span>, <span class="st">"!"</span><span class="op">)</span></span>
+<span><span class="co">#&gt; [1] "This product is gr8"       "Loved it! Will buy again!"</span></span>
+<span><span class="co">#&gt; [3] "Good product, good price"</span></span></code></pre></div>
+<p>Standardizing how people wrote “percent”:</p>
+<div class="sourceCode" id="cb379"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">responses</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"50 percent"</span>, <span class="st">"30%"</span>, <span class="st">"about 20 percent"</span>, <span class="st">"75%"</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://stringr.tidyverse.org/reference/str_replace.html">str_replace_all</a></span><span class="op">(</span><span class="va">responses</span>, <span class="st">" percent"</span>, <span class="st">"%"</span><span class="op">)</span></span>
+<span><span class="co">#&gt; [1] "50%"       "30%"       "about 20%" "75%"</span></span></code></pre></div>
+<p><code><a href="https://stringr.tidyverse.org/reference/str_remove.html">str_remove()</a></code> and <code><a href="https://stringr.tidyverse.org/reference/str_remove.html">str_remove_all()</a></code> are shortcuts for replacing with nothing — perfect for stripping symbols:</p>
+<div class="sourceCode" id="cb380"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">prices</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"$29.99"</span>, <span class="st">"$149.50"</span>, <span class="st">"$5.00"</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://stringr.tidyverse.org/reference/str_remove.html">str_remove</a></span><span class="op">(</span><span class="va">prices</span>, <span class="st">"\\$"</span><span class="op">)</span></span>
+<span><span class="co">#&gt; [1] "29.99"  "149.50" "5.00"</span></span></code></pre></div>
+</div>
+<div id="extracting-text-with-str_extract" class="section level2" number="14.8">
+<h2>
+<span class="header-section-number">14.8</span> Extracting Text with <code>str_extract()</code><a class="anchor" aria-label="anchor" href="#extracting-text-with-str_extract"><i class="fas fa-link"></i></a>
+</h2>
+<p>Need to pull a number out of a messy string? <code><a href="https://stringr.tidyverse.org/reference/str_extract.html">str_extract()</a></code> grabs the first match.</p>
+<div class="sourceCode" id="cb381"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">order_notes</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"Order 1234 placed"</span>, <span class="st">"Invoice 5678 pending"</span>, <span class="st">"Shipped item 91011"</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://stringr.tidyverse.org/reference/str_extract.html">str_extract</a></span><span class="op">(</span><span class="va">order_notes</span>, <span class="st">"\\d+"</span><span class="op">)</span></span>
+<span><span class="co">#&gt; [1] "1234"  "5678"  "91011"</span></span></code></pre></div>
+<p>That <code>\\d+</code> is a regular expression (regex). Do not panic — the next section covers the only ones you will ever need.</p>
+</div>
+<div id="regular-expressions-just-the-3-patterns-you-actually-need" class="section level2" number="14.9">
+<h2>
+<span class="header-section-number">14.9</span> Regular Expressions: Just the 3 Patterns You Actually Need<a class="anchor" aria-label="anchor" href="#regular-expressions-just-the-3-patterns-you-actually-need"><i class="fas fa-link"></i></a>
+</h2>
+<p>Regex looks like a cat walked across your keyboard. The good news: for 90% of business data cleaning, you only need three patterns. Seriously.</p>
+<p><strong>Pattern 1: <code>\\d+</code> — Find numbers</strong></p>
+<div class="sourceCode" id="cb382"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">sales_notes</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"Sold 15 units"</span>, <span class="st">"Returned 3 items"</span>, <span class="st">"Ordered 200 widgets"</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://stringr.tidyverse.org/reference/str_extract.html">str_extract</a></span><span class="op">(</span><span class="va">sales_notes</span>, <span class="st">"\\d+"</span><span class="op">)</span></span>
+<span><span class="co">#&gt; [1] "15"  "3"   "200"</span></span></code></pre></div>
+<p><strong>Pattern 2: <code>[A-Za-z]+</code> — Find words (letters only)</strong></p>
+<div class="sourceCode" id="cb383"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">codes</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"SKU-12345"</span>, <span class="st">"PROD-6789"</span>, <span class="st">"ITEM-111"</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://stringr.tidyverse.org/reference/str_extract.html">str_extract</a></span><span class="op">(</span><span class="va">codes</span>, <span class="st">"[A-Z]+"</span><span class="op">)</span></span>
+<span><span class="co">#&gt; [1] "SKU"  "PROD" "ITEM"</span></span></code></pre></div>
+<p><strong>Pattern 3: <code>[\\w.]+@[\\w.]+</code> — Find email-like patterns</strong></p>
+<div class="sourceCode" id="cb384"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">messages</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"Contact alice@example.com for details"</span>,</span>
+<span>              <span class="st">"Email bob.smith@company.org for info"</span>,</span>
+<span>              <span class="st">"No email here"</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://stringr.tidyverse.org/reference/str_extract.html">str_extract</a></span><span class="op">(</span><span class="va">messages</span>, <span class="st">"[\\w.]+@[\\w.]+"</span><span class="op">)</span></span>
+<span><span class="co">#&gt; [1] "alice@example.com"     "bob.smith@company.org" NA</span></span></code></pre></div>
+<p>That is the whole regex syllabus. If you need something fancier, Google “regex cheat sheet.” Everyone does it — including the people who wrote the cheat sheet.</p>
+</div>
+<div id="putting-it-all-together-a-survey-data-cleaning-pipeline" class="section level2" number="14.10">
+<h2>
+<span class="header-section-number">14.10</span> Putting It All Together: A Survey Data Cleaning Pipeline<a class="anchor" aria-label="anchor" href="#putting-it-all-together-a-survey-data-cleaning-pipeline"><i class="fas fa-link"></i></a>
+</h2>
+<p>Here is a realistic scenario. You received survey data and it looks like it was filled out during an earthquake on a moving bus:</p>
+<div class="sourceCode" id="cb385"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">survey_raw</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://tibble.tidyverse.org/reference/tibble.html">tibble</a></span><span class="op">(</span></span>
+<span>  respondent <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"  JOHN doe  "</span>, <span class="st">"jane SMITH"</span>, <span class="st">" Bob  Johnson "</span>,</span>
+<span>                 <span class="st">"ALICE williams"</span>, <span class="st">" charlie Brown"</span><span class="op">)</span>,</span>
+<span>  email <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"John.Doe@Gmail.COM"</span>, <span class="st">"jane_smith@YAHOO.com"</span>,</span>
+<span>            <span class="st">"BOB@company.ORG"</span>, <span class="st">"alice.w@School.Edu"</span>, <span class="st">"charlie@EMAIL.com"</span><span class="op">)</span>,</span>
+<span>  phone <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"(555) 123-4567"</span>, <span class="st">"555.234.5678"</span>, <span class="st">"555 345 6789"</span>,</span>
+<span>            <span class="st">"5554567890"</span>, <span class="st">"(555)-567-8901"</span><span class="op">)</span>,</span>
+<span>  favorite_color <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"  Blue "</span>, <span class="st">"RED"</span>, <span class="st">"  green  "</span>, <span class="st">"BLUE"</span>, <span class="st">" Green"</span><span class="op">)</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">survey_clean</span> <span class="op">&lt;-</span> <span class="va">survey_raw</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span></span>
+<span>    <span class="co"># Clean names: squish + title case</span></span>
+<span>    respondent <span class="op">=</span> <span class="va">respondent</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> <span class="fu"><a href="https://stringr.tidyverse.org/reference/str_trim.html">str_squish</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> <span class="fu"><a href="https://stringr.tidyverse.org/reference/case.html">str_to_title</a></span><span class="op">(</span><span class="op">)</span>,</span>
+<span></span>
+<span>    <span class="co"># Emails: just lowercase everything</span></span>
+<span>    email <span class="op">=</span> <span class="fu"><a href="https://stringr.tidyverse.org/reference/case.html">str_to_lower</a></span><span class="op">(</span><span class="va">email</span><span class="op">)</span>,</span>
+<span></span>
+<span>    <span class="co"># Phone numbers: strip everything that isn't a digit, then reformat</span></span>
+<span>    phone <span class="op">=</span> <span class="va">phone</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
+<span>      <span class="fu"><a href="https://stringr.tidyverse.org/reference/str_remove.html">str_remove_all</a></span><span class="op">(</span><span class="st">"[^0-9]"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
+<span>      <span class="fu"><a href="https://stringr.tidyverse.org/reference/str_replace.html">str_replace</a></span><span class="op">(</span><span class="st">"(\\d{3})(\\d{3})(\\d{4})"</span>, <span class="st">"\\1-\\2-\\3"</span><span class="op">)</span>,</span>
+<span></span>
+<span>    <span class="co"># Colors: squish + lowercase for consistency</span></span>
+<span>    favorite_color <span class="op">=</span> <span class="va">favorite_color</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> <span class="fu"><a href="https://stringr.tidyverse.org/reference/str_trim.html">str_squish</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> <span class="fu"><a href="https://stringr.tidyverse.org/reference/case.html">str_to_lower</a></span><span class="op">(</span><span class="op">)</span></span>
+<span>  <span class="op">)</span></span>
+<span></span>
+<span><span class="va">survey_clean</span></span>
+<span><span class="co">#&gt; # A tibble: 5 × 4</span></span>
+<span><span class="co">#&gt;   respondent     email                phone        favorite_color</span></span>
+<span><span class="co">#&gt;   &lt;chr&gt;          &lt;chr&gt;                &lt;chr&gt;        &lt;chr&gt;         </span></span>
+<span><span class="co">#&gt; 1 John Doe       john.doe@gmail.com   555-123-4567 blue          </span></span>
+<span><span class="co">#&gt; 2 Jane Smith     jane_smith@yahoo.com 555-234-5678 red           </span></span>
+<span><span class="co">#&gt; 3 Bob Johnson    bob@company.org      555-345-6789 green         </span></span>
+<span><span class="co">#&gt; 4 Alice Williams alice.w@school.edu   555-456-7890 blue          </span></span>
+<span><span class="co">#&gt; 5 Charlie Brown  charlie@email.com    555-567-8901 green</span></span></code></pre></div>
+<p>Five lines of <code><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate()</a></code> and the chaos is gone. Let’s verify the colors actually standardized:</p>
+<div class="sourceCode" id="cb386"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">survey_clean</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/count.html">count</a></span><span class="op">(</span><span class="va">favorite_color</span><span class="op">)</span></span>
+<span><span class="co">#&gt; # A tibble: 3 × 2</span></span>
+<span><span class="co">#&gt;   favorite_color     n</span></span>
+<span><span class="co">#&gt;   &lt;chr&gt;          &lt;int&gt;</span></span>
+<span><span class="co">#&gt; 1 blue               2</span></span>
+<span><span class="co">#&gt; 2 green              2</span></span>
+<span><span class="co">#&gt; 3 red                1</span></span></code></pre></div>
+<p>Blue and green each appear twice. Order restored. Sanity preserved.</p>
+</div>
+<div id="cleaning-product-names" class="section level2" number="14.11">
+<h2>
+<span class="header-section-number">14.11</span> Cleaning Product Names<a class="anchor" aria-label="anchor" href="#cleaning-product-names"><i class="fas fa-link"></i></a>
+</h2>
+<p>Pulling structured data out of messy product descriptions — you will do this way more often than you think:</p>
+<div class="sourceCode" id="cb387"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">products</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://tibble.tidyverse.org/reference/tibble.html">tibble</a></span><span class="op">(</span></span>
+<span>  description <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span></span>
+<span>    <span class="st">"Widget A (SKU: WDG-001) - Price: $29.99"</span>,</span>
+<span>    <span class="st">"Gadget B (SKU: GDG-042) - Price: $149.50"</span>,</span>
+<span>    <span class="st">"Thingamajig (SKU: THG-100) - Price: $5.00"</span></span>
+<span>  <span class="op">)</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">products</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span></span>
+<span>    sku <span class="op">=</span> <span class="fu"><a href="https://stringr.tidyverse.org/reference/str_extract.html">str_extract</a></span><span class="op">(</span><span class="va">description</span>, <span class="st">"[A-Z]{3}-\\d{3}"</span><span class="op">)</span>,</span>
+<span>    price_raw <span class="op">=</span> <span class="fu"><a href="https://stringr.tidyverse.org/reference/str_extract.html">str_extract</a></span><span class="op">(</span><span class="va">description</span>, <span class="st">"\\$[\\d.]+"</span><span class="op">)</span>,</span>
+<span>    price <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/numeric.html">as.numeric</a></span><span class="op">(</span><span class="fu"><a href="https://stringr.tidyverse.org/reference/str_remove.html">str_remove</a></span><span class="op">(</span><span class="va">price_raw</span>, <span class="st">"\\$"</span><span class="op">)</span><span class="op">)</span>,</span>
+<span>    product_name <span class="op">=</span> <span class="fu"><a href="https://stringr.tidyverse.org/reference/str_extract.html">str_extract</a></span><span class="op">(</span><span class="va">description</span>, <span class="st">"^[^(]+"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> <span class="fu"><a href="https://stringr.tidyverse.org/reference/str_trim.html">str_trim</a></span><span class="op">(</span><span class="op">)</span></span>
+<span>  <span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span><span class="op">(</span><span class="va">product_name</span>, <span class="va">sku</span>, <span class="va">price</span><span class="op">)</span></span>
+<span><span class="co">#&gt; # A tibble: 3 × 3</span></span>
+<span><span class="co">#&gt;   product_name sku     price</span></span>
+<span><span class="co">#&gt;   &lt;chr&gt;        &lt;chr&gt;   &lt;dbl&gt;</span></span>
+<span><span class="co">#&gt; 1 Widget A     WDG-001  30.0</span></span>
+<span><span class="co">#&gt; 2 Gadget B     GDG-042 150. </span></span>
+<span><span class="co">#&gt; 3 Thingamajig  THG-100   5</span></span></code></pre></div>
+<p>One messy text column became three clean, analysis-ready columns. That is the kind of transformation that gets you a “nice work” in the group chat.</p>
+</div>
+<div id="extracting-numbers-from-sales-notes" class="section level2" number="14.12">
+<h2>
+<span class="header-section-number">14.12</span> Extracting Numbers from Sales Notes<a class="anchor" aria-label="anchor" href="#extracting-numbers-from-sales-notes"><i class="fas fa-link"></i></a>
+</h2>
+<p>Pulling numbers out of free-text notes so you can actually do math with them:</p>
+<div class="sourceCode" id="cb388"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">sales_notes</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://tibble.tidyverse.org/reference/tibble.html">tibble</a></span><span class="op">(</span></span>
+<span>  region <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"North"</span>, <span class="st">"North"</span>, <span class="st">"South"</span>, <span class="st">"South"</span><span class="op">)</span>,</span>
+<span>  notes <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"Sold 15 units of product A"</span>,</span>
+<span>            <span class="st">"Sold 8 units of product B"</span>,</span>
+<span>            <span class="st">"Sold 22 units of product A"</span>,</span>
+<span>            <span class="st">"Sold 3 units of product C"</span><span class="op">)</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">sales_notes</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span></span>
+<span>    units <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/integer.html">as.integer</a></span><span class="op">(</span><span class="fu"><a href="https://stringr.tidyverse.org/reference/str_extract.html">str_extract</a></span><span class="op">(</span><span class="va">notes</span>, <span class="st">"\\d+"</span><span class="op">)</span><span class="op">)</span>,</span>
+<span>    product <span class="op">=</span> <span class="fu"><a href="https://stringr.tidyverse.org/reference/str_extract.html">str_extract</a></span><span class="op">(</span><span class="va">notes</span>, <span class="st">"product [A-C]"</span><span class="op">)</span></span>
+<span>  <span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html">group_by</a></span><span class="op">(</span><span class="va">region</span>, <span class="va">product</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/pkg/Hmisc/man/summarize.html">summarize</a></span><span class="op">(</span>total_units <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/sum.html">sum</a></span><span class="op">(</span><span class="va">units</span><span class="op">)</span>, .groups <span class="op">=</span> <span class="st">"drop"</span><span class="op">)</span></span>
+<span><span class="co">#&gt; # A tibble: 4 × 3</span></span>
+<span><span class="co">#&gt;   region product   total_units</span></span>
+<span><span class="co">#&gt;   &lt;chr&gt;  &lt;chr&gt;           &lt;int&gt;</span></span>
+<span><span class="co">#&gt; 1 North  product A          15</span></span>
+<span><span class="co">#&gt; 2 North  product B           8</span></span>
+<span><span class="co">#&gt; 3 South  product A          22</span></span>
+<span><span class="co">#&gt; 4 South  product C           3</span></span></code></pre></div>
+<p>Text data became a proper summary table. Drop that into the quarterly deck and watch heads nod approvingly.</p>
+</div>
+<div id="quick-reference" class="section level2" number="14.13">
+<h2>
+<span class="header-section-number">14.13</span> Quick Reference<a class="anchor" aria-label="anchor" href="#quick-reference"><i class="fas fa-link"></i></a>
+</h2>
+<p>The functions you will actually use, ranked by how often you will reach for them:</p>
+<div class="inline-table"><table class="table table-sm">
+<colgroup>
+<col width="68%">
+<col width="31%">
+</colgroup>
+<thead><tr class="header">
+<th align="left">What you want to do</th>
+<th align="left">Function</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td align="left">Glue strings together</td>
+<td align="left"><code><a href="https://stringr.tidyverse.org/reference/str_c.html">str_c()</a></code></td>
+</tr>
+<tr class="even">
+<td align="left">Lowercase / uppercase / title case</td>
+<td align="left">
+<code><a href="https://stringr.tidyverse.org/reference/case.html">str_to_lower()</a></code>, <code><a href="https://stringr.tidyverse.org/reference/case.html">str_to_upper()</a></code>, <code><a href="https://stringr.tidyverse.org/reference/case.html">str_to_title()</a></code>
+</td>
+</tr>
+<tr class="odd">
+<td align="left">Remove extra whitespace</td>
+<td align="left">
+<code><a href="https://stringr.tidyverse.org/reference/str_trim.html">str_trim()</a></code>, <code><a href="https://stringr.tidyverse.org/reference/str_trim.html">str_squish()</a></code>
+</td>
+</tr>
+<tr class="even">
+<td align="left">Does it contain this pattern?</td>
+<td align="left"><code><a href="https://stringr.tidyverse.org/reference/str_detect.html">str_detect()</a></code></td>
+</tr>
+<tr class="odd">
+<td align="left">Pull out matching text</td>
+<td align="left"><code><a href="https://stringr.tidyverse.org/reference/str_extract.html">str_extract()</a></code></td>
+</tr>
+<tr class="even">
+<td align="left">Find and replace</td>
+<td align="left">
+<code><a href="https://stringr.tidyverse.org/reference/str_replace.html">str_replace()</a></code>, <code><a href="https://stringr.tidyverse.org/reference/str_replace.html">str_replace_all()</a></code>
+</td>
+</tr>
+<tr class="odd">
+<td align="left">Delete a pattern</td>
+<td align="left">
+<code><a href="https://stringr.tidyverse.org/reference/str_remove.html">str_remove()</a></code>, <code><a href="https://stringr.tidyverse.org/reference/str_remove.html">str_remove_all()</a></code>
+</td>
+</tr>
+<tr class="even">
+<td align="left">How many characters?</td>
+<td align="left"><code><a href="https://stringr.tidyverse.org/reference/str_length.html">str_length()</a></code></td>
+</tr>
+</tbody>
+</table></div>
+<p>And the three regex patterns that handle 90% of business problems:</p>
+<div class="inline-table"><table class="table table-sm">
+<thead><tr class="header">
+<th align="left">Pattern</th>
+<th align="left">What it finds</th>
+<th align="left">Example</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td align="left"><code>\\d+</code></td>
+<td align="left">Numbers</td>
+<td align="left">“Order <strong>1234</strong> placed”</td>
+</tr>
+<tr class="even">
+<td align="left"><code>[A-Za-z]+</code></td>
+<td align="left">Words (letters)</td>
+<td align="left">“<strong>SKU</strong>-12345”</td>
+</tr>
+<tr class="odd">
+<td align="left"><code>[\\w.]+@[\\w.]+</code></td>
+<td align="left">Email addresses</td>
+<td align="left">“<strong><a href="mailto:alice@example.com" class="email">alice@example.com</a></strong>”</td>
+</tr>
+</tbody>
+</table></div>
+<p>That is stringr. Clean your text, extract what you need, get back to the analysis that actually matters. Your data does not care how it was entered — but your boss cares how it looks when you present it.</p>
+
+</div>
+</div>
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+  var sidebar = document.querySelector(".sidebar-book");
+  if (!sidebar) return;
+
+  // Create a slim tab on the left edge — visible, unobtrusive, clearly a toggle
+  var btn = document.createElement("button");
+  btn.innerHTML = '&#9776; Contents';
+  btn.setAttribute("aria-label", "Toggle table of contents");
+  btn.id = "sidebar-toggle-btn";
+  document.body.appendChild(btn);
+
+  var isOpen = false;
+
+  function openSidebar() {
+    isOpen = true;
+    sidebar.classList.add("sidebar-open");
+    btn.innerHTML = '&times; Close';
+    btn.classList.add("sidebar-toggle-active");
+  }
+
+  function closeSidebar() {
+    isOpen = false;
+    sidebar.classList.remove("sidebar-open");
+    btn.innerHTML = '&#9776; Contents';
+    btn.classList.remove("sidebar-toggle-active");
+  }
+
+  btn.addEventListener("click", function(e) {
+    e.stopPropagation();
+    if (isOpen) { closeSidebar(); } else { openSidebar(); }
+  });
+
+  // Close when clicking outside
+  document.addEventListener("click", function(e) {
+    if (isOpen && !sidebar.contains(e.target) && e.target !== btn) {
+      closeSidebar();
+    }
+  });
+
+  // Close on Escape key
+  document.addEventListener("keydown", function(e) {
+    if (e.key === "Escape" && isOpen) { closeSidebar(); }
+  });
+
+  // Only activate on wide screens
+  function checkWidth() {
+    if (window.innerWidth >= 992) {
+      btn.style.display = "flex";
+      sidebar.classList.add("sidebar-collapsed");
+    } else {
+      btn.style.display = "none";
+      sidebar.classList.remove("sidebar-collapsed");
+      sidebar.classList.remove("sidebar-open");
+    }
+  }
+
+  window.addEventListener("resize", checkWidth);
+  checkWidth();
+});
+</script><div class="chapter-nav">
+<div class="prev"><a href="multivar.html"><span class="header-section-number">13</span> Relationships Between Variables</a></div>
+<div class="next"><a href="forcats.html"><span class="header-section-number">15</span> Wrangling Categories with forcats</a></div>
+</div></main><div class="col-md-3 col-lg-2 d-none d-md-block sidebar sidebar-chapter">
+    <nav id="toc" data-toggle="toc" aria-label="On this page"><h2>On this page</h2>
+      <ul class="nav navbar-nav">
+<li><a class="nav-link" href="#stringr"><span class="header-section-number">14</span> Working with Text Data</a></li>
+<li><a class="nav-link" href="#why-you-need-this"><span class="header-section-number">14.1</span> Why You Need This</a></li>
+<li><a class="nav-link" href="#string-basics"><span class="header-section-number">14.2</span> String Basics</a></li>
+<li><a class="nav-link" href="#combining-strings-with-str_c"><span class="header-section-number">14.3</span> Combining Strings with str_c()</a></li>
+<li><a class="nav-link" href="#changing-case-your-most-used-trick"><span class="header-section-number">14.4</span> Changing Case — Your Most-Used Trick</a></li>
+<li><a class="nav-link" href="#trimming-whitespace"><span class="header-section-number">14.5</span> Trimming Whitespace</a></li>
+<li><a class="nav-link" href="#detecting-patterns-with-str_detect"><span class="header-section-number">14.6</span> Detecting Patterns with str_detect()</a></li>
+<li><a class="nav-link" href="#replacing-text-with-str_replace"><span class="header-section-number">14.7</span> Replacing Text with str_replace()</a></li>
+<li><a class="nav-link" href="#extracting-text-with-str_extract"><span class="header-section-number">14.8</span> Extracting Text with str_extract()</a></li>
+<li><a class="nav-link" href="#regular-expressions-just-the-3-patterns-you-actually-need"><span class="header-section-number">14.9</span> Regular Expressions: Just the 3 Patterns You Actually Need</a></li>
+<li><a class="nav-link" href="#putting-it-all-together-a-survey-data-cleaning-pipeline"><span class="header-section-number">14.10</span> Putting It All Together: A Survey Data Cleaning Pipeline</a></li>
+<li><a class="nav-link" href="#cleaning-product-names"><span class="header-section-number">14.11</span> Cleaning Product Names</a></li>
+<li><a class="nav-link" href="#extracting-numbers-from-sales-notes"><span class="header-section-number">14.12</span> Extracting Numbers from Sales Notes</a></li>
+<li><a class="nav-link" href="#quick-reference"><span class="header-section-number">14.13</span> Quick Reference</a></li>
+</ul>
+
+      <div class="book-extra">
+        <ul class="list-unstyled">
+          
+        </ul>
+</div>
+    </nav>
+</div>
+
+</div>
+</div> <!-- .container -->
+
+<footer class="bg-primary text-light mt-5"><div class="container"><div class="row">
+
+  <div class="col-12 col-md-6 mt-3">
+    <p>"<strong>R and the Tidyverse: A Beginner’s Guide</strong>" was written by Vivek H. Patil. It was last built on 2026-02-27.</p>
+  </div>
+
+  <div class="col-12 col-md-6 mt-3">
+    <p>This book was built by the <a class="text-light" href="https://bookdown.org">bookdown</a> R package.</p>
+  </div>
+
+</div></div>
+</footer><!-- dynamically load mathjax for compatibility with self-contained --><script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "true";
+    if (src === "" || src === "true") src = "https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.9/latest.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:")
+      if (/^https?:/.test(src))
+        src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script><script type="text/x-mathjax-config">const popovers = document.querySelectorAll('a.footnote-ref[data-toggle="popover"]');
+for (let popover of popovers) {
+  const div = document.createElement('div');
+  div.setAttribute('style', 'position: absolute; top: 0, left:0; width:0, height:0, overflow: hidden; visibility: hidden;');
+  div.innerHTML = popover.getAttribute('data-content');
+
+  var has_math = div.querySelector("span.math");
+  if (has_math) {
+    document.body.appendChild(div);
+    MathJax.Hub.Queue(["Typeset", MathJax.Hub, div]);
+    MathJax.Hub.Queue(function() {
+      popover.setAttribute('data-content', div.innerHTML);
+      document.body.removeChild(div);
+    })
+  }
+}
+</script>
+</body>
+</html>

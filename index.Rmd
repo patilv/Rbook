@@ -1,5 +1,5 @@
 ---
-title: "R and the Tidyverse: A Companion Guide"
+title: "R and the Tidyverse: A Beginner's Guide"
 author: "Vivek H. Patil"
 date: "`r Sys.Date()`"
 site: bookdown::bookdown_site
@@ -14,27 +14,27 @@ lof: yes
 fontsize: 12pt
 monofont: "Source Code Pro"
 monofontoptions: "Scale=0.7"
-github-repo: patilv/Rbook
-description: "A beginner-friendly companion guide for learning R and the tidyverse. The secondary R reference for the Visual Analytics and Data Storytelling course."
+description: "A beginner-friendly guide to learning R and the tidyverse for data analysis."
+cover-image: cover.png
 ---
 
 # Preface {-}
 
 Welcome! If you are reading this, chances are you have been asked (or voluntarily chose) to learn R. Either way, you are in the right place.
 
-This book has two jobs:
+This book has one job: **teach you R from scratch.** No prior programming experience needed. If you can use a spreadsheet, you can learn R. It is going to feel weird at first --- typing code instead of clicking buttons --- but stick with it. The payoff is worth it.
 
-1. **Teach you R from scratch.** No prior programming experience needed. If you can use a spreadsheet, you can learn R. It is going to feel weird at first --- typing code instead of clicking buttons --- but stick with it. The payoff is worth it.
-
-2. **Be your R reference for the data visualization course.** This book is the companion to the [Visual Analytics and Data Storytelling](http://patilv.com/VizAnalytics4Biz/) course. That course teaches you *why* and *what* to visualize. This book teaches you *how* to make R do the work.
+By the end, you will be able to import messy data, clean it up, compute summary statistics, build publication-quality charts, and produce self-updating reports --- all in R.
 
 ### How this book is organized {-}
 
 - **Chapters 1--2**: Getting started. Installing R, finding your way around RStudio, and not panicking.
-- **Chapter 3**: R Markdown. The tool that lets you combine your writing and your code into one document (your professors will love this).
-- **Chapters 4--12**: The tidyverse. This is where the magic happens --- importing data, wrangling it into shape, making gorgeous plots, and working with text, categories, and dates.
-- **Chapters 13--17**: Data exploration and statistical analysis. Describing data, summary statistics, and hypothesis testing --- with both the old-school base R way and the tidyverse way.
-- **Chapter 18**: Advanced R Markdown. Presentations, dashboards, and other cool things you can build.
+- **Chapters 3--4**: Your data analysis toolkit and importing data. Meet the tidyverse and learn how to get data into R from CSVs, Excel files, and databases.
+- **Chapters 5--8**: Working with data. Describing variables, modifying and reshaping data with dplyr and tidyr.
+- **Chapters 9--11**: Summary statistics and visualization. Computing the numbers that matter and building charts with ggplot2.
+- **Chapters 12--13**: Statistical analysis. Hypothesis testing for single variables and relationships between variables.
+- **Chapters 14--17**: Specialized tools. Working with text (stringr), categories (forcats), dates (lubridate), and repetitive tasks (purrr).
+- **Chapters 18--19**: R Markdown. Combining your writing and code into polished, self-updating reports, presentations, and dashboards.
 
 ### A few ground rules {-}
 
@@ -44,7 +44,112 @@ This book has two jobs:
 
 Let's get started.
 
-## About me {-}
+### Why this book exists at a Jesuit university {-}
 
-I am a Professor of Marketing in the School of Business Administration at [Gonzaga University](http://www.gonzaga.edu), where I teach marketing research, data visualization, and business analytics.
+You might be wondering what a coding book has to do with Gonzaga's mission. Fair question. Here is the short answer: everything.
+
+Gonzaga is a Jesuit university, which means we care about educating the whole person --- not just the part of you that can pass an exam, but the part that will go out into the world and actually do something meaningful with what you learned. The Jesuit tradition talks about forming "men and women for others," people who lead with competence *and* conscience. Data literacy is a big part of that now.
+
+Here is the thing about data: it is never neutral. Every dataset was collected by someone, for some reason, with some set of assumptions baked in. Every summary statistic you compute, every chart you build, every model you deploy --- these shape decisions that affect real people. Which neighborhoods get investment. Which patients get treatment. Which applicants get interviews. When you know how to work with data responsibly, you have the power to make those decisions more fair, more transparent, and more grounded in evidence rather than gut feelings.
+
+That is the Jesuit idea of the "common good" in action --- not as an abstract ideal you read about in a philosophy class, but as a practical skill you exercise every time you write a line of code.
+
+So yes, this is a book about R. You will learn functions and packages and how to make charts that do not look like they were made in 1997. But underneath all of that is something bigger: the ability to think critically about data, ask whose story it tells (and whose it leaves out), and use your skills in ways that make the world a little more honest and a little more just.
+
+That is why this book exists at a Jesuit university. Now let's learn some R.
+
+## About the Author {-}
+
+**Vivek H. Patil** is a Professor of Marketing and Director of Graduate Business Programs in the School of Business Administration at [Gonzaga University](https://www.gonzaga.edu). He has over two decades of teaching and research experience spanning marketing, data analytics, and research methodology.
+
+His research integrates measurement theory and statistics with frameworks from economics, social psychology, and cognitive psychology to examine human behavior. He has authored or co-authored 25+ peer-reviewed articles in journals including the *Journal of Business Research*, *PLOS ONE*, *Journal of Marketing Analytics*, *Scientometrics*, and the *American Journal of Health Promotion*.
+
+He holds a Ph.D. in Business (Marketing) from the University of Kansas, an M.Eng. in Software Systems from the Birla Institute of Technology and Science (BITS Pilani), and a Master of Management Studies from BITS Pilani. This combination of business, statistics, and software engineering backgrounds informs his approach to teaching data analysis — practical, code-first, and focused on real-world applications.
+
+At Gonzaga, he teaches courses in marketing research, data visualization, and business analytics. He is also the founder of [VeloxPortfolio.com](https://veloxportfolio.com), an AI-powered tool that transforms resumes into portfolio websites. More at [patilv.com](https://www.patilv.com).
+
+
+## License {-}
+
+All rights reserved. No part of this book may be reproduced, distributed, or transmitted in any form or by any means without the prior written permission of the author, except for brief quotations in reviews or scholarly works. For permissions or licensing inquiries, contact the author.
+
+
+## Attributions and Data Sources {-}
+
+This book was built with open-source tools and relies on publicly available data, R packages, and published sources. Full attributions are listed here.
+
+### Software {-}
+
+- **R** [@R-base]: R Core Team. *R: A Language and Environment for Statistical Computing.* R Foundation for Statistical Computing, Vienna, Austria. [https://www.R-project.org/](https://www.R-project.org/). License: GPL-2 | GPL-3.
+- **RStudio / Posit**: Posit Software, PBC. [https://posit.co/](https://posit.co/).
+- **bookdown** [@R-bookdown]: Yihui Xie. Used to produce this book. License: GPL-3.
+- **knitr** [@R-knitr]: Yihui Xie. License: GPL-2 | GPL-3.
+- **rmarkdown** [@R-rmarkdown]: Allaire, J.J., Xie, Y., et al. License: GPL-3.
+
+### R Packages Used in Examples {-}
+
+All R packages listed below are open source and available on [CRAN](https://cran.r-project.org/). Package authors retain copyright to their respective works.
+
+| Package | Author(s) | License | Used in |
+|:--------|:----------|:--------|:--------|
+| **tidyverse** (ggplot2, dplyr, tidyr, readr, purrr, tibble, stringr, forcats) | Hadley Wickham et al. | MIT | Throughout |
+| **lubridate** | Vitalie Spinu, Garrett Grolemund, Hadley Wickham | GPL (>=2) | Ch 16 |
+| **DT** | Yihui Xie et al. | GPL-3 | Ch 5, 7 |
+| **plotly** | Carson Sievert et al. | MIT | Ch 10, 13 |
+| **Hmisc** | Frank Harrell et al. | GPL (>=2) | Ch 13 |
+| **scales** | Hadley Wickham, Dana Seidel | MIT | Ch 10--11 |
+| **readxl** | Hadley Wickham, Jennifer Bryan | MIT | Ch 4 |
+| **kableExtra** | Hao Zhu | MIT | Ch 18 |
+| **skimr** | Elin Waring et al. | GPL-3 | Ch 5 |
+| **patchwork** | Thomas Lin Pedersen | MIT | Ch 11 |
+| **ggthemes** | Jeffrey B. Arnold | GPL-2 | Ch 11 |
+| **ggrepel** | Kamil Slowikowski | GPL-3 | Ch 11 |
+| **haven** | Hadley Wickham, Evan Miller | MIT | Ch 4 |
+| **RColorBrewer** | Erich Neuwirth | Apache 2.0 | Ch 11 |
+| **MASS** | Brian Ripley et al. | GPL-2 / GPL-3 | Ch 6 |
+
+### Datasets {-}
+
+| Dataset | Source | License / Terms |
+|:--------|:-------|:----------------|
+| **iris** | Anderson, E. (1935) and Fisher, R.A. (1936). Built into R. | Public domain |
+| **mtcars** | Henderson and Velleman (1981). *Motor Trend* magazine, 1974. Built into R. | Public domain |
+| **mpg** | EPA fuel economy data (1999, 2008). Included in ggplot2. | Public domain (US government data) |
+| **diamonds** | Included in ggplot2. Originally from [diamondse.info](https://www.diamondse.info/). | Fair use for education |
+| **economics** | Federal Reserve Economic Data (FRED). Included in ggplot2. | Public domain (US government data) |
+| **survey** | Venables, W.N. and Ripley, B.D. (1999). *Modern Applied Statistics with S-PLUS,* 3rd ed., Springer. From the MASS package; collected from 237 Statistics I students at the University of Adelaide. | GPL-2 / GPL-3 (MASS package) |
+| **corrdata** | Simulated correlation demonstration data created by the author. | Original to this book |
+
+### Images {-}
+
+| Image | Source | Terms |
+|:------|:-------|:------|
+| R logo (`Rlogo.png`) | The R Foundation. [https://www.r-project.org/logo/](https://www.r-project.org/logo/) | [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/) |
+| Type conversion diagram (`04files/conversion.png`) | Created by the author or adapted from public R documentation. | Original to this book |
+
+### Chapter 1 Sources {-}
+
+The following factual claims in Chapter 1 are drawn from publicly available sources:
+
+- **CRAN package count (~23,000+ in 2026):** CRAN package repository, [https://cran.r-project.org/web/packages/](https://cran.r-project.org/web/packages/). Milestone estimates based on Muenchen, R.A., "The Popularity of Data Analysis Software," [https://r4stats.com/articles/popularity/](https://r4stats.com/articles/popularity/) (continuously updated).
+- **TIOBE Index (#8, December 2025):** TIOBE Software BV, [https://www.tiobe.com/tiobe-index/](https://www.tiobe.com/tiobe-index/).
+- **PYPL Index (#5):** Pierre Carbonnelle, [https://pypl.github.io/PYPL.html](https://pypl.github.io/PYPL.html).
+- **IEEE Spectrum (#5, 2024):** IEEE, "Top Programming Languages," [https://spectrum.ieee.org/top-programming-languages](https://spectrum.ieee.org/top-programming-languages).
+- **Stack Overflow Developer Survey (4.9%, 2025):** Stack Overflow, [https://survey.stackoverflow.co/](https://survey.stackoverflow.co/).
+- **R Consortium user estimate (2 million+):** R Consortium, [https://www.r-consortium.org/](https://www.r-consortium.org/).
+- **NYT article on R:** Vance, A. (2009). "Data Analysts Captivated by R's Power." *The New York Times,* January 6, 2009.
+- **BBC bbplot package:** BBC Visual and Data Journalism, [https://github.com/bbc/bbplot](https://github.com/bbc/bbplot). License: GPL-3.
+- **R's return to TIOBE top 10 coverage:**
+    - Krill, P. (2025). "R language is making a comeback." *InfoWorld,* December 13, 2025.
+    - "Is the R Programming Language Surging in Popularity?" *Slashdot,* December 14, 2025.
+    - Yau, N. (2025). "R climbs back up into the top ten programming languages." *FlowingData,* December 19, 2025.
+
+### Typography and Fonts {-}
+
+- **Inter** by Rasmus Andersson. [https://rsms.me/inter/](https://rsms.me/inter/). License: SIL Open Font License 1.1.
+- **Fira Code** by Nikita Prokopov. [https://github.com/tonsky/FiraCode](https://github.com/tonsky/FiraCode). License: SIL Open Font License 1.1.
+
+### Acknowledgments {-}
+
+This book was developed with assistance from **Claude** (Anthropic), an AI language model used for drafting, editing, and code generation. All content was reviewed and approved by the author.
 

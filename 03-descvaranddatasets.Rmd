@@ -6,7 +6,8 @@ Think of this chapter as your pre-meeting prep before a big client call. You wou
 
 ```{r include=FALSE}
 library(tidyverse)
-opts_chunk$set(echo=TRUE, warning=FALSE, message=FALSE)
+library(DT)
+knitr::opts_chunk$set(echo=TRUE, warning=FALSE, message=FALSE)
 ```
 
 ## How big is this thing? Rows and columns
@@ -16,6 +17,8 @@ First question on any first date with data: how big are you? The `dim()` functio
 ```{r}
 dim(iris) # dimensions
 ```
+
+The output `150 5` tells you the iris dataset has 150 rows (observations) and 5 columns (variables). In a business context, this is your first sense of scale: "We have 150 records and 5 attributes to work with."
 
 ## Just the row count
 
@@ -47,6 +50,13 @@ The `head()` function shows you the first 6 rows of your data. This is one of th
 
 ```{r}
 head(iris)
+```
+
+Want to explore the full dataset interactively? The table below lets you search, sort, and page through all 150 rows -- try clicking a column header to sort, or typing "virginica" in the search box:
+
+```{r}
+DT::datatable(iris, options = list(pageLength = 10, autoWidth = TRUE),
+              caption = "The complete iris dataset — search, sort, and explore.")
 ```
 
 ## Just a taste -- first 2 rows
@@ -107,6 +117,8 @@ For the most part, we will be concerned with `character`, `factor`, and `numeric
 str(iris)
 ```
 
+Here is how to read this output. Each line shows one variable: the name (like `Sepal.Length`), the data type (`num` for numeric, `Factor` for categorical), and a preview of the first few values. The `Factor w/ 3 levels` line tells you that `Species` is a categorical variable with exactly three categories: setosa, versicolor, and virginica. If a variable shows up as `chr` (character) when you expected a number, that is your first clue that something went wrong during data import --- a common "gotcha" that `str()` helps you catch early.
+
 If you have a factor variable and want to see all its categories, the `levels()` function has you covered:
 
 ```{r}
@@ -129,9 +141,9 @@ You can also focus on just one variable at a time. Imagine you only care about o
 summary(iris$Sepal.Length)
 ```
 
-## Tidyverse approach: `glimpse()` and `tibble`
+## Another useful exploration tool: `glimpse()` and `tibble`
 
-Alright, time to upgrade. Everything we have covered so far uses base R, which gets the job done perfectly well. But the tidyverse provides some slicker, more modern ways to explore your data. The `glimpse()` function from **dplyr** is like `str()` but better-looking -- it shows every column in a transposed format, making it easy to scan datasets that have a lot of variables. Think of it as the LinkedIn profile version of `str()` -- same information, better presentation.
+The `glimpse()` function from **dplyr** is another great way to explore your data -- it shows every column in a transposed format, making it easy to scan datasets that have a lot of variables. Think of it as the LinkedIn profile version of `str()` -- same information, better presentation.
 
 ```{r}
 glimpse(iris)
@@ -146,7 +158,7 @@ iris_tbl <- as_tibble(iris)
 iris_tbl
 ```
 
-Notice how the tibble only shows the first 10 rows and tells you the dimensions up front. Much friendlier than base R's default behavior of printing every single row like an overenthusiastic intern who CC'd the entire company on a reply-all.
+Notice how the tibble only shows the first 10 rows and tells you the dimensions up front --- no more scrolling through thousands of rows in your console.
 
 ### Selecting and viewing with dplyr
 
@@ -162,6 +174,8 @@ iris_tbl %>% select(Species, Sepal.Length) %>% head()
 iris_tbl %>% count(Species)
 ```
 
+All three species have exactly 50 observations each --- a perfectly balanced dataset. In real-world data, this kind of balance is rare. You are more likely to see one dominant group (like 90% "Standard" customers and 10% "Premium"), and spotting that imbalance early shapes every analysis decision downstream.
+
 ```{r}
 # Quick summary by group
 iris_tbl %>%
@@ -172,6 +186,8 @@ iris_tbl %>%
     mean_petal_length = mean(Petal.Length)
   )
 ```
+
+This grouped summary reveals that the three species differ dramatically in petal length (from 1.46 cm for setosa to 5.55 cm for virginica) but less so in sepal length (5.01 to 6.59 cm). Even this quick table tells you that petal measurements are likely to be more useful than sepal measurements for distinguishing between species --- a genuine analytical insight from three lines of code.
 
 ### The `skimr` package
 

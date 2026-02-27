@@ -14,7 +14,7 @@ In all of these cases, you're doing the **same thing to many things**. You could
 Let's see the difference. Here's computing the mean of each column in `mtcars` with a for loop:
 
 ```{r}
-# The for-loop way
+# Using a for loop
 means <- numeric(ncol(mtcars))
 for (i in seq_along(mtcars)) {
   means[i] <- mean(mtcars[[i]])
@@ -28,6 +28,8 @@ Now with purrr:
 ```{r}
 map_dbl(mtcars, mean)
 ```
+
+Same result --- the mean of every column, neatly named. You can see that the average car has about 6.2 cylinders, 20.1 mpg, 230 horsepower, and weighs about 3,217 lbs. One line replaced five lines of loop code.
 
 One line. Same result. No indexing, no pre-allocation, no room for mistakes. Let's learn how this works.
 
@@ -63,7 +65,7 @@ map_dfr(simple_list, ~ tibble(mean = mean(.x), sd = sd(.x), n = length(.x)),
         .id = "group")
 ```
 
-The `.id = "group"` argument adds a column that tells you which list element each row came from. Very handy.
+The result is a tidy summary table with one row per group: group "a" has a mean of 3, "b" has 8, and "c" has 13 --- each with 5 observations. The `.id = "group"` argument adds the column that tells you which list element each row came from. This is exactly the kind of summary table you would build to compare business segments or product lines.
 
 The modern alternative to `map_dfr()` uses `map()` with `list_rbind()`:
 
@@ -126,6 +128,8 @@ y <- list(10, 20, 30)
 
 map2_dbl(x, y, ~ mean(.x) + .y)
 ```
+
+The result is three numbers: the mean of `1:5` (3) plus 10 = 13, the mean of `6:10` (8) plus 20 = 28, and the mean of `11:15` (13) plus 30 = 43. Each pair of inputs was processed in parallel.
 
 Practical example --- generating samples from different distributions:
 

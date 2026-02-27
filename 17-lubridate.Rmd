@@ -10,13 +10,9 @@ knitr::opts_chunk$set(echo = TRUE, warning = FALSE, message = FALSE)
 
 Dates look simple. Everyone knows what "January 15, 2025" means. But try to do math with dates and things get strange fast. Months have different numbers of days. Years sometimes have an extra day. And don't even get me started on daylight saving time.
 
-Base R has tools for dates, but they require you to memorize format strings like `"%m/%d/%Y"` (and yes, the capital Y matters). The **lubridate** package takes a different approach: just tell it what order the year, month, and day appear in, and it figures out the rest.
+R has built-in tools for dates, but they require you to memorize format strings like `"%m/%d/%Y"` (and yes, the capital Y matters). The **lubridate** package takes a different approach: just tell it what order the year, month, and day appear in, and it figures out the rest.
 
-One important note: lubridate is NOT loaded automatically with `library(tidyverse)`. You need to load it separately:
-
-```{r eval=FALSE}
-library(lubridate)
-```
+One note: as of **tidyverse 2.0** (released in 2023), lubridate IS loaded automatically with `library(tidyverse)`. In older code or tutorials, you may see `library(lubridate)` as a separate line --- that still works fine, it is just no longer necessary. This chapter's setup chunk loads both to be explicit.
 
 Let's jump in.
 
@@ -224,6 +220,8 @@ transactions %>%
   )
 ```
 
+The output shows three rows --- one per month --- with total revenue and transaction count. January had the highest total revenue ($3,250 from 3 transactions), while February had the highest single-transaction count of 3 as well but a different total. This `floor_date()` + `group_by()` pattern is incredibly common in business reporting --- it turns granular daily data into the monthly summaries that dashboards and management reports are built on.
+
 You can also round to weeks, quarters, or even custom intervals like "15 minutes" or "6 hours" if you're working with high-frequency data.
 
 
@@ -253,6 +251,8 @@ economics %>%
   theme_minimal()
 ```
 
+The color-coded decades immediately reveal the cyclical nature of unemployment. Each decade has its own recession spike, and the overall level trends upward over time as the labor force grew. The 2000s (pink) show the most dramatic rise, corresponding to the Great Recession. This is the payoff of `year()` --- extracting a date component lets you group and color data in ways that reveal long-term patterns.
+
 ```{r}
 economics %>%
   mutate(month = month(date, label = TRUE)) %>%
@@ -267,6 +267,8 @@ economics %>%
   theme_minimal()
 ```
 
+The monthly averages are remarkably flat --- unemployment does not have a strong seasonal pattern when averaged over nearly 50 years. The slight variations you see are dwarfed by the cyclical (recession-driven) swings. This is a useful finding in itself: it tells you that month-to-month comparisons of unemployment are meaningful, unlike retail sales which have massive seasonal swings.
+
 ```{r}
 # Filter to the Great Recession and plot
 economics %>%
@@ -279,6 +281,8 @@ economics %>%
   ) +
   theme_minimal()
 ```
+
+The Great Recession chart shows unemployment nearly doubling in just two years --- from about 7 million to over 14 million. The `between()` function combined with `ymd()` made it trivial to zoom into this specific date range. This pattern --- filter to a date window, then plot --- is exactly how you would build a "drill-down" view in a business dashboard.
 
 See how `year()`, `month()`, `between()`, and `ymd()` all work together seamlessly with dplyr and ggplot2? That's the whole point.
 

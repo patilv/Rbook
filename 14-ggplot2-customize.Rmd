@@ -16,7 +16,11 @@ We will cover:
 - **Annotations** -- draw attention to the things that matter
 - **Combining plots** -- put multiple charts together for a complete story
 
-We will use the built-in `mpg`, `iris`, and `diamonds` datasets throughout.
+We will use the built-in `mpg`, `iris`, and `diamonds` datasets throughout. This chapter also uses three additional packages --- **patchwork** (combining plots), **ggthemes** (publication-style themes), and **ggrepel** (non-overlapping labels). Install them once if you haven't already:
+
+```{r eval=FALSE}
+install.packages(c("patchwork", "ggthemes", "ggrepel"))
+```
 
 ## Themes -- One-Line Style Upgrades
 
@@ -224,6 +228,8 @@ v4 <- ggplot(diamonds_sample, aes(x = carat, y = price, color = depth)) +
 (v1 | v2) / (v3 | v4)
 ```
 
+All four palettes go from dark to light, but the color journeys differ. **Viridis** (the default) runs from purple through green to yellow --- the best all-rounder. **Magma** and **inferno** go through warm reds and oranges, making high values "pop" more dramatically. **Plasma** takes a purple-to-yellow path through pinks. All four are designed to be readable even when printed in black and white and are safe for people with color vision deficiencies. When in doubt, stick with the default viridis.
+
 For discrete (categorical) data, use `scale_color_viridis_d()` or `scale_fill_viridis_d()`:
 
 ```{r}
@@ -285,6 +291,8 @@ ggplot(diamonds, aes(x = carat, y = price)) +
   labs(title = "Diamond Price vs. Carat (Log Scale)", x = "Carat (log)", y = "Price (log)")
 ```
 
+On the original linear axes, the diamond data was a curved blob. On log scales, the relationship between carat and price becomes nearly linear, which means the relationship is *multiplicative* --- doubling the carat weight roughly multiplies the price by a fixed factor rather than adding a fixed dollar amount. Log scales are your friend whenever data spans orders of magnitude or when exponential/power-law relationships are at play.
+
 ### Zooming vs. Filtering -- An Important Distinction
 
 There are two ways to limit your axes, and they behave very differently:
@@ -308,7 +316,7 @@ p_coord <- p_base +
 p_scale | p_coord
 ```
 
-See how the regression lines differ? Use `coord_cartesian()` when you want to zoom without distorting your analysis.
+See how the regression lines differ? The left panel's line is steeper because it was fitted only to the visible data (3--6 liters), ignoring the smaller and larger engines. The right panel's line was fitted to *all* the data and then the view was zoomed in. This distinction matters when you are showing a zoomed-in portion of a chart in a presentation --- use `coord_cartesian()` so your trend lines and statistics reflect the full picture, not just the window.
 
 
 ## Legend Customization

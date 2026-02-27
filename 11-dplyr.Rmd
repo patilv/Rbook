@@ -3,6 +3,7 @@
 ```{r include=FALSE}
 library(tidyverse)
 library(knitr)
+library(DT)
 opts_chunk$set(echo = TRUE, warning = FALSE, message = FALSE)
 ```
 
@@ -45,6 +46,8 @@ Imagine you're a recruiter with a stack of 500 resumes on your desk. You don't r
 # Cars that get more than 30 miles per gallon
 filter(mtcars, mpg > 30)
 ```
+
+Only 4 cars out of the original 32 clear the 30 mpg bar --- the Toyota Corolla, Fiat 128, Lotus Europa, and Honda Civic. Filtering transformed a 32-row dataset into a 4-row answer.
 
 ```{r}
 # Only setosa flowers
@@ -131,6 +134,8 @@ Real-world filtering usually stacks several conditions. Here's the kind of thing
 # Efficient cars: 4 cylinders with above-average mpg
 filter(mtcars, cyl == 4, mpg > mean(mpg))
 ```
+
+Notice something clever: `mean(mpg)` is computed on the full dataset (about 20.1 mpg), and then only 4-cylinder cars above that average are kept. All 4-cylinder cars are fuel-efficient by design, so most of them pass this bar.
 
 
 ## select() -- Show Me Only the Columns I Care About {#select}
@@ -299,6 +304,8 @@ mutate(iris,
 ) |> count(sepal_size, Species)
 ```
 
+But seriously --- take a beat here. The categories you define in `case_when()` are not just code. Labels like "high value," "poor performance," or "high risk" drive real decisions about real people: who gets the promotion, who gets flagged for review, who qualifies for a loan. The code itself is neutral; the choices baked into it are not. Pressure-test your categories the way you would want someone to pressure-test a category that *you* got sorted into.
+
 
 ## summarize() -- Give Me the Summary Stats {#summarize}
 
@@ -314,6 +321,8 @@ summarize(mtcars,
   max_wt = max(wt)
 )
 ```
+
+One row, four numbers. The average car gets about 20 mpg with 147 horsepower, and weights range from 1.5 to 5.4 (in thousands of pounds). That is the entire 32-row dataset collapsed into an executive summary.
 
 ### Common Summary Functions
 
@@ -347,6 +356,8 @@ iris |>
   summarize(across(where(is.numeric), mean))
 ```
 
+One line, four averages. Petal measurements (mean length 3.76, mean width 1.20) are more variable across species than sepal measurements, which hints at petal dimensions being more useful for telling species apart.
+
 ```{r}
 # Multiple stats at once
 iris |>
@@ -356,6 +367,8 @@ iris |>
     .names = "{.col}_{.fn}"
   ))
 ```
+
+Now each numeric column gets both its mean and standard deviation. The `.names` argument controls the output column names --- `{.col}` is the original column name and `{.fn}` is the function name. Petal.Length has the highest standard deviation (1.77), confirming it varies the most across the dataset.
 
 
 ## arrange() -- Sort My Data {#arrange}
@@ -406,6 +419,8 @@ iris |>
   )
 ```
 
+Three species, three rows. Setosa has the shortest petals (mean 1.46 cm) while virginica has the longest (mean 5.55 cm) --- a nearly fourfold difference. This makes Petal.Length a strong candidate for distinguishing species.
+
 ```{r}
 mtcars |>
   group_by(cyl) |>
@@ -416,7 +431,7 @@ mtcars |>
   )
 ```
 
-Boom --- pivot table. Average MPG and horsepower, broken out by cylinder count. Your boss would frame this.
+Boom --- pivot table. The pattern is crystal clear: 4-cylinder cars average 26.7 mpg with 82 hp, while 8-cylinder cars average only 15.1 mpg but pack 209 hp. More cylinders = more power but worse fuel economy. Your boss would frame this.
 
 ### Multiple Grouping Variables
 
@@ -432,7 +447,7 @@ mtcars |>
   )
 ```
 
-The `.groups = "drop"` removes the grouping when you're done. Good habit --- leftover grouping causes sneaky bugs.
+Now we see six rows --- every combination of cylinder count and transmission type (am = 0 is automatic, am = 1 is manual). Manual 4-cylinder cars get the best mileage (28.1 mpg), while automatic 8-cylinder cars get the worst (15.1 mpg). The `.groups = "drop"` removes the grouping when you're done. Good habit --- leftover grouping causes sneaky bugs.
 
 ### Grouped Mutate
 
@@ -449,6 +464,8 @@ iris |>
   head(10)
 ```
 
+The `sepal_deviation` column shows how far each flower is from its species mean. Positive values are above average for that species; negative values are below. This is a common technique for benchmarking --- "how does this salesperson compare to their regional average?" --- without mixing up groups that have different baselines.
+
 ### Grouped Filter
 
 Filter within groups: "Show me the top performers in each department."
@@ -461,6 +478,8 @@ mtcars |>
   select(cyl, mpg) |>
   arrange(cyl, desc(mpg))
 ```
+
+This keeps only the cars that beat the average for their cylinder class. The key insight is that "above average" is computed *within each group*, not across the whole dataset. A 6-cylinder car with 21 mpg is above average for 6-cylinder cars, even though it is below average for 4-cylinder cars. This is exactly the logic you need for questions like "which stores outperform their regional average?"
 
 ### Don't Forget to ungroup()
 
@@ -518,7 +537,7 @@ mtcars |>
   arrange(desc(avg_mpg))
 ```
 
-This is exactly the kind of summary table your manager wants on their desk by Friday. Clean, grouped, sorted, readable.
+This is exactly the kind of summary table your manager wants on their desk by Friday. Manual transmissions with straight engines get the best mileage (28.4 mpg), while automatic V-shaped engines are the thirstiest (15.1 mpg). Clean, grouped, sorted, readable.
 
 ### Example: Species Comparison with Full Stats
 
@@ -531,6 +550,8 @@ iris |>
   ) |>
   mutate(across(where(is.numeric), \(x) round(x, 2)))
 ```
+
+This produces a comprehensive statistical profile for each species --- mean and standard deviation for every numeric variable. Scanning across, virginica consistently has the largest petal measurements, while setosa has the smallest. This kind of "all stats for all groups" table is a staple of exploratory data analysis.
 
 
 ## Joining Data -- Connecting Your Tables {#joins}
@@ -590,7 +611,9 @@ right_join(customers, orders, by = "customer_id")
 **full_join()** --- keeps everything from both tables. The "I don't want to lose ANY data" option.
 
 ```{r}
-full_join(customers, orders, by = "customer_id")
+full_join(customers, orders, by = "customer_id") |>
+  DT::datatable(options = list(pageLength = 10, dom = 't'),
+                caption = "Full join: every row from both tables, with NA where no match exists.")
 ```
 
 **anti_join()** --- "Show me customers who DON'T have orders." Perfect for finding gaps in your data, like identifying leads who haven't converted.

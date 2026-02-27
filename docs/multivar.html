@@ -1,512 +1,713 @@
 <!DOCTYPE html>
-<html >
-
+<html lang="en">
 <head>
-
-  <meta charset="UTF-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <title>Chapter 7 Relationships between variables | Basic Insights from Data for Marketing Researchers</title>
-  <meta name="description" content="This book should contain introductory material for analyzing data for marketing researchers.">
-  <meta name="generator" content="bookdown  and GitBook 2.6.7">
-
-  <meta property="og:title" content="Chapter 7 Relationships between variables | Basic Insights from Data for Marketing Researchers" />
-  <meta property="og:type" content="book" />
-  
-  
-  <meta property="og:description" content="This book should contain introductory material for analyzing data for marketing researchers." />
-  <meta name="github-repo" content="patilv.github.io" />
-
-  <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="Chapter 7 Relationships between variables | Basic Insights from Data for Marketing Researchers" />
-  
-  <meta name="twitter:description" content="This book should contain introductory material for analyzing data for marketing researchers." />
-  
-
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<title>Chapter 13 Relationships Between Variables | R and the Tidyverse: A Beginner’s Guide</title>
 <meta name="author" content="Vivek H. Patil">
-
-
-<meta name="date" content="2019-11-04">
-
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-status-bar-style" content="black">
-  
-  
-<link rel="prev" href="singlevar.html">
-
-<script src="libs/jquery-2.2.3/jquery.min.js"></script>
-<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
-<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
-<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
-<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
-<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
-<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
-
-
-
-
-
-
-
-
-
+<meta name="description" content="Now we are getting to the good stuff. Analyzing one variable at a time is like judging a basketball player by their height alone — useful, but you are missing the whole picture. The real magic of...">
+<meta name="generator" content="bookdown 0.46 with bs4_book()">
+<meta property="og:title" content="Chapter 13 Relationships Between Variables | R and the Tidyverse: A Beginner’s Guide">
+<meta property="og:type" content="book">
+<meta property="og:image" content="/cover.png">
+<meta property="og:description" content="Now we are getting to the good stuff. Analyzing one variable at a time is like judging a basketball player by their height alone — useful, but you are missing the whole picture. The real magic of...">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Chapter 13 Relationships Between Variables | R and the Tidyverse: A Beginner’s Guide">
+<meta name="twitter:description" content="Now we are getting to the good stuff. Analyzing one variable at a time is like judging a basketball player by their height alone — useful, but you are missing the whole picture. The real magic of...">
+<meta name="twitter:image" content="/cover.png">
+<!-- JS --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script><script src="https://kit.fontawesome.com/6ecbd6c532.js" crossorigin="anonymous"></script><script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<link href="libs/bootstrap-4.6.0/bootstrap.min.css" rel="stylesheet">
+<script src="libs/bootstrap-4.6.0/bootstrap.bundle.min.js"></script><script src="libs/bs3compat-0.10.0/transition.js"></script><script src="libs/bs3compat-0.10.0/tabs.js"></script><script src="libs/bs3compat-0.10.0/bs3compat.js"></script><link href="libs/bs4_book-1.0.0/bs4_book.css" rel="stylesheet">
+<script src="libs/bs4_book-1.0.0/bs4_book.js"></script><link href="libs/htmltools-fill-0.5.9/fill.css" rel="stylesheet">
+<script src="libs/htmlwidgets-1.6.4/htmlwidgets.js"></script><link href="libs/datatables-css-0.0.0/datatables-crosstalk.css" rel="stylesheet">
+<script src="libs/datatables-binding-0.34.0/datatables.js"></script><link href="libs/dt-core-1.13.6/css/jquery.dataTables.min.css" rel="stylesheet">
+<link href="libs/dt-core-1.13.6/css/jquery.dataTables.extra.css" rel="stylesheet">
+<script src="libs/dt-core-1.13.6/js/jquery.dataTables.min.js"></script><link href="libs/crosstalk-1.2.2/css/crosstalk.min.css" rel="stylesheet">
+<script src="libs/crosstalk-1.2.2/js/crosstalk.min.js"></script><script src="libs/plotly-binding-4.12.0/plotly.js"></script><script src="libs/typedarray-0.1/typedarray.min.js"></script><link href="libs/plotly-htmlwidgets-css-2.25.2/plotly-htmlwidgets.css" rel="stylesheet">
+<script src="libs/plotly-main-2.25.2/plotly-latest.min.js"></script><script src="libs/kePrint-0.0.1/kePrint.js"></script><link href="libs/lightable-0.0.1/lightable.css" rel="stylesheet">
+<link href="libs/nouislider-7.0.10/jquery.nouislider.min.css" rel="stylesheet">
+<script src="libs/nouislider-7.0.10/jquery.nouislider.min.js"></script><link href="libs/selectize-0.12.0/selectize.bootstrap3.css" rel="stylesheet">
+<script src="libs/selectize-0.12.0/selectize.min.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/autocomplete.js/0.38.0/autocomplete.jquery.min.js" integrity="sha512-GU9ayf+66Xx2TmpxqJpliWbT5PiGYxpaG8rfnBEk1LL8l1KGkRShhngwdXK1UgqhAzWpZHSiYPc09/NwDQIGyg==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/mark.min.js" integrity="sha512-5CYOlHXGh6QpOFA/TeTylKLWfB3ftPsde7AnmhuitiTX4K5SqCLBeKro6sPS8ilsz1Q4NRx3v8Ko2IBiszzdww==" crossorigin="anonymous"></script><!-- CSS --><style type="text/css">
+    
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  </style>
 <style type="text/css">
-a.sourceLine { display: inline-block; line-height: 1.25; }
-a.sourceLine { pointer-events: none; color: inherit; text-decoration: inherit; }
-a.sourceLine:empty { height: 1.2em; }
-.sourceCode { overflow: visible; }
-code.sourceCode { white-space: pre; position: relative; }
-div.sourceCode { margin: 1em 0; }
-pre.sourceCode { margin: 0; }
-@media screen {
-div.sourceCode { overflow: auto; }
-}
-@media print {
-code.sourceCode { white-space: pre-wrap; }
-a.sourceLine { text-indent: -1em; padding-left: 1em; }
-}
-pre.numberSource a.sourceLine
-  { position: relative; left: -4em; }
-pre.numberSource a.sourceLine::before
-  { content: attr(title);
-    position: relative; left: -1em; text-align: right; vertical-align: baseline;
-    border: none; pointer-events: all; display: inline-block;
-    -webkit-touch-callout: none; -webkit-user-select: none;
-    -khtml-user-select: none; -moz-user-select: none;
-    -ms-user-select: none; user-select: none;
-    padding: 0 4px; width: 4em;
-    color: #aaaaaa;
-  }
-pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
-div.sourceCode
-  {  }
-@media screen {
-a.sourceLine::before { text-decoration: underline; }
-}
-code span.al { color: #ff0000; font-weight: bold; } /* Alert */
-code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
-code span.at { color: #7d9029; } /* Attribute */
-code span.bn { color: #40a070; } /* BaseN */
-code span.bu { } /* BuiltIn */
-code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
-code span.ch { color: #4070a0; } /* Char */
-code span.cn { color: #880000; } /* Constant */
-code span.co { color: #60a0b0; font-style: italic; } /* Comment */
-code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
-code span.do { color: #ba2121; font-style: italic; } /* Documentation */
-code span.dt { color: #902000; } /* DataType */
-code span.dv { color: #40a070; } /* DecVal */
-code span.er { color: #ff0000; font-weight: bold; } /* Error */
-code span.ex { } /* Extension */
-code span.fl { color: #40a070; } /* Float */
-code span.fu { color: #06287e; } /* Function */
-code span.im { } /* Import */
-code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
-code span.kw { color: #007020; font-weight: bold; } /* Keyword */
-code span.op { color: #666666; } /* Operator */
-code span.ot { color: #007020; } /* Other */
-code span.pp { color: #bc7a00; } /* Preprocessor */
-code span.sc { color: #4070a0; } /* SpecialChar */
-code span.ss { color: #bb6688; } /* SpecialString */
-code span.st { color: #4070a0; } /* String */
-code span.va { color: #19177c; } /* Variable */
-code span.vs { color: #4070a0; } /* VerbatimString */
-code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
-</style>
-
-<link rel="stylesheet" href="style.css" type="text/css" />
+    /* Used with Pandoc 2.11+ new --citeproc when CSL is used */
+    div.csl-bib-body { }
+    div.csl-entry {
+      clear: both;
+          margin-bottom: 0em;
+        }
+    .hanging div.csl-entry {
+      margin-left:2em;
+      text-indent:-2em;
+    }
+    div.csl-left-margin {
+      min-width:2em;
+      float:left;
+    }
+    div.csl-right-inline {
+      margin-left:2em;
+      padding-left:1em;
+    }
+    div.csl-indent {
+      margin-left: 2em;
+    }
+  </style>
+<link rel="stylesheet" href="style.css">
 </head>
+<body data-spy="scroll" data-target="#toc">
 
-<body>
+<div class="container-fluid">
+<div class="row">
+  <header class="col-sm-12 col-lg-3 sidebar sidebar-book"><a class="sr-only sr-only-focusable" href="#content">Skip to main content</a>
 
+    <div class="d-flex align-items-start justify-content-between">
+      <h1>
+        <a href="index.html" title="">R and the Tidyverse: A Beginner’s Guide</a>
+      </h1>
+      <button class="btn btn-outline-primary d-lg-none ml-2 mt-1" type="button" data-toggle="collapse" data-target="#main-nav" aria-expanded="true" aria-controls="main-nav"><i class="fas fa-bars"></i><span class="sr-only">Show table of contents</span></button>
+    </div>
 
+    <div id="main-nav" class="collapse-lg">
+      <form role="search">
+        <input id="search" class="form-control" type="search" placeholder="Search" aria-label="Search">
+</form>
 
-  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
-
-    <div class="book-summary">
-      <nav role="navigation">
-
-<ul class="summary">
-<li><a href="./">Basic Insights from Data for Marketing Researchers</a></li>
-
-<li class="divider"></li>
-<li class="chapter" data-level="" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i>Preface</a><ul>
-<li class="chapter" data-level="" data-path="index.html"><a href="index.html#about-me"><i class="fa fa-check"></i>About me</a></li>
-</ul></li>
-<li class="chapter" data-level="1" data-path="introR.html"><a href="introR.html"><i class="fa fa-check"></i><b>1</b> Introduction to R</a><ul>
-<li class="chapter" data-level="1.1" data-path="introR.html"><a href="introR.html#why-use-r"><i class="fa fa-check"></i><b>1.1</b> Why use R?</a></li>
-<li class="chapter" data-level="1.2" data-path="introR.html"><a href="introR.html#r---environment-and-software"><i class="fa fa-check"></i><b>1.2</b> R - Environment and Software</a></li>
-<li class="chapter" data-level="1.3" data-path="introR.html"><a href="introR.html#a-recently-released-video-on-r"><i class="fa fa-check"></i><b>1.3</b> A Recently Released Video on R</a></li>
-</ul></li>
-<li class="chapter" data-level="2" data-path="Rgettingstarted.html"><a href="Rgettingstarted.html"><i class="fa fa-check"></i><b>2</b> Getting Started with R</a><ul>
-<li class="chapter" data-level="2.1" data-path="Rgettingstarted.html"><a href="Rgettingstarted.html#r-studio-interface"><i class="fa fa-check"></i><b>2.1</b> R-Studio Interface</a></li>
-<li class="chapter" data-level="2.2" data-path="Rgettingstarted.html"><a href="Rgettingstarted.html#organizing-projects"><i class="fa fa-check"></i><b>2.2</b> Organizing projects</a></li>
-<li class="chapter" data-level="2.3" data-path="Rgettingstarted.html"><a href="Rgettingstarted.html#installing-packages-from-cran"><i class="fa fa-check"></i><b>2.3</b> Installing Packages from CRAN</a></li>
-<li class="chapter" data-level="2.4" data-path="Rgettingstarted.html"><a href="Rgettingstarted.html#installing-a-package-from-github"><i class="fa fa-check"></i><b>2.4</b> Installing a package from GitHub</a></li>
-<li class="chapter" data-level="2.5" data-path="Rgettingstarted.html"><a href="Rgettingstarted.html#installed-packages-should-be-loaded-for-them-to-offer-their-functions-for-use"><i class="fa fa-check"></i><b>2.5</b> Installed packages should be loaded for them to offer their functions for use</a></li>
-<li class="chapter" data-level="2.6" data-path="Rgettingstarted.html"><a href="Rgettingstarted.html#setting-your-working-directory"><i class="fa fa-check"></i><b>2.6</b> Setting your working directory</a></li>
-<li class="chapter" data-level="2.7" data-path="Rgettingstarted.html"><a href="Rgettingstarted.html#reading-data-from-different-sources"><i class="fa fa-check"></i><b>2.7</b> Reading data from different sources</a></li>
-<li class="chapter" data-level="2.8" data-path="Rgettingstarted.html"><a href="Rgettingstarted.html#saving-data"><i class="fa fa-check"></i><b>2.8</b> Saving data</a></li>
-<li class="chapter" data-level="2.9" data-path="Rgettingstarted.html"><a href="Rgettingstarted.html#creating-a-dataframe"><i class="fa fa-check"></i><b>2.9</b> Creating a dataframe</a></li>
-</ul></li>
-<li class="chapter" data-level="3" data-path="describedata.html"><a href="describedata.html"><i class="fa fa-check"></i><b>3</b> Describing Data</a><ul>
-<li class="chapter" data-level="3.1" data-path="describedata.html"><a href="describedata.html#number-of-rows-and-columns-in-that-sequence"><i class="fa fa-check"></i><b>3.1</b> Number of rows and columns (in that sequence)</a></li>
-<li class="chapter" data-level="3.2" data-path="describedata.html"><a href="describedata.html#number-of-rows"><i class="fa fa-check"></i><b>3.2</b> Number of rows</a></li>
-<li class="chapter" data-level="3.3" data-path="describedata.html"><a href="describedata.html#number-of-columns"><i class="fa fa-check"></i><b>3.3</b> Number of columns</a></li>
-<li class="chapter" data-level="3.4" data-path="describedata.html"><a href="describedata.html#names-of-variables"><i class="fa fa-check"></i><b>3.4</b> Names of variables</a></li>
-<li class="chapter" data-level="3.5" data-path="describedata.html"><a href="describedata.html#first-6-rows"><i class="fa fa-check"></i><b>3.5</b> First 6 rows</a></li>
-<li class="chapter" data-level="3.6" data-path="describedata.html"><a href="describedata.html#first-2-rows"><i class="fa fa-check"></i><b>3.6</b> First 2 rows</a></li>
-<li class="chapter" data-level="3.7" data-path="describedata.html"><a href="describedata.html#last-6-rows"><i class="fa fa-check"></i><b>3.7</b> Last 6 rows</a></li>
-<li class="chapter" data-level="3.8" data-path="describedata.html"><a href="describedata.html#first-row"><i class="fa fa-check"></i><b>3.8</b> First row</a></li>
-<li class="chapter" data-level="3.9" data-path="describedata.html"><a href="describedata.html#first-row-first-column"><i class="fa fa-check"></i><b>3.9</b> First row, first column</a></li>
-<li class="chapter" data-level="3.10" data-path="describedata.html"><a href="describedata.html#name-of-third-column"><i class="fa fa-check"></i><b>3.10</b> Name of third column</a></li>
-<li class="chapter" data-level="3.11" data-path="describedata.html"><a href="describedata.html#entries-from-third-column"><i class="fa fa-check"></i><b>3.11</b> 3 entries from third column</a></li>
-<li class="chapter" data-level="3.12" data-path="describedata.html"><a href="describedata.html#structure-of-the-dataframe"><i class="fa fa-check"></i><b>3.12</b> Structure of the dataframe</a></li>
-<li class="chapter" data-level="3.13" data-path="describedata.html"><a href="describedata.html#summary-of-the-dataframe"><i class="fa fa-check"></i><b>3.13</b> Summary of the dataframe</a></li>
-<li class="chapter" data-level="3.14" data-path="describedata.html"><a href="describedata.html#summary-of-a-variable-in-the-dataframe"><i class="fa fa-check"></i><b>3.14</b> Summary of a variable in the dataframe</a></li>
-</ul></li>
-<li class="chapter" data-level="4" data-path="modifydata.html"><a href="modifydata.html"><i class="fa fa-check"></i><b>4</b> Modifying Data</a><ul>
-<li class="chapter" data-level="4.1" data-path="modifydata.html"><a href="modifydata.html#creating-new-variables"><i class="fa fa-check"></i><b>4.1</b> Creating new variables</a></li>
-<li class="chapter" data-level="4.2" data-path="modifydata.html"><a href="modifydata.html#subsetting-data-and-dropping-factor-levels"><i class="fa fa-check"></i><b>4.2</b> Subsetting data and dropping factor levels</a></li>
-<li class="chapter" data-level="4.3" data-path="modifydata.html"><a href="modifydata.html#reordering-factor-levels"><i class="fa fa-check"></i><b>4.3</b> Reordering factor levels</a></li>
-<li class="chapter" data-level="4.4" data-path="modifydata.html"><a href="modifydata.html#reordering-dataset-entries"><i class="fa fa-check"></i><b>4.4</b> Reordering dataset entries</a></li>
-<li class="chapter" data-level="4.5" data-path="modifydata.html"><a href="modifydata.html#changing-column-names"><i class="fa fa-check"></i><b>4.5</b> Changing column names</a></li>
-<li class="chapter" data-level="4.6" data-path="modifydata.html"><a href="modifydata.html#renamingcollapsing-factor-levels"><i class="fa fa-check"></i><b>4.6</b> Renaming/Collapsing factor levels</a></li>
-<li class="chapter" data-level="4.7" data-path="modifydata.html"><a href="modifydata.html#converting-data-types"><i class="fa fa-check"></i><b>4.7</b> Converting data types</a><ul>
-<li class="chapter" data-level="4.7.1" data-path="modifydata.html"><a href="modifydata.html#factor-to-numeric"><i class="fa fa-check"></i><b>4.7.1</b> Factor to numeric</a></li>
-<li class="chapter" data-level="4.7.2" data-path="modifydata.html"><a href="modifydata.html#numeric-to-factor---binning-variables"><i class="fa fa-check"></i><b>4.7.2</b> Numeric to Factor - Binning variables</a></li>
-<li class="chapter" data-level="4.7.3" data-path="modifydata.html"><a href="modifydata.html#factor-and-numeric-to-character-and-vice-versa"><i class="fa fa-check"></i><b>4.7.3</b> Factor and Numeric to Character and vice versa</a></li>
-</ul></li>
-</ul></li>
-<li class="chapter" data-level="5" data-path="summarystats.html"><a href="summarystats.html"><i class="fa fa-check"></i><b>5</b> Summary Statistics</a><ul>
-<li class="chapter" data-level="5.1" data-path="summarystats.html"><a href="summarystats.html#measures-of-central-tendency"><i class="fa fa-check"></i><b>5.1</b> Measures of Central Tendency</a></li>
-<li class="chapter" data-level="5.2" data-path="summarystats.html"><a href="summarystats.html#other-measures-of-central-tendency"><i class="fa fa-check"></i><b>5.2</b> Other measures of central tendency</a></li>
-<li class="chapter" data-level="5.3" data-path="summarystats.html"><a href="summarystats.html#measures-of-dispersion-variation"><i class="fa fa-check"></i><b>5.3</b> Measures of Dispersion (variation)</a><ul>
-<li class="chapter" data-level="5.3.1" data-path="summarystats.html"><a href="summarystats.html#range"><i class="fa fa-check"></i><b>5.3.1</b> Range</a></li>
-<li class="chapter" data-level="5.3.2" data-path="summarystats.html"><a href="summarystats.html#interquartile-range-difference-between-25th-and-75th-percentile-or-quantile"><i class="fa fa-check"></i><b>5.3.2</b> Interquartile range: Difference between 25th and 75th percentile (or quantile)</a></li>
-<li class="chapter" data-level="5.3.3" data-path="summarystats.html"><a href="summarystats.html#variance-and-standard-deviation"><i class="fa fa-check"></i><b>5.3.3</b> Variance and Standard Deviation</a></li>
-</ul></li>
-</ul></li>
-<li class="chapter" data-level="6" data-path="singlevar.html"><a href="singlevar.html"><i class="fa fa-check"></i><b>6</b> Single variable Analysis</a><ul>
-<li class="chapter" data-level="6.1" data-path="singlevar.html"><a href="singlevar.html#numeric-variable"><i class="fa fa-check"></i><b>6.1</b> Numeric Variable</a><ul>
-<li class="chapter" data-level="6.1.1" data-path="singlevar.html"><a href="singlevar.html#histogram"><i class="fa fa-check"></i><b>6.1.1</b> Histogram</a></li>
-<li class="chapter" data-level="6.1.2" data-path="singlevar.html"><a href="singlevar.html#density-plot"><i class="fa fa-check"></i><b>6.1.2</b> Density plot</a></li>
-<li class="chapter" data-level="6.1.3" data-path="singlevar.html"><a href="singlevar.html#box-plot"><i class="fa fa-check"></i><b>6.1.3</b> Box plot</a></li>
-<li class="chapter" data-level="6.1.4" data-path="singlevar.html"><a href="singlevar.html#test-of-mean"><i class="fa fa-check"></i><b>6.1.4</b> Test of Mean</a></li>
-</ul></li>
-<li class="chapter" data-level="6.2" data-path="singlevar.html"><a href="singlevar.html#factor-variable"><i class="fa fa-check"></i><b>6.2</b> Factor variable</a><ul>
-<li class="chapter" data-level="6.2.1" data-path="singlevar.html"><a href="singlevar.html#bar-plot"><i class="fa fa-check"></i><b>6.2.1</b> Bar plot</a></li>
-<li class="chapter" data-level="6.2.2" data-path="singlevar.html"><a href="singlevar.html#pie-chart---fyi-do-not-use"><i class="fa fa-check"></i><b>6.2.2</b> Pie Chart - FYI Do not use</a></li>
-<li class="chapter" data-level="6.2.3" data-path="singlevar.html"><a href="singlevar.html#one-factor-variable-chi-square-goodness-of-fit-test"><i class="fa fa-check"></i><b>6.2.3</b> One factor-variable Chi-square goodness-of-fit test</a></li>
-</ul></li>
-<li class="chapter" data-level="6.3" data-path="singlevar.html"><a href="singlevar.html#one-factor-variable---t-test-one-sample-proportion"><i class="fa fa-check"></i><b>6.3</b> One factor variable - t-test one sample proportion</a></li>
-</ul></li>
-<li class="chapter" data-level="7" data-path="multivar.html"><a href="multivar.html"><i class="fa fa-check"></i><b>7</b> Relationships between variables</a><ul>
-<li class="chapter" data-level="7.1" data-path="multivar.html"><a href="multivar.html#between-continuous-variables-correlations"><i class="fa fa-check"></i><b>7.1</b> Between continuous variables: Correlations</a><ul>
-<li class="chapter" data-level="7.1.1" data-path="multivar.html"><a href="multivar.html#plotting"><i class="fa fa-check"></i><b>7.1.1</b> Plotting</a></li>
-<li class="chapter" data-level="7.1.2" data-path="multivar.html"><a href="multivar.html#correlations-between-two-numeric-variables"><i class="fa fa-check"></i><b>7.1.2</b> Correlations between two numeric variables</a></li>
-<li class="chapter" data-level="7.1.3" data-path="multivar.html"><a href="multivar.html#paired-samples---comparing-two-means"><i class="fa fa-check"></i><b>7.1.3</b> Paired Samples - comparing two-means</a></li>
-<li class="chapter" data-level="7.1.4" data-path="multivar.html"><a href="multivar.html#relationships-between-more-than-two-numeric-variables"><i class="fa fa-check"></i><b>7.1.4</b> Relationships between more than two numeric variables</a></li>
-</ul></li>
-<li class="chapter" data-level="7.2" data-path="multivar.html"><a href="multivar.html#relationships-between-factor-variables"><i class="fa fa-check"></i><b>7.2</b> Relationships between factor variables</a></li>
-<li class="chapter" data-level="7.3" data-path="multivar.html"><a href="multivar.html#between-factor-and-continuous-variables"><i class="fa fa-check"></i><b>7.3</b> Between factor and continuous variables</a><ul>
-<li class="chapter" data-level="7.3.1" data-path="multivar.html"><a href="multivar.html#two-levels-of-a-factor-level-and-one-continuous-variable---t-test"><i class="fa fa-check"></i><b>7.3.1</b> Two levels of a factor level and one continuous variable - t-test</a></li>
-<li class="chapter" data-level="7.3.2" data-path="multivar.html"><a href="multivar.html#more-than-two-levels-of-a-factor-variable-and-one-continuous-variable.--one-way-anova"><i class="fa fa-check"></i><b>7.3.2</b> More than two levels of a factor variable and one continuous variable.- One-Way ANOVA</a></li>
-</ul></li>
-</ul></li>
-<li class="divider"></li>
-<li><a href="https://github.com/patilv" target="blank">Published with bookdown</a></li>
-
+      <nav aria-label="Table of contents"><h2>Table of contents</h2>
+        <ul class="book-toc list-unstyled">
+<li><a class="" href="index.html">Preface</a></li>
+<li><a class="" href="introR.html"><span class="header-section-number">1</span> Introduction to R</a></li>
+<li><a class="" href="Rgettingstarted.html"><span class="header-section-number">2</span> Getting Started with R</a></li>
+<li><a class="" href="tidyverse.html"><span class="header-section-number">3</span> Your Data Analysis Toolkit</a></li>
+<li><a class="" href="dataimport.html"><span class="header-section-number">4</span> Data Import</a></li>
+<li><a class="" href="describedata.html"><span class="header-section-number">5</span> Describing Data</a></li>
+<li><a class="" href="modifydata.html"><span class="header-section-number">6</span> Modifying Data</a></li>
+<li><a class="" href="dplyr.html"><span class="header-section-number">7</span> Data Wrangling with dplyr</a></li>
+<li><a class="" href="tidyr.html"><span class="header-section-number">8</span> Tidy Data with tidyr</a></li>
+<li><a class="" href="summarystats.html"><span class="header-section-number">9</span> Summary Statistics</a></li>
+<li><a class="" href="ggplot2basics.html"><span class="header-section-number">10</span> Data Visualization with ggplot2</a></li>
+<li><a class="" href="ggplot2customize.html"><span class="header-section-number">11</span> Customizing ggplot2 Visualizations</a></li>
+<li><a class="" href="singlevar.html"><span class="header-section-number">12</span> Single Variable Analysis</a></li>
+<li><a class="active" href="multivar.html"><span class="header-section-number">13</span> Relationships Between Variables</a></li>
+<li><a class="" href="stringr.html"><span class="header-section-number">14</span> Working with Text Data</a></li>
+<li><a class="" href="forcats.html"><span class="header-section-number">15</span> Wrangling Categories with forcats</a></li>
+<li><a class="" href="lubridate.html"><span class="header-section-number">16</span> Working with Dates and Times</a></li>
+<li><a class="" href="purrr.html"><span class="header-section-number">17</span> Doing the Same Thing to Many Things at Once</a></li>
+<li><a class="" href="rmarkdown.html"><span class="header-section-number">18</span> R Markdown</a></li>
+<li><a class="" href="rmarkdown-advanced.html"><span class="header-section-number">19</span> Advanced R Markdown</a></li>
 </ul>
 
+        <div class="book-extra">
+          
+        </div>
       </nav>
-    </div>
+</div>
+  </header><main class="col-sm-12 col-md-9 col-lg-7" id="content"><div id="multivar" class="section level1" number="13">
+<h1>
+<span class="header-section-number">13</span> Relationships Between Variables<a class="anchor" aria-label="anchor" href="#multivar"><i class="fas fa-link"></i></a>
+</h1>
+<p>Now we are getting to the good stuff. Analyzing one variable at a time is like judging a basketball player by their height alone — useful, but you are missing the whole picture. The real magic of data analysis happens when you start asking “how do these variables relate to each other?” This is where you go from describing your data to actually understanding it, and it is where the questions that keep business leaders up at night finally get answers:</p>
+<ul>
+<li>Does higher marketing spend actually lead to more sales, or are we just throwing money into the void? (Correlation)</li>
+<li>Do male and female employees earn different salaries? (t-test)</li>
+<li>Does customer satisfaction differ across our three service tiers? (ANOVA)</li>
+<li>Is there a relationship between customer region and product preference? (Chi-square test of independence)</li>
+</ul>
+<p>This chapter covers bivariate and multivariate analysis — fancy words for “looking at two or more variables at the same time and seeing what shakes out.” We use visualizations throughout. For the full ggplot2 experience, see Chapters <a href="ggplot2basics.html#ggplot2basics">10</a> and <a href="ggplot2customize.html#ggplot2customize">11</a>.</p>
+<div id="between-continuous-variables-correlations" class="section level2" number="13.1">
+<h2>
+<span class="header-section-number">13.1</span> Between continuous variables: Correlations<a class="anchor" aria-label="anchor" href="#between-continuous-variables-correlations"><i class="fas fa-link"></i></a>
+</h2>
+<p>Correlation is the workhorse of “do these two things move together?” It produces a single number between -1 and +1 that tells you the strength and direction of a linear relationship. Here is the cheat sheet:</p>
+<ul>
+<li>
+<strong>+1</strong> = perfect positive relationship. When one goes up, the other goes up in lockstep. (Think: hours studied and exam scores.)</li>
+<li>
+<strong>-1</strong> = perfect negative relationship. When one goes up, the other goes down like a seesaw. (Think: price of a product and quantity demanded — Econ 101 vibes.)</li>
+<li>
+<strong>0</strong> = no linear relationship whatsoever. These two variables could not care less about each other. (Think: your shoe size and your GPA.)</li>
+</ul>
+<p>In business, correlations are everywhere. A marketing analyst might correlate ad spend with website traffic. An operations manager might correlate warehouse staffing levels with order fulfillment speed. A finance analyst might correlate interest rates with loan applications. The correlation coefficient gives you a quick read on whether two things are related — and how strongly — before you invest time in deeper analysis.</p>
+<p>Here is a rough guide for interpreting correlation strength (these are rules of thumb, not hard boundaries):</p>
+<div class="inline-table"><table class="table table-sm">
+<thead><tr class="header">
+<th align="left">Absolute Value of r</th>
+<th align="left">Interpretation</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td align="left">0.00 – 0.19</td>
+<td align="left">Very weak</td>
+</tr>
+<tr class="even">
+<td align="left">0.20 – 0.39</td>
+<td align="left">Weak</td>
+</tr>
+<tr class="odd">
+<td align="left">0.40 – 0.59</td>
+<td align="left">Moderate</td>
+</tr>
+<tr class="even">
+<td align="left">0.60 – 0.79</td>
+<td align="left">Strong</td>
+</tr>
+<tr class="odd">
+<td align="left">0.80 – 1.00</td>
+<td align="left">Very strong</td>
+</tr>
+</tbody>
+</table></div>
+<p>And one critical warning you will hear a hundred times in your career: <strong>correlation does not imply causation.</strong> Just because two things move together does not mean one causes the other. Ice cream sales and drowning deaths are positively correlated — not because ice cream is dangerous, but because both go up in the summer. Always think about whether a lurking third variable (a “confound”) could be driving both.</p>
+<div id="plotting" class="section level3" number="13.1.1">
+<h3>
+<span class="header-section-number">13.1.1</span> Plotting<a class="anchor" aria-label="anchor" href="#plotting"><i class="fas fa-link"></i></a>
+</h3>
+<p>The best way to start is with scatterplots. Below are several examples showing what different correlation values actually look like in practice. Notice how the dots cluster tighter around the blue line as the correlation gets stronger (closer to -1 or +1), and scatter into a shapeless cloud as it approaches 0. A correlation of 0.003 is basically “I drew dots at random and drew a line through them for fun”:</p>
+<div class="inline-figure"><img src="Rbook_files/figure-html/unnamed-chunk-349-1.png" alt="" width="672"></div>
+<p>Look at how the visual pattern changes as the correlation number changes. At -0.65, the points form a clear downward-sloping cloud — when one variable goes up, the other tends to go down. At -0.16 and 0.20, the relationship is so weak that you can barely see a trend; the dots look almost random. At 0.003, there is literally no pattern — the blue line is nearly flat. At 0.69, a strong upward trend re-emerges. These panels give you visual intuition for what the numbers mean in practice.</p>
+</div>
+<div id="correlations-between-two-numeric-variables" class="section level3" number="13.1.2">
+<h3>
+<span class="header-section-number">13.1.2</span> Correlations between two numeric variables<a class="anchor" aria-label="anchor" href="#correlations-between-two-numeric-variables"><i class="fas fa-link"></i></a>
+</h3>
+<p>Before running a correlation, there are a few assumptions to keep in mind: the variables should be on an interval or ratio scale (so, actual numbers — not categories), the relationship between them should be roughly linear (not curved like a roller coaster), extreme outliers should not be hijacking the result, and ideally both variables are approximately normally distributed. Do not lose sleep over these for now, but keep them in the back of your mind like a mental sticky note.</p>
+<p>Let us plot Sepal.Length against Petal.Length. In a business context, think of this as plotting “years of experience” against “salary” or “social media followers” against “monthly revenue.”</p>
+<div class="sourceCode" id="cb344"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span><span class="va">iris</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">Sepal.Length</span>, y <span class="op">=</span> <span class="va">Petal.Length</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html">geom_point</a></span><span class="op">(</span>color <span class="op">=</span> <span class="st">"red"</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_smooth.html">geom_smooth</a></span><span class="op">(</span>method <span class="op">=</span> <span class="st">"lm"</span>, se <span class="op">=</span> <span class="cn">TRUE</span>, color <span class="op">=</span> <span class="st">"blue"</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">labs</a></span><span class="op">(</span>x <span class="op">=</span> <span class="st">"Sepal Length"</span>, y <span class="op">=</span> <span class="st">"Petal Length"</span>,</span>
+<span>       title <span class="op">=</span> <span class="st">"Sepal Length vs Petal Length"</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html">theme_minimal</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
+<div class="inline-figure"><img src="Rbook_files/figure-html/unnamed-chunk-350-1.png" alt="" width="672"></div>
+<p>The scatterplot shows a clear positive relationship — as Sepal.Length increases, Petal.Length tends to increase as well. The blue <strong>regression line</strong> (also called a “line of best fit”) is the straight line that comes closest to all the data points; it summarizes the overall trend in one stroke. The gray band around it is a <strong>confidence band</strong> — it shows the range of uncertainty around the line. A narrow band (like this one) means the trend is reliable; a wide band means more uncertainty. In business terms, if these were “years of experience” and “salary,” you would see that more experience is strongly associated with higher pay.</p>
+<p>We can color by species to reveal group structure — and this is a genuinely important technique. Sometimes the overall trend masks completely different patterns within subgroups. Imagine overall company revenue is flat, but when you break it down, the East region is booming while the West is tanking. The aggregate number hid the real story. Same idea here.</p>
+<p>This matters beyond iris flowers. Aggregate numbers can mask real disparities — in pay, in health outcomes, in loan approval rates. Disaggregating by demographic group is how you find out whether a system that looks fair on average is actually working for everyone. The Jesuit commitment to solidarity with the marginalized starts, in data work, with something deceptively simple: looking at the right level of detail.</p>
+<div class="sourceCode" id="cb345"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">p_species</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span><span class="va">iris</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">Sepal.Length</span>, y <span class="op">=</span> <span class="va">Petal.Length</span>, color <span class="op">=</span> <span class="va">Species</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html">geom_point</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_smooth.html">geom_smooth</a></span><span class="op">(</span>method <span class="op">=</span> <span class="st">"lm"</span>, se <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">labs</a></span><span class="op">(</span>x <span class="op">=</span> <span class="st">"Sepal Length"</span>, y <span class="op">=</span> <span class="st">"Petal Length"</span>,</span>
+<span>       title <span class="op">=</span> <span class="st">"Sepal Length vs Petal Length by Species"</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html">theme_minimal</a></span><span class="op">(</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">ggplotly</span><span class="op">(</span><span class="va">p_species</span><span class="op">)</span></span></code></pre></div>
+<div class="plotly html-widget html-fill-item" id="htmlwidget-58c83f8f26f7580c25e7" style="width:672px;height:480px;"></div>
+<script type="application/json" data-for="htmlwidget-58c83f8f26f7580c25e7">{"x":{"data":[{"x":[5.0999999999999996,4.9000000000000004,4.7000000000000002,4.5999999999999996,5,5.4000000000000004,4.5999999999999996,5,4.4000000000000004,4.9000000000000004,5.4000000000000004,4.7999999999999998,4.7999999999999998,4.2999999999999998,5.7999999999999998,5.7000000000000002,5.4000000000000004,5.0999999999999996,5.7000000000000002,5.0999999999999996,5.4000000000000004,5.0999999999999996,4.5999999999999996,5.0999999999999996,4.7999999999999998,5,5,5.2000000000000002,5.2000000000000002,4.7000000000000002,4.7999999999999998,5.4000000000000004,5.2000000000000002,5.5,4.9000000000000004,5,5.5,4.9000000000000004,4.4000000000000004,5.0999999999999996,5,4.5,4.4000000000000004,5,5.0999999999999996,4.7999999999999998,5.0999999999999996,4.5999999999999996,5.2999999999999998,5],"y":[1.3999999999999999,1.3999999999999999,1.3,1.5,1.3999999999999999,1.7,1.3999999999999999,1.5,1.3999999999999999,1.5,1.5,1.6000000000000001,1.3999999999999999,1.1000000000000001,1.2,1.5,1.3,1.3999999999999999,1.7,1.5,1.7,1.5,1,1.7,1.8999999999999999,1.6000000000000001,1.6000000000000001,1.5,1.3999999999999999,1.6000000000000001,1.6000000000000001,1.5,1.5,1.3999999999999999,1.5,1.2,1.3,1.3999999999999999,1.3,1.5,1.3,1.3,1.3,1.6000000000000001,1.8999999999999999,1.3999999999999999,1.6000000000000001,1.3999999999999999,1.5,1.3999999999999999],"text":["Sepal.Length: 5.1<br />Petal.Length: 1.4<br />Species: setosa","Sepal.Length: 4.9<br />Petal.Length: 1.4<br />Species: setosa","Sepal.Length: 4.7<br />Petal.Length: 1.3<br />Species: setosa","Sepal.Length: 4.6<br />Petal.Length: 1.5<br />Species: setosa","Sepal.Length: 5.0<br />Petal.Length: 1.4<br />Species: setosa","Sepal.Length: 5.4<br />Petal.Length: 1.7<br />Species: setosa","Sepal.Length: 4.6<br />Petal.Length: 1.4<br />Species: setosa","Sepal.Length: 5.0<br />Petal.Length: 1.5<br />Species: setosa","Sepal.Length: 4.4<br />Petal.Length: 1.4<br />Species: setosa","Sepal.Length: 4.9<br />Petal.Length: 1.5<br />Species: setosa","Sepal.Length: 5.4<br />Petal.Length: 1.5<br />Species: setosa","Sepal.Length: 4.8<br />Petal.Length: 1.6<br />Species: setosa","Sepal.Length: 4.8<br />Petal.Length: 1.4<br />Species: setosa","Sepal.Length: 4.3<br />Petal.Length: 1.1<br />Species: setosa","Sepal.Length: 5.8<br />Petal.Length: 1.2<br />Species: setosa","Sepal.Length: 5.7<br />Petal.Length: 1.5<br />Species: setosa","Sepal.Length: 5.4<br />Petal.Length: 1.3<br />Species: setosa","Sepal.Length: 5.1<br />Petal.Length: 1.4<br />Species: setosa","Sepal.Length: 5.7<br />Petal.Length: 1.7<br />Species: setosa","Sepal.Length: 5.1<br />Petal.Length: 1.5<br />Species: setosa","Sepal.Length: 5.4<br />Petal.Length: 1.7<br />Species: setosa","Sepal.Length: 5.1<br />Petal.Length: 1.5<br />Species: setosa","Sepal.Length: 4.6<br />Petal.Length: 1.0<br />Species: setosa","Sepal.Length: 5.1<br />Petal.Length: 1.7<br />Species: setosa","Sepal.Length: 4.8<br />Petal.Length: 1.9<br />Species: setosa","Sepal.Length: 5.0<br />Petal.Length: 1.6<br />Species: setosa","Sepal.Length: 5.0<br />Petal.Length: 1.6<br />Species: setosa","Sepal.Length: 5.2<br />Petal.Length: 1.5<br />Species: setosa","Sepal.Length: 5.2<br />Petal.Length: 1.4<br />Species: setosa","Sepal.Length: 4.7<br />Petal.Length: 1.6<br />Species: setosa","Sepal.Length: 4.8<br />Petal.Length: 1.6<br />Species: setosa","Sepal.Length: 5.4<br />Petal.Length: 1.5<br />Species: setosa","Sepal.Length: 5.2<br />Petal.Length: 1.5<br />Species: setosa","Sepal.Length: 5.5<br />Petal.Length: 1.4<br />Species: setosa","Sepal.Length: 4.9<br />Petal.Length: 1.5<br />Species: setosa","Sepal.Length: 5.0<br />Petal.Length: 1.2<br />Species: setosa","Sepal.Length: 5.5<br />Petal.Length: 1.3<br />Species: setosa","Sepal.Length: 4.9<br />Petal.Length: 1.4<br />Species: setosa","Sepal.Length: 4.4<br />Petal.Length: 1.3<br />Species: setosa","Sepal.Length: 5.1<br />Petal.Length: 1.5<br />Species: setosa","Sepal.Length: 5.0<br />Petal.Length: 1.3<br />Species: setosa","Sepal.Length: 4.5<br />Petal.Length: 1.3<br />Species: setosa","Sepal.Length: 4.4<br />Petal.Length: 1.3<br />Species: setosa","Sepal.Length: 5.0<br />Petal.Length: 1.6<br />Species: setosa","Sepal.Length: 5.1<br />Petal.Length: 1.9<br />Species: setosa","Sepal.Length: 4.8<br />Petal.Length: 1.4<br />Species: setosa","Sepal.Length: 5.1<br />Petal.Length: 1.6<br />Species: setosa","Sepal.Length: 4.6<br />Petal.Length: 1.4<br />Species: setosa","Sepal.Length: 5.3<br />Petal.Length: 1.5<br />Species: setosa","Sepal.Length: 5.0<br />Petal.Length: 1.4<br />Species: setosa"],"type":"scatter","mode":"markers","marker":{"autocolorscale":false,"color":"rgba(248,118,109,1)","opacity":1,"size":5.6692913385826778,"symbol":"circle","line":{"width":1.8897637795275593,"color":"rgba(248,118,109,1)"}},"hoveron":"points","name":"setosa","legendgroup":"setosa","showlegend":true,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null},{"x":[7,6.4000000000000004,6.9000000000000004,5.5,6.5,5.7000000000000002,6.2999999999999998,4.9000000000000004,6.5999999999999996,5.2000000000000002,5,5.9000000000000004,6,6.0999999999999996,5.5999999999999996,6.7000000000000002,5.5999999999999996,5.7999999999999998,6.2000000000000002,5.5999999999999996,5.9000000000000004,6.0999999999999996,6.2999999999999998,6.0999999999999996,6.4000000000000004,6.5999999999999996,6.7999999999999998,6.7000000000000002,6,5.7000000000000002,5.5,5.5,5.7999999999999998,6,5.4000000000000004,6,6.7000000000000002,6.2999999999999998,5.5999999999999996,5.5,5.5,6.0999999999999996,5.7999999999999998,5,5.5999999999999996,5.7000000000000002,5.7000000000000002,6.2000000000000002,5.0999999999999996,5.7000000000000002],"y":[4.7000000000000002,4.5,4.9000000000000004,4,4.5999999999999996,4.5,4.7000000000000002,3.2999999999999998,4.5999999999999996,3.8999999999999999,3.5,4.2000000000000002,4,4.7000000000000002,3.6000000000000001,4.4000000000000004,4.5,4.0999999999999996,4.5,3.8999999999999999,4.7999999999999998,4,4.9000000000000004,4.7000000000000002,4.2999999999999998,4.4000000000000004,4.7999999999999998,5,4.5,3.5,3.7999999999999998,3.7000000000000002,3.8999999999999999,5.0999999999999996,4.5,4.5,4.7000000000000002,4.4000000000000004,4.0999999999999996,4,4.4000000000000004,4.5999999999999996,4,3.2999999999999998,4.2000000000000002,4.2000000000000002,4.2000000000000002,4.2999999999999998,3,4.0999999999999996],"text":["Sepal.Length: 7.0<br />Petal.Length: 4.7<br />Species: versicolor","Sepal.Length: 6.4<br />Petal.Length: 4.5<br />Species: versicolor","Sepal.Length: 6.9<br />Petal.Length: 4.9<br />Species: versicolor","Sepal.Length: 5.5<br />Petal.Length: 4.0<br />Species: versicolor","Sepal.Length: 6.5<br />Petal.Length: 4.6<br />Species: versicolor","Sepal.Length: 5.7<br />Petal.Length: 4.5<br />Species: versicolor","Sepal.Length: 6.3<br />Petal.Length: 4.7<br />Species: versicolor","Sepal.Length: 4.9<br />Petal.Length: 3.3<br />Species: versicolor","Sepal.Length: 6.6<br />Petal.Length: 4.6<br />Species: versicolor","Sepal.Length: 5.2<br />Petal.Length: 3.9<br />Species: versicolor","Sepal.Length: 5.0<br />Petal.Length: 3.5<br />Species: versicolor","Sepal.Length: 5.9<br />Petal.Length: 4.2<br />Species: versicolor","Sepal.Length: 6.0<br />Petal.Length: 4.0<br />Species: versicolor","Sepal.Length: 6.1<br />Petal.Length: 4.7<br />Species: versicolor","Sepal.Length: 5.6<br />Petal.Length: 3.6<br />Species: versicolor","Sepal.Length: 6.7<br />Petal.Length: 4.4<br />Species: versicolor","Sepal.Length: 5.6<br />Petal.Length: 4.5<br />Species: versicolor","Sepal.Length: 5.8<br />Petal.Length: 4.1<br />Species: versicolor","Sepal.Length: 6.2<br />Petal.Length: 4.5<br />Species: versicolor","Sepal.Length: 5.6<br />Petal.Length: 3.9<br />Species: versicolor","Sepal.Length: 5.9<br />Petal.Length: 4.8<br />Species: versicolor","Sepal.Length: 6.1<br />Petal.Length: 4.0<br />Species: versicolor","Sepal.Length: 6.3<br />Petal.Length: 4.9<br />Species: versicolor","Sepal.Length: 6.1<br />Petal.Length: 4.7<br />Species: versicolor","Sepal.Length: 6.4<br />Petal.Length: 4.3<br />Species: versicolor","Sepal.Length: 6.6<br />Petal.Length: 4.4<br />Species: versicolor","Sepal.Length: 6.8<br />Petal.Length: 4.8<br />Species: versicolor","Sepal.Length: 6.7<br />Petal.Length: 5.0<br />Species: versicolor","Sepal.Length: 6.0<br />Petal.Length: 4.5<br />Species: versicolor","Sepal.Length: 5.7<br />Petal.Length: 3.5<br />Species: versicolor","Sepal.Length: 5.5<br />Petal.Length: 3.8<br />Species: versicolor","Sepal.Length: 5.5<br />Petal.Length: 3.7<br />Species: versicolor","Sepal.Length: 5.8<br />Petal.Length: 3.9<br />Species: versicolor","Sepal.Length: 6.0<br />Petal.Length: 5.1<br />Species: versicolor","Sepal.Length: 5.4<br />Petal.Length: 4.5<br />Species: versicolor","Sepal.Length: 6.0<br />Petal.Length: 4.5<br />Species: versicolor","Sepal.Length: 6.7<br />Petal.Length: 4.7<br />Species: versicolor","Sepal.Length: 6.3<br />Petal.Length: 4.4<br />Species: versicolor","Sepal.Length: 5.6<br />Petal.Length: 4.1<br />Species: versicolor","Sepal.Length: 5.5<br />Petal.Length: 4.0<br />Species: versicolor","Sepal.Length: 5.5<br />Petal.Length: 4.4<br />Species: versicolor","Sepal.Length: 6.1<br />Petal.Length: 4.6<br />Species: versicolor","Sepal.Length: 5.8<br />Petal.Length: 4.0<br />Species: versicolor","Sepal.Length: 5.0<br />Petal.Length: 3.3<br />Species: versicolor","Sepal.Length: 5.6<br />Petal.Length: 4.2<br />Species: versicolor","Sepal.Length: 5.7<br />Petal.Length: 4.2<br />Species: versicolor","Sepal.Length: 5.7<br />Petal.Length: 4.2<br />Species: versicolor","Sepal.Length: 6.2<br />Petal.Length: 4.3<br />Species: versicolor","Sepal.Length: 5.1<br />Petal.Length: 3.0<br />Species: versicolor","Sepal.Length: 5.7<br />Petal.Length: 4.1<br />Species: versicolor"],"type":"scatter","mode":"markers","marker":{"autocolorscale":false,"color":"rgba(0,186,56,1)","opacity":1,"size":5.6692913385826778,"symbol":"circle","line":{"width":1.8897637795275593,"color":"rgba(0,186,56,1)"}},"hoveron":"points","name":"versicolor","legendgroup":"versicolor","showlegend":true,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null},{"x":[6.2999999999999998,5.7999999999999998,7.0999999999999996,6.2999999999999998,6.5,7.5999999999999996,4.9000000000000004,7.2999999999999998,6.7000000000000002,7.2000000000000002,6.5,6.4000000000000004,6.7999999999999998,5.7000000000000002,5.7999999999999998,6.4000000000000004,6.5,7.7000000000000002,7.7000000000000002,6,6.9000000000000004,5.5999999999999996,7.7000000000000002,6.2999999999999998,6.7000000000000002,7.2000000000000002,6.2000000000000002,6.0999999999999996,6.4000000000000004,7.2000000000000002,7.4000000000000004,7.9000000000000004,6.4000000000000004,6.2999999999999998,6.0999999999999996,7.7000000000000002,6.2999999999999998,6.4000000000000004,6,6.9000000000000004,6.7000000000000002,6.9000000000000004,5.7999999999999998,6.7999999999999998,6.7000000000000002,6.7000000000000002,6.2999999999999998,6.5,6.2000000000000002,5.9000000000000004],"y":[6,5.0999999999999996,5.9000000000000004,5.5999999999999996,5.7999999999999998,6.5999999999999996,4.5,6.2999999999999998,5.7999999999999998,6.0999999999999996,5.0999999999999996,5.2999999999999998,5.5,5,5.0999999999999996,5.2999999999999998,5.5,6.7000000000000002,6.9000000000000004,5,5.7000000000000002,4.9000000000000004,6.7000000000000002,4.9000000000000004,5.7000000000000002,6,4.7999999999999998,4.9000000000000004,5.5999999999999996,5.7999999999999998,6.0999999999999996,6.4000000000000004,5.5999999999999996,5.0999999999999996,5.5999999999999996,6.0999999999999996,5.5999999999999996,5.5,4.7999999999999998,5.4000000000000004,5.5999999999999996,5.0999999999999996,5.0999999999999996,5.9000000000000004,5.7000000000000002,5.2000000000000002,5,5.2000000000000002,5.4000000000000004,5.0999999999999996],"text":["Sepal.Length: 6.3<br />Petal.Length: 6.0<br />Species: virginica","Sepal.Length: 5.8<br />Petal.Length: 5.1<br />Species: virginica","Sepal.Length: 7.1<br />Petal.Length: 5.9<br />Species: virginica","Sepal.Length: 6.3<br />Petal.Length: 5.6<br />Species: virginica","Sepal.Length: 6.5<br />Petal.Length: 5.8<br />Species: virginica","Sepal.Length: 7.6<br />Petal.Length: 6.6<br />Species: virginica","Sepal.Length: 4.9<br />Petal.Length: 4.5<br />Species: virginica","Sepal.Length: 7.3<br />Petal.Length: 6.3<br />Species: virginica","Sepal.Length: 6.7<br />Petal.Length: 5.8<br />Species: virginica","Sepal.Length: 7.2<br />Petal.Length: 6.1<br />Species: virginica","Sepal.Length: 6.5<br />Petal.Length: 5.1<br />Species: virginica","Sepal.Length: 6.4<br />Petal.Length: 5.3<br />Species: virginica","Sepal.Length: 6.8<br />Petal.Length: 5.5<br />Species: virginica","Sepal.Length: 5.7<br />Petal.Length: 5.0<br />Species: virginica","Sepal.Length: 5.8<br />Petal.Length: 5.1<br />Species: virginica","Sepal.Length: 6.4<br />Petal.Length: 5.3<br />Species: virginica","Sepal.Length: 6.5<br />Petal.Length: 5.5<br />Species: virginica","Sepal.Length: 7.7<br />Petal.Length: 6.7<br />Species: virginica","Sepal.Length: 7.7<br />Petal.Length: 6.9<br />Species: virginica","Sepal.Length: 6.0<br />Petal.Length: 5.0<br />Species: virginica","Sepal.Length: 6.9<br />Petal.Length: 5.7<br />Species: virginica","Sepal.Length: 5.6<br />Petal.Length: 4.9<br />Species: virginica","Sepal.Length: 7.7<br />Petal.Length: 6.7<br />Species: virginica","Sepal.Length: 6.3<br />Petal.Length: 4.9<br />Species: virginica","Sepal.Length: 6.7<br />Petal.Length: 5.7<br />Species: virginica","Sepal.Length: 7.2<br />Petal.Length: 6.0<br />Species: virginica","Sepal.Length: 6.2<br />Petal.Length: 4.8<br />Species: virginica","Sepal.Length: 6.1<br />Petal.Length: 4.9<br />Species: virginica","Sepal.Length: 6.4<br />Petal.Length: 5.6<br />Species: virginica","Sepal.Length: 7.2<br />Petal.Length: 5.8<br />Species: virginica","Sepal.Length: 7.4<br />Petal.Length: 6.1<br />Species: virginica","Sepal.Length: 7.9<br />Petal.Length: 6.4<br />Species: virginica","Sepal.Length: 6.4<br />Petal.Length: 5.6<br />Species: virginica","Sepal.Length: 6.3<br />Petal.Length: 5.1<br />Species: virginica","Sepal.Length: 6.1<br />Petal.Length: 5.6<br />Species: virginica","Sepal.Length: 7.7<br />Petal.Length: 6.1<br />Species: virginica","Sepal.Length: 6.3<br />Petal.Length: 5.6<br />Species: virginica","Sepal.Length: 6.4<br />Petal.Length: 5.5<br />Species: virginica","Sepal.Length: 6.0<br />Petal.Length: 4.8<br />Species: virginica","Sepal.Length: 6.9<br />Petal.Length: 5.4<br />Species: virginica","Sepal.Length: 6.7<br />Petal.Length: 5.6<br />Species: virginica","Sepal.Length: 6.9<br />Petal.Length: 5.1<br />Species: virginica","Sepal.Length: 5.8<br />Petal.Length: 5.1<br />Species: virginica","Sepal.Length: 6.8<br />Petal.Length: 5.9<br />Species: virginica","Sepal.Length: 6.7<br />Petal.Length: 5.7<br />Species: virginica","Sepal.Length: 6.7<br />Petal.Length: 5.2<br />Species: virginica","Sepal.Length: 6.3<br />Petal.Length: 5.0<br />Species: virginica","Sepal.Length: 6.5<br />Petal.Length: 5.2<br />Species: virginica","Sepal.Length: 6.2<br />Petal.Length: 5.4<br />Species: virginica","Sepal.Length: 5.9<br />Petal.Length: 5.1<br />Species: virginica"],"type":"scatter","mode":"markers","marker":{"autocolorscale":false,"color":"rgba(97,156,255,1)","opacity":1,"size":5.6692913385826778,"symbol":"circle","line":{"width":1.8897637795275593,"color":"rgba(97,156,255,1)"}},"hoveron":"points","name":"virginica","legendgroup":"virginica","showlegend":true,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null},{"x":[4.2999999999999998,4.3189873417721518,4.3379746835443038,4.3569620253164558,4.3759493670886078,4.3949367088607589,4.4139240506329109,4.4329113924050629,4.4518987341772149,4.4708860759493669,4.4898734177215189,4.5088607594936709,4.5278481012658229,4.5468354430379749,4.565822784810126,4.584810126582278,4.60379746835443,4.622784810126582,4.641772151898734,4.660759493670886,4.679746835443038,4.69873417721519,4.7177215189873412,4.7367088607594932,4.7556962025316452,4.7746835443037972,4.7936708860759492,4.8126582278481012,4.8316455696202532,4.8506329113924052,4.8696202531645572,4.8886075949367083,4.9075949367088603,4.9265822784810123,4.9455696202531643,4.9645569620253163,4.9835443037974683,5.0025316455696203,5.0215189873417723,5.0405063291139243,5.0594936708860754,5.0784810126582274,5.0974683544303794,5.1164556962025314,5.1354430379746834,5.1544303797468354,5.1734177215189874,5.1924050632911394,5.2113924050632914,5.2303797468354425,5.2493670886075945,5.2683544303797465,5.2873417721518985,5.3063291139240505,5.3253164556962025,5.3443037974683545,5.3632911392405065,5.3822784810126585,5.4012658227848096,5.4202531645569616,5.4392405063291136,5.4582278481012656,5.4772151898734176,5.4962025316455696,5.5151898734177216,5.5341772151898736,5.5531645569620256,5.5721518987341767,5.5911392405063287,5.6101265822784807,5.6291139240506327,5.6481012658227847,5.6670886075949367,5.6860759493670887,5.7050632911392398,5.7240506329113927,5.7430379746835438,5.7620253164556958,5.7810126582278478,5.7999999999999998],"y":[1.3690680332446368,1.3715673689590027,1.3740667046733686,1.3765660403877344,1.3790653761021003,1.3815647118164662,1.3840640475308321,1.386563383245198,1.3890627189595641,1.39156205467393,1.3940613903882959,1.3965607261026618,1.3990600618170279,1.4015593975313938,1.4040587332457595,1.4065580689601254,1.4090574046744915,1.4115567403888574,1.4140560761032233,1.4165554118175891,1.419054747531955,1.4215540832463209,1.4240534189606868,1.4265527546750527,1.4290520903894186,1.4315514261037845,1.4340507618181504,1.4365500975325163,1.4390494332468822,1.4415487689612481,1.444048104675614,1.4465474403899798,1.4490467761043457,1.4515461118187116,1.4540454475330775,1.4565447832474436,1.4590441189618095,1.4615434546761754,1.4640427903905415,1.4665421261049074,1.4690414618192731,1.471540797533639,1.4740401332480051,1.476539468962371,1.4790388046767369,1.4815381403911028,1.4840374761054687,1.4865368118198345,1.4890361475342004,1.4915354832485663,1.4940348189629322,1.4965341546772981,1.499033490391664,1.5015328261060299,1.5040321618203958,1.5065314975347617,1.5090308332491276,1.5115301689634937,1.5140295046778594,1.5165288403922252,1.5190281761065911,1.5215275118209572,1.5240268475353231,1.526526183249689,1.5290255189640549,1.531524854678421,1.5340241903927869,1.5365235261071526,1.5390228618215185,1.5415221975358846,1.5440215332502505,1.5465208689646164,1.5490202046789823,1.5515195403933482,1.5540188761077141,1.5565182118220799,1.5590175475364458,1.5615168832508117,1.5640162189651776,1.5665155546795435],"text":["Sepal.Length: 4.300000<br />Petal.Length: 1.369068<br />Species: setosa","Sepal.Length: 4.318987<br />Petal.Length: 1.371567<br />Species: setosa","Sepal.Length: 4.337975<br />Petal.Length: 1.374067<br />Species: setosa","Sepal.Length: 4.356962<br />Petal.Length: 1.376566<br />Species: setosa","Sepal.Length: 4.375949<br />Petal.Length: 1.379065<br />Species: setosa","Sepal.Length: 4.394937<br />Petal.Length: 1.381565<br />Species: setosa","Sepal.Length: 4.413924<br />Petal.Length: 1.384064<br />Species: setosa","Sepal.Length: 4.432911<br />Petal.Length: 1.386563<br />Species: setosa","Sepal.Length: 4.451899<br />Petal.Length: 1.389063<br />Species: setosa","Sepal.Length: 4.470886<br />Petal.Length: 1.391562<br />Species: setosa","Sepal.Length: 4.489873<br />Petal.Length: 1.394061<br />Species: setosa","Sepal.Length: 4.508861<br />Petal.Length: 1.396561<br />Species: setosa","Sepal.Length: 4.527848<br />Petal.Length: 1.399060<br />Species: setosa","Sepal.Length: 4.546835<br />Petal.Length: 1.401559<br />Species: setosa","Sepal.Length: 4.565823<br />Petal.Length: 1.404059<br />Species: setosa","Sepal.Length: 4.584810<br />Petal.Length: 1.406558<br />Species: setosa","Sepal.Length: 4.603797<br />Petal.Length: 1.409057<br />Species: setosa","Sepal.Length: 4.622785<br />Petal.Length: 1.411557<br />Species: setosa","Sepal.Length: 4.641772<br />Petal.Length: 1.414056<br />Species: setosa","Sepal.Length: 4.660759<br />Petal.Length: 1.416555<br />Species: setosa","Sepal.Length: 4.679747<br />Petal.Length: 1.419055<br />Species: setosa","Sepal.Length: 4.698734<br />Petal.Length: 1.421554<br />Species: setosa","Sepal.Length: 4.717722<br />Petal.Length: 1.424053<br />Species: setosa","Sepal.Length: 4.736709<br />Petal.Length: 1.426553<br />Species: setosa","Sepal.Length: 4.755696<br />Petal.Length: 1.429052<br />Species: setosa","Sepal.Length: 4.774684<br />Petal.Length: 1.431551<br />Species: setosa","Sepal.Length: 4.793671<br />Petal.Length: 1.434051<br />Species: setosa","Sepal.Length: 4.812658<br />Petal.Length: 1.436550<br />Species: setosa","Sepal.Length: 4.831646<br />Petal.Length: 1.439049<br />Species: setosa","Sepal.Length: 4.850633<br />Petal.Length: 1.441549<br />Species: setosa","Sepal.Length: 4.869620<br />Petal.Length: 1.444048<br />Species: setosa","Sepal.Length: 4.888608<br />Petal.Length: 1.446547<br />Species: setosa","Sepal.Length: 4.907595<br />Petal.Length: 1.449047<br />Species: setosa","Sepal.Length: 4.926582<br />Petal.Length: 1.451546<br />Species: setosa","Sepal.Length: 4.945570<br />Petal.Length: 1.454045<br />Species: setosa","Sepal.Length: 4.964557<br />Petal.Length: 1.456545<br />Species: setosa","Sepal.Length: 4.983544<br />Petal.Length: 1.459044<br />Species: setosa","Sepal.Length: 5.002532<br />Petal.Length: 1.461543<br />Species: setosa","Sepal.Length: 5.021519<br />Petal.Length: 1.464043<br />Species: setosa","Sepal.Length: 5.040506<br />Petal.Length: 1.466542<br />Species: setosa","Sepal.Length: 5.059494<br />Petal.Length: 1.469041<br />Species: setosa","Sepal.Length: 5.078481<br />Petal.Length: 1.471541<br />Species: setosa","Sepal.Length: 5.097468<br />Petal.Length: 1.474040<br />Species: setosa","Sepal.Length: 5.116456<br />Petal.Length: 1.476539<br />Species: setosa","Sepal.Length: 5.135443<br />Petal.Length: 1.479039<br />Species: setosa","Sepal.Length: 5.154430<br />Petal.Length: 1.481538<br />Species: setosa","Sepal.Length: 5.173418<br />Petal.Length: 1.484037<br />Species: setosa","Sepal.Length: 5.192405<br />Petal.Length: 1.486537<br />Species: setosa","Sepal.Length: 5.211392<br />Petal.Length: 1.489036<br />Species: setosa","Sepal.Length: 5.230380<br />Petal.Length: 1.491535<br />Species: setosa","Sepal.Length: 5.249367<br />Petal.Length: 1.494035<br />Species: setosa","Sepal.Length: 5.268354<br />Petal.Length: 1.496534<br />Species: setosa","Sepal.Length: 5.287342<br />Petal.Length: 1.499033<br />Species: setosa","Sepal.Length: 5.306329<br />Petal.Length: 1.501533<br />Species: setosa","Sepal.Length: 5.325316<br />Petal.Length: 1.504032<br />Species: setosa","Sepal.Length: 5.344304<br />Petal.Length: 1.506531<br />Species: setosa","Sepal.Length: 5.363291<br />Petal.Length: 1.509031<br />Species: setosa","Sepal.Length: 5.382278<br />Petal.Length: 1.511530<br />Species: setosa","Sepal.Length: 5.401266<br />Petal.Length: 1.514030<br />Species: setosa","Sepal.Length: 5.420253<br />Petal.Length: 1.516529<br />Species: setosa","Sepal.Length: 5.439241<br />Petal.Length: 1.519028<br />Species: setosa","Sepal.Length: 5.458228<br />Petal.Length: 1.521528<br />Species: setosa","Sepal.Length: 5.477215<br />Petal.Length: 1.524027<br />Species: setosa","Sepal.Length: 5.496203<br />Petal.Length: 1.526526<br />Species: setosa","Sepal.Length: 5.515190<br />Petal.Length: 1.529026<br />Species: setosa","Sepal.Length: 5.534177<br />Petal.Length: 1.531525<br />Species: setosa","Sepal.Length: 5.553165<br />Petal.Length: 1.534024<br />Species: setosa","Sepal.Length: 5.572152<br />Petal.Length: 1.536524<br />Species: setosa","Sepal.Length: 5.591139<br />Petal.Length: 1.539023<br />Species: setosa","Sepal.Length: 5.610127<br />Petal.Length: 1.541522<br />Species: setosa","Sepal.Length: 5.629114<br />Petal.Length: 1.544022<br />Species: setosa","Sepal.Length: 5.648101<br />Petal.Length: 1.546521<br />Species: setosa","Sepal.Length: 5.667089<br />Petal.Length: 1.549020<br />Species: setosa","Sepal.Length: 5.686076<br />Petal.Length: 1.551520<br />Species: setosa","Sepal.Length: 5.705063<br />Petal.Length: 1.554019<br />Species: setosa","Sepal.Length: 5.724051<br />Petal.Length: 1.556518<br />Species: setosa","Sepal.Length: 5.743038<br />Petal.Length: 1.559018<br />Species: setosa","Sepal.Length: 5.762025<br />Petal.Length: 1.561517<br />Species: setosa","Sepal.Length: 5.781013<br />Petal.Length: 1.564016<br />Species: setosa","Sepal.Length: 5.800000<br />Petal.Length: 1.566516<br />Species: setosa"],"type":"scatter","mode":"lines","name":"setosa","line":{"width":3.7795275590551185,"color":"rgba(248,118,109,1)","dash":"solid"},"hoveron":"points","legendgroup":"setosa","showlegend":false,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null},{"x":[4.9000000000000004,4.9265822784810132,4.953164556962026,4.9797468354430379,5.0063291139240507,5.0329113924050635,5.0594936708860763,5.0860759493670891,5.1126582278481019,5.1392405063291147,5.1658227848101266,5.1924050632911394,5.2189873417721522,5.245569620253165,5.2721518987341778,5.2987341772151906,5.3253164556962025,5.3518987341772153,5.3784810126582281,5.4050632911392409,5.4316455696202537,5.4582278481012665,5.4848101265822784,5.5113924050632912,5.537974683544304,5.5645569620253168,5.5911392405063296,5.6177215189873424,5.6443037974683543,5.6708860759493671,5.6974683544303799,5.7240506329113927,5.7506329113924055,5.7772151898734183,5.8037974683544302,5.830379746835443,5.8569620253164558,5.8835443037974686,5.9101265822784814,5.9367088607594933,5.963291139240507,5.9898734177215189,6.0164556962025317,6.0430379746835445,6.0696202531645573,6.0962025316455701,6.122784810126582,6.1493670886075948,6.1759493670886076,6.2025316455696204,6.2291139240506332,6.255696202531646,6.2822784810126588,6.3088607594936708,6.3354430379746836,6.3620253164556964,6.3886075949367092,6.415189873417722,6.4417721518987339,6.4683544303797467,6.4949367088607595,6.5215189873417723,6.5481012658227851,6.5746835443037979,6.6012658227848107,6.6278481012658226,6.6544303797468354,6.6810126582278482,6.707594936708861,6.7341772151898738,6.7607594936708857,6.7873417721518985,6.8139240506329113,6.8405063291139241,6.8670886075949369,6.8936708860759497,6.9202531645569625,6.9468354430379744,6.9734177215189872,7],"y":[3.5488173294932284,3.56706525980045,3.5853131901076711,3.6035611204148918,3.6218090507221135,3.6400569810293351,3.6583049113365562,3.6765528416437778,3.694800771950999,3.7130487022582206,3.7312966325654413,3.7495445628726625,3.7677924931798841,3.7860404234871057,3.8042883537943268,3.8225362841015484,3.8407842144087692,3.8590321447159903,3.8772800750232119,3.8955280053304331,3.9137759356376547,3.9320238659448763,3.950271796252097,3.9685197265593182,3.9867676568665398,4.0050155871737614,4.0232635174809825,4.0415114477882037,4.0597593780954249,4.078007308402646,4.0962552387098681,4.1145031690170892,4.1327510993243104,4.1509990296315316,4.1692469599387527,4.1874948902459739,4.2057428205531959,4.2239907508604171,4.2422386811676382,4.2604866114748594,4.2787345417820815,4.2969824720893017,4.3152304023965238,4.3334783327037449,4.3517262630109661,4.3699741933181881,4.3882221236254084,4.4064700539326296,4.4247179842398516,4.4429659145470728,4.461213844854294,4.4794617751615151,4.4977097054687372,4.5159576357759574,4.5342055660831795,4.5524534963904006,4.5707014266976218,4.588949357004843,4.6071972873120641,4.6254452176192853,4.6436931479265073,4.6619410782337285,4.6801890085409497,4.6984369388481708,4.7166848691553929,4.7349327994626131,4.7531807297698343,4.7714286600770563,4.7896765903842775,4.8079245206914987,4.8261724509987198,4.844420381305941,4.8626683116131622,4.8809162419203842,4.8991641722276054,4.9174121025348265,4.9356600328420477,4.9539079631492688,4.97215589345649,4.9904038237637121],"text":["Sepal.Length: 4.900000<br />Petal.Length: 3.548817<br />Species: versicolor","Sepal.Length: 4.926582<br />Petal.Length: 3.567065<br />Species: versicolor","Sepal.Length: 4.953165<br />Petal.Length: 3.585313<br />Species: versicolor","Sepal.Length: 4.979747<br />Petal.Length: 3.603561<br />Species: versicolor","Sepal.Length: 5.006329<br />Petal.Length: 3.621809<br />Species: versicolor","Sepal.Length: 5.032911<br />Petal.Length: 3.640057<br />Species: versicolor","Sepal.Length: 5.059494<br />Petal.Length: 3.658305<br />Species: versicolor","Sepal.Length: 5.086076<br />Petal.Length: 3.676553<br />Species: versicolor","Sepal.Length: 5.112658<br />Petal.Length: 3.694801<br />Species: versicolor","Sepal.Length: 5.139241<br />Petal.Length: 3.713049<br />Species: versicolor","Sepal.Length: 5.165823<br />Petal.Length: 3.731297<br />Species: versicolor","Sepal.Length: 5.192405<br />Petal.Length: 3.749545<br />Species: versicolor","Sepal.Length: 5.218987<br />Petal.Length: 3.767792<br />Species: versicolor","Sepal.Length: 5.245570<br />Petal.Length: 3.786040<br />Species: versicolor","Sepal.Length: 5.272152<br />Petal.Length: 3.804288<br />Species: versicolor","Sepal.Length: 5.298734<br />Petal.Length: 3.822536<br />Species: versicolor","Sepal.Length: 5.325316<br />Petal.Length: 3.840784<br />Species: versicolor","Sepal.Length: 5.351899<br />Petal.Length: 3.859032<br />Species: versicolor","Sepal.Length: 5.378481<br />Petal.Length: 3.877280<br />Species: versicolor","Sepal.Length: 5.405063<br />Petal.Length: 3.895528<br />Species: versicolor","Sepal.Length: 5.431646<br />Petal.Length: 3.913776<br />Species: versicolor","Sepal.Length: 5.458228<br />Petal.Length: 3.932024<br />Species: versicolor","Sepal.Length: 5.484810<br />Petal.Length: 3.950272<br />Species: versicolor","Sepal.Length: 5.511392<br />Petal.Length: 3.968520<br />Species: versicolor","Sepal.Length: 5.537975<br />Petal.Length: 3.986768<br />Species: versicolor","Sepal.Length: 5.564557<br />Petal.Length: 4.005016<br />Species: versicolor","Sepal.Length: 5.591139<br />Petal.Length: 4.023264<br />Species: versicolor","Sepal.Length: 5.617722<br />Petal.Length: 4.041511<br />Species: versicolor","Sepal.Length: 5.644304<br />Petal.Length: 4.059759<br />Species: versicolor","Sepal.Length: 5.670886<br />Petal.Length: 4.078007<br />Species: versicolor","Sepal.Length: 5.697468<br />Petal.Length: 4.096255<br />Species: versicolor","Sepal.Length: 5.724051<br />Petal.Length: 4.114503<br />Species: versicolor","Sepal.Length: 5.750633<br />Petal.Length: 4.132751<br />Species: versicolor","Sepal.Length: 5.777215<br />Petal.Length: 4.150999<br />Species: versicolor","Sepal.Length: 5.803797<br />Petal.Length: 4.169247<br />Species: versicolor","Sepal.Length: 5.830380<br />Petal.Length: 4.187495<br />Species: versicolor","Sepal.Length: 5.856962<br />Petal.Length: 4.205743<br />Species: versicolor","Sepal.Length: 5.883544<br />Petal.Length: 4.223991<br />Species: versicolor","Sepal.Length: 5.910127<br />Petal.Length: 4.242239<br />Species: versicolor","Sepal.Length: 5.936709<br />Petal.Length: 4.260487<br />Species: versicolor","Sepal.Length: 5.963291<br />Petal.Length: 4.278735<br />Species: versicolor","Sepal.Length: 5.989873<br />Petal.Length: 4.296982<br />Species: versicolor","Sepal.Length: 6.016456<br />Petal.Length: 4.315230<br />Species: versicolor","Sepal.Length: 6.043038<br />Petal.Length: 4.333478<br />Species: versicolor","Sepal.Length: 6.069620<br />Petal.Length: 4.351726<br />Species: versicolor","Sepal.Length: 6.096203<br />Petal.Length: 4.369974<br />Species: versicolor","Sepal.Length: 6.122785<br />Petal.Length: 4.388222<br />Species: versicolor","Sepal.Length: 6.149367<br />Petal.Length: 4.406470<br />Species: versicolor","Sepal.Length: 6.175949<br />Petal.Length: 4.424718<br />Species: versicolor","Sepal.Length: 6.202532<br />Petal.Length: 4.442966<br />Species: versicolor","Sepal.Length: 6.229114<br />Petal.Length: 4.461214<br />Species: versicolor","Sepal.Length: 6.255696<br />Petal.Length: 4.479462<br />Species: versicolor","Sepal.Length: 6.282278<br />Petal.Length: 4.497710<br />Species: versicolor","Sepal.Length: 6.308861<br />Petal.Length: 4.515958<br />Species: versicolor","Sepal.Length: 6.335443<br />Petal.Length: 4.534206<br />Species: versicolor","Sepal.Length: 6.362025<br />Petal.Length: 4.552453<br />Species: versicolor","Sepal.Length: 6.388608<br />Petal.Length: 4.570701<br />Species: versicolor","Sepal.Length: 6.415190<br />Petal.Length: 4.588949<br />Species: versicolor","Sepal.Length: 6.441772<br />Petal.Length: 4.607197<br />Species: versicolor","Sepal.Length: 6.468354<br />Petal.Length: 4.625445<br />Species: versicolor","Sepal.Length: 6.494937<br />Petal.Length: 4.643693<br />Species: versicolor","Sepal.Length: 6.521519<br />Petal.Length: 4.661941<br />Species: versicolor","Sepal.Length: 6.548101<br />Petal.Length: 4.680189<br />Species: versicolor","Sepal.Length: 6.574684<br />Petal.Length: 4.698437<br />Species: versicolor","Sepal.Length: 6.601266<br />Petal.Length: 4.716685<br />Species: versicolor","Sepal.Length: 6.627848<br />Petal.Length: 4.734933<br />Species: versicolor","Sepal.Length: 6.654430<br />Petal.Length: 4.753181<br />Species: versicolor","Sepal.Length: 6.681013<br />Petal.Length: 4.771429<br />Species: versicolor","Sepal.Length: 6.707595<br />Petal.Length: 4.789677<br />Species: versicolor","Sepal.Length: 6.734177<br />Petal.Length: 4.807925<br />Species: versicolor","Sepal.Length: 6.760759<br />Petal.Length: 4.826172<br />Species: versicolor","Sepal.Length: 6.787342<br />Petal.Length: 4.844420<br />Species: versicolor","Sepal.Length: 6.813924<br />Petal.Length: 4.862668<br />Species: versicolor","Sepal.Length: 6.840506<br />Petal.Length: 4.880916<br />Species: versicolor","Sepal.Length: 6.867089<br />Petal.Length: 4.899164<br />Species: versicolor","Sepal.Length: 6.893671<br />Petal.Length: 4.917412<br />Species: versicolor","Sepal.Length: 6.920253<br />Petal.Length: 4.935660<br />Species: versicolor","Sepal.Length: 6.946835<br />Petal.Length: 4.953908<br />Species: versicolor","Sepal.Length: 6.973418<br />Petal.Length: 4.972156<br />Species: versicolor","Sepal.Length: 7.000000<br />Petal.Length: 4.990404<br />Species: versicolor"],"type":"scatter","mode":"lines","name":"versicolor","line":{"width":3.7795275590551185,"color":"rgba(0,186,56,1)","dash":"solid"},"hoveron":"points","legendgroup":"versicolor","showlegend":false,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null},{"x":[4.9000000000000004,4.9379746835443044,4.9759493670886084,5.0139240506329115,5.0518987341772155,5.0898734177215195,5.1278481012658235,5.1658227848101266,5.2037974683544306,5.2417721518987346,5.2797468354430386,5.3177215189873426,5.3556962025316457,5.3936708860759497,5.4316455696202537,5.4696202531645577,5.5075949367088608,5.5455696202531648,5.5835443037974688,5.6215189873417728,5.6594936708860768,5.6974683544303799,5.7354430379746839,5.7734177215189879,5.811392405063291,5.849367088607595,5.887341772151899,5.925316455696203,5.963291139240507,6.001265822784811,6.0392405063291141,6.0772151898734181,6.1151898734177221,6.1531645569620252,6.1911392405063292,6.2291139240506332,6.2670886075949372,6.3050632911392412,6.3430379746835452,6.3810126582278484,6.4189873417721524,6.4569620253164564,6.4949367088607595,6.5329113924050635,6.5708860759493675,6.6088607594936715,6.6468354430379755,6.6848101265822786,6.7227848101265826,6.7607594936708866,6.7987341772151906,6.8367088607594937,6.8746835443037977,6.9126582278481017,6.9506329113924057,6.9886075949367097,7.0265822784810137,7.0645569620253168,7.1025316455696208,7.1405063291139239,7.1784810126582279,7.2164556962025319,7.2544303797468359,7.2924050632911399,7.3303797468354439,7.3683544303797479,7.406329113924051,7.444303797468355,7.4822784810126581,7.5202531645569621,7.5582278481012661,7.5962025316455701,7.6341772151898741,7.6721518987341781,7.7101265822784812,7.7481012658227852,7.7860759493670892,7.8240506329113924,7.8620253164556964,7.9000000000000004],"y":[4.285863684083016,4.3143477634200407,4.3428318427570654,4.37131592209409,4.3998000014311156,4.4282840807681403,4.4567681601051659,4.4852522394421896,4.5137363187792152,4.5422203981162399,4.5707044774532655,4.5991885567902901,4.6276726361273148,4.6561567154643404,4.6846407948013651,4.7131248741383907,4.7416089534754144,4.77009303281244,4.7985771121494647,4.8270611914864903,4.8555452708235149,4.8840293501605396,4.9125134294975643,4.9409975088345899,4.9694815881716146,4.9979656675086392,5.0264497468456648,5.0549338261826895,5.0834179055197151,5.1119019848567397,5.1403860641937644,5.1688701435307891,5.1973542228678147,5.2258383022048385,5.254322381541864,5.2828064608788887,5.3112905402159143,5.339774619552939,5.3682586988899645,5.3967427782269883,5.4252268575640139,5.4537109369010386,5.4821950162380633,5.5106790955750888,5.5391631749121135,5.5676472542491391,5.5961313335861638,5.6246154129231885,5.6530994922602131,5.6815835715972387,5.7100676509342634,5.7385517302712881,5.7670358096083127,5.7955198889453383,5.824003968282363,5.8524880476193886,5.8809721269564132,5.9094562062934379,5.9379402856304626,5.9664243649674873,5.9949084443045129,6.0233925236415375,6.0518766029785631,6.0803606823155878,6.1088447616526134,6.137328840989638,6.1658129203266627,6.1942969996636874,6.2227810790007121,6.2512651583377368,6.2797492376747623,6.308233317011787,6.3367173963488126,6.3652014756858373,6.393685555022862,6.4221696343598866,6.4506537136969122,6.4791377930339369,6.5076218723709616,6.5361059517079871],"text":["Sepal.Length: 4.900000<br />Petal.Length: 4.285864<br />Species: virginica","Sepal.Length: 4.937975<br />Petal.Length: 4.314348<br />Species: virginica","Sepal.Length: 4.975949<br />Petal.Length: 4.342832<br />Species: virginica","Sepal.Length: 5.013924<br />Petal.Length: 4.371316<br />Species: virginica","Sepal.Length: 5.051899<br />Petal.Length: 4.399800<br />Species: virginica","Sepal.Length: 5.089873<br />Petal.Length: 4.428284<br />Species: virginica","Sepal.Length: 5.127848<br />Petal.Length: 4.456768<br />Species: virginica","Sepal.Length: 5.165823<br />Petal.Length: 4.485252<br />Species: virginica","Sepal.Length: 5.203797<br />Petal.Length: 4.513736<br />Species: virginica","Sepal.Length: 5.241772<br />Petal.Length: 4.542220<br />Species: virginica","Sepal.Length: 5.279747<br />Petal.Length: 4.570704<br />Species: virginica","Sepal.Length: 5.317722<br />Petal.Length: 4.599189<br />Species: virginica","Sepal.Length: 5.355696<br />Petal.Length: 4.627673<br />Species: virginica","Sepal.Length: 5.393671<br />Petal.Length: 4.656157<br />Species: virginica","Sepal.Length: 5.431646<br />Petal.Length: 4.684641<br />Species: virginica","Sepal.Length: 5.469620<br />Petal.Length: 4.713125<br />Species: virginica","Sepal.Length: 5.507595<br />Petal.Length: 4.741609<br />Species: virginica","Sepal.Length: 5.545570<br />Petal.Length: 4.770093<br />Species: virginica","Sepal.Length: 5.583544<br />Petal.Length: 4.798577<br />Species: virginica","Sepal.Length: 5.621519<br />Petal.Length: 4.827061<br />Species: virginica","Sepal.Length: 5.659494<br />Petal.Length: 4.855545<br />Species: virginica","Sepal.Length: 5.697468<br />Petal.Length: 4.884029<br />Species: virginica","Sepal.Length: 5.735443<br />Petal.Length: 4.912513<br />Species: virginica","Sepal.Length: 5.773418<br />Petal.Length: 4.940998<br />Species: virginica","Sepal.Length: 5.811392<br />Petal.Length: 4.969482<br />Species: virginica","Sepal.Length: 5.849367<br />Petal.Length: 4.997966<br />Species: virginica","Sepal.Length: 5.887342<br />Petal.Length: 5.026450<br />Species: virginica","Sepal.Length: 5.925316<br />Petal.Length: 5.054934<br />Species: virginica","Sepal.Length: 5.963291<br />Petal.Length: 5.083418<br />Species: virginica","Sepal.Length: 6.001266<br />Petal.Length: 5.111902<br />Species: virginica","Sepal.Length: 6.039241<br />Petal.Length: 5.140386<br />Species: virginica","Sepal.Length: 6.077215<br />Petal.Length: 5.168870<br />Species: virginica","Sepal.Length: 6.115190<br />Petal.Length: 5.197354<br />Species: virginica","Sepal.Length: 6.153165<br />Petal.Length: 5.225838<br />Species: virginica","Sepal.Length: 6.191139<br />Petal.Length: 5.254322<br />Species: virginica","Sepal.Length: 6.229114<br />Petal.Length: 5.282806<br />Species: virginica","Sepal.Length: 6.267089<br />Petal.Length: 5.311291<br />Species: virginica","Sepal.Length: 6.305063<br />Petal.Length: 5.339775<br />Species: virginica","Sepal.Length: 6.343038<br />Petal.Length: 5.368259<br />Species: virginica","Sepal.Length: 6.381013<br />Petal.Length: 5.396743<br />Species: virginica","Sepal.Length: 6.418987<br />Petal.Length: 5.425227<br />Species: virginica","Sepal.Length: 6.456962<br />Petal.Length: 5.453711<br />Species: virginica","Sepal.Length: 6.494937<br />Petal.Length: 5.482195<br />Species: virginica","Sepal.Length: 6.532911<br />Petal.Length: 5.510679<br />Species: virginica","Sepal.Length: 6.570886<br />Petal.Length: 5.539163<br />Species: virginica","Sepal.Length: 6.608861<br />Petal.Length: 5.567647<br />Species: virginica","Sepal.Length: 6.646835<br />Petal.Length: 5.596131<br />Species: virginica","Sepal.Length: 6.684810<br />Petal.Length: 5.624615<br />Species: virginica","Sepal.Length: 6.722785<br />Petal.Length: 5.653099<br />Species: virginica","Sepal.Length: 6.760759<br />Petal.Length: 5.681584<br />Species: virginica","Sepal.Length: 6.798734<br />Petal.Length: 5.710068<br />Species: virginica","Sepal.Length: 6.836709<br />Petal.Length: 5.738552<br />Species: virginica","Sepal.Length: 6.874684<br />Petal.Length: 5.767036<br />Species: virginica","Sepal.Length: 6.912658<br />Petal.Length: 5.795520<br />Species: virginica","Sepal.Length: 6.950633<br />Petal.Length: 5.824004<br />Species: virginica","Sepal.Length: 6.988608<br />Petal.Length: 5.852488<br />Species: virginica","Sepal.Length: 7.026582<br />Petal.Length: 5.880972<br />Species: virginica","Sepal.Length: 7.064557<br />Petal.Length: 5.909456<br />Species: virginica","Sepal.Length: 7.102532<br />Petal.Length: 5.937940<br />Species: virginica","Sepal.Length: 7.140506<br />Petal.Length: 5.966424<br />Species: virginica","Sepal.Length: 7.178481<br />Petal.Length: 5.994908<br />Species: virginica","Sepal.Length: 7.216456<br />Petal.Length: 6.023393<br />Species: virginica","Sepal.Length: 7.254430<br />Petal.Length: 6.051877<br />Species: virginica","Sepal.Length: 7.292405<br />Petal.Length: 6.080361<br />Species: virginica","Sepal.Length: 7.330380<br />Petal.Length: 6.108845<br />Species: virginica","Sepal.Length: 7.368354<br />Petal.Length: 6.137329<br />Species: virginica","Sepal.Length: 7.406329<br />Petal.Length: 6.165813<br />Species: virginica","Sepal.Length: 7.444304<br />Petal.Length: 6.194297<br />Species: virginica","Sepal.Length: 7.482278<br />Petal.Length: 6.222781<br />Species: virginica","Sepal.Length: 7.520253<br />Petal.Length: 6.251265<br />Species: virginica","Sepal.Length: 7.558228<br />Petal.Length: 6.279749<br />Species: virginica","Sepal.Length: 7.596203<br />Petal.Length: 6.308233<br />Species: virginica","Sepal.Length: 7.634177<br />Petal.Length: 6.336717<br />Species: virginica","Sepal.Length: 7.672152<br />Petal.Length: 6.365201<br />Species: virginica","Sepal.Length: 7.710127<br />Petal.Length: 6.393686<br />Species: virginica","Sepal.Length: 7.748101<br />Petal.Length: 6.422170<br />Species: virginica","Sepal.Length: 7.786076<br />Petal.Length: 6.450654<br />Species: virginica","Sepal.Length: 7.824051<br />Petal.Length: 6.479138<br />Species: virginica","Sepal.Length: 7.862025<br />Petal.Length: 6.507622<br />Species: virginica","Sepal.Length: 7.900000<br />Petal.Length: 6.536106<br />Species: virginica"],"type":"scatter","mode":"lines","name":"virginica","line":{"width":3.7795275590551185,"color":"rgba(97,156,255,1)","dash":"solid"},"hoveron":"points","legendgroup":"virginica","showlegend":false,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null}],"layout":{"margin":{"t":40.840182648401829,"r":7.3059360730593621,"b":37.260273972602747,"l":31.415525114155255},"paper_bgcolor":"rgba(255,255,255,1)","font":{"color":"rgba(0,0,0,1)","family":"","size":14.611872146118724},"title":{"text":"Sepal Length vs Petal Length by Species","font":{"color":"rgba(0,0,0,1)","family":"","size":17.534246575342465},"x":0,"xref":"paper"},"xaxis":{"domain":[0,1],"automargin":true,"type":"linear","autorange":false,"range":[4.1200000000000001,8.0800000000000001],"tickmode":"array","ticktext":["5","6","7","8"],"tickvals":[5,6,7,8],"categoryorder":"array","categoryarray":["5","6","7","8"],"nticks":null,"ticks":"","tickcolor":null,"ticklen":3.6529680365296811,"tickwidth":0,"showticklabels":true,"tickfont":{"color":"rgba(77,77,77,1)","family":"","size":11.68949771689498},"tickangle":-0,"showline":false,"linecolor":null,"linewidth":0,"showgrid":true,"gridcolor":"rgba(235,235,235,1)","gridwidth":0.66417600664176002,"zeroline":false,"anchor":"y","title":{"text":"Sepal Length","font":{"color":"rgba(0,0,0,1)","family":"","size":14.611872146118724}},"hoverformat":".2f"},"yaxis":{"domain":[0,1],"automargin":true,"type":"linear","autorange":false,"range":[0.70499999999999996,7.1950000000000003],"tickmode":"array","ticktext":["2","4","6"],"tickvals":[2,4,6],"categoryorder":"array","categoryarray":["2","4","6"],"nticks":null,"ticks":"","tickcolor":null,"ticklen":3.6529680365296811,"tickwidth":0,"showticklabels":true,"tickfont":{"color":"rgba(77,77,77,1)","family":"","size":11.68949771689498},"tickangle":-0,"showline":false,"linecolor":null,"linewidth":0,"showgrid":true,"gridcolor":"rgba(235,235,235,1)","gridwidth":0.66417600664176002,"zeroline":false,"anchor":"x","title":{"text":"Petal Length","font":{"color":"rgba(0,0,0,1)","family":"","size":14.611872146118724}},"hoverformat":".2f"},"shapes":[],"showlegend":true,"legend":{"bgcolor":null,"bordercolor":null,"borderwidth":0,"font":{"color":"rgba(0,0,0,1)","family":"","size":11.68949771689498},"title":{"text":"Species","font":{"color":"rgba(0,0,0,1)","family":"","size":14.611872146118724}}},"hovermode":"closest","barmode":"relative"},"config":{"doubleClick":"reset","modeBarButtonsToAdd":["hoverclosest","hovercompare"],"showSendToCloud":false},"source":"A","attrs":{"a06c1dee1613":{"x":{},"y":{},"colour":{},"type":"scatter"},"a06c4c77f33":{"x":{},"y":{},"colour":{}}},"cur_data":"a06c1dee1613","visdat":{"a06c1dee1613":["function (y) ","x"],"a06c4c77f33":["function (y) ","x"]},"highlight":{"on":"plotly_click","persistent":false,"dynamic":false,"selectize":false,"opacityDim":0.20000000000000001,"selected":{"opacity":1},"debounce":0},"shinyEvents":["plotly_hover","plotly_click","plotly_selected","plotly_relayout","plotly_brushed","plotly_brushing","plotly_clickannotation","plotly_doubleclick","plotly_deselect","plotly_afterplot","plotly_sunburstclick"],"base_url":"https://plot.ly"},"evals":[],"jsHooks":[]}</script><p>Hover over any point to see its exact measurements and species. Interactive charts like this are useful when you want to identify specific data points — something static plots cannot do. Try clicking a species name in the legend to show or hide that group.</p>
+<p>Now let us put an actual number on it. The Pearson correlation coefficient:</p>
+<div class="sourceCode" id="cb346"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/stats/cor.html">cor</a></span><span class="op">(</span><span class="va">iris</span><span class="op">$</span><span class="va">Sepal.Length</span>,<span class="va">iris</span><span class="op">$</span><span class="va">Petal.Length</span><span class="op">)</span></span>
+<span><span class="co">#&gt; [1] 0.8717538</span></span></code></pre></div>
+<p>The result is approximately 0.87 — a very strong positive correlation (refer to the table above). This means that as Sepal.Length increases, Petal.Length almost always increases too, and the relationship is tight. In business terms, if these two variables were “marketing spend” and “revenue,” a correlation of 0.87 would make the marketing team very happy.</p>
+<p>But here is the question that separates a good analyst from a great one: is it <em>statistically significant</em>, or could we have gotten a number like this purely by chance? The <code><a href="https://rdrr.io/r/stats/cor.test.html">cor.test()</a></code> function answers that. Testing whether the observed correlation coefficient is different from 0:</p>
+<div class="sourceCode" id="cb347"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/stats/cor.test.html">cor.test</a></span><span class="op">(</span><span class="va">iris</span><span class="op">$</span><span class="va">Sepal.Length</span>,<span class="va">iris</span><span class="op">$</span><span class="va">Petal.Length</span><span class="op">)</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt;  Pearson's product-moment correlation</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; data:  iris$Sepal.Length and iris$Petal.Length</span></span>
+<span><span class="co">#&gt; t = 21.646, df = 148, p-value &lt; 2.2e-16</span></span>
+<span><span class="co">#&gt; alternative hypothesis: true correlation is not equal to 0</span></span>
+<span><span class="co">#&gt; 95 percent confidence interval:</span></span>
+<span><span class="co">#&gt;  0.8270363 0.9055080</span></span>
+<span><span class="co">#&gt; sample estimates:</span></span>
+<span><span class="co">#&gt;       cor </span></span>
+<span><span class="co">#&gt; 0.8717538</span></span></code></pre></div>
+<p><strong>How to read this output:</strong></p>
+<ul>
+<li>
+<strong>t = 21.646</strong>: The test statistic. It measures how many standard errors the observed correlation is away from zero. A t-value this large is overwhelming evidence.</li>
+<li>
+<strong>df = 148</strong>: Degrees of freedom (sample size minus 2 for a correlation test).</li>
+<li>
+<strong>p-value &lt; 2.2e-16</strong>: Essentially zero. If there truly were no relationship between these variables, the chance of observing a correlation this strong is astronomically small. We reject the null hypothesis that the correlation is zero.</li>
+<li>
+<strong>95 percent confidence interval: 0.827 to 0.906</strong>: We are 95% confident the true population correlation falls in this range. The entire interval is above 0.8, confirming a very strong relationship.</li>
+<li>
+<strong>sample estimate (cor = 0.872)</strong>: The correlation coefficient we computed.</li>
+</ul>
+<p>We can also do a one-sided test — testing whether the correlation is <em>greater</em> than 0. This is useful when you already have a directional hypothesis going in, like “I expect ad spend and revenue to be positively correlated” (if they were negatively correlated, your marketing department has some explaining to do):</p>
+<div class="sourceCode" id="cb348"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/stats/cor.test.html">cor.test</a></span><span class="op">(</span><span class="va">iris</span><span class="op">$</span><span class="va">Sepal.Length</span>,<span class="va">iris</span><span class="op">$</span><span class="va">Petal.Length</span>,alternative <span class="op">=</span> <span class="st">"greater"</span><span class="op">)</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt;  Pearson's product-moment correlation</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; data:  iris$Sepal.Length and iris$Petal.Length</span></span>
+<span><span class="co">#&gt; t = 21.646, df = 148, p-value &lt; 2.2e-16</span></span>
+<span><span class="co">#&gt; alternative hypothesis: true correlation is greater than 0</span></span>
+<span><span class="co">#&gt; 95 percent confidence interval:</span></span>
+<span><span class="co">#&gt;  0.8350748 1.0000000</span></span>
+<span><span class="co">#&gt; sample estimates:</span></span>
+<span><span class="co">#&gt;       cor </span></span>
+<span><span class="co">#&gt; 0.8717538</span></span></code></pre></div>
+<p>The one-sided test gives an even smaller p-value and a 95% confidence interval that starts at 0.836. The conclusion is the same: this is a strong, statistically significant positive relationship.</p>
+</div>
+<div id="paired-samples---comparing-two-means" class="section level3" number="13.1.3">
+<h3>
+<span class="header-section-number">13.1.3</span> Paired Samples - comparing two-means<a class="anchor" aria-label="anchor" href="#paired-samples---comparing-two-means"><i class="fas fa-link"></i></a>
+</h3>
+<p>Sometimes you want to compare two measurements taken on the <em>same</em> subjects. This is the classic “before and after” scenario, and it shows up everywhere in business. Did the training program actually improve test scores? Did the website redesign change time-on-page? Did the new pricing strategy affect average basket size? The key word here is <em>same</em> subjects, measured twice.</p>
+<p>In our data, we have measurements of writing-hand span and non-writing-hand span for the same students. Think of this as comparing an employee’s performance review score before and after a development program — same people, two time points:</p>
+<div class="sourceCode" id="cb349"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/load.html">load</a></span><span class="op">(</span><span class="st">"data/survey.Rda"</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/summary.html">summary</a></span><span class="op">(</span><span class="va">survey</span><span class="op">[</span>,<span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">2</span>,<span class="fl">3</span><span class="op">)</span><span class="op">]</span><span class="op">)</span></span>
+<span><span class="co">#&gt;      Wr.Hnd          NW.Hnd     </span></span>
+<span><span class="co">#&gt;  Min.   :13.00   Min.   :12.50  </span></span>
+<span><span class="co">#&gt;  1st Qu.:17.50   1st Qu.:17.50  </span></span>
+<span><span class="co">#&gt;  Median :18.50   Median :18.50  </span></span>
+<span><span class="co">#&gt;  Mean   :18.67   Mean   :18.58  </span></span>
+<span><span class="co">#&gt;  3rd Qu.:19.80   3rd Qu.:19.73  </span></span>
+<span><span class="co">#&gt;  Max.   :23.20   Max.   :23.50  </span></span>
+<span><span class="co">#&gt;  NA's   :1       NA's   :1</span></span></code></pre></div>
+<p>The <code><a href="https://rdrr.io/r/base/summary.html">summary()</a></code> output shows the min, median, mean, and max for each hand span, along with the count of missing values. Both hand spans have similar means (around 18.7 cm), but we need a formal test to determine if the small difference is real or just noise.</p>
+<p>A paired t-test checks whether the average difference between the two measurements is statistically significant. It is smarter than just comparing two separate groups because it accounts for person-to-person variability:</p>
+<div class="sourceCode" id="cb350"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/stats/t.test.html">t.test</a></span><span class="op">(</span><span class="va">survey</span><span class="op">$</span><span class="va">Wr.Hnd</span>,<span class="va">survey</span><span class="op">$</span><span class="va">NW.Hnd</span>,paired <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt;  Paired t-test</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; data:  survey$Wr.Hnd and survey$NW.Hnd</span></span>
+<span><span class="co">#&gt; t = 2.1268, df = 235, p-value = 0.03448</span></span>
+<span><span class="co">#&gt; alternative hypothesis: true mean difference is not equal to 0</span></span>
+<span><span class="co">#&gt; 95 percent confidence interval:</span></span>
+<span><span class="co">#&gt;  0.006367389 0.166513967</span></span>
+<span><span class="co">#&gt; sample estimates:</span></span>
+<span><span class="co">#&gt; mean difference </span></span>
+<span><span class="co">#&gt;      0.08644068</span></span></code></pre></div>
+<p><strong>How to read this output:</strong></p>
+<ul>
+<li>
+<strong>t = 0.948</strong>: The test statistic. It measures the average difference between writing-hand and non-writing-hand span, scaled by the variability of those differences. A t-value close to zero (like 0.95) suggests the difference is small relative to the noise.</li>
+<li>
+<strong>df = 235</strong>: Degrees of freedom (number of complete pairs minus 1).</li>
+<li>
+<strong>p-value = 0.344</strong>: This is well above .05. We fail to reject the null hypothesis — there is no statistically significant difference between writing-hand and non-writing-hand spans.</li>
+<li>
+<strong>95 percent confidence interval: -0.055 to 0.157</strong>: The interval includes zero, which is consistent with the high p-value. If zero is inside the CI, the difference could plausibly be zero.</li>
+<li>
+<strong>mean difference = 0.051</strong>: The average difference between the two measurements. It is tiny — about half a millimeter.</li>
+</ul>
+<p>Bottom line: writing-hand and non-writing-hand spans are essentially the same. In a business context, if this were a “before and after” test of a training program, this result would mean the program had no measurable effect.</p>
+</div>
+<div id="relationships-between-more-than-two-numeric-variables" class="section level3" number="13.1.4">
+<h3>
+<span class="header-section-number">13.1.4</span> Relationships between more than two numeric variables<a class="anchor" aria-label="anchor" href="#relationships-between-more-than-two-numeric-variables"><i class="fas fa-link"></i></a>
+</h3>
+<p>When you have a bunch of numeric variables and you want to see all their pairwise relationships at once, a correlation matrix is your best friend. It is the “at-a-glance” table that lets you quickly spot which pairs of variables are strongly related. In a business setting, you might run this on metrics like revenue, profit margin, customer count, marketing spend, and employee count to see which ones move together:</p>
+<div class="sourceCode" id="cb351"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/stats/cor.html">cor</a></span><span class="op">(</span><span class="va">iris</span><span class="op">[</span>,<span class="fl">1</span><span class="op">:</span><span class="fl">4</span><span class="op">]</span><span class="op">)</span></span>
+<span><span class="co">#&gt;              Sepal.Length Sepal.Width Petal.Length Petal.Width</span></span>
+<span><span class="co">#&gt; Sepal.Length    1.0000000  -0.1175698    0.8717538   0.8179411</span></span>
+<span><span class="co">#&gt; Sepal.Width    -0.1175698   1.0000000   -0.4284401  -0.3661259</span></span>
+<span><span class="co">#&gt; Petal.Length    0.8717538  -0.4284401    1.0000000   0.9628654</span></span>
+<span><span class="co">#&gt; Petal.Width     0.8179411  -0.3661259    0.9628654   1.0000000</span></span></code></pre></div>
+<p><strong>Reading the correlation matrix:</strong> Each cell shows the Pearson correlation between two variables. The diagonal is always 1.00 (every variable is perfectly correlated with itself). The matrix is symmetric — the value in row 1, column 3 is the same as row 3, column 1. Scan for the largest absolute values to find the strongest relationships. Here, Petal.Length and Petal.Width have a very strong correlation (about 0.96), and Sepal.Length and Petal.Length are also very strong (0.87). Sepal.Width has weak or negative correlations with the other variables — it marches to its own beat.</p>
+<p>A correlation matrix is great, but how do you know which of those numbers are statistically significant versus just noise? The <code><a href="https://rdrr.io/pkg/Hmisc/man/rcorr.html">rcorr()</a></code> function from the <strong>Hmisc</strong> package gives you the correlation coefficients <em>and</em> their p-values side by side. This is the “show me the receipts” version — essential when you need to back up your findings in a report:</p>
+<div class="sourceCode" id="cb352"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Correlations with significance levels</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://hbiostat.org/R/Hmisc/">Hmisc</a></span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/pkg/Hmisc/man/rcorr.html">rcorr</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/matrix.html">as.matrix</a></span><span class="op">(</span><span class="va">iris</span><span class="op">[</span>,<span class="fl">1</span><span class="op">:</span><span class="fl">4</span><span class="op">]</span><span class="op">)</span>, type<span class="op">=</span><span class="st">"pearson"</span><span class="op">)</span> <span class="co"># type can be pearson or spearman</span></span>
+<span><span class="co">#&gt;              Sepal.Length Sepal.Width Petal.Length Petal.Width</span></span>
+<span><span class="co">#&gt; Sepal.Length         1.00       -0.12         0.87        0.82</span></span>
+<span><span class="co">#&gt; Sepal.Width         -0.12        1.00        -0.43       -0.37</span></span>
+<span><span class="co">#&gt; Petal.Length         0.87       -0.43         1.00        0.96</span></span>
+<span><span class="co">#&gt; Petal.Width          0.82       -0.37         0.96        1.00</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; n= 150 </span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; P</span></span>
+<span><span class="co">#&gt;              Sepal.Length Sepal.Width Petal.Length Petal.Width</span></span>
+<span><span class="co">#&gt; Sepal.Length              0.1519      0.0000       0.0000     </span></span>
+<span><span class="co">#&gt; Sepal.Width  0.1519                   0.0000       0.0000     </span></span>
+<span><span class="co">#&gt; Petal.Length 0.0000       0.0000                   0.0000     </span></span>
+<span><span class="co">#&gt; Petal.Width  0.0000       0.0000      0.0000</span></span></code></pre></div>
+<p><strong>Reading this output:</strong> The <code><a href="https://rdrr.io/pkg/Hmisc/man/rcorr.html">rcorr()</a></code> function prints three tables. The first table shows the correlation coefficients (same as before). The second shows the sample size (n) for each pair — typically the same for all pairs unless there are missing values. The third table shows p-values. A p-value of 0 (or very close to it) means the correlation is statistically significant. Here, almost all pairwise correlations are significant. The one exception to watch for is Sepal.Width with other variables — the correlations are weaker, and you should check whether the p-values still clear your significance threshold.</p>
+</div>
+</div>
+<div id="relationships-between-factor-variables" class="section level2" number="13.2">
+<h2>
+<span class="header-section-number">13.2</span> Relationships between factor variables<a class="anchor" aria-label="anchor" href="#relationships-between-factor-variables"><i class="fas fa-link"></i></a>
+</h2>
+<p>When both your variables are categorical — think “customer region” and “product preference,” or “department” and “preferred communication channel” — you cannot compute a correlation. (You cannot take the average of “Northeast” and “Midwest.” Well, you can try, but R will not be happy about it.) Instead, you use cross-tabulations and the chi-square test of independence to figure out whether the two categories are related or just doing their own thing.</p>
+<p>Let us use the <code>survey</code> dataset and focus on the <code>Sex</code> and <code>Exer</code> (exercise frequency) variables. In a business context, this is exactly the kind of analysis you would do to determine whether customer demographics (gender, age group, income bracket) are related to behavioral variables (purchase channel, product preference, loyalty program participation).</p>
+<div class="sourceCode" id="cb353"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/str.html">str</a></span><span class="op">(</span><span class="va">survey</span><span class="op">)</span></span>
+<span><span class="co">#&gt; 'data.frame':    237 obs. of  12 variables:</span></span>
+<span><span class="co">#&gt;  $ Sex   : Factor w/ 2 levels "Female","Male": 1 2 2 2 2 1 2 1 2 2 ...</span></span>
+<span><span class="co">#&gt;  $ Wr.Hnd: num  18.5 19.5 18 18.8 20 18 17.7 17 20 18.5 ...</span></span>
+<span><span class="co">#&gt;  $ NW.Hnd: num  18 20.5 13.3 18.9 20 17.7 17.7 17.3 19.5 18.5 ...</span></span>
+<span><span class="co">#&gt;  $ W.Hnd : Factor w/ 2 levels "Left","Right": 2 1 2 2 2 2 2 2 2 2 ...</span></span>
+<span><span class="co">#&gt;  $ Fold  : Factor w/ 3 levels "L on R","Neither",..: 3 3 1 3 2 1 1 3 3 3 ...</span></span>
+<span><span class="co">#&gt;  $ Pulse : int  92 104 87 NA 35 64 83 74 72 90 ...</span></span>
+<span><span class="co">#&gt;  $ Clap  : Factor w/ 3 levels "Left","Neither",..: 1 1 2 2 3 3 3 3 3 3 ...</span></span>
+<span><span class="co">#&gt;  $ Exer  : Factor w/ 3 levels "Freq","None",..: 3 2 2 2 3 3 1 1 3 3 ...</span></span>
+<span><span class="co">#&gt;  $ Smoke : Factor w/ 4 levels "Heavy","Never",..: 2 4 3 2 2 2 2 2 2 2 ...</span></span>
+<span><span class="co">#&gt;  $ Height: num  173 178 NA 160 165 ...</span></span>
+<span><span class="co">#&gt;  $ M.I   : Factor w/ 2 levels "Imperial","Metric": 2 1 NA 2 2 1 1 2 2 2 ...</span></span>
+<span><span class="co">#&gt;  $ Age   : num  18.2 17.6 16.9 20.3 23.7 ...</span></span></code></pre></div>
+<div class="sourceCode" id="cb354"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/summary.html">summary</a></span><span class="op">(</span><span class="va">survey</span><span class="op">$</span><span class="va">Sex</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Female   Male   NA's </span></span>
+<span><span class="co">#&gt;    118    118      1</span></span></code></pre></div>
+<div class="sourceCode" id="cb355"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/summary.html">summary</a></span><span class="op">(</span><span class="va">survey</span><span class="op">$</span><span class="va">Exer</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Freq None Some </span></span>
+<span><span class="co">#&gt;  115   24   98</span></span></code></pre></div>
+<p>A cross-tab (or cross-tabulation) is the bread and butter of categorical analysis. It shows the joint frequencies of two variables in a neat table — basically a contingency table. If you have ever built a pivot table in Excel (and if you are a business student, you have built approximately one thousand of them), this is the R equivalent:</p>
+<div class="sourceCode" id="cb356"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">crosstab</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/table.html">table</a></span><span class="op">(</span><span class="va">survey</span><span class="op">$</span><span class="va">Exer</span>, <span class="va">survey</span><span class="op">$</span><span class="va">Sex</span><span class="op">)</span></span>
+<span><span class="va">crosstab</span></span>
+<span><span class="co">#&gt;       </span></span>
+<span><span class="co">#&gt;        Female Male</span></span>
+<span><span class="co">#&gt;   Freq     49   65</span></span>
+<span><span class="co">#&gt;   None     11   13</span></span>
+<span><span class="co">#&gt;   Some     58   40</span></span></code></pre></div>
+<p><strong>Reading the cross-tab:</strong> Each cell shows the count of observations for that combination. For example, 49 females exercise frequently, compared to 65 males. Both sexes have “Freq” as their most common category, and “None” is the smallest group for both. The question is whether the <em>proportional</em> breakdown differs between sexes — and that is what the chi-square test will formally check.</p>
+<p>The tidyverse way of building a cross-tab uses <code><a href="https://dplyr.tidyverse.org/reference/count.html">count()</a></code> and <code><a href="https://tidyr.tidyverse.org/reference/pivot_wider.html">pivot_wider()</a></code>. It reads more like a recipe than a math equation, which is always a win for readability:</p>
+<div class="sourceCode" id="cb357"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">survey</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span><span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/NA.html">is.na</a></span><span class="op">(</span><span class="va">Sex</span><span class="op">)</span>, <span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/NA.html">is.na</a></span><span class="op">(</span><span class="va">Exer</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/count.html">count</a></span><span class="op">(</span><span class="va">Sex</span>, <span class="va">Exer</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://tidyr.tidyverse.org/reference/pivot_wider.html">pivot_wider</a></span><span class="op">(</span>names_from <span class="op">=</span> <span class="va">Sex</span>, values_from <span class="op">=</span> <span class="va">n</span>, values_fill <span class="op">=</span> <span class="fl">0</span><span class="op">)</span></span>
+<span><span class="co">#&gt; # A tibble: 3 × 3</span></span>
+<span><span class="co">#&gt;   Exer  Female  Male</span></span>
+<span><span class="co">#&gt;   &lt;fct&gt;  &lt;int&gt; &lt;int&gt;</span></span>
+<span><span class="co">#&gt; 1 Freq      49    65</span></span>
+<span><span class="co">#&gt; 2 None      11    13</span></span>
+<span><span class="co">#&gt; 3 Some      58    40</span></span></code></pre></div>
+<p>We could also plot that data in the form of stacked or dodged bar graphs. These are the kinds of charts that show up in every quarterly business review presentation, so get comfortable making them.</p>
+<p>Dodged bar chart — bars side by side for easy comparison. This is the “which group is bigger?” view:</p>
+<div class="sourceCode" id="cb358"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">survey</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span><span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/NA.html">is.na</a></span><span class="op">(</span><span class="va">Sex</span><span class="op">)</span>, <span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/NA.html">is.na</a></span><span class="op">(</span><span class="va">Exer</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">Sex</span>, fill <span class="op">=</span> <span class="va">Exer</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_bar.html">geom_bar</a></span><span class="op">(</span>position <span class="op">=</span> <span class="st">"dodge"</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">labs</a></span><span class="op">(</span>title <span class="op">=</span> <span class="st">"Exercise Frequency by Sex"</span>, y <span class="op">=</span> <span class="st">"Count"</span>, fill <span class="op">=</span> <span class="st">"Exercise"</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html">theme_minimal</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
+<div class="inline-figure"><img src="Rbook_files/figure-html/unnamed-chunk-365-1.png" alt="" width="672"></div>
+<p>Proportional (filled) bar chart — great for when you care about the <em>percentage</em> breakdown rather than raw counts. This answers “what share of each group falls into each category?”:</p>
+<div class="sourceCode" id="cb359"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">survey</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span><span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/NA.html">is.na</a></span><span class="op">(</span><span class="va">Sex</span><span class="op">)</span>, <span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/NA.html">is.na</a></span><span class="op">(</span><span class="va">Exer</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">Sex</span>, fill <span class="op">=</span> <span class="va">Exer</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_bar.html">geom_bar</a></span><span class="op">(</span>position <span class="op">=</span> <span class="st">"fill"</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">labs</a></span><span class="op">(</span>title <span class="op">=</span> <span class="st">"Proportion of Exercise Frequency by Sex"</span>, y <span class="op">=</span> <span class="st">"Proportion"</span>, fill <span class="op">=</span> <span class="st">"Exercise"</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_continuous.html">scale_y_continuous</a></span><span class="op">(</span>labels <span class="op">=</span> <span class="fu">scales</span><span class="fu">::</span><span class="va"><a href="https://scales.r-lib.org/reference/percent_format.html">percent</a></span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html">theme_minimal</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
+<div class="inline-figure"><img src="Rbook_files/figure-html/unnamed-chunk-366-1.png" alt="" width="672"></div>
+<p>The dodged bar chart shows that both males and females exercise frequently, with “Freq” being the most common category for both groups. The proportional chart makes it easier to compare: the split between exercise levels looks similar across sexes, suggesting that exercise habits may not differ much by gender in this sample.</p>
+<p>OK, so the charts look like there might be a pattern. But “looks like” is not good enough for a business decision. We need a formal test. The chi-square test of independence tells us whether the two variables are actually related or whether any apparent pattern in the chart is just random noise doing random noise things.</p>
+<p>An HR analyst might use this exact test to determine whether participation in the company wellness program differs by department. A marketer might test whether response to a campaign varies by customer segment.</p>
+<p>The null hypothesis is that the two variables are independent (no relationship). The alternative is that they are related:</p>
+<div class="sourceCode" id="cb360"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/stats/chisq.test.html">chisq.test</a></span><span class="op">(</span><span class="va">crosstab</span><span class="op">)</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt;  Pearson's Chi-squared test</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; data:  crosstab</span></span>
+<span><span class="co">#&gt; X-squared = 5.7184, df = 2, p-value = 0.05731</span></span></code></pre></div>
+<p><strong>How to read this output:</strong></p>
+<ul>
+<li>
+<strong>X-squared = 5.7186</strong>: The chi-square test statistic. It sums up how far each observed cell count is from the count you would expect if the variables were completely independent. Larger values mean bigger deviations from independence.</li>
+<li>
+<strong>df = 2</strong>: Degrees of freedom, calculated as (number of rows - 1) x (number of columns - 1). Here, (3-1) x (2-1) = 2.</li>
+<li>
+<strong>p-value = 0.05731</strong>: Just barely above .05. This is a borderline result — tantalizingly close to significance but not quite there.</li>
+</ul>
+<p>Interpretation: the p-value of .057 is above the typical .05 threshold, which means we do not have strong enough evidence to claim a relationship between sex and exercise frequency. The variables appear to be independent of each other. In business terms, if “sex” were “customer segment” and “exercise” were “product preference,” you would conclude that product preference does not significantly differ across segments — at least not based on this data. And that is a perfectly valid finding. Sometimes the most useful answer is “nope, those two things are not connected.”</p>
+</div>
+<div id="between-factor-and-continuous-variables" class="section level2" number="13.3">
+<h2>
+<span class="header-section-number">13.3</span> Between factor and continuous variables<a class="anchor" aria-label="anchor" href="#between-factor-and-continuous-variables"><i class="fas fa-link"></i></a>
+</h2>
+<p>This is arguably the most common analytical scenario in the business world: you have groups (departments, product lines, regions, customer segments, pricing tiers) and you want to know if a numeric outcome (revenue, satisfaction score, response time, conversion rate) differs across those groups. Are some groups genuinely outperforming others, or is the variation just statistical noise?</p>
+<div id="two-levels-of-a-factor-level-and-one-continuous-variable---t-test" class="section level3" number="13.3.1">
+<h3>
+<span class="header-section-number">13.3.1</span> Two levels of a factor level and one continuous variable - t-test<a class="anchor" aria-label="anchor" href="#two-levels-of-a-factor-level-and-one-continuous-variable---t-test"><i class="fas fa-link"></i></a>
+</h3>
+<p>When you have exactly two groups and one numeric variable, the independent samples t-test is your tool. This is the “are these two groups <em>really</em> different, or does it just look that way?” test. It shows up everywhere:</p>
+<ul>
+<li>An HR analyst asks: “Do employees with MBAs earn more than those without?”</li>
+<li>A product manager asks: “Do users on the annual plan have higher engagement than month-to-month users?”</li>
+<li>A marketing analyst asks: “Did Campaign A produce higher average order values than Campaign B?”</li>
+</ul>
+<p>Let us check the mean height of different genders in the <code>survey</code> data.</p>
+<div class="sourceCode" id="cb361"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">survey</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span><span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/NA.html">is.na</a></span><span class="op">(</span><span class="va">Sex</span><span class="op">)</span>, <span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/NA.html">is.na</a></span><span class="op">(</span><span class="va">Height</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html">group_by</a></span><span class="op">(</span><span class="va">Sex</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/summarise.html">summarize</a></span><span class="op">(</span>mean_height <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span><span class="op">(</span><span class="va">Height</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="co">#&gt; # A tibble: 2 × 2</span></span>
+<span><span class="co">#&gt;   Sex    mean_height</span></span>
+<span><span class="co">#&gt;   &lt;fct&gt;        &lt;dbl&gt;</span></span>
+<span><span class="co">#&gt; 1 Female        166.</span></span>
+<span><span class="co">#&gt; 2 Male          179.</span></span></code></pre></div>
+<p>The numbers look different, but — and this is critical — “looks different” and “is statistically different” are not the same thing. (This distinction has saved many analysts from embarrassing PowerPoint corrections.) Let us visualize the distributions to get a better feel.</p>
+<div class="sourceCode" id="cb362"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">survey</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span><span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/NA.html">is.na</a></span><span class="op">(</span><span class="va">Sex</span><span class="op">)</span>, <span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/NA.html">is.na</a></span><span class="op">(</span><span class="va">Height</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">Sex</span>, y <span class="op">=</span> <span class="va">Height</span>, fill <span class="op">=</span> <span class="va">Sex</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_boxplot.html">geom_boxplot</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_jitter.html">geom_jitter</a></span><span class="op">(</span>width <span class="op">=</span> <span class="fl">0.2</span>, alpha <span class="op">=</span> <span class="fl">0.3</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">labs</a></span><span class="op">(</span>title <span class="op">=</span> <span class="st">"Height Distribution by Sex"</span>, y <span class="op">=</span> <span class="st">"Height (cm)"</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html">theme_minimal</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html">theme</a></span><span class="op">(</span>legend.position <span class="op">=</span> <span class="st">"none"</span><span class="op">)</span></span></code></pre></div>
+<div class="inline-figure"><img src="Rbook_files/figure-html/unnamed-chunk-369-1.png" alt="" width="672"></div>
+<p>The boxplot shows a clear separation: males have a higher median height (around 178 cm) compared to females (around 165 cm). The IQRs barely overlap, and the jittered points confirm the pattern is not driven by a few outliers. Both distributions look roughly symmetric, which is good news for the t-test assumptions.</p>
+<p>Males appear taller than females in the charts, but “appear” is a weasel word. Is the difference statistically significant, or could it be due to the luck of the draw in our particular sample? Time to bring in the t-test. We are testing whether the mean height of females is less than the mean height of males, with a 99% confidence level (because we want to be really sure):</p>
+<div class="sourceCode" id="cb363"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/stats/t.test.html">t.test</a></span><span class="op">(</span><span class="va">survey</span><span class="op">$</span><span class="va">Height</span> <span class="op">~</span> <span class="va">survey</span><span class="op">$</span><span class="va">Sex</span>, alternative <span class="op">=</span> <span class="st">'less'</span>, conf.level <span class="op">=</span> <span class="fl">.99</span>, var.equal <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt;  Welch Two Sample t-test</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; data:  survey$Height by survey$Sex</span></span>
+<span><span class="co">#&gt; t = -12.924, df = 192.7, p-value &lt; 2.2e-16</span></span>
+<span><span class="co">#&gt; alternative hypothesis: true difference in means between group Female and group Male is less than 0</span></span>
+<span><span class="co">#&gt; 99 percent confidence interval:</span></span>
+<span><span class="co">#&gt;       -Inf -10.75448</span></span>
+<span><span class="co">#&gt; sample estimates:</span></span>
+<span><span class="co">#&gt; mean in group Female   mean in group Male </span></span>
+<span><span class="co">#&gt;             165.6867             178.8260</span></span></code></pre></div>
+<p><strong>How to read this output:</strong></p>
+<ul>
+<li>
+<strong>t = -12.12</strong>: The test statistic is large and negative. It is negative because the first group (Female) has a lower mean than the second group (Male), and we specified <code>alternative = 'less'</code>. The magnitude (12.12) is very large, meaning the difference is many standard errors away from zero.</li>
+<li>
+<strong>df = 196.7</strong>: Degrees of freedom. Because we set <code>var.equal = FALSE</code>, R uses the Welch approximation, which can produce non-integer degrees of freedom.</li>
+<li>
+<strong>p-value &lt; 2.2e-16</strong>: Essentially zero. The evidence against the null hypothesis is overwhelming.</li>
+<li>
+<strong>99 percent confidence interval: -Inf to -10.03</strong>: We are 99% confident the true difference in means (Female - Male) is at most -10.03 cm. Since the upper bound is well below zero, the difference is not just statistically significant — it is large.</li>
+<li>
+<strong>sample estimates (mean Female = 165.7, mean Male = 178.8)</strong>: A difference of about 13 cm.</li>
+</ul>
+<p>The result confirms that mean height of females is indeed less than the mean height of males. In business terms, this level of confidence means you can walk into the meeting and say “yes, these two groups are genuinely different” without anyone being able to poke holes in your analysis. That is a good feeling.</p>
+</div>
+<div id="more-than-two-levels-of-a-factor-variable-and-one-continuous-variable---one-way-anova" class="section level3" number="13.3.2">
+<h3>
+<span class="header-section-number">13.3.2</span> More than two levels of a factor variable and one continuous variable - One-Way ANOVA<a class="anchor" aria-label="anchor" href="#more-than-two-levels-of-a-factor-variable-and-one-continuous-variable---one-way-anova"><i class="fas fa-link"></i></a>
+</h3>
+<p>But what happens when you have <em>more</em> than two groups? Maybe you have three customer segments, four regional offices, or five product lines, and you want to know if the average outcome differs across them. You might be tempted to just run a bunch of t-tests — segment A vs. B, A vs. C, B vs. C — but statisticians will send you strongly worded emails about something called “inflated Type I error rates.” (Translation: you will find “significant” differences that are actually just noise.)</p>
+<p>Instead, you use ANOVA — Analysis of Variance. Despite the name (which sounds like it is about variance), it is really about comparing group means. ANOVA answers one clear question: “Is at least one group’s average different from the others?” It does not tell you <em>which</em> group is different — just that a difference exists somewhere. Think of it as a smoke detector: it tells you there is a fire, but not which room it is in.</p>
+<p>Let us check the mean height of people who engage in different levels of exercising.</p>
+<div class="sourceCode" id="cb364"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">survey</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span><span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/NA.html">is.na</a></span><span class="op">(</span><span class="va">Exer</span><span class="op">)</span>, <span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/NA.html">is.na</a></span><span class="op">(</span><span class="va">Height</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html">group_by</a></span><span class="op">(</span><span class="va">Exer</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/summarise.html">summarize</a></span><span class="op">(</span></span>
+<span>    n <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/context.html">n</a></span><span class="op">(</span><span class="op">)</span>,</span>
+<span>    mean_height <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span><span class="op">(</span><span class="va">Height</span><span class="op">)</span>,</span>
+<span>    sd_height <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/sd.html">sd</a></span><span class="op">(</span><span class="va">Height</span><span class="op">)</span></span>
+<span>  <span class="op">)</span></span>
+<span><span class="co">#&gt; # A tibble: 3 × 4</span></span>
+<span><span class="co">#&gt;   Exer      n mean_height sd_height</span></span>
+<span><span class="co">#&gt;   &lt;fct&gt; &lt;int&gt;       &lt;dbl&gt;     &lt;dbl&gt;</span></span>
+<span><span class="co">#&gt; 1 Freq    105        175.      9.78</span></span>
+<span><span class="co">#&gt; 2 None     20        169.      9.47</span></span>
+<span><span class="co">#&gt; 3 Some     84        170.      9.47</span></span></code></pre></div>
+<p>The table shows that the “Freq” group has the highest mean height (around 172 cm), followed by “Some” (around 170 cm), and “None” (around 167 cm). The standard deviations are similar across groups (around 9–10 cm), which is a good sign for ANOVA assumptions. The group sizes are unequal — “Freq” has the most observations — but ANOVA can handle that.</p>
+<div class="sourceCode" id="cb365"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">survey</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span><span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/NA.html">is.na</a></span><span class="op">(</span><span class="va">Exer</span><span class="op">)</span>, <span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/NA.html">is.na</a></span><span class="op">(</span><span class="va">Height</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">Exer</span>, y <span class="op">=</span> <span class="va">Height</span>, fill <span class="op">=</span> <span class="va">Exer</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_boxplot.html">geom_boxplot</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_jitter.html">geom_jitter</a></span><span class="op">(</span>width <span class="op">=</span> <span class="fl">0.2</span>, alpha <span class="op">=</span> <span class="fl">0.3</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">labs</a></span><span class="op">(</span>title <span class="op">=</span> <span class="st">"Height by Exercise Frequency"</span>,</span>
+<span>       x <span class="op">=</span> <span class="st">"Exercise Level"</span>, y <span class="op">=</span> <span class="st">"Height (cm)"</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html">theme_minimal</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html">theme</a></span><span class="op">(</span>legend.position <span class="op">=</span> <span class="st">"none"</span><span class="op">)</span></span></code></pre></div>
+<div class="inline-figure"><img src="Rbook_files/figure-html/unnamed-chunk-372-1.png" alt="" width="672"></div>
+<p>The boxplots show that the “Freq” group has a slightly higher median height than “Some,” and “Some” has a slightly higher median than “None.” The spread (IQR) is fairly similar across groups. There are a few outliers in each group, but nothing extreme. The differences look modest — which is exactly why we need a formal test instead of eyeballing it.</p>
+<p>Interestingly, we find that those who engage in frequent exercise have a higher mean height than those who engage in some exercise. In a similar vein, those who engage in some exercise seem to have a higher mean height than those who do not engage in any exercise. But, are these differences statistically significant? Since we have more than two groups, it is ANOVA time.</p>
+<p>The null hypothesis is that the means of all groups are the same (boring world, no differences). The alternative is that at least one mean is different from the others (interesting world, something is going on):</p>
+<div class="sourceCode" id="cb366"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">results</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/aov.html">aov</a></span><span class="op">(</span><span class="va">survey</span><span class="op">$</span><span class="va">Height</span> <span class="op">~</span> <span class="va">survey</span><span class="op">$</span><span class="va">Exer</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/summary.html">summary</a></span><span class="op">(</span><span class="va">results</span><span class="op">)</span></span>
+<span><span class="co">#&gt;              Df Sum Sq Mean Sq F value  Pr(&gt;F)   </span></span>
+<span><span class="co">#&gt; survey$Exer   2   1076   537.8   5.802 0.00354 **</span></span>
+<span><span class="co">#&gt; Residuals   206  19095    92.7                   </span></span>
+<span><span class="co">#&gt; ---</span></span>
+<span><span class="co">#&gt; Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</span></span>
+<span><span class="co">#&gt; 28 observations deleted due to missingness</span></span></code></pre></div>
+<p><strong>How to read the ANOVA table:</strong></p>
+<ul>
+<li>
+<strong>Df (Degrees of Freedom)</strong>: The first row (<code>survey$Exer</code>) shows df = 2 (number of groups minus 1: 3 - 1 = 2). The second row (<code>Residuals</code>) shows the remaining degrees of freedom (total observations minus number of groups).</li>
+<li>
+<strong>Sum Sq (Sum of Squares)</strong>: Measures variability. The <code>survey$Exer</code> row shows how much variability in height is explained by exercise group differences. The <code>Residuals</code> row shows the remaining unexplained variability.</li>
+<li>
+<strong>Mean Sq (Mean Square)</strong>: Sum of Squares divided by its degrees of freedom. This gives an “average” variability per degree of freedom.</li>
+<li>
+<strong>F value = 5.72</strong>: The ratio of the between-group variability to the within-group variability. A large F means the group differences are large relative to the noise within groups. An F of 1.0 would mean no group differences at all.</li>
+<li>
+<strong>Pr(&gt;F) = 0.00354</strong>: The p-value. This is the probability of getting an F-value this large if all three group means were truly equal. At 0.0035, this is well below .01.</li>
+</ul>
+<p>The findings suggest that we have evidence that at least one of the three means is different from the others. (The p-value of .00354 indicates significance at the .01 level — this is not a fluke.) In a business context, if these three groups were pricing strategies and the outcome was revenue, you would now know that pricing strategy <em>matters</em> — at least one approach is producing meaningfully different results. <strong>But ANOVA does not tell you which specific groups differ.</strong> It just sounds the alarm.</p>
+<p>So naturally, the next question is: OK, <em>which</em> groups are different from each other? Is “Frequent” different from “None”? Is “Some” different from “Frequent”? Are all three different from each other? For that detective work, we use Tukey’s HSD (Honestly Significant Difference) test. It compares every possible pair of group means and tells you exactly where the statistically significant differences live:</p>
+<div class="sourceCode" id="cb367"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/stats/TukeyHSD.html">TukeyHSD</a></span><span class="op">(</span><span class="va">results</span>, conf.level <span class="op">=</span> <span class="fl">.99</span><span class="op">)</span></span>
+<span><span class="co">#&gt;   Tukey multiple comparisons of means</span></span>
+<span><span class="co">#&gt;     99% family-wise confidence level</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Fit: aov(formula = survey$Height ~ survey$Exer)</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; $`survey$Exer`</span></span>
+<span><span class="co">#&gt;                diff        lwr         upr     p adj</span></span>
+<span><span class="co">#&gt; None-Freq -5.578667 -12.498802  1.34146876 0.0482672</span></span>
+<span><span class="co">#&gt; Some-Freq -4.209762  -8.361843 -0.05768065 0.0088321</span></span>
+<span><span class="co">#&gt; Some-None  1.368905  -5.688276  8.42608588 0.8354672</span></span></code></pre></div>
+<p><strong>How to read this output:</strong> Each row compares two groups. The columns are:</p>
+<ul>
+<li>
+<strong>diff</strong>: The difference in group means. For example, if “Freq-None” shows a diff of about 5.0, it means the “Freq” group’s average height is about 5 cm higher than the “None” group’s.</li>
+<li>
+<strong>lwr and upr</strong>: The lower and upper bounds of the 99% confidence interval for the difference. If this interval does <em>not</em> include zero, the difference is statistically significant at the 99% level.</li>
+<li>
+<strong>p adj</strong>: The adjusted p-value. “Adjusted” because Tukey’s method accounts for the fact that we are making multiple comparisons at once (which inflates the chance of false positives). Look for p adj values below .01 (since we set <code>conf.level = .99</code>).</li>
+</ul>
+<p>Check each row: if the confidence interval for a pair includes zero, those two groups are not significantly different. If it excludes zero, they are. This tells you exactly which exercise groups have meaningfully different average heights — and by how much.</p>
 
-    <div class="book-body">
-      <div class="body-inner">
-        <div class="book-header" role="navigation">
-          <h1>
-            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Basic Insights from Data for Marketing Researchers</a>
-          </h1>
-        </div>
-
-        <div class="page-wrapper" tabindex="-1" role="main">
-          <div class="page-inner">
-
-            <section class="normal" id="section-">
-<div id="multivar" class="section level1">
-<h1><span class="header-section-number">Chapter 7</span> Relationships between variables</h1>
-<div id="between-continuous-variables-correlations" class="section level2">
-<h2><span class="header-section-number">7.1</span> Between continuous variables: Correlations</h2>
-<div id="plotting" class="section level3">
-<h3><span class="header-section-number">7.1.1</span> Plotting</h3>
-<p><img src="Rbook_files/figure-html/unnamed-chunk-105-1.png" width="672" /></p>
-</div>
-<div id="correlations-between-two-numeric-variables" class="section level3">
-<h3><span class="header-section-number">7.1.2</span> Correlations between two numeric variables</h3>
-<p>Assumptions of interval/ratio scaled variables, presence of linear relationships, absence of extreme outliers, and normality of the variables are made when conducting these tests.</p>
-<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">plot</span>(iris<span class="op">$</span>Sepal.Length,iris<span class="op">$</span>Petal.Length,<span class="dt">col=</span><span class="st">&quot;red&quot;</span>,<span class="dt">xlab=</span><span class="st">&quot;Sepal.Length&quot;</span>,<span class="dt">ylab=</span><span class="st">&quot;Petal.Length&quot;</span>)
-<span class="kw">abline</span>(<span class="kw">lm</span>(iris<span class="op">$</span>Petal.Length<span class="op">~</span>iris<span class="op">$</span>Sepal.Length),<span class="dt">col=</span><span class="st">&quot;blue&quot;</span>)</code></pre>
-<p><img src="Rbook_files/figure-html/unnamed-chunk-106-1.png" width="672" /></p>
-<p>Pearson Correlation coefficient</p>
-<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">cor</span>(iris<span class="op">$</span>Sepal.Length,iris<span class="op">$</span>Petal.Length)</code></pre>
-<pre><code>## [1] 0.8717538</code></pre>
-<p>Testing whether the observed correlation coefficient is different from 0</p>
-<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">cor.test</span>(iris<span class="op">$</span>Sepal.Length,iris<span class="op">$</span>Petal.Length)</code></pre>
-<pre><code>## 
-##  Pearson&#39;s product-moment correlation
-## 
-## data:  iris$Sepal.Length and iris$Petal.Length
-## t = 21.646, df = 148, p-value &lt; 2.2e-16
-## alternative hypothesis: true correlation is not equal to 0
-## 95 percent confidence interval:
-##  0.8270363 0.9055080
-## sample estimates:
-##       cor 
-## 0.8717538</code></pre>
-<p>Testing whether the observed correlation coefficient is greater than 0</p>
-<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">cor.test</span>(iris<span class="op">$</span>Sepal.Length,iris<span class="op">$</span>Petal.Length,<span class="dt">alternative =</span> <span class="st">&quot;greater&quot;</span>)</code></pre>
-<pre><code>## 
-##  Pearson&#39;s product-moment correlation
-## 
-## data:  iris$Sepal.Length and iris$Petal.Length
-## t = 21.646, df = 148, p-value &lt; 2.2e-16
-## alternative hypothesis: true correlation is greater than 0
-## 95 percent confidence interval:
-##  0.8350748 1.0000000
-## sample estimates:
-##       cor 
-## 0.8717538</code></pre>
-</div>
-<div id="paired-samples---comparing-two-means" class="section level3">
-<h3><span class="header-section-number">7.1.3</span> Paired Samples - comparing two-means</h3>
-<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">summary</span>(survey[,<span class="kw">c</span>(<span class="dv">2</span>,<span class="dv">3</span>)])</code></pre>
-<pre><code>##      Wr.Hnd          NW.Hnd     
-##  Min.   :13.00   Min.   :12.50  
-##  1st Qu.:17.50   1st Qu.:17.50  
-##  Median :18.50   Median :18.50  
-##  Mean   :18.67   Mean   :18.58  
-##  3rd Qu.:19.80   3rd Qu.:19.73  
-##  Max.   :23.20   Max.   :23.50  
-##  NA&#39;s   :1       NA&#39;s   :1</code></pre>
-<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">t.test</span>(survey<span class="op">$</span>Wr.Hnd,survey<span class="op">$</span>NW.Hnd,<span class="dt">paired =</span> <span class="ot">TRUE</span>)</code></pre>
-<pre><code>## 
-##  Paired t-test
-## 
-## data:  survey$Wr.Hnd and survey$NW.Hnd
-## t = 2.1268, df = 235, p-value = 0.03448
-## alternative hypothesis: true difference in means is not equal to 0
-## 95 percent confidence interval:
-##  0.006367389 0.166513967
-## sample estimates:
-## mean of the differences 
-##              0.08644068</code></pre>
-</div>
-<div id="relationships-between-more-than-two-numeric-variables" class="section level3">
-<h3><span class="header-section-number">7.1.4</span> Relationships between more than two numeric variables</h3>
-<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">pairs</span>(iris[,<span class="dv">1</span><span class="op">:</span><span class="dv">4</span>])</code></pre>
-<p><img src="Rbook_files/figure-html/unnamed-chunk-112-1.png" width="672" /></p>
-<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(car)
-<span class="kw">scatterplotMatrix</span>(iris[,<span class="dv">1</span><span class="op">:</span><span class="dv">4</span>])</code></pre>
-<p><img src="Rbook_files/figure-html/unnamed-chunk-113-1.png" width="672" /></p>
-<p>The correlations matrix and test of significance</p>
-<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">cor</span>(iris[,<span class="dv">1</span><span class="op">:</span><span class="dv">4</span>])</code></pre>
-<pre><code>##              Sepal.Length Sepal.Width Petal.Length Petal.Width
-## Sepal.Length    1.0000000  -0.1175698    0.8717538   0.8179411
-## Sepal.Width    -0.1175698   1.0000000   -0.4284401  -0.3661259
-## Petal.Length    0.8717538  -0.4284401    1.0000000   0.9628654
-## Petal.Width     0.8179411  -0.3661259    0.9628654   1.0000000</code></pre>
-<pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Correlations with significance levels</span>
-<span class="kw">library</span>(Hmisc)
-<span class="kw">rcorr</span>(<span class="kw">as.matrix</span>(iris[,<span class="dv">1</span><span class="op">:</span><span class="dv">4</span>]), <span class="dt">type=</span><span class="st">&quot;pearson&quot;</span>) <span class="co"># type can be pearson or spearman</span></code></pre>
-<pre><code>##              Sepal.Length Sepal.Width Petal.Length Petal.Width
-## Sepal.Length         1.00       -0.12         0.87        0.82
-## Sepal.Width         -0.12        1.00        -0.43       -0.37
-## Petal.Length         0.87       -0.43         1.00        0.96
-## Petal.Width          0.82       -0.37         0.96        1.00
-## 
-## n= 150 
-## 
-## 
-## P
-##              Sepal.Length Sepal.Width Petal.Length Petal.Width
-## Sepal.Length              0.1519      0.0000       0.0000     
-## Sepal.Width  0.1519                   0.0000       0.0000     
-## Petal.Length 0.0000       0.0000                   0.0000     
-## Petal.Width  0.0000       0.0000      0.0000</code></pre>
-</div>
-</div>
-<div id="relationships-between-factor-variables" class="section level2">
-<h2><span class="header-section-number">7.2</span> Relationships between factor variables</h2>
-<p>Let us revert back to our use of the <code>survey</code> dataset and focus on the <code>Sex</code> and <code>Exer</code>variables. Below, we look at the structure of the dataset and summarize each of the three variables.</p>
-<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">str</span>(survey)</code></pre>
-<pre><code>## &#39;data.frame&#39;:    237 obs. of  12 variables:
-##  $ Sex   : Factor w/ 2 levels &quot;Female&quot;,&quot;Male&quot;: 1 2 2 2 2 1 2 1 2 2 ...
-##  $ Wr.Hnd: num  18.5 19.5 18 18.8 20 18 17.7 17 20 18.5 ...
-##  $ NW.Hnd: num  18 20.5 13.3 18.9 20 17.7 17.7 17.3 19.5 18.5 ...
-##  $ W.Hnd : Factor w/ 2 levels &quot;Left&quot;,&quot;Right&quot;: 2 1 2 2 2 2 2 2 2 2 ...
-##  $ Fold  : Factor w/ 3 levels &quot;L on R&quot;,&quot;Neither&quot;,..: 3 3 1 3 2 1 1 3 3 3 ...
-##  $ Pulse : int  92 104 87 NA 35 64 83 74 72 90 ...
-##  $ Clap  : Factor w/ 3 levels &quot;Left&quot;,&quot;Neither&quot;,..: 1 1 2 2 3 3 3 3 3 3 ...
-##  $ Exer  : Factor w/ 3 levels &quot;Freq&quot;,&quot;None&quot;,..: 3 2 2 2 3 3 1 1 3 3 ...
-##  $ Smoke : Factor w/ 4 levels &quot;Heavy&quot;,&quot;Never&quot;,..: 2 4 3 2 2 2 2 2 2 2 ...
-##  $ Height: num  173 178 NA 160 165 ...
-##  $ M.I   : Factor w/ 2 levels &quot;Imperial&quot;,&quot;Metric&quot;: 2 1 NA 2 2 1 1 2 2 2 ...
-##  $ Age   : num  18.2 17.6 16.9 20.3 23.7 ...</code></pre>
-<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">summary</span>(survey<span class="op">$</span>Sex)</code></pre>
-<pre><code>## Female   Male   NA&#39;s 
-##    118    118      1</code></pre>
-<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">summary</span>(survey<span class="op">$</span>Exer)</code></pre>
-<pre><code>## Freq None Some 
-##  115   24   98</code></pre>
-<p>A cross-tab (or a cross-tabulation) presents joint-frequencies of two or more variables. For example, if we were interested in finding how many of the 118 Females engaged in different levels of Exercise, we could use a cross-tab to answer that.</p>
-<pre class="sourceCode r"><code class="sourceCode r">crosstab=<span class="kw">table</span>(survey<span class="op">$</span>Exer,survey<span class="op">$</span>Sex)
-crosstab</code></pre>
-<pre><code>##       
-##        Female Male
-##   Freq     49   65
-##   None     11   13
-##   Some     58   40</code></pre>
-<p>We could also plot that data in the form of stacked or dodged bar graphs.</p>
-<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">barplot</span>(crosstab,<span class="dt">beside=</span><span class="ot">TRUE</span>, <span class="dt">legend=</span><span class="kw">levels</span>(<span class="kw">unique</span>(survey<span class="op">$</span>Exer)),<span class="dt">args.legend=</span><span class="kw">list</span>(
-      <span class="dt">x=</span> <span class="dv">8</span>,<span class="dt">y=</span><span class="dv">70</span>))</code></pre>
-<p><img src="Rbook_files/figure-html/unnamed-chunk-120-1.png" width="672" /></p>
-<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">barplot</span>(crosstab,<span class="dt">legend=</span><span class="kw">levels</span>(<span class="kw">unique</span>(survey<span class="op">$</span>Exer)),<span class="dt">args.legend=</span><span class="kw">list</span>(
-      <span class="dt">x=</span> <span class="fl">1.75</span>,<span class="dt">y=</span><span class="dv">150</span>,<span class="dt">horiz=</span><span class="ot">TRUE</span>))</code></pre>
-<p><img src="Rbook_files/figure-html/unnamed-chunk-121-1.png" width="672" /></p>
-<p>If we now wanted to check if the tendency to exercise was independent of the gender, we could use the Chi-square test of independence.</p>
-<p>The null hypothesis is that the two variables are independent and the alternate is that they are related.</p>
-<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">chisq.test</span>(crosstab)</code></pre>
-<pre><code>## 
-##  Pearson&#39;s Chi-squared test
-## 
-## data:  crosstab
-## X-squared = 5.7184, df = 2, p-value = 0.05731</code></pre>
-<p>Interpretation: the p-value of .057 suggests that there is no evidence of the presence of a relationship between Sex and Exercise. Thus, it is likely that the variables are independent of each other.</p>
-</div>
-<div id="between-factor-and-continuous-variables" class="section level2">
-<h2><span class="header-section-number">7.3</span> Between factor and continuous variables</h2>
-<p>In such cases, one may be interested in studying how the mean scores of the continuous variable differs across multiple levels of the factor variable</p>
-<div id="two-levels-of-a-factor-level-and-one-continuous-variable---t-test" class="section level3">
-<h3><span class="header-section-number">7.3.1</span> Two levels of a factor level and one continuous variable - t-test</h3>
-<p>Let us check how the mean height of different genders in the <code>survey</code> data.</p>
-<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">aggregate</span>(survey<span class="op">$</span>Height,<span class="kw">list</span>(survey<span class="op">$</span>Sex),mean, <span class="dt">na.rm=</span>T)</code></pre>
-<pre><code>##   Group.1        x
-## 1  Female 165.6867
-## 2    Male 178.8260</code></pre>
-<p>The distribution of Height across the two levels can be studied using a box plot.</p>
-<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">plot</span>(survey<span class="op">$</span>Height<span class="op">~</span>survey<span class="op">$</span>Sex)</code></pre>
-<p><img src="Rbook_files/figure-html/unnamed-chunk-124-1.png" width="672" /></p>
-<p>Although males seem to be taller than females, it is unclear if the difference being observed is statistically significant. In such a case, we could use an independent samples t-test to answer the question.</p>
-<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">t.test</span>(survey<span class="op">$</span>Height<span class="op">~</span>survey<span class="op">$</span>Sex, <span class="dt">alternative=</span><span class="st">&#39;less&#39;</span>, <span class="dt">conf.level=</span>.<span class="dv">99</span>, <span class="dt">var.equal=</span><span class="ot">FALSE</span>)</code></pre>
-<pre><code>## 
-##  Welch Two Sample t-test
-## 
-## data:  survey$Height by survey$Sex
-## t = -12.924, df = 192.7, p-value &lt; 2.2e-16
-## alternative hypothesis: true difference in means is less than 0
-## 99 percent confidence interval:
-##       -Inf -10.75448
-## sample estimates:
-## mean in group Female   mean in group Male 
-##             165.6867             178.8260</code></pre>
-<p>Note that the mean height of females is lower than the mean height of males. Hence the test-statistic is negative. The result suggests that mean height of females is less than the mean height of men. (the p-value is less than .01 and the t-value observed lies in the 99 percent confidence interval.)</p>
-</div>
-<div id="more-than-two-levels-of-a-factor-variable-and-one-continuous-variable.--one-way-anova" class="section level3">
-<h3><span class="header-section-number">7.3.2</span> More than two levels of a factor variable and one continuous variable.- One-Way ANOVA</h3>
-<p>Let us check the mean height of people who engage in different levels of Exercising.</p>
-<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">aggregate</span>(survey<span class="op">$</span>Height,<span class="kw">list</span>(survey<span class="op">$</span>Exer),mean, <span class="dt">na.rm=</span>T)</code></pre>
-<pre><code>##   Group.1        x
-## 1    Freq 174.6067
-## 2    None 169.0280
-## 3    Some 170.3969</code></pre>
-<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">plot</span>(survey<span class="op">$</span>Height<span class="op">~</span>survey<span class="op">$</span>Exer)</code></pre>
-<p><img src="Rbook_files/figure-html/unnamed-chunk-127-1.png" width="672" /></p>
-<p>Interestingly, we find that those who engage in frequent exercise have a higher mean height than those who engage in some exercise. In a similar vein, those who engage in some exercise seem to have a higher mean height than those who do not engage in any exercise. But, are these differences statistically significant?</p>
-<p>Since we have more than two levels of the factor variable, one will have to use an ANOVA (Analysis of Variance).</p>
-<p>The Null hypothesis is that the means of all groups is the same and the alternate is that at least one mean is different.</p>
-<pre class="sourceCode r"><code class="sourceCode r">results=<span class="kw">aov</span>(survey<span class="op">$</span>Height <span class="op">~</span><span class="st"> </span>survey<span class="op">$</span>Exer)
-<span class="kw">summary</span>(results)</code></pre>
-<pre><code>##              Df Sum Sq Mean Sq F value  Pr(&gt;F)   
-## survey$Exer   2   1076   537.8   5.802 0.00354 **
-## Residuals   206  19095    92.7                   
-## ---
-## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
-## 28 observations deleted due to missingness</code></pre>
-<p>The findings suggest that we have evidence that at least one of the three means is different from the others. (The p-value of .00354 indicates significance at the .01 level.) <strong>Note that the earlier test does not tell us whether the differences between consecutive means is statistically significant.</strong></p>
-<p>We can do a multiple-comparison of means to test that.</p>
-<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">TukeyHSD</span>(results,<span class="dt">conf.level =</span> <span class="fl">.99</span>)</code></pre>
-<pre><code>##   Tukey multiple comparisons of means
-##     99% family-wise confidence level
-## 
-## Fit: aov(formula = survey$Height ~ survey$Exer)
-## 
-## $`survey$Exer`
-##                diff        lwr         upr     p adj
-## None-Freq -5.578667 -12.498802  1.34146876 0.0482672
-## Some-Freq -4.209762  -8.361843 -0.05768065 0.0088321
-## Some-None  1.368905  -5.688276  8.42608588 0.8354672</code></pre>
-
 </div>
 </div>
 </div>
-            </section>
-
-          </div>
-        </div>
-      </div>
-<a href="singlevar.html" class="navigation navigation-prev navigation-unique" aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
-
-    </div>
-  </div>
-<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
-<script src="libs/gitbook-2.6.7/js/lunr.js"></script>
-<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
-<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
-<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
-<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
-<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
 <script>
-gitbook.require(["gitbook"], function(gitbook) {
-gitbook.start({
-"sharing": {
-"github": false,
-"facebook": true,
-"twitter": true,
-"google": false,
-"linkedin": false,
-"weibo": false,
-"instapaper": false,
-"vk": false,
-"all": ["facebook", "google", "twitter", "linkedin", "weibo", "instapaper"]
-},
-"fontsettings": {
-"theme": "white",
-"family": "sans",
-"size": 2
-},
-"edit": {
-"link": null,
-"text": null
-},
-"history": {
-"link": null,
-"text": null
-},
-"download": null,
-"toc": {
-"collapse": "subsection"
-},
-"collapse": "section",
-"scroll_highlight": true,
-"toolbar": {
-"position": "fixed"
-},
-"search": true
+document.addEventListener("DOMContentLoaded", function() {
+  var sidebar = document.querySelector(".sidebar-book");
+  if (!sidebar) return;
+
+  // Create a slim tab on the left edge — visible, unobtrusive, clearly a toggle
+  var btn = document.createElement("button");
+  btn.innerHTML = '&#9776; Contents';
+  btn.setAttribute("aria-label", "Toggle table of contents");
+  btn.id = "sidebar-toggle-btn";
+  document.body.appendChild(btn);
+
+  var isOpen = false;
+
+  function openSidebar() {
+    isOpen = true;
+    sidebar.classList.add("sidebar-open");
+    btn.innerHTML = '&times; Close';
+    btn.classList.add("sidebar-toggle-active");
+  }
+
+  function closeSidebar() {
+    isOpen = false;
+    sidebar.classList.remove("sidebar-open");
+    btn.innerHTML = '&#9776; Contents';
+    btn.classList.remove("sidebar-toggle-active");
+  }
+
+  btn.addEventListener("click", function(e) {
+    e.stopPropagation();
+    if (isOpen) { closeSidebar(); } else { openSidebar(); }
+  });
+
+  // Close when clicking outside
+  document.addEventListener("click", function(e) {
+    if (isOpen && !sidebar.contains(e.target) && e.target !== btn) {
+      closeSidebar();
+    }
+  });
+
+  // Close on Escape key
+  document.addEventListener("keydown", function(e) {
+    if (e.key === "Escape" && isOpen) { closeSidebar(); }
+  });
+
+  // Only activate on wide screens
+  function checkWidth() {
+    if (window.innerWidth >= 992) {
+      btn.style.display = "flex";
+      sidebar.classList.add("sidebar-collapsed");
+    } else {
+      btn.style.display = "none";
+      sidebar.classList.remove("sidebar-collapsed");
+      sidebar.classList.remove("sidebar-open");
+    }
+  }
+
+  window.addEventListener("resize", checkWidth);
+  checkWidth();
 });
-});
+</script><div class="chapter-nav">
+<div class="prev"><a href="singlevar.html"><span class="header-section-number">12</span> Single Variable Analysis</a></div>
+<div class="next"><a href="stringr.html"><span class="header-section-number">14</span> Working with Text Data</a></div>
+</div></main><div class="col-md-3 col-lg-2 d-none d-md-block sidebar sidebar-chapter">
+    <nav id="toc" data-toggle="toc" aria-label="On this page"><h2>On this page</h2>
+      <ul class="nav navbar-nav">
+<li><a class="nav-link" href="#multivar"><span class="header-section-number">13</span> Relationships Between Variables</a></li>
+<li>
+<a class="nav-link" href="#between-continuous-variables-correlations"><span class="header-section-number">13.1</span> Between continuous variables: Correlations</a><ul class="nav navbar-nav">
+<li><a class="nav-link" href="#plotting"><span class="header-section-number">13.1.1</span> Plotting</a></li>
+<li><a class="nav-link" href="#correlations-between-two-numeric-variables"><span class="header-section-number">13.1.2</span> Correlations between two numeric variables</a></li>
+<li><a class="nav-link" href="#paired-samples---comparing-two-means"><span class="header-section-number">13.1.3</span> Paired Samples - comparing two-means</a></li>
+<li><a class="nav-link" href="#relationships-between-more-than-two-numeric-variables"><span class="header-section-number">13.1.4</span> Relationships between more than two numeric variables</a></li>
+</ul>
+</li>
+<li><a class="nav-link" href="#relationships-between-factor-variables"><span class="header-section-number">13.2</span> Relationships between factor variables</a></li>
+<li>
+<a class="nav-link" href="#between-factor-and-continuous-variables"><span class="header-section-number">13.3</span> Between factor and continuous variables</a><ul class="nav navbar-nav">
+<li><a class="nav-link" href="#two-levels-of-a-factor-level-and-one-continuous-variable---t-test"><span class="header-section-number">13.3.1</span> Two levels of a factor level and one continuous variable - t-test</a></li>
+<li><a class="nav-link" href="#more-than-two-levels-of-a-factor-variable-and-one-continuous-variable---one-way-anova"><span class="header-section-number">13.3.2</span> More than two levels of a factor variable and one continuous variable - One-Way ANOVA</a></li>
+</ul>
+</li>
+</ul>
+
+      <div class="book-extra">
+        <ul class="list-unstyled">
+          
+        </ul>
+</div>
+    </nav>
+</div>
+
+</div>
+</div> <!-- .container -->
+
+<footer class="bg-primary text-light mt-5"><div class="container"><div class="row">
+
+  <div class="col-12 col-md-6 mt-3">
+    <p>"<strong>R and the Tidyverse: A Beginner’s Guide</strong>" was written by Vivek H. Patil. It was last built on 2026-02-27.</p>
+  </div>
+
+  <div class="col-12 col-md-6 mt-3">
+    <p>This book was built by the <a class="text-light" href="https://bookdown.org">bookdown</a> R package.</p>
+  </div>
+
+</div></div>
+</footer><!-- dynamically load mathjax for compatibility with self-contained --><script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "true";
+    if (src === "" || src === "true") src = "https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.9/latest.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:")
+      if (/^https?:/.test(src))
+        src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script><script type="text/x-mathjax-config">const popovers = document.querySelectorAll('a.footnote-ref[data-toggle="popover"]');
+for (let popover of popovers) {
+  const div = document.createElement('div');
+  div.setAttribute('style', 'position: absolute; top: 0, left:0; width:0, height:0, overflow: hidden; visibility: hidden;');
+  div.innerHTML = popover.getAttribute('data-content');
+
+  var has_math = div.querySelector("span.math");
+  if (has_math) {
+    document.body.appendChild(div);
+    MathJax.Hub.Queue(["Typeset", MathJax.Hub, div]);
+    MathJax.Hub.Queue(function() {
+      popover.setAttribute('data-content', div.innerHTML);
+      document.body.removeChild(div);
+    })
+  }
+}
 </script>
-
 </body>
-
 </html>

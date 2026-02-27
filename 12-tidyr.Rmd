@@ -113,6 +113,8 @@ messy_wide %>%
   )
 ```
 
+Compare this to the messy version above: we went from 3 rows and 4 columns to 9 rows and 3 columns. Each row is now one country in one year --- a single observation. The wide format was convenient for a human glancing at a spreadsheet, but this long format is what ggplot2, dplyr, and every modeling function in R expects.
+
 Three arguments to tattoo on your forearm:
 
 - **`cols`**: Which columns to pivot (the ones that are really values in disguise).
@@ -246,6 +248,8 @@ messy_both %>%
     values_from = count
   )
 ```
+
+Now `cases` and `population` are proper columns instead of being stacked as values in the `type` column. Each row is one country in one year with both measurements side-by-side --- which means you can now easily compute a rate (`cases / population`) as a new column.
 
 Two arguments:
 
@@ -484,6 +488,8 @@ tidy_scores %>%
     .groups = "drop"
   )
 ```
+
+Both math and reading scores improved from 2022 to 2023 (math from about 79.7 to 82.2, reading from 76.2 to 79.0). This kind of year-over-year comparison is only possible because we tidied the data first --- in the original messy format with eight columns, getting to this summary would have required painful manual work.
 
 A quick visualization?
 
